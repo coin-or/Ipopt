@@ -291,7 +291,7 @@ bool SpralSolverInterface::InitializeImpl(
 )
 {
    spral_ssids_default_options(&control_);
-   control_.array_base = 0; // Use Fortran numbering (documentation incorrect).
+   control_.array_base = 1; // Use Fortran numbering
    control_.action = true; // Continue factorization on discovery of a zero pivot.
    /* Note: we can't set control_.action = false as we need to know the
     * inertia. (Otherwise we just enter the restoration phase and fail.) */
