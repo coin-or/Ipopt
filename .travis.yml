@@ -1,5 +1,8 @@
 language: cpp
 
+git:
+   depth: 3
+
 matrix:
   include:
     - os: linux
@@ -10,6 +13,8 @@ matrix:
             - gfortran
             - liblapack-dev
             - libmetis-dev
+            - libhwloc-dev
+            - libudev-dev
             - cppcheck
       env: ENABLEDEBUG=true CPPCHECK=true
     - os: linux
@@ -94,7 +99,7 @@ before_script:
   - >
     if [[ "$TRAVIS_OS_NAME" == "osx" ]] && ! $NOF77; then
     brew update;
-    brew install bash gcc metis;
+    brew install bash gcc metis hwloc;
     $SINGLEPRECISION && brew install lapack;
     if [[ "$OSX" == 10.14 ]] ; then export CC=gcc-9 ; export CXX=g++-9 ;
     elif [[ "$OSX" == 10.15 ]] ; then export CC=gcc-10 ; export CXX=g++-10 ;
@@ -103,14 +108,12 @@ before_script:
     fi
 
 script:
-  # Spral doesn't compile on macOS at the moment: https://github.com/ralna/spral/issues/21 (waiting for merge into lanl-ansi/spral)
-  # Spral doesn't compile with recent GCC (like on Focal) at the moment: https://github.com/ralna/spral/issues/38 (waiting for merge into lanl-ansi/spral)
   # macOS VecLib doesn't work for single-precision routines (https://github.com/mcg1969/vecLibFort) - use homebrew lapack instead
   - >
-    if $NOF77 || $SINGLEPRECISION || [[ "$TRAVIS_OS_NAME" == "osx" ]] || [[ "$TRAVIS_DIST" == "focal" ]]; then
+    if $NOF77 || $SINGLEPRECISION || $INT64 ; then
     echo "Skipping Spral build." ;
     else
-    git clone --depth 1 --branch master https://github.com/lanl-ansi/spral.git &&
+    git clone --depth 1 --branch master https://github.com/ralna/spral.git &&
     pushd spral &&
     ./autogen.sh &&
     if [[ "$TRAVIS_OS_NAME" == "osx" ]] ; then
@@ -130,7 +133,7 @@ script:
     $INT64 && echo "with_intsize=64" ;
     [[ -d $HOME/spral ]] && echo "with_spral_cflags=-I${HOME}/spral/include" ;
     [[ -d $HOME/spral ]] && [[ "$TRAVIS_OS_NAME" == "linux" ]] && echo "with_spral_lflags=\"-L${HOME}/spral/lib -lspral -lgfortran -lhwloc -lm -lmetis -llapack -lblas -fopenmp\"" ;
-    [[ -d $HOME/spral ]] && [[ "$TRAVIS_OS_NAME" == "osx" ]] && echo "with_spral_lflags=\"-L${HOME}/spral/lib -lspral -lgfortran -lhwloc -lm -L/usr/local/Cellar/metis/5.1.0/lib -lmetis -llapack -lblas -fopenmp\"" ;
+    [[ -d $HOME/spral ]] && [[ "$TRAVIS_OS_NAME" == "osx" ]] && echo "with_spral_lflags=\"-L${HOME}/spral/lib -lspral -lgfortran -L/usr/local/Cellar/hwloc/2.4.1/lib -lhwloc -lm -L/usr/local/Cellar/metis/5.1.0/lib -lmetis -framework Accelerate -fopenmp\"" ;
     [[ "$TRAVIS_OS_NAME" == "osx" ]] && ( echo "with_metis_cflags=-I/usr/local/Cellar/metis/5.1.0/include" ; echo "with_metis_lflags=\"-L/usr/local/Cellar/metis/5.1.0/lib -lmetis\"" ) ;
     ) > $HOME/install/share/config.site ;
     cat $HOME/install/share/config.site
