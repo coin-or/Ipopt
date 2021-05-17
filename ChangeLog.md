@@ -11,6 +11,7 @@ More detailed information about incremental changes can be found in the
 
 - Fixed problem that collecting timing statistics were not disabled for
   initialization and solve in restoration phase. [#299]
+- Fixed compilation of IpTNLPAdapter.cpp if having Wsmp or HSL, but no Mumps
 
 ### 3.14 beta1 (2021-05-14)
 

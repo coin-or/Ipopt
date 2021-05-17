@@ -275,7 +275,7 @@ bool TNLPAdapter::ProcessOptions(
 #endif
 
 #ifdef IPOPT_HAS_WSMP
-   else if( dependency_detector == "wsmp" )
+   if( dependency_detector == "wsmp" )
    {
       SmartPtr<SparseSymLinearSolverInterface> SolverInterface;
 #ifdef PARDISO_MATCHING_PREPROCESS
@@ -292,7 +292,7 @@ bool TNLPAdapter::ProcessOptions(
 #endif
 
 #if ((defined(COINHSL_HAS_MA28) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MA28S) && defined(IPOPT_SINGLE))) && defined(F77_FUNC) && !defined(IPOPT_INT64)
-   else if( dependency_detector == "ma28" )
+   if( dependency_detector == "ma28" )
    {
       dependency_detector_ = new Ma28TDependencyDetector();
    }
