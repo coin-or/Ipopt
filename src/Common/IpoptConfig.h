@@ -71,6 +71,8 @@
 #  define SIPOPTLIB_EXPORT __declspec(dllexport)
 # elif defined(__GNUC__) && __GNUC__ >= 4
 #  define SIPOPTLIB_EXPORT __attribute__((__visibility__("default")))
+# else
+#  define SIPOPTLIB_EXPORT
 # endif
 #else
 # ifdef DLL_EXPORT
