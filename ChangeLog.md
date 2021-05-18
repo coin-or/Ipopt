@@ -12,7 +12,8 @@ More detailed information about incremental changes can be found in the
 - Fixed problem that collecting timing statistics were not disabled for
   initialization and solve in restoration phase. [#299]
 - Fixed compilation of IpTNLPAdapter.cpp if having Wsmp or HSL, but no Mumps
-- Fixed static build if sIpopt without GCC
+- Fixed static build if sIpopt without GCC. Fixed that installed sIpopt
+  headers were not usable (SIPOPTLIB_EXPORT not defined).
 
 ### 3.14 beta1 (2021-05-14)
 

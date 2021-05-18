@@ -552,7 +552,8 @@ fi
 ##          Create Makefiles and other stuff                          ##
 ########################################################################
 
-AC_COIN_FINALIZE_FLAGS([IpoptLib IpoptAmplInterfaceLib SIpoptAmplInterfaceLib])
+# the SIpoptLib is here to get SIPOPTLIB_EXPORT
+AC_COIN_FINALIZE_FLAGS([IpoptLib IpoptAmplInterfaceLib SIpoptLib SIpoptAmplInterfaceLib])
 
 AC_CONFIG_FILES([Makefile
   src/ipopt.pc

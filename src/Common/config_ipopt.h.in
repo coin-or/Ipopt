@@ -33,6 +33,9 @@
 /* Library Visibility Attribute */
 #undef IPOPTLIB_EXPORT
 
+/* Library Visibility Attribute */
+#undef SIPOPTLIB_EXPORT
+
 /** type corresponding to integers in Fortran
  * @deprecated Use ipindex instead.
  */

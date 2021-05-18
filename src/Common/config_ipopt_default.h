@@ -30,3 +30,11 @@
 #define IPOPTLIB_EXPORT
 #endif
 #endif
+
+#ifndef SIPOPTLIB_EXPORT
+#if defined(_WIN32) && defined(DLL_EXPORT)
+#define DIPOPTLIB_EXPORT __declspec(dllimport)
+#else
+#define DIPOPTLIB_EXPORT
+#endif
+#endif
