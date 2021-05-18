@@ -192,6 +192,18 @@ script:
   - make
   - if ! $NOF77 ; then ./recursive_nlp ; fi
   - popd
+  - pushd contrib/sIPOPT/examples/parametric_cpp
+  - make
+  - if ! $NOF77 ; then ./parametric_driver ; fi
+  - popd
+  - pushd contrib/sIPOPT/examples/parametric_dsdp_cpp
+  - make
+  - if ! $NOF77 ; then ./parametric_dsdp_driver ; fi
+  - popd
+  - pushd contrib/sIPOPT/examples/redhess_cpp
+  - make
+  - if ! $NOF77 ; then ./redhess_cpp ; fi
+  - popd
   - if $CPPCHECK ; then make cppcheck ; fi
 
 after_failure:
