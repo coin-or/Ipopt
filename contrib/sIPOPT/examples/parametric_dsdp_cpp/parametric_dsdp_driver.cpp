@@ -79,37 +79,37 @@ int main(
    app_sens->GetSensitivityMatrix(SX, SL, SZL, SZU);
 
    printf("\n** Directional Derivative (Eq. 14 of implementation paper) ** \n");
-   for( Index i = 0; i < n; ++i )
+   for( int i = 0; i < n; ++i )
    {
       printf("* ds/dp(x)(p-p0)[%i] = %.14g\n", i + 1, DDX[i]);
    }
-   for( Index i = 0; i < m; ++i )
+   for( int i = 0; i < m; ++i )
    {
       printf("* ds/dp(l)(p-p0)[%i] = %.14g\n", i + 1, DDL[i]);
    }
-   for( Index i = 0; i < nzl; ++i )
+   for( int i = 0; i < nzl; ++i )
    {
       printf("* ds/dp(zl)(p-p0)[%i] = %.14g\n", i + 1, DDZL[i]);
    }
-   for( Index i = 0; i < nzu; ++i )
+   for( int i = 0; i < nzu; ++i )
    {
       printf("* ds/dp(zu)(p-p0)[%i] = %.14g\n", i + 1, DDZU[i]);
    }
 
    printf("\n** Sensitivity Matrix (Eq. 9 of implementation paper) ** \n");
-   for( Index i = 0; i < n * np; ++i )
+   for( int i = 0; i < n * np; ++i )
    {
       printf("* ds/dp(x)[%i] = %.14g\n", i + 1, SX[i]);
    }
-   for( Index i = 0; i < m * np; ++i )
+   for( int i = 0; i < m * np; ++i )
    {
       printf("* ds/dp(l)[%i] = %.14g\n", i + 1, SL[i]);
    }
-   for( Index i = 0; i < nzl * np; ++i )
+   for( int i = 0; i < nzl * np; ++i )
    {
       printf("* ds/dp(zl)[%i] = %.14g\n", i + 1, SZL[i]);
    }
-   for( Index i = 0; i < nzu * np; ++i )
+   for( int i = 0; i < nzu * np; ++i )
    {
       printf("* ds/dp(zu)[%i] = %.14g\n", i + 1, SZU[i]);
    }
@@ -125,37 +125,37 @@ int main(
    app_sens->GetSensitivityMatrix(SX, SL, SZL, SZU);
 
    printf("\n** Directional Derivative (Eq. 14 of implementation paper) ** \n");
-   for( Index i = 0; i < n; ++i )
+   for( int i = 0; i < n; ++i )
    {
       printf("* ds/dp(x)(p-p0)[%i] = %.14g\n", i + 1, DDX[i]);
    }
-   for( Index i = 0; i < m; ++i )
+   for( int i = 0; i < m; ++i )
    {
       printf("* ds/dp(l)(p-p0)[%i] = %.14g\n", i + 1, DDL[i]);
    }
-   for( Index i = 0; i < nzl; ++i )
+   for( int i = 0; i < nzl; ++i )
    {
       printf("* ds/dp(zl)(p-p0)[%i] = %.14g\n", i + 1, DDZL[i]);
    }
-   for( Index i = 0; i < nzu; ++i )
+   for( int i = 0; i < nzu; ++i )
    {
       printf("* ds/dp(zu)(p-p0)[%i] = %.14g\n", i + 1, DDZU[i]);
    }
 
    printf("\n** Sensitivity Matrix (Eq. 9 of implementation paper) ** \n");
-   for( Index i = 0; i < n * np; ++i )
+   for( int i = 0; i < n * np; ++i )
    {
       printf("* ds/dp(x)[%i] = %.14g\n", i + 1, SX[i]);
    }
-   for( Index i = 0; i < m * np; ++i )
+   for( int i = 0; i < m * np; ++i )
    {
       printf("* ds/dp(l)[%i] = %.14g\n", i + 1, SL[i]);
    }
-   for( Index i = 0; i < nzl * np; ++i )
+   for( int i = 0; i < nzl * np; ++i )
    {
       printf("* ds/dp(zl)[%i] = %.14g\n", i + 1, SZL[i]);
    }
-   for( Index i = 0; i < nzu * np; ++i )
+   for( int i = 0; i < nzu * np; ++i )
    {
       printf("* ds/dp(zu)[%i] = %.14g\n", i + 1, SZU[i]);
    }

@@ -324,13 +324,13 @@ void ParametricTNLP::finalize_solution(
    // Print the solution vector
    printf("\n"
           "                Nominal                    Perturbed\n");
-   for( Index k = 0; k < (Index) sens_sol_vec.size(); ++k )
+   for( size_t k = 0; k < sens_sol_vec.size(); ++k )
    {
-      printf("x[%3d]   % .23f   % .23f\n", k, x[k], sens_sol_vec[k]);
+      printf("x[%3zd]   % .23f   % .23f\n", k, x[k], sens_sol_vec[k]);
    }
 
    printf("\n**********\n");
-   for( Index k = 0; k < m; ++k )
+   for( int k = 0; k < m; ++k )
    {
       printf("lambda[%3d] (nom)  % .23f \n", k, lambda[k]);
    }
