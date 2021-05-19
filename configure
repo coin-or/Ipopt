@@ -25168,31 +25168,12 @@ printf "%s\n" "$coin_has_spral (COIN_SKIP_PROJECTS)" >&6; }
 
   if test "$coin_has_spral" = 'no' ; then
     if expr "$spral_failmode" : '.*header.*' &>/dev/null ; then
-      { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING:
-Compiler flags are \"$spral_cflags\". If you expected this test to
-succeed, check that they are correct. You can supply correct values using
---with-spral-cflags." >&5
-printf "%s\n" "$as_me: WARNING:
-Compiler flags are \"$spral_cflags\". If you expected this test to
-succeed, check that they are correct. You can supply correct values using
---with-spral-cflags." >&2;}
+      { printf "%s\n" "$as_me:${as_lineno-$LINENO}: Compiler flags were \"$spral_cflags\". Use --with-spral-cflags to overwrite. Check config.log for details of failed compile attempt." >&5
+printf "%s\n" "$as_me: Compiler flags were \"$spral_cflags\". Use --with-spral-cflags to overwrite. Check config.log for details of failed compile attempt." >&6;}
     fi
     if expr "$spral_failmode" : '.*link.*' &>/dev/null ; then
-      { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING:
-Linker flags are \"$spral_lflags\". If you expected this test to
-succeed, check that they are correct. You can supply correct values using
---with-spral-lflags." >&5
-printf "%s\n" "$as_me: WARNING:
-Linker flags are \"$spral_lflags\". If you expected this test to
-succeed, check that they are correct. You can supply correct values using
---with-spral-lflags." >&2;}
-    fi
-    if expr "$spral_failmode" : '.*header.*' &>/dev/null ||
-       expr "$spral_failmode" : '.*link.*' &>/dev/null ; then
-      { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING:
-Check config.log for details of failed compile or link attempts." >&5
-printf "%s\n" "$as_me: WARNING:
-Check config.log for details of failed compile or link attempts." >&2;}
+      { printf "%s\n" "$as_me:${as_lineno-$LINENO}: Linker flags are \"$spral_lflags\". Use --with-spral-lflags to overwrite. Check config.log for details of failed link attempt." >&5
+printf "%s\n" "$as_me: Linker flags are \"$spral_lflags\". Use --with-spral-lflags to overwrite. Check config.log for details of failed link attempt." >&6;}
     fi
     if test "$spral_userflags" = 'yes' ; then
       as_fn_error $? "user-specified flags for Spral do not work." "$LINENO" 5
@@ -25969,7 +25950,7 @@ else $as_nop
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25972 "configure" */
+/* #line 25953 "configure" */
 public class Test {
 }
 EOF
@@ -26495,7 +26476,7 @@ else $as_nop
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 26498 "configure" */
+/* #line 26479 "configure" */
 public class Test {
 }
 EOF
@@ -26530,7 +26511,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 26533 "configure" */
+/* [#]line 26514 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);
