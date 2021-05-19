@@ -379,10 +379,12 @@ and value `pardisomkl` has to be used to select Pardiso from Intel MKL.
 
 \subsection DOWNLOAD_SPRAL SPRAL (Sparse Parallel Robust Algorithms Library)
 
-To compile %Ipopt with the linear solver SPRAL, the
-[LANL ANSI fork of SPRAL](https://github.com/lanl-ansi/spral) should first
+To compile %Ipopt with the linear solver SPRAL,
+[SPRAL](https://github.com/ralna/spral) should first
 be downloaded and compiled according to the associated
-[SPRAL compilation guide](https://github.com/lanl-ansi/spral/blob/master/COMPILE.md).
+[SPRAL compilation guide](https://github.com/ralna/spral/blob/master/COMPILE.md).
+Alternatively, consider using the [LANL ANSI fork of SPRAL](https://github.com/lanl-ansi/spral).
+The maintainer of this fork test whether their current version works with %Ipopt.
 
 After compilation of SPRAL, while configuring %Ipopt,
 you need to specify the link and include directories for the library with the
@@ -413,10 +415,10 @@ export OMP_NESTED=TRUE
 export OMP_PROC_BIND=TRUE
 \endverbatim
 
-A guide for building Ipopt with Spral on Ubuntu Linux is also avaiable
+A guide for building %Ipopt with Spral on Ubuntu Linux is also avaiable
 [here](https://gist.github.com/tasseff/ee61ef6c15d3c54e0a6b3e488f2a65be)
 (some GitHub URLs need to be adjusted to use coin-or/Ipopt instead of lanl-ansi/Ipopt).
-More information on the Spral interface of Ipopt can be found in \cite Tasseff2019.
+More information on the Spral interface of %Ipopt can be found in \cite Tasseff2019.
 
 \subsection DOWNLOAD_WSMP WSMP (Watson Sparse Matrix Package)
 
@@ -553,10 +555,10 @@ $IPOPTDIR/configure
 
     One might have to give options to the configure script, e.g., in
     order to choose a non-default compiler, or to tell it where to install
-    Ipopt eventually, see \ref CONFIGURE_FLAGS.
+    %Ipopt eventually, see \ref CONFIGURE_FLAGS.
 
     If the last output line reads
-    `configure: Main configuration of Ipopt successful` then
+    `configure: Main configuration of %Ipopt successful` then
     everything worked fine. Otherwise, look at the screen output, have a
     look at the `config.log` output file and/or consult \ref CONFIGURE_FLAGS.
 
@@ -725,7 +727,7 @@ Below a few particular options are discussed:
 -   %Ipopt can load HSL or Pardiso libraries at runtime. To disable this
     feature, specify `--disable-linear-solver-loader`.
 
--   \ref SIPOPT "sIpopt" is build and installed together with Ipopt. If
+-   \ref SIPOPT "sIpopt" is build and installed together with %Ipopt. If
     you do not need sIpopt, you can disable it via `--disable-sipopt`.
 
 Configure flags specific to the use of %Ipopt's dependencies were discussed
@@ -733,7 +735,7 @@ in the corresponding sections of \ref EXTERNALCODE.
 
 \subsection CPP_FLAGS Additional Flags for Compiler Preprocessor
 
-A few flags that influence which Ipopt code is compiled are not controlled by parameters for configure.
+A few flags that influence which %Ipopt code is compiled are not controlled by parameters for configure.
 We list some of these flags in the following.
 
 \note These are flags for expert users.

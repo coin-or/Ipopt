@@ -14,6 +14,7 @@ More detailed information about incremental changes can be found in the
 - Fixed compilation of IpTNLPAdapter.cpp if having Wsmp or HSL, but no Mumps
 - Fixed static build if sIpopt without GCC. Fixed that installed sIpopt
   headers were not usable (SIPOPTLIB_EXPORT not defined).
+- Adjusted SPRAL interface to work with [SPRAL from RALNA](https://github.com/ralna/spral).
 
 ### 3.14 beta1 (2021-05-14)
 
