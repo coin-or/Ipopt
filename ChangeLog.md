@@ -7,13 +7,13 @@ More detailed information about incremental changes can be found in the
 
 ## 3.14
 
-### 3.14 beta2 (2021-0x-yy)
+### 3.14 beta2 (2021-05-20)
 
 - Fixed problem that collecting timing statistics were not disabled for
-  initialization and solve in restoration phase. [#299]
-- Fixed compilation of IpTNLPAdapter.cpp if having Wsmp or HSL, but no Mumps
-- Fixed static build if sIpopt without GCC. Fixed that installed sIpopt
-  headers were not usable (SIPOPTLIB_EXPORT not defined).
+  initialization and for solve in restoration phase. [#299]
+- Fixed compilation of `IpTNLPAdapter.cpp` if having Wsmp or HSL, but no MUMPS.
+- Fixed static build of sIpopt without GCC. Fixed that installed sIpopt
+  headers were not usable (`SIPOPTLIB_EXPORT` not defined).
 - Adjusted SPRAL interface to work with [SPRAL from RALNA](https://github.com/ralna/spral).
 
 ### 3.14 beta1 (2021-05-14)
