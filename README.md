@@ -1,6 +1,8 @@
 Ipopt
 =====
 
+# You are looking at **Ipopt 3.14 BETA**. For Ipopt 3.13, checkout branch stable/3.13 or [release 3.13.4](https://github.com/coin-or/Ipopt/releases/tag/releases/3.13.4).
+
 Introduction
 ------------
 
