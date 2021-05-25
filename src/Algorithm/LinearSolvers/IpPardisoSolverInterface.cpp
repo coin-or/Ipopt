@@ -23,6 +23,14 @@ namespace Ipopt
 static const Index dbg_verbosity = 0;
 #endif
 
+/** pointer to Pardiso function that can be set via PardisoSolverInterface::SetFunctions() */
+static IPOPT_DECL_PARDISOINIT(*user_pardisoinit) = NULL;
+static IPOPT_DECL_PARDISO(*user_pardiso) = NULL;
+static bool user_isparallel = false;
+#ifdef PARDISO_MATCHING_PREPROCESS
+static IPOPT_DECL_SMAT_REORDERING_PARDISO_WSMP(*user_smat_reordering_pardiso_wsmp) = NULL;
+#endif
+
 PardisoSolverInterface::PardisoSolverInterface(
    SmartPtr<LibraryLoader> pardisoloader_
 )  : a_(NULL),
@@ -229,30 +237,65 @@ void PardisoSolverInterface::RegisterOptions(
       true);
 }
 
+void PardisoSolverInterface::SetFunctions(
+   IPOPT_DECL_PARDISOINIT(*pardisoinit),
+   IPOPT_DECL_PARDISO(*pardiso),
+   bool isparallel,
+   IPOPT_DECL_SMAT_REORDERING_PARDISO_WSMP(*smat_reordering_pardiso_wsmp)
+)
+{
+   DBG_ASSERT(pardisoinit != NULL);
+   DBG_ASSERT(pardiso != NULL);
+#ifdef PARDISO_MATCHING_PREPROCESS
+   DBG_ASSERT(smat_reordering_pardiso_wsmp != NULL);
+#endif
+
+   user_pardisoinit = pardisoinit;
+   user_pardiso = pardiso;
+   user_isparallel = isparallel;
+#ifdef PARDISO_MATCHING_PREPROCESS
+   user_smat_reordering_pardiso_wsmp = smat_reordering_pardiso_wsmp;
+#else
+   (void)smat_reordering_pardiso_wsmp;
+#endif
+}
+
 bool PardisoSolverInterface::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix
 )
 {
-   DBG_ASSERT(IsValid(pardisoloader));
-
-   pardisoinit = (IPOPT_DECL_PARDISOINIT(*))pardisoloader->loadSymbol("pardisoinit");
-   pardiso = (IPOPT_DECL_PARDISO(*))pardisoloader->loadSymbol("pardiso");
+   if( user_pardisoinit != NULL )
+   {
+      pardisoinit = user_pardisoinit;
+      pardiso = user_pardiso;
+      pardiso_exist_parallel = user_isparallel;
 #ifdef PARDISO_MATCHING_PREPROCESS
-   smat_reordering_pardiso_wsmp = (IPOPT_DECL_SMAT_REORDERING_PARDISO_WSMP(*))pardisoloader->loadSymbol("smat_reordering_pardiso_wsmp");
+      smat_reordering_pardiso_wsmp = user_smat_reordering_pardiso_wsmp;
 #endif
-   // load pardiso_ipopt_newinterface only as check that we get Pardiso >= 4.0.0 from pardiso-project
-   pardisoloader->loadSymbol("pardiso_ipopt_newinterface");
-   // set pardiso_exist_parallel to true if symbol pardiso_exist_parallel exists in pardiso library
-   // ignore if symbol doesn't exist (pardiso_exist_parallel == false)
-   try
-   {
-      pardisoloader->loadSymbol("pardiso_exist_parallel");
-      pardiso_exist_parallel = true;
    }
-   catch( const DYNAMIC_LIBRARY_FAILURE& )
+   else
    {
-      DBG_ASSERT(!pardiso_exist_parallel);
+      DBG_ASSERT(IsValid(pardisoloader));
+
+      pardisoinit = (IPOPT_DECL_PARDISOINIT(*))pardisoloader->loadSymbol("pardisoinit");
+      pardiso = (IPOPT_DECL_PARDISO(*))pardisoloader->loadSymbol("pardiso");
+#ifdef PARDISO_MATCHING_PREPROCESS
+      smat_reordering_pardiso_wsmp = (IPOPT_DECL_SMAT_REORDERING_PARDISO_WSMP(*))pardisoloader->loadSymbol("smat_reordering_pardiso_wsmp");
+#endif
+      // load pardiso_ipopt_newinterface only as check that we get Pardiso >= 4.0.0 from pardiso-project
+      pardisoloader->loadSymbol("pardiso_ipopt_newinterface");
+      // set pardiso_exist_parallel to true if symbol pardiso_exist_parallel exists in pardiso library
+      // ignore if symbol doesn't exist (pardiso_exist_parallel == false)
+      try
+      {
+         pardisoloader->loadSymbol("pardiso_exist_parallel");
+         pardiso_exist_parallel = true;
+      }
+      catch( const DYNAMIC_LIBRARY_FAILURE& )
+      {
+         DBG_ASSERT(!pardiso_exist_parallel);
+      }
    }
 
    DBG_ASSERT(pardisoinit != NULL);

@@ -130,6 +130,20 @@ public:
    );
    ///@}
 
+   /// set Pardiso functions to use for every instantiation of this class
+   ///
+   /// unless PARDISO_MATCHING_PREPROCESS has been defined, @arg smat_reordering_pardiso_wsmp is ignored
+   /// @since 3.14.0
+   static void SetFunctions(
+      IPOPT_DECL_PARDISOINIT(*pardisoinit),
+      IPOPT_DECL_PARDISO(*pardiso),
+      bool isparallel,
+      IPOPT_DECL_SMAT_REORDERING_PARDISO_WSMP(*smat_reordering_pardiso_wsmp)
+#ifndef PARDISO_MATCHING_PREPROCESS
+      = NULL
+#endif
+   );
+
 private:
    /**@name Default Compiler Generated Methods
     * (Hidden to avoid implicit creation/calling).
