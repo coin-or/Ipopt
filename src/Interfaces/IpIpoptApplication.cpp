@@ -602,7 +602,9 @@ ApplicationReturnStatus IpoptApplication::call_optimize()
       options_->GetBoolValue("print_timing_statistics", print_timing_statistics, "");
       // enable collecting timing statistics if they need to be printed later
       if( print_timing_statistics )
+      {
          options_->SetStringValue("timing_statistics", "yes", true, true);
+      }
 
       // Set up the algorithm
       p2alg->Initialize(*jnlst_, *p2ip_nlp, *p2ip_data, *p2ip_cq, *options_, "");

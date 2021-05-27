@@ -140,7 +140,6 @@ void Ma27TSolverInterface::RegisterOptions(
       true);
 }
 
-/// set MA27 functions to use for every instantiation of this class
 void Ma27TSolverInterface::SetFunctions(
    IPOPT_DECL_MA27A(*ma27a),
    IPOPT_DECL_MA27B(*ma27b),
