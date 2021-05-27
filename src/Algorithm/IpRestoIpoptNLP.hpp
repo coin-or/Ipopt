@@ -444,16 +444,15 @@ private:
    /** exponent for mu in eta calculation */
    Number eta_mu_exponent_;
 
-   // TODO in the following we should use pointers to CONST values
    /// Scaling factors for the \$x\$ part of the regularization term
-   SmartPtr<Vector> dr_x_;
+   SmartPtr<const Vector> dr_x_;
    /// Squared scaling factors for the \$x\$ part of the regularization term, for grad_f
-   SmartPtr<Vector> dr2_x_;
+   SmartPtr<const Vector> dr2_x_;
    /// Matrix with squared scaling factors, for h()
-   SmartPtr<DiagMatrix> DR2_x_;
+   SmartPtr<const DiagMatrix> DR2_x_;
 
    /** \$x\$ part of the reference point in the regularization term */
-   SmartPtr<Vector> x_ref_;
+   SmartPtr<const Vector> x_ref_;
    ///@}
 
    /**@name Default Compiler Generated Methods

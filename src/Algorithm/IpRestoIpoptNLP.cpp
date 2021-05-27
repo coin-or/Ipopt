@@ -424,25 +424,29 @@ bool RestoIpoptNLP::InitializeStructures(
    // Initialize other data needed by the restoration nlp.  x_ref is
    // the point to reference to which we based the regularization
    // term
-   x_ref_ = orig_x_space->MakeNew();
-   x_ref_->Copy(*orig_ip_data_->curr()->x());
+   SmartPtr<Vector> x_ref = orig_x_space->MakeNew();
+   x_ref->Copy(*orig_ip_data_->curr()->x());
+   x_ref_ = x_ref;
 
-   dr_x_ = orig_x_space->MakeNew();
-   dr_x_->Set(1.0);
-   SmartPtr<Vector> tmp = dr_x_->MakeNew();
+   SmartPtr<Vector> dr_x = orig_x_space->MakeNew();
+   dr_x->Set(1.0);
+   SmartPtr<Vector> tmp = dr_x->MakeNew();
    tmp->Copy(*x_ref_);
-   dr_x_->ElementWiseMax(*tmp);
+   dr_x->ElementWiseMax(*tmp);
    tmp->Scal(-1.);
-   dr_x_->ElementWiseMax(*tmp);
-   dr_x_->ElementWiseReciprocal();
+   dr_x->ElementWiseMax(*tmp);
+   dr_x->ElementWiseReciprocal();
+   dr_x_ = dr_x;
    DBG_PRINT_VECTOR(2, "dr_x_", *dr_x_);
 
    // dr_x^2
-   dr2_x_ = dr_x_->MakeNewCopy();
-   dr2_x_->ElementWiseMultiply(*dr_x_);
+   SmartPtr<Vector> dr2_x = dr_x->MakeNewCopy();
+   dr2_x->ElementWiseMultiply(*dr_x_);
+   dr2_x_ = dr2_x;
 
-   DR2_x_ = DR2_x_space->MakeNewDiagMatrix();
-   DR2_x_->SetDiag(*dr2_x_);
+   SmartPtr<DiagMatrix> DR2_x = DR2_x_space->MakeNewDiagMatrix();
+   DR2_x->SetDiag(*dr2_x_);
+   DR2_x_ = DR2_x;
 
    return true;
 }
