@@ -7,6 +7,11 @@ More detailed information about incremental changes can be found in the
 
 ## 3.14
 
+### 3.14 beta3 (2021-0x-yy)
+
+- Fixed wrong gradient of objective function and Lagrangian Hessian in
+  restoration problem [#478, by Nai-Yuan Chiang].
+
 ### 3.14 beta2 (2021-05-20)
 
 - Fixed problem that collecting timing statistics were not disabled for

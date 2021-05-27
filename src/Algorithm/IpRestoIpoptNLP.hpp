@@ -445,10 +445,12 @@ private:
    Number eta_mu_exponent_;
 
    // TODO in the following we should use pointers to CONST values
-   // TODO We can get rid of one of the dr DR
-   /** Scaling factors for the \$x\$ part of the regularization term */
+   /// Scaling factors for the \$x\$ part of the regularization term
    SmartPtr<Vector> dr_x_;
-   SmartPtr<DiagMatrix> DR_x_;
+   /// Squared scaling factors for the \$x\$ part of the regularization term, for grad_f
+   SmartPtr<Vector> dr2_x_;
+   /// Matrix with squared scaling factors, for h()
+   SmartPtr<DiagMatrix> DR2_x_;
 
    /** \$x\$ part of the reference point in the regularization term */
    SmartPtr<Vector> x_ref_;

@@ -294,7 +294,7 @@ bool RestoIpoptNLP::InitializeStructures(
    h_space_->SetBlockDim(3, orig_d_space->Dim());
    h_space_->SetBlockDim(4, orig_d_space->Dim());
 
-   SmartPtr<DiagMatrixSpace> DR_x_space = new DiagMatrixSpace(orig_x_space->Dim());
+   SmartPtr<DiagMatrixSpace> DR2_x_space = new DiagMatrixSpace(orig_x_space->Dim());
    if( hessian_approximation_ == LIMITED_MEMORY )
    {
       const LowRankUpdateSymMatrixSpace* LR_h_space = static_cast<const LowRankUpdateSymMatrixSpace*>(GetRawPtr(
@@ -308,7 +308,7 @@ bool RestoIpoptNLP::InitializeStructures(
    {
       SmartPtr<SumSymMatrixSpace> sumsym_mat_space = new SumSymMatrixSpace(orig_x_space->Dim(), 2);
       sumsym_mat_space->SetTermSpace(0, *orig_h_space);
-      sumsym_mat_space->SetTermSpace(1, *DR_x_space);
+      sumsym_mat_space->SetTermSpace(1, *DR2_x_space);
       h_space_->SetCompSpace(0, 0, *sumsym_mat_space, true);
       // All remaining blocks are zero'ed out
    }
@@ -436,8 +436,13 @@ bool RestoIpoptNLP::InitializeStructures(
    dr_x_->ElementWiseMax(*tmp);
    dr_x_->ElementWiseReciprocal();
    DBG_PRINT_VECTOR(2, "dr_x_", *dr_x_);
-   DR_x_ = DR_x_space->MakeNewDiagMatrix();
-   DR_x_->SetDiag(*dr_x_);
+
+   // dr_x^2
+   dr2_x_ = dr_x_->MakeNewCopy();
+   dr2_x_->ElementWiseMultiply(*dr_x_);
+
+   DR2_x_ = DR2_x_space->MakeNewDiagMatrix();
+   DR2_x_->SetDiag(*dr2_x_);
 
    return true;
 }
@@ -507,7 +512,7 @@ SmartPtr<const Vector> RestoIpoptNLP::grad_f(
    SmartPtr<Vector> x_only = c_vec->GetCompNonConst(0);
    x_only->Copy(*x_only_in);
    x_only->Axpy(-1.0, *x_ref_);
-   x_only->ElementWiseMultiply(*dr_x_);
+   x_only->ElementWiseMultiply(*dr2_x_);
    x_only->Scal(Eta(mu));
 
    return ConstPtr(retPtr);
@@ -689,7 +694,7 @@ SmartPtr<const SymMatrix> RestoIpoptNLP::h(
    SmartPtr<Matrix> h_sum_mat = retPtr->GetCompNonConst(0, 0);
    SmartPtr<SumSymMatrix> h_sum = static_cast<SumSymMatrix*>(GetRawPtr(h_sum_mat));
    h_sum->SetTerm(0, 1.0, *h_con_orig);
-   h_sum->SetTerm(1, obj_factor * Eta(mu), *DR_x_);
+   h_sum->SetTerm(1, obj_factor * Eta(mu), *DR2_x_);
 
    return GetRawPtr(retPtr);
 }
@@ -708,7 +713,7 @@ SmartPtr<const SymMatrix> RestoIpoptNLP::uninitialized_h()
       SmartPtr<Matrix> h_sum_mat = retPtr->GetCompNonConst(0, 0);
       SmartPtr<SumSymMatrix> h_sum = static_cast<SumSymMatrix*>(GetRawPtr(h_sum_mat));
       h_sum->SetTerm(0, 1.0, *h_con_orig);
-      h_sum->SetTerm(1, 1.0, *DR_x_);
+      h_sum->SetTerm(1, 1.0, *DR2_x_);
    }
 
    return GetRawPtr(retPtr);
