@@ -33,6 +33,8 @@ DenseVector::DenseVector(
    if( Dim() == 0 )
    {
       initialized_ = true;
+      homogeneous_ = true;
+      scalar_ = 0.;
    }
 }
 
@@ -136,6 +138,10 @@ void DenseVector::AxpyImpl(
 
    DBG_ASSERT(dense_x->initialized_);
    DBG_ASSERT(Dim() == dense_x->Dim());
+
+   if( Dim() == 0 )
+      return;
+
    if( homogeneous_ )
    {
       if( dense_x->homogeneous_ )
@@ -179,6 +185,10 @@ Number DenseVector::DotImpl(
 
    DBG_ASSERT(dense_x->initialized_);
    DBG_ASSERT(Dim() == dense_x->Dim());
+
+   if( Dim() == 0 )
+      return 0.0;
+
    if( homogeneous_ )
    {
       if( dense_x->homogeneous_ )
@@ -237,17 +247,13 @@ Number DenseVector::AmaxImpl() const
    {
       return 0.;
    }
-   else
+
+   if( homogeneous_ )
    {
-      if( homogeneous_ )
-      {
-         return std::abs(scalar_);
-      }
-      else
-      {
-         return std::abs(values_[IpBlasIamax(Dim(), values_, 1) - 1]);
-      }
+      return std::abs(scalar_);
    }
+
+   return std::abs(values_[IpBlasIamax(Dim(), values_, 1) - 1]);
 }
 
 void DenseVector::SetImpl(
@@ -276,6 +282,10 @@ void DenseVector::ElementWiseDivideImpl(
    DBG_ASSERT(dense_x->initialized_);
    const Number* values_x = dense_x->values_;
    DBG_ASSERT(Dim() == dense_x->Dim());
+
+   if( Dim() == 0 )
+      return;
+
    if( homogeneous_ )
    {
       if( dense_x->homogeneous_ )
@@ -322,6 +332,10 @@ void DenseVector::ElementWiseMultiplyImpl(
    DBG_ASSERT(dense_x->initialized_);
    const Number* values_x = dense_x->values_;
    DBG_ASSERT(Dim() == dense_x->Dim());
+
+   if( Dim() == 0 )
+      return;
+
    if( homogeneous_ )
    {
       if( dense_x->homogeneous_ )
@@ -371,6 +385,10 @@ void DenseVector::ElementWiseSelectImpl(
    DBG_ASSERT(dense_x->initialized_);
    const Number* values_x = dense_x->values_;
    DBG_ASSERT(Dim() == dense_x->Dim());
+
+   if( Dim() == 0 )
+      return;
+
    if( homogeneous_ )
    {
       if( scalar_ == 0.0 )
@@ -440,6 +458,10 @@ void DenseVector::ElementWiseMaxImpl(
    DBG_ASSERT(dense_x->initialized_);
    const Number* values_x = dense_x->values_;
    DBG_ASSERT(Dim() == dense_x->Dim());
+
+   if( Dim() == 0 )
+      return;
+
    if( homogeneous_ )
    {
       if( dense_x->homogeneous_ )
@@ -486,6 +508,10 @@ void DenseVector::ElementWiseMinImpl(
    DBG_ASSERT(dense_x->initialized_);
    const Number* values_x = dense_x->values_;
    DBG_ASSERT(Dim() == dense_x->Dim());
+
+   if( Dim() == 0 )
+      return;
+
    if( homogeneous_ )
    {
       if( dense_x->homogeneous_ )
@@ -524,6 +550,10 @@ void DenseVector::ElementWiseMinImpl(
 void DenseVector::ElementWiseReciprocalImpl()
 {
    DBG_ASSERT(initialized_);
+
+   if( Dim() == 0 )
+      return;
+
    if( homogeneous_ )
    {
       scalar_ = 1.0 / scalar_;
@@ -1286,6 +1316,9 @@ Number DenseVector::FracToBoundImpl(
    const DenseVector* dense_delta = static_cast<const DenseVector*>(&delta);
    DBG_ASSERT(dynamic_cast<const DenseVector*>(&delta));
 
+   if( Dim() == 0 )
+      return 1.0;
+
    Number alpha = 1.;
    Number* values_x = values_;
    Number* values_delta = dense_delta->values_;
@@ -1357,6 +1390,9 @@ void DenseVector::AddVectorQuotientImpl(
    DBG_ASSERT(c == 0. || initialized_);
    bool homogeneous_z = dense_z->homogeneous_;
    bool homogeneous_s = dense_s->homogeneous_;
+
+   if( Dim() == 0 )
+      return;
 
    if( (c == 0. || homogeneous_) && homogeneous_z && homogeneous_s )
    {

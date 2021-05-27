@@ -11,6 +11,8 @@ More detailed information about incremental changes can be found in the
 
 - Fixed wrong gradient of objective function and Lagrangian Hessian in
   restoration problem [#478, by Nai-Yuan Chiang].
+- Changed more `DenseVector` methods to skip calculations when dimension is 0
+  to avoid (probably harmless) divisions by zero.
 
 ### 3.14 beta2 (2021-05-20)
 
