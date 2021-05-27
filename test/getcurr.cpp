@@ -18,14 +18,14 @@
 using namespace Ipopt;
 
 #ifdef IPOPT_SINGLE
-#define TESTTOL 1e-5
+#define TESTTOL 5e-4
 #else
 #define TESTTOL 1e-9
 #endif
 #define ASSERTEQ(val1, val2) \
    do if( std::abs((val1)-(val2)) > TESTTOL*std::max(1.0,std::max((double)std::abs(val1),(double)std::abs(val2))) ) \
    { \
-      fprintf(stderr, "Wrong %s = %.12g, expected %s = %.12g\n", #val1, val1, #val2, val2); \
+      fprintf(stderr, "Line %d: Wrong %s = %.12g, expected %s = %.12g\n", __LINE__, #val1, val1, #val2, val2); \
       abort(); \
    } while (false)
 
