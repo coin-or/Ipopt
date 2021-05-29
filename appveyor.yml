@@ -19,8 +19,8 @@ install:
   - IF %ARCH%==win64-mingw (CALL C:\msys64\usr\bin\bash -lc "PATH=/mingw64/bin:$PATH ; gcc --version; g++ --version; gfortran --version; pkg-config --libs lapack ; echo PATH=$PATH")
 
 build_script:
-  - IF %ARCH%==win64-mingw (CALL C:\msys64\usr\bin\bash -lc "PATH=/mingw64/bin:$PATH ; git clone --depth 1 https://github.com/coin-or-tools/ThirdParty-ASL && cd ThirdParty-ASL && ./get.ASL && ./configure --prefix=$HOME/install && make && make install")
-  - IF %ARCH%==win64-mingw (CALL C:\msys64\usr\bin\bash -lc "PATH=/mingw64/bin:$PATH ; git clone --depth 1 https://github.com/coin-or-tools/ThirdParty-Mumps && cd ThirdParty-Mumps && ./get.Mumps && ./configure --prefix=$HOME/install && make && make install")
+  - IF %ARCH%==win64-mingw (CALL C:\msys64\usr\bin\bash -lc "PATH=/mingw64/bin:$PATH ; git clone --depth 1 --branch stable/2.0 https://github.com/coin-or-tools/ThirdParty-ASL && cd ThirdParty-ASL && ./get.ASL && ./configure --prefix=$HOME/install && make && make install")
+  - IF %ARCH%==win64-mingw (CALL C:\msys64\usr\bin\bash -lc "PATH=/mingw64/bin:$PATH ; git clone --depth 1 --branch stable/2.1 https://github.com/coin-or-tools/ThirdParty-Mumps && cd ThirdParty-Mumps && ./get.Mumps && ./configure --prefix=$HOME/install && make && make install")
   - IF %ARCH%==win64-mingw (CALL C:\msys64\usr\bin\bash -lc "PATH=/mingw64/bin:$PATH ; JAVA_HOME=/c/Progra~2/Java/jdk1.8.0 ; /c/projects/ipopt/configure --prefix=$HOME/install && make && make install")
   - IF %ARCH%==win64-msvc15 (CALL C:\msys64\usr\bin\bash -lc "/c/projects/ipopt/configure --enable-msvc && make")
 
