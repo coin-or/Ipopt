@@ -129,6 +129,9 @@ public:
       if( inner_ )
       {
          Number arg = 0.5 * (x[0] - a_) * (x[0] - a_) + 0.5 * x[0] * x[0];
+         // avoid a floating-point overflow when arg is too large, return false instead
+         if( arg >= std::log(std::numeric_limits<Number>::max()) )
+            return false;
          obj_value = std::exp(arg);
          return true;
       }
@@ -158,6 +161,9 @@ public:
 
       // evaluate object for the outer problem
       Number arg = 0.5 * (y_ - x[0]) * (y_ - x[0]) + 0.5 * y_ * y_;
+      // avoid a floating-point overflow when arg is too large, return false instead
+      if( arg >= std::log(std::numeric_limits<Number>::max()) )
+         return false;
       obj_value = std::exp(arg);
 
       return true;
