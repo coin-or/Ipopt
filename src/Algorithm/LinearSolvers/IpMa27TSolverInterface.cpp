@@ -425,7 +425,7 @@ ESymSolverStatus Ma27TSolverInterface::SymbolicFactorization(
       iw_ = NULL;
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "Size of integer work space recommended by MA27 is %" IPOPT_INDEX_FORMAT "\n", nirnec);
-      liw_ = (Index) (liw_init_factor_ * (Number) (nirnec));
+      ComputeMemIncrease(liw_, liw_init_factor_ * (Number) nirnec , 0, "integer working space for MA27");
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "Setting integer work space size to %" IPOPT_INDEX_FORMAT "\n", liw_);
       iw_ = new Index[liw_];
@@ -435,14 +435,14 @@ ESymSolverStatus Ma27TSolverInterface::SymbolicFactorization(
       a_ = NULL;
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "Size of doublespace recommended by MA27 is %" IPOPT_INDEX_FORMAT "\n", nrlnec);
-      la_ = Max(nonzeros_, (Index) (la_init_factor_ * (Number) (nrlnec)));
+      ComputeMemIncrease(la_, la_init_factor_ * (Number) nrlnec, nonzeros_, "double working space for MA27");
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "Setting double work space size to %" IPOPT_INDEX_FORMAT "\n", la_);
       a_ = new Number[la_];
    }
    catch( const std::bad_alloc& e )
    {
-      Jnlst().Printf(J_STRONGWARNING, J_LINEAR_ALGEBRA, "Failed to allocate more working space memory for MA27\n");
+      Jnlst().Printf(J_STRONGWARNING, J_LINEAR_ALGEBRA, "Failed to allocate more working space for MA27\n");
       throw; // will be caught in IpIpoptApplication
    }
 
@@ -473,7 +473,7 @@ ESymSolverStatus Ma27TSolverInterface::Factorization(
    {
       Number* a_old = a_;
       Index la_old = la_;
-      la_ = (Index) (meminc_factor_ * (Number) (la_));
+      ComputeMemIncrease(la_, meminc_factor_ * (Number) la_, 0, "double working space for MA27");
       a_ = new Number[la_];
       for( Index i = 0; i < nonzeros_; i++ )
       {
@@ -491,7 +491,7 @@ ESymSolverStatus Ma27TSolverInterface::Factorization(
       delete[] iw_;
       iw_ = NULL;
       Index liw_old = liw_;
-      liw_ = (Index) (meminc_factor_ * (Number) (liw_));
+      ComputeMemIncrease(liw_, meminc_factor_ * (Number) liw_, 0, "integer working space for MA27");
       iw_ = new Index[liw_];
       liw_increase_ = false;
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
@@ -539,13 +539,13 @@ ESymSolverStatus Ma27TSolverInterface::Factorization(
       Index la_old = la_;
       if( iflag == -3 )
       {
-         liw_ = (Index) (meminc_factor_ * (Number) (ierror));
-         la_ = (Index) (meminc_factor_ * (Number) (la_));
+         ComputeMemIncrease(liw_, meminc_factor_ * (Number) ierror, 0, "integer working space for MA27");
+         ComputeMemIncrease(la_, meminc_factor_ * (Number) la_, 0, "double working space for MA27");
       }
       else
       {
-         liw_ = (Index) (meminc_factor_ * (Number) (liw_));
-         la_ = (Index) (meminc_factor_ * (Number) (ierror));
+         ComputeMemIncrease(liw_, meminc_factor_ * (Number) liw_, 0, "integer working space for MA27");
+         ComputeMemIncrease(la_, meminc_factor_ * (Number) ierror, 0, "double working space for MA27");
       }
       iw_ = new Index[liw_];
       a_ = new Number[la_];
