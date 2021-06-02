@@ -102,6 +102,11 @@ IpoptApplication::IpoptApplication(
       jnlst_->Printf(J_ERROR, J_MAIN, "\nEXIT: Not enough memory.\n");
       THROW_EXCEPTION(IPOPT_APPLICATION_ERROR, "Not enough memory");
    }
+   catch( std::overflow_error& )
+   {
+      jnlst_->Printf(J_ERROR, J_MAIN, "\nEXIT: Integer type too small for required memory.\n");
+      THROW_EXCEPTION(IPOPT_APPLICATION_ERROR, "Not enough memory");
+   }
    catch( ... )
    {
       IpoptException exc("Unknown Exception caught in ipopt", "Unknown File", -1);
@@ -266,6 +271,11 @@ ApplicationReturnStatus IpoptApplication::Initialize(
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Not enough memory.\n");
       return Insufficient_Memory;
    }
+   catch( std::overflow_error& )
+   {
+      jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Integer type too small for required memory.\n");
+      return Insufficient_Memory;
+   }
    catch( ... )
    {
       if( !rethrow_nonipoptexception_ )
@@ -297,6 +307,11 @@ ApplicationReturnStatus IpoptApplication::Initialize(
       catch( std::bad_alloc& )
       {
          jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Not enough memory.\n");
+         return Insufficient_Memory;
+      }
+      catch( std::overflow_error& )
+      {
+         jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Integer type too small for required memory.\n");
          return Insufficient_Memory;
       }
       catch( ... )
@@ -530,6 +545,11 @@ ApplicationReturnStatus IpoptApplication::OptimizeNLP(
    {
       retValue = Insufficient_Memory;
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Not enough memory.\n");
+   }
+   catch( std::overflow_error& )
+   {
+      retValue = Insufficient_Memory;
+      jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Integer type too small for required memory.\n");
    }
    catch( ... )
    {
@@ -832,6 +852,12 @@ ApplicationReturnStatus IpoptApplication::call_optimize()
    {
       retValue = Insufficient_Memory;
       jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Not enough memory.\n");
+      status = OUT_OF_MEMORY;
+   }
+   catch( std::overflow_error& )
+   {
+      retValue = Insufficient_Memory;
+      jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Integer type too small for required memory.\n");
       status = OUT_OF_MEMORY;
    }
    catch( ... )

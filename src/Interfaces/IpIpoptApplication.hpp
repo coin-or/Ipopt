@@ -242,10 +242,10 @@ public:
     */
    void PrintCopyrightMessage();
 
-   /** Method to set whether non-ipopt non-bad_alloc exceptions
+   /** Method to set whether non-ipopt non-bad_alloc non-overflow_error exceptions
     * are rethrown by Ipopt.
     *
-    * By default, non-Ipopt and non-bad_alloc exceptions are
+    * By default, non-Ipopt and non-bad_alloc and non-overflow_error exceptions are
     * caught by Ipopts initialization and optimization methods
     * and the status NonIpopt_Exception_Thrown is returned.
     * This function allows to enable rethrowing of such exceptions.
@@ -302,7 +302,7 @@ private:
    /** Decide whether or not the ipopt.opt file should be read */
    bool read_params_dat_;
 
-   /** Decide whether non-ipopt non-bad_alloc exceptions should be rethrown */
+   /** Decide whether non-ipopt non-bad_alloc non-overflow_error exceptions should be rethrown */
    bool rethrow_nonipoptexception_;
    ///@}
 

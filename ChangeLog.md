@@ -13,6 +13,13 @@ More detailed information about incremental changes can be found in the
   restoration problem [#478, by Nai-Yuan Chiang].
 - Changed more `DenseVector` methods to skip calculations when dimension is 0
   to avoid (probably harmless) divisions by zero.
+- std::overflow_error exceptions are now caught by Ipopt even if rethrowing
+  of non-Ipopt exceptions is enabled.
+- An insufficient memory return status is now also given if the memory
+  required for a working space array of a linear solver exceeds the maximal
+  value for the working space length variable, e.g., if MA27 requires a
+  working space array of length higher than 2^31.
+- Avoid floating point overflow when computing memory increase in MA27 interface.
 
 ### 3.14 beta2 (2021-05-20)
 
