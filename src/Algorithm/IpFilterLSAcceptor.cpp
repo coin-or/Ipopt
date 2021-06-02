@@ -277,6 +277,7 @@ bool FilterLSAcceptor::IsFtype(Number alpha_primal_test)
                   reference_theta_, reference_gradBarrTDelta_);
    Number mach_eps = std::numeric_limits<Number>::epsilon();
    // ToDo find good value
+   // because the assert below fails (with MA27) for CUTEst instances HATFLDF, NONMSQRT, PALMER7E, PALMER5A
    if (reference_theta_ == 0. &&  reference_gradBarrTDelta_ > 0. &&
        reference_gradBarrTDelta_ < 100.*mach_eps)
    {
