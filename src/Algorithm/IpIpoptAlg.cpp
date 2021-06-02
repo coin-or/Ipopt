@@ -15,6 +15,10 @@
 #include "CoinHslConfig.h"
 #endif
 
+#if IPOPT_CHECKLEVEL > 1 && defined(IPOPT_HAS_FEENABLEEXCEPT)
+#include <cfenv>
+#endif
+
 namespace Ipopt
 {
 #if IPOPT_VERBOSITY > 0
@@ -254,23 +258,32 @@ bool IpoptAlgorithm::InitializeImpl(
    return true;
 }
 
-// class to end a TimedTask when object is destructed
-class EndTimedTask
+// class to execute some tasks when object is destructed
+// ends a TimedTask, disables floating-point exceptions
+class EndTasks
 {
 private:
-   TimedTask& task;
+   TimedTask& task_;
+   int excepts_;
 public:
-   EndTimedTask(
-      TimedTask& task_
+   EndTasks(
+      TimedTask& task,
+      int        excepts
    )
-      : task(task_)
+      : task_(task),
+        excepts_(excepts)
    {
-      DBG_ASSERT(task.IsStarted());
+      DBG_ASSERT(task_.IsStarted());
    }
 
-   ~EndTimedTask()
+   ~EndTasks()
    {
-      task.End();
+      task_.End();
+#if IPOPT_CHECKLEVEL > 1 && defined(IPOPT_HAS_FEENABLEEXCEPT)
+      fedisableexcept(excepts_);
+#else
+      (void)excepts_;
+#endif
    }
 };
 
@@ -282,7 +295,20 @@ SolverReturn IpoptAlgorithm::Optimize(
 
    // Start measuring CPU time
    IpData().TimingStats().OverallAlgorithm().Start();
-   EndTimedTask endtask(IpData().TimingStats().OverallAlgorithm());  // ensure task is ended when Optimize() is left
+
+   int disable_excepts = 0;
+#if IPOPT_CHECKLEVEL > 1 && defined(IPOPT_HAS_FEENABLEEXCEPT)
+   int orig_excepts = feenableexcept(FE_DIVBYZERO | FE_INVALID | FE_OVERFLOW);
+   if( orig_excepts >= 0 )
+   {
+      // disable exceptions FE_DIVBYZERO, FE_INVALID, FE_OVERFLOW later, if not part of originally set exceptions
+      disable_excepts = ~orig_excepts & (FE_DIVBYZERO | FE_INVALID | FE_OVERFLOW);
+   }
+#endif
+
+   // ensure timed task is ended when Optimize() is left
+   // ensure additional floating point exceptions are no longer raised when Optimize() is left
+   EndTasks endtasks(IpData().TimingStats().OverallAlgorithm(), disable_excepts);
 
    if( !copyright_message_printed )
    {

@@ -25774,6 +25774,19 @@ fi
 rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
 
 
+##################
+# feenableexcept #
+##################
+
+ac_fn_check_decl "$LINENO" "feenableexcept" "ac_cv_have_decl_feenableexcept" "#include <cfenv>
+" "$ac_cxx_undeclared_builtin_options" "CXXFLAGS"
+if test "x$ac_cv_have_decl_feenableexcept" = xyes
+then :
+
+printf "%s\n" "#define IPOPT_HAS_FEENABLEEXCEPT 1" >>confdefs.h
+
+fi
+
 ###################################################
 # Check if user wants inexact algorithm available #
 ###################################################
@@ -25950,7 +25963,7 @@ else $as_nop
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25953 "configure" */
+/* #line 25966 "configure" */
 public class Test {
 }
 EOF
@@ -26476,7 +26489,7 @@ else $as_nop
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 26479 "configure" */
+/* #line 26492 "configure" */
 public class Test {
 }
 EOF
@@ -26511,7 +26524,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 26514 "configure" */
+/* [#]line 26527 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);

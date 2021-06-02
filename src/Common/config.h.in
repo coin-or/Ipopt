@@ -104,6 +104,9 @@
 /* Define to 1 if function drand48 is available */
 #undef IPOPT_HAS_DRAND48
 
+/* Define to 1 if function feenableexcept is available */
+#undef IPOPT_HAS_FEENABLEEXCEPT
+
 /* Define to 1 if HSL is available. */
 #undef IPOPT_HAS_HSL
 
