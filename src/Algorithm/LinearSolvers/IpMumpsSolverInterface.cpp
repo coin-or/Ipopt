@@ -477,12 +477,10 @@ ESymSolverStatus MumpsSolverInterface::Factorization(
       {
          Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
                         "MUMPS returned INFO(1) = %" IPOPT_INDEX_FORMAT " and requires more memory, reallocating.  Attempt %d\n", error, trycount + 1);
+         MUMPS_INT old_mem_percent = mumps_data->icntl[13];
+         ComputeMemIncrease(mumps_data->icntl[13], 2.0 * (Number)old_mem_percent, MUMPS_INT(0), "percent extra working space for MUMPS");
          Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
-                        "  Increasing icntl[13] from %" IPOPT_INDEX_FORMAT " to ", mumps_data->icntl[13]);
-         Number mem_percent = mumps_data->icntl[13];
-         mumps_data->icntl[13] = (Index) (2.0 * mem_percent);
-         Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
-                        "%" IPOPT_INDEX_FORMAT ".\n", mumps_data->icntl[13]);
+                        "  Increasing icntl[13] from %" IPOPT_INDEX_FORMAT " to %" IPOPT_INDEX_FORMAT ".\n", old_mem_percent, mumps_data->icntl[13]);
 
          dump_matrix(mumps_data);
          Jnlst().Printf(J_MOREDETAILED, J_LINEAR_ALGEBRA,
@@ -670,12 +668,10 @@ ESymSolverStatus MumpsSolverInterface::DetermineDependentRows(
       {
          Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
                         "MUMPS returned INFO(1) = %" IPOPT_INDEX_FORMAT " and requires more memory, reallocating.  Attempt %d\n", error, trycount + 1);
+         MUMPS_INT old_mem_percent = mumps_data->icntl[13];
+         ComputeMemIncrease(mumps_data->icntl[13], 2.0 * (Number)old_mem_percent, MUMPS_INT(0), "percent extra working space for MUMPS");
          Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
-                        "  Increasing icntl[13] from %" IPOPT_INDEX_FORMAT " to ", mumps_data->icntl[13]);
-         Number mem_percent = mumps_data->icntl[13];
-         mumps_data->icntl[13] = (Index) (2.0 * mem_percent);
-         Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
-                        "%" IPOPT_INDEX_FORMAT ".\n", mumps_data->icntl[13]);
+                        "  Increasing icntl[13] from %" IPOPT_INDEX_FORMAT " to %" IPOPT_INDEX_FORMAT ".\n", old_mem_percent, mumps_data->icntl[13]);
 
          dump_matrix(mumps_data);
          mumps_c(mumps_data);
