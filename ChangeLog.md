@@ -19,7 +19,8 @@ More detailed information about incremental changes can be found in the
   required for a working space array of a linear solver exceeds the maximal
   value for the working space length variable, e.g., if MA27 requires a
   working space array of length higher than 2^31.
-- Avoid floating point overflow when computing memory increase in MA27 interface.
+- Avoid floating point overflow when computing memory increase in interfaces
+  to MA27, MA57.
 
 ### 3.14 beta2 (2021-05-20)
 

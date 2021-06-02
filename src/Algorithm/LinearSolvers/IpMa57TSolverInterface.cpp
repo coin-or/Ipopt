@@ -10,7 +10,6 @@
 
 #include <cmath>
 #include <iostream>
-#include <limits>
 
 #ifdef IPOPT_HAS_HSL
 #include "CoinHslConfig.h"
@@ -574,8 +573,10 @@ ESymSolverStatus Ma57TSolverInterface::SymbolicFactorization(
                      "*** Error from MA57AD *** INFO(0) = %" IPOPT_INDEX_FORMAT "\n", wd_info_[0]);
    }
 
-   wd_lfact_ = (ma57int) ((Number) wd_info_[8] * ma57_pre_alloc_);
-   wd_lifact_ = (ma57int) ((Number) wd_info_[9] * ma57_pre_alloc_);
+   wd_lfact_ = 0;
+   wd_lifact_ = 0;
+   ComputeMemIncrease(wd_lfact_, (Number)wd_info_[8] * ma57_pre_alloc_, 0, "double working space for MA57");
+   ComputeMemIncrease(wd_lifact_, (Number)wd_info_[9] * ma57_pre_alloc_, 0, "integer working space for MA57");
 
    // XXX MH:  Why is this necessary?  Is `::Factorization' called more
    // than once per object lifetime?  Where should allocation take
@@ -646,16 +647,17 @@ ESymSolverStatus Ma57TSolverInterface::Factorization(
          Number* temp;
          ma57int ic = 0;
 
-         wd_lfact_ = (ma57int) ((Number) wd_info_[16] * ma57_pre_alloc_);
+         ComputeMemIncrease(wd_lfact_, (Number)wd_info_[16] * ma57_pre_alloc_, 0, "double working space for MA57");
          Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
                         "Reallocating memory for MA57: lfact (%" IPOPT_INDEX_FORMAT ")\n", wd_lfact_);
 
-         if( (size_t) wd_lfact_ > std::numeric_limits<size_t>::max() / sizeof(Number) )
-         {
-            Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
-                           "Cannot allocate memory of size %" IPOPT_INDEX_FORMAT " exceeding SIZE_MAX = %zd\n", wd_lfact_, std::numeric_limits<size_t>::max());
-            return SYMSOLVER_FATAL_ERROR;
-         }
+         // I removed this, because the call to new below should already check this, too, and would throw a std::bad_alloc (which we catch) (or std::bad_array_new_length if C++11)
+         // if( (size_t) wd_lfact_ > std::numeric_limits<size_t>::max() / sizeof(Number) )
+         // {
+         //   Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
+         //                  "Cannot allocate memory of size %" IPOPT_INDEX_FORMAT " exceeding SIZE_MAX = %zd\n", wd_lfact_, std::numeric_limits<size_t>::max());
+         //   return SYMSOLVER_FATAL_ERROR;
+         // }
 
          temp = new Number[wd_lfact_];
 
@@ -677,7 +679,7 @@ ESymSolverStatus Ma57TSolverInterface::Factorization(
          ma57int* temp;
          ma57int ic = 1;
 
-         wd_lifact_ = (ma57int) ((Number) wd_info_[17] * ma57_pre_alloc_);
+         ComputeMemIncrease(wd_lifact_, (Number)wd_info_[17] * ma57_pre_alloc_, 0, "integer working space for MA57");
          temp = new ma57int[wd_lifact_];
 
          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
@@ -719,7 +721,7 @@ ESymSolverStatus Ma57TSolverInterface::Factorization(
       }
    }
 
-   Number peak_mem = 1.0e-3 * ((Number) wd_lfact_ * 8.0 + (Number) wd_lifact_ * 4.0 + (Number) wd_lkeep_ * 4.0);
+   Number peak_mem = 1.0e-3 * ((Number) wd_lfact_ * sizeof(Number) + (Number) wd_lifact_ * sizeof(ma57int) + (Number) wd_lkeep_ * sizeof(ma57int));
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                   "MA57 peak memory use: %zdKB\n", (size_t) (peak_mem));
 
