@@ -7,7 +7,7 @@ More detailed information about incremental changes can be found in the
 
 ## 3.14
 
-### 3.14 beta3 (2021-0x-yy)
+### 3.14 beta3 (2021-06-03)
 
 - Fixed wrong gradient of objective function and Lagrangian Hessian in
   restoration problem [#478, by Nai-Yuan Chiang].
