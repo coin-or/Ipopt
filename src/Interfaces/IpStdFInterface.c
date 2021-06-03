@@ -414,8 +414,11 @@ static char* f2cstr(
       }
    }
    cstr = (char*) malloc(sizeof(char) * (len + 1));
-   strncpy(cstr, FSTR, len);
-   cstr[len] = '\0';
+   if( cstr != NULL )
+   {
+      strncpy(cstr, FSTR, len);
+      cstr[len] = '\0';
+   }
 
    return cstr;
 }
