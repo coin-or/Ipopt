@@ -20,10 +20,10 @@
 /***************************************************************************/
 
 /* Define to the debug sanity check level (0 is no test) */
-#define IPOPT_CHECKLEVEL 0
+/* #define IPOPT_CHECKLEVEL 0 */
 
 /* Define to the debug verbosity level (0 is no output) */
-#define IPOPT_VERBOSITY 0
+/* #define IPOPT_VERBOSITY 0 */
 
 /* If defined, the Ampl Solver Library is available. */
 /* #undef IPOPT_HAS_ASL 1 */
