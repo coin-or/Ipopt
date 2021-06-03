@@ -136,7 +136,7 @@
 #define SIZEOF_INT 4
 
 /* The size of a `int *', as computed by sizeof. */
-#define SIZEOF_INT_P 4
+#define SIZEOF_INT_P 8
 
 /* The size of a `long', as computed by sizeof. */
 #define SIZEOF_LONG 4
