@@ -21,7 +21,7 @@ More detailed information about incremental changes can be found in the
   working space array of length higher than 2^31.
 - Avoid floating point overflow when computing memory increase in interfaces
   to MA27, MA57.
-- If Ipopt checklevel is set to 2 or higher and the GLIBC extension `feenableexcept()`
+- If Ipopt is compiled for checklevel 2 or higher and the GLIBC extension `feenableexcept()`
   is available, then floating-pointing exceptions divbyzero, overflow, and
   invalid are raised while `IpoptAlgorithm::Optimize()` is running.
 

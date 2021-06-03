@@ -669,10 +669,16 @@ Below a few particular options are discussed:
     compiler optimization.
 
     Also, you can tell %Ipopt to do some additional runtime
-    sanity checks, by specifying the flag `--with-ipopt-checklevel=1`.
+    sanity checks, by specifying the flag `--with-ipopt-checklevel`.
 
     This usually leads to a significant slowdown of the code, but might
     be helpful when debugging something.
+
+    The checklevel value has the following effect:
+    - &ge; 1 : enables asserts (DBG_ASSERT) and debug statements (DBG_DO)
+    - &ge; 2 : floating-point exceptions divbyzero, overflow, and invalid are signaled (SIGFPE) while %Ipopt is solving (requires GLIBC)
+    - &ge; 3 : checks in Ipopts caching and observer mechanisms are enabled
+    - &ge; 4 : checks in Ipopts SmartPtr implementation are enabled
 
 -   If you want to link the %Ipopt library with a main
     program written in C or Fortran, the C and Fortran compiler doing
@@ -703,7 +709,7 @@ Below a few particular options are discussed:
     (Alternatively, a simpler solution for AIX is to set the environment
     variable `OBJECT_MODE` to 64.)
 
--   Ipopt's Java interface `JIpopt` uses the Java Native Interface (JNI),
+-   %Ipopt's Java interface `JIpopt` uses the Java Native Interface (JNI),
     which is a programming framework that allows Java code running in the
     Java Virtual Machine (JVM) to call and be called by native applications
     and libraries written in languages such as C and C++.
