@@ -140,7 +140,9 @@ void DenseVector::AxpyImpl(
    DBG_ASSERT(Dim() == dense_x->Dim());
 
    if( Dim() == 0 )
+   {
       return;
+   }
 
    if( homogeneous_ )
    {
@@ -187,7 +189,9 @@ Number DenseVector::DotImpl(
    DBG_ASSERT(Dim() == dense_x->Dim());
 
    if( Dim() == 0 )
+   {
       return 0.0;
+   }
 
    if( homogeneous_ )
    {
@@ -284,7 +288,9 @@ void DenseVector::ElementWiseDivideImpl(
    DBG_ASSERT(Dim() == dense_x->Dim());
 
    if( Dim() == 0 )
+   {
       return;
+   }
 
    if( homogeneous_ )
    {
@@ -334,7 +340,9 @@ void DenseVector::ElementWiseMultiplyImpl(
    DBG_ASSERT(Dim() == dense_x->Dim());
 
    if( Dim() == 0 )
+   {
       return;
+   }
 
    if( homogeneous_ )
    {
@@ -387,7 +395,9 @@ void DenseVector::ElementWiseSelectImpl(
    DBG_ASSERT(Dim() == dense_x->Dim());
 
    if( Dim() == 0 )
+   {
       return;
+   }
 
    if( homogeneous_ )
    {
@@ -460,7 +470,9 @@ void DenseVector::ElementWiseMaxImpl(
    DBG_ASSERT(Dim() == dense_x->Dim());
 
    if( Dim() == 0 )
+   {
       return;
+   }
 
    if( homogeneous_ )
    {
@@ -510,7 +522,9 @@ void DenseVector::ElementWiseMinImpl(
    DBG_ASSERT(Dim() == dense_x->Dim());
 
    if( Dim() == 0 )
+   {
       return;
+   }
 
    if( homogeneous_ )
    {
@@ -552,7 +566,9 @@ void DenseVector::ElementWiseReciprocalImpl()
    DBG_ASSERT(initialized_);
 
    if( Dim() == 0 )
+   {
       return;
+   }
 
    if( homogeneous_ )
    {
@@ -1317,7 +1333,9 @@ Number DenseVector::FracToBoundImpl(
    DBG_ASSERT(dynamic_cast<const DenseVector*>(&delta));
 
    if( Dim() == 0 )
+   {
       return 1.0;
+   }
 
    Number alpha = 1.;
    Number* values_x = values_;
@@ -1392,7 +1410,9 @@ void DenseVector::AddVectorQuotientImpl(
    bool homogeneous_s = dense_s->homogeneous_;
 
    if( Dim() == 0 )
+   {
       return;
+   }
 
    if( (c == 0. || homogeneous_) && homogeneous_z && homogeneous_s )
    {

@@ -425,7 +425,7 @@ ESymSolverStatus Ma27TSolverInterface::SymbolicFactorization(
       iw_ = NULL;
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "Size of integer work space recommended by MA27 is %" IPOPT_INDEX_FORMAT "\n", nirnec);
-      ComputeMemIncrease(liw_, liw_init_factor_ * (Number) nirnec , 0, "integer working space for MA27");
+      ComputeMemIncrease(liw_, liw_init_factor_ * (Number) nirnec, 0, "integer working space for MA27");
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "Setting integer work space size to %" IPOPT_INDEX_FORMAT "\n", liw_);
       iw_ = new Index[liw_];
