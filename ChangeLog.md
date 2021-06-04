@@ -12,6 +12,9 @@ More detailed information about incremental changes can be found in the
 - When a square problem is solved and the restoration phase only succeeded to
   find a point that is feasible w.r.t. constr_viol_tol, but not w.r.t. tol,
   then status Feasible_Point_Found is returned now.
+- Fixed that norm on unscaled complementarity or scaled complementarity tolerance
+  were negative when maximizing (by using a negative scaling factor for the
+  objective).
 
 ### 3.14 beta3 (2021-06-03)
 

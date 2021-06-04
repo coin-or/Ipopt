@@ -210,7 +210,7 @@ void MonotoneMuUpdate::CalcNewMuAndTau(
 
    // Here we need the complementarity tolerance that is posed to the
    // scaled problem
-   Number compl_inf_tol = IpNLP().NLP_scaling()->apply_obj_scaling(compl_inf_tol_);
+   Number compl_inf_tol = std::abs(IpNLP().NLP_scaling()->apply_obj_scaling(compl_inf_tol_));
    new_mu = Min(mu_linear_decrease_factor_ * mu, std::pow(mu, mu_superlinear_decrease_power_));
    new_mu = Max(new_mu, mu_target_, Min(tol, compl_inf_tol) / (barrier_tol_factor_ + Number(1.)));
 

@@ -261,7 +261,7 @@ bool AdaptiveMuUpdate::UpdateBarrierParameter()
    // (e.g. in the restoration phase)
    if( mu_min_default_ )
    {
-      mu_min_ = Min(mu_min_, Number(0.5) * Min(IpData().tol(), IpNLP().NLP_scaling()->apply_obj_scaling(compl_inf_tol_)));
+      mu_min_ = Min(mu_min_, Number(0.5) * Min(IpData().tol(), std::abs(IpNLP().NLP_scaling()->apply_obj_scaling(compl_inf_tol_))));
    }
 
    // if mu_max has not yet been computed, do so now, based on the
@@ -273,7 +273,7 @@ bool AdaptiveMuUpdate::UpdateBarrierParameter()
                      "Setting mu_max to %e.\n", mu_max_);
    }
 
-   // if there are not bounds, we always return the minimum MU value
+   // if there are no bounds, we always return the minimum MU value
    if( !check_if_no_bounds_ )
    {
       Index n_bounds = IpData().curr()->z_L()->Dim() + IpData().curr()->z_U()->Dim() + IpData().curr()->v_L()->Dim()
@@ -323,7 +323,7 @@ bool AdaptiveMuUpdate::UpdateBarrierParameter()
             // well, decrease mu
             // ToDo combine this code with MonotoneMuUpdate
             Number tol = IpData().tol();
-            Number compl_inf_tol = IpNLP().NLP_scaling()->apply_obj_scaling(compl_inf_tol_);
+            Number compl_inf_tol = std::abs(IpNLP().NLP_scaling()->apply_obj_scaling(compl_inf_tol_));
             Number new_mu = Min(mu_linear_decrease_factor_ * mu, std::pow(mu, mu_superlinear_decrease_power_));
             DBG_PRINT((1, "new_mu = %e, compl_inf_tol = %e tol = %e\n", new_mu, compl_inf_tol, tol));
             new_mu = Max(new_mu, Min(compl_inf_tol, tol) / (barrier_tol_factor_ + Number(1.)));

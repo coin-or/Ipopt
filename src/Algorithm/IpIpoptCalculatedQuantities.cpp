@@ -2949,7 +2949,7 @@ Number IpoptCalculatedQuantities::unscaled_curr_complementarity(
    ENormType NormType
 )
 {
-   return ip_nlp_->NLP_scaling()->unapply_obj_scaling(curr_complementarity(mu, NormType));
+   return std::abs(ip_nlp_->NLP_scaling()->unapply_obj_scaling(curr_complementarity(mu, NormType)));
 }
 
 Number IpoptCalculatedQuantities::CalcCentralityMeasure(
