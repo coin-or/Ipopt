@@ -157,7 +157,7 @@ bool MinC_1NrmRestorationPhase::PerformRestoration()
    if( square_problem )
    {
       actual_resto_options = new OptionsList(*resto_options_);
-      // If this is a square problem, the want the restoration phase
+      // If this is a square problem, then we want the restoration phase
       // never to be left until the problem is converged
       actual_resto_options->SetNumericValueIfUnset("required_infeasibility_reduction", 0.);
    }
@@ -266,6 +266,15 @@ bool MinC_1NrmRestorationPhase::PerformRestoration()
 
       retval = 0;
    }
+   else if( square_problem && resto_status == STOP_AT_ACCEPTABLE_POINT && IpCq().unscaled_curr_nlp_constraint_violation(NORM_MAX) < constr_viol_tol_ )
+   {
+      // square problem with point that is feasible w.r.t. constr_viol_tol_, though probably not w.r.t. tol
+      // we can return feasibility-problem-solved here, but not optimal
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                     "Recursive restoration phase algorithm terminated acceptably for square problem.\n");
+      THROW_EXCEPTION(FEASIBILITY_PROBLEM_SOLVED,
+                      "Restoration phase converged to sufficiently feasible point of original square problem.");
+   }
    else if( resto_status == STOP_AT_TINY_STEP || resto_status == STOP_AT_ACCEPTABLE_POINT )
    {
       Number orig_primal_inf = IpCq().curr_primal_infeasibility(NORM_MAX);
@@ -347,14 +356,14 @@ bool MinC_1NrmRestorationPhase::PerformRestoration()
          if( constr_viol <= constr_viol_tol_ )
          {
             Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-                           "Recursive restoration phase algorithm termined successfully for square problem.\n");
+                           "Recursive restoration phase algorithm terminated successfully for square problem.\n");
             IpData().AcceptTrialPoint();
             THROW_EXCEPTION(FEASIBILITY_PROBLEM_SOLVED,
                             "Restoration phase converged to sufficiently feasible point of original square problem.");
          }
       }
 
-      // Update the bound multiplers, pretending that the entire
+      // Update the bound multipliers, pretending that the entire
       // progress in x and s in the restoration phase has been one
       // [rimal-dual Newton step (and therefore the result of solving
       // an augmented system)

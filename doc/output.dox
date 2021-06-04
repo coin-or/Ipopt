@@ -123,7 +123,8 @@ output message to the console, and a brief description.
 
    This message is printed if the problem is "square" (i.e., it has as
    many equality constraints as free variables) and %Ipopt
-   found a feasible point.
+   found a point that is feasible w.r.t. constr_viol_tol. It may, however,
+   not be feasible w.r.t. tol.
 
 - `Infeasible_Problem_Detected`:
 

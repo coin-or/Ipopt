@@ -7,6 +7,12 @@ More detailed information about incremental changes can be found in the
 
 ## 3.14
 
+### 3.14 beta4 (2021-0x-yy)
+
+- When a square problem is solved and the restoration phase only succeeded to
+  find a point that is feasible w.r.t. constr_viol_tol, but not w.r.t. tol,
+  then status Feasible_Point_Found is returned now.
+
 ### 3.14 beta3 (2021-06-03)
 
 - Fixed wrong gradient of objective function and Lagrangian Hessian in

@@ -173,6 +173,10 @@ ConvergenceCheck::ConvergenceStatus RestoConvergenceCheck::CheckConvergence(
    }
    else if( orig_ip_cq->IsSquareProblem() && orig_trial_inf_pr <= Min(orig_ip_data->tol(), orig_constr_viol_tol_) )
    {
+      // if tol < orig_trial_inf_pr <= orig_constr_viol_tol_, then the next else-if will set status = CONTINUE
+      // so below we may try to continue with tightened IpData().tol()
+      // if that isn't possible, we return with CONVERGED_TO_ACCEPTABLE_POINT
+      // in MinC_1NrmRestorationPhase we then check again and return with FEASIBLE_POINT_FOUND
       Jnlst().Printf(J_DETAILED, J_MAIN,
                      "Restoration phase found points satisfying feasibility tolerance in square problem.\n");
       status = CONVERGED;
@@ -203,31 +207,33 @@ ConvergenceCheck::ConvergenceStatus RestoConvergenceCheck::CheckConvergence(
       status = OptimalityErrorConvergenceCheck::CheckConvergence(false);
       if( status == CONVERGED || status == CONVERGED_TO_ACCEPTABLE_POINT )
       {
-         Number orig_trial_primal_inf = orig_ip_cq->trial_primal_infeasibility(NORM_MAX);
          // ToDo make the factor in following line an option
-         if( orig_trial_primal_inf <= 1e2 * IpData().tol() )
+         if( orig_trial_inf_pr <= 1e2 * IpData().tol() && IpData().tol() > 1e-1 * orig_ip_data->tol() )
          {
-            //        if (orig_trial_primal_inf <= 1e2*orig_ip_data->tol()) {
-            if( IpData().tol() > 1e-1 * orig_ip_data->tol() )
-            {
-               // For once, we tighten the convergence tolerance for the
-               // restoration phase problem in case the problem is only
-               // very slightly infeasible.
-               IpData().Set_tol(1e-2 * IpData().tol());
-               status = CONTINUE;
-               Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-                              "Tightening restoration phase tolerance to %e.\n", IpData().tol());
-               IpData().Append_info_string("!");
-            }
-            else
-            {
-               Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
-                              "Restoration phase converged to a feasible point that is\n"
-                              "unacceptable to the filter for the original problem.\n");
-               THROW_EXCEPTION(RESTORATION_CONVERGED_TO_FEASIBLE_POINT,
-                               "Restoration phase converged to a feasible point that is "
-                               "unacceptable to the filter for the original problem.");
-            }
+            // For once, we tighten the convergence tolerance for the
+            // restoration phase problem in case the problem is only
+            // very slightly infeasible.
+            IpData().Set_tol(1e-2 * IpData().tol());
+            status = CONTINUE;
+            Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                           "Tightening restoration phase tolerance to %e.\n", IpData().tol());
+            IpData().Append_info_string("!");
+         }
+         else if( orig_ip_cq->IsSquareProblem() && orig_trial_inf_pr <= orig_constr_viol_tol_ )
+         {
+            // we are feasible w.r.t. constr_viol_tol, but not w.r.t. tol
+            // since the original problem is a square problem, we want to return the feasible-point-found status
+            // so we return here CONVERGED_TO_ACCEPTABLE_POINT and let MinC_1NrmRestorationPhase check again
+            status = CONVERGED_TO_ACCEPTABLE_POINT;
+         }
+         else if( orig_trial_inf_pr <= 1e2 * IpData().tol() )
+         {
+            Jnlst().Printf(J_WARNING, J_LINE_SEARCH,
+                           "Restoration phase converged to a feasible point that is\n"
+                           "unacceptable to the filter for the original problem.\n");
+            THROW_EXCEPTION(RESTORATION_CONVERGED_TO_FEASIBLE_POINT,
+                            "Restoration phase converged to a feasible point that is "
+                            "unacceptable to the filter for the original problem.");
          }
          else
          {

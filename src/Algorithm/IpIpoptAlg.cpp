@@ -488,7 +488,16 @@ SolverReturn IpoptAlgorithm::Optimize(
    {
       exc.ReportException(Jnlst(), J_MOREDETAILED);
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
-      retval = RESTORATION_FAILURE;
+      if( IpCq().IsSquareProblem() )
+      {
+         // make the sure multipliers are computed properly
+         ComputeFeasibilityMultipliers();
+         retval = FEASIBLE_POINT_FOUND;
+      }
+      else
+      {
+         retval = RESTORATION_FAILURE;
+      }
    }
    catch( RESTORATION_FAILED& exc )
    {
