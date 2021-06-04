@@ -67,14 +67,18 @@ public:
 
    DECLARE_STD_EXCEPTION(INVALID_TNLP);
 
-   /**@name methods to gather information about the NLP */
-   ///@{
+   typedef std::map<std::string, std::vector<std::string> > StringMetaDataMapType;
+   typedef std::map<std::string, std::vector<Index> > IntegerMetaDataMapType;
+   typedef std::map<std::string, std::vector<Number> > NumericMetaDataMapType;
 
    enum IndexStyleEnum
    {
       C_STYLE       = 0,
       FORTRAN_STYLE = 1
    };
+
+   /**@name Methods to gather information about the NLP */
+   ///@{
 
    /** Method to request the initial information about the problem.
     *
@@ -100,10 +104,6 @@ public:
       IndexStyleEnum& index_style
    ) = 0;
    // [TNLP_get_nlp_info]
-
-   typedef std::map<std::string, std::vector<std::string> > StringMetaDataMapType;
-   typedef std::map<std::string, std::vector<Index> > IntegerMetaDataMapType;
-   typedef std::map<std::string, std::vector<Number> > NumericMetaDataMapType;
 
    /** Method to request meta data for the variables and the constraints.
     *
@@ -497,6 +497,60 @@ public:
       (void) values;
       return false;
    }
+
+   /** @name Methods for quasi-Newton approximation.
+    *
+    *  If the second derivatives are approximated by %Ipopt, it is better
+    *  to do this only in the space of nonlinear variables. The following
+    *  methods are call by %Ipopt if the \ref QUASI_NEWTON "quasi-Newton approximation"
+    *  is selected.
+    *
+    * @{
+    */
+
+   /** Return the number of variables that appear nonlinearly in the objective function or in at least one constraint function
+    *
+    *  If -1 is returned as number of nonlinear variables,
+    *  %Ipopt assumes that all variables are nonlinear.  Otherwise, it
+    *  calls get_list_of_nonlinear_variables with an array into which
+    *  the indices of the nonlinear variables should be written - the
+    *  array has the length num_nonlin_vars, which is identical with
+    *  the return value of get_number_of_nonlinear_variables().  It
+    *  is assumed that the indices are counted starting with 1 in the
+    *  FORTRAN_STYLE, and 0 for the C_STYLE.
+    *
+    *  The default implementation returns -1, i.e.,
+    *  all variables are assumed to be nonlinear.
+    */
+   // [TNLP_get_number_of_nonlinear_variables]
+   virtual Index get_number_of_nonlinear_variables()
+   // [TNLP_get_number_of_nonlinear_variables]
+   {
+      return -1;
+   }
+
+   /** Return the indices of all nonlinear variables.
+    *
+    * This method is called only if limited-memory quasi-Newton option
+    * is used and get_number_of_nonlinear_variables() returned a positive
+    * number. This number is provided in parameter num_nonlin_var.
+    *
+    * The method must store the indices of all nonlinear variables in
+    * pos_nonlin_vars, where the numbering starts with 0 order 1,
+    * depending on the numbering style determined in get_nlp_info.
+    */
+   // [TNLP_get_list_of_nonlinear_variables]
+   virtual bool get_list_of_nonlinear_variables(
+      Index  num_nonlin_vars,
+      Index* pos_nonlin_vars
+   )
+   // [TNLP_get_list_of_nonlinear_variables]
+   {
+      (void) num_nonlin_vars;
+      (void) pos_nonlin_vars;
+      return false;
+   }
+   ///@}
    ///@}
 
    /** @name Solution Methods */
@@ -637,60 +691,6 @@ public:
       (void) ip_data;
       (void) ip_cq;
       return true;
-   }
-   ///@}
-
-   /** @name Methods for quasi-Newton approximation.
-    *
-    *  If the second derivatives are approximated by %Ipopt, it is better
-    *  to do this only in the space of nonlinear variables. The following
-    *  methods are call by %Ipopt if the \ref QUASI_NEWTON "quasi-Newton approximation"
-    *  is selected.
-    *
-    * @{
-    */
-
-   /** Return the number of variables that appear nonlinearly in the objective function or in at least one constraint function
-    *
-    *  If -1 is returned as number of nonlinear variables,
-    *  %Ipopt assumes that all variables are nonlinear.  Otherwise, it
-    *  calls get_list_of_nonlinear_variables with an array into which
-    *  the indices of the nonlinear variables should be written - the
-    *  array has the length num_nonlin_vars, which is identical with
-    *  the return value of get_number_of_nonlinear_variables().  It
-    *  is assumed that the indices are counted starting with 1 in the
-    *  FORTRAN_STYLE, and 0 for the C_STYLE.
-    *
-    *  The default implementation returns -1, i.e.,
-    *  all variables are assumed to be nonlinear.
-    */
-   // [TNLP_get_number_of_nonlinear_variables]
-   virtual Index get_number_of_nonlinear_variables()
-   // [TNLP_get_number_of_nonlinear_variables]
-   {
-      return -1;
-   }
-
-   /** Return the indices of all nonlinear variables.
-    *
-    * This method is called only if limited-memory quasi-Newton option
-    * is used and get_number_of_nonlinear_variables() returned a positive
-    * number. This number is provided in parameter num_nonlin_var.
-    *
-    * The method must store the indices of all nonlinear variables in
-    * pos_nonlin_vars, where the numbering starts with 0 order 1,
-    * depending on the numbering style determined in get_nlp_info.
-    */
-   // [TNLP_get_list_of_nonlinear_variables]
-   virtual bool get_list_of_nonlinear_variables(
-      Index  num_nonlin_vars,
-      Index* pos_nonlin_vars
-   )
-   // [TNLP_get_list_of_nonlinear_variables]
-   {
-      (void) num_nonlin_vars;
-      (void) pos_nonlin_vars;
-      return false;
    }
    ///@}
 
