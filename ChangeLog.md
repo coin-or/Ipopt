@@ -15,6 +15,7 @@ More detailed information about incremental changes can be found in the
 - Fixed that norm on unscaled complementarity or scaled complementarity tolerance
   were negative when maximizing (by using a negative scaling factor for the
   objective).
+- Fixed calculation of nlp_constraint_violation in TNLP::get_curr_violations().
 
 ### 3.14 beta3 (2021-06-03)
 

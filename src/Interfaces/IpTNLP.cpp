@@ -922,12 +922,15 @@ bool TNLP::get_curr_violations(
       SmartPtr<const DenseVector> c = curr_c(ip_data, ip_cq, orignlp, restonlp, scaled);
       SmartPtr<const DenseVector> d = curr_d(ip_data, ip_cq, orignlp, restonlp, true);
 
-      // violation of d_L <= d(x)
+      // violation of d_L <= d(x) -> compute d_L - d first
       SmartPtr<Vector> d_viol_L;
       if( orignlp->d_L()->Dim() > 0 )
       {
-         d_viol_L = d->MakeNewCopy();
-         orignlp->Pd_L()->MultVector(1., *orignlp->d_L(), -1., *d_viol_L);  // d_L - d, scaled
+         SmartPtr<Vector> tmp = orignlp->d_L()->MakeNewCopy();
+         d_viol_L = d->MakeNew();
+         d_viol_L->Set(0.);
+         orignlp->Pd_L()->TransMultVector(-1., *d, 1., *tmp);   // tmp := -P^Td + d_L, scaled
+         orignlp->Pd_L()->MultVector(1., *tmp, 0., *d_viol_L);  // d_viol_L := P(d_L - P^Td), scaled
          if( !scaled && orignlp->NLP_scaling()->have_d_scaling() )
          {
             d_viol_L = orignlp->NLP_scaling()->unapply_vector_scaling_d_NonConst(ConstPtr(d_viol_L));
@@ -939,12 +942,15 @@ bool TNLP::get_curr_violations(
          d_viol_L->Set(0.);
       }
 
-      // violation of d(x) <= d_U
+      // violation of d(x) <= d_U -> compute d - d_U first
       SmartPtr<Vector> d_viol_U;
       if( orignlp->d_U()->Dim() > 0 )
       {
-         d_viol_U = d->MakeNewCopy();
-         orignlp->Pd_U()->MultVector(-1., *orignlp->d_U(), 1., *d_viol_U);  // d - d_U, scaled
+         SmartPtr<Vector> tmp = orignlp->d_U()->MakeNewCopy();
+         d_viol_U = d->MakeNew();
+         d_viol_U->Set(0.);
+         orignlp->Pd_U()->TransMultVector(1., *d, -1., *tmp);   // tmp := P^Td - d_U, scaled
+         orignlp->Pd_U()->MultVector(1., *tmp, 0., *d_viol_U);  // d_viol_U := P(P^Td - d_U), scaled
          if( !scaled && orignlp->NLP_scaling()->have_d_scaling() )
          {
             d_viol_U = orignlp->NLP_scaling()->unapply_vector_scaling_d_NonConst(ConstPtr(d_viol_U));
