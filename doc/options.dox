@@ -212,7 +212,7 @@ Possible values: yes, no
 \anchor OPT_print_timing_statistics
 <strong>print_timing_statistics</strong>: Switch to print timing statistics.
 <blockquote>
- If selected, the program will print the CPU usage (user time) for selected tasks. If enabled, timing_statistics=yes is implied. The default value for this string option is "no".
+ If selected, the program will print the time spend for selected tasks. This implies timing_statistics=yes. The default value for this string option is "no".
 
 Possible values: yes, no
 </blockquote>
@@ -1089,7 +1089,7 @@ Possible values:
  - ma77: use the Harwell routine HSL_MA77
  - ma86: use the Harwell routine HSL_MA86
  - ma97: use the Harwell routine HSL_MA97
- - pardiso: load the Pardiso package from pardiso-project.org from library at runtime
+ - pardiso: use the Pardiso package from pardiso-project.org
  - pardisomkl: use the Pardiso package from Intel MKL
  - spral: use the Spral package
  - wsmp: use the Wsmp package
@@ -1232,7 +1232,7 @@ Possible values:
 \anchor OPT_first_hessian_perturbation
 <strong>first_hessian_perturbation</strong>: Size of first x-s perturbation tried.
 <blockquote>
- The first value tried for the x-s perturbation in the inertia correction scheme.This is delta_0 in the implementation paper. The valid range for this real option is 0 < first_hessian_perturbation and its default value is 0.0001.
+ The first value tried for the x-s perturbation in the inertia correction scheme. This is delta_0 in the implementation paper. The valid range for this real option is 0 < first_hessian_perturbation and its default value is 0.0001.
 </blockquote>
 
 \anchor OPT_jacobian_regularization_value

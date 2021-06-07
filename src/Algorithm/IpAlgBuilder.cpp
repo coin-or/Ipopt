@@ -171,7 +171,7 @@ void AlgorithmBuilder::RegisterOptions(
       }
       else
       {
-         descrs.push_back("load the Pardiso package from pardiso-project.org from library at runtime");
+         descrs.push_back("load the Pardiso package from pardiso-project.org from user-provided library at runtime");
       }
    }
 

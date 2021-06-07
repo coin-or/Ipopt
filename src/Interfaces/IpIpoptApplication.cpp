@@ -412,8 +412,8 @@ void IpoptApplication::RegisterOptions(
       "print_timing_statistics",
       "Switch to print timing statistics.",
       false,
-      "If selected, the program will print the CPU usage (user time) for selected tasks. "
-      "If enabled, timing_statistics=yes is implied.");
+      "If selected, the program will print the time spend for selected tasks. "
+      "This implies timing_statistics=yes.");
 
    roptions->SetRegisteringCategory("Miscellaneous");
    roptions->AddStringOption1(

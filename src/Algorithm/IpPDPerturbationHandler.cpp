@@ -77,7 +77,7 @@ void PDPerturbationHandler::RegisterOptions(
       "Size of first x-s perturbation tried.",
       0., true,
       1e-4,
-      "The first value tried for the x-s perturbation in the inertia correction scheme."
+      "The first value tried for the x-s perturbation in the inertia correction scheme. "
       "This is delta_0 in the implementation paper.");
    roptions->AddLowerBoundedNumberOption(
       "jacobian_regularization_value",
