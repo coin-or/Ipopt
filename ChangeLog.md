@@ -7,7 +7,7 @@ More detailed information about incremental changes can be found in the
 
 ## 3.14
 
-### 3.14 beta4 (2021-0x-yy)
+### 3.14 beta4 (2021-06-07)
 
 - When a square problem is solved and the restoration phase only succeeded to
   find a point that is feasible w.r.t. constr_viol_tol, but not w.r.t. tol,
