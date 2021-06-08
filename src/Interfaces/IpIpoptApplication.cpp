@@ -783,7 +783,7 @@ ApplicationReturnStatus IpoptApplication::call_optimize()
       else if( status == ERROR_IN_STEP_COMPUTATION )
       {
          retValue = Error_In_Step_Computation;
-         jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Error in step computation (regularization becomes too large?)!\n");
+         jnlst_->Printf(J_SUMMARY, J_MAIN, "\nEXIT: Error in step computation!\n");
       }
       else if( status == LOCAL_INFEASIBILITY )
       {
