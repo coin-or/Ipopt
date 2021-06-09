@@ -430,7 +430,7 @@ ESymSolverStatus MumpsSolverInterface::SymbolicFactorization()
       IpData().TimingStats().LinearSystemSymbolicFactorization().End();
    }
 
-   //return appropriat value
+   //return appropriate value
    if( error == -6 )  //system is singular
    {
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,

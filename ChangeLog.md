@@ -7,6 +7,12 @@ More detailed information about incremental changes can be found in the
 
 ## 3.14
 
+### 3.14 beta5 (2021-0x-yy)
+
+- Changed formula for relative error in derivative checker. The absolute
+  error is now scaled up if the approximate derivative value is between
+  derivative_test_tol and 1. [#487].
+
 ### 3.14 beta4 (2021-06-07)
 
 - When a square problem is solved and the restoration phase only succeeded to

@@ -53,7 +53,8 @@ numbering is used, i.e., when counting of indices starts with 0 instead
 of 1). The first floating point number is the value given by the user
 code, and the second number (after "~") is the finite differences
 estimation. Finally, the number in square brackets is the relative
-difference between these two numbers.
+difference between these two numbers
+\f$\left(\frac{|\mathrm{approx}-\mathrm{exact}|}{\max(|\mathrm{approx}|,\mathrm{derivative\_test\_tol})}\right)\f$.
 
 For constraints, the first index after `jac_g` is the index of the
 constraint, and the second one corresponds to the variable index (again,

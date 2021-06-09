@@ -3038,7 +3038,7 @@ bool TNLPAdapter::CheckDerivatives(
 
          Number deriv_approx = (fpert - fref) / this_perturbation;
          Number deriv_exact = grad_f[ivar];
-         Number rel_error = std::abs(deriv_approx - deriv_exact) / Max(std::abs(deriv_approx), Number(1.));
+         Number rel_error = std::abs(deriv_approx - deriv_exact) / Max(std::abs(deriv_approx), derivative_test_tol_);
          char cflag = ' ';
          if( rel_error >= derivative_test_tol_ )
          {
@@ -3069,7 +3069,7 @@ bool TNLPAdapter::CheckDerivatives(
                      deriv_exact += jac_g[i];
                   }
                }
-               rel_error = std::abs(deriv_approx - deriv_exact) / Max(std::abs(deriv_approx), Number(1.));
+               rel_error = std::abs(deriv_approx - deriv_exact) / Max(std::abs(deriv_approx), derivative_test_tol_);
                cflag = ' ';
                if( rel_error >= derivative_test_tol_ )
                {
@@ -3216,7 +3216,7 @@ bool TNLPAdapter::CheckDerivatives(
                      found = true;
                   }
                }
-               Number rel_error = std::abs(deriv_approx - deriv_exact) / Max(std::abs(deriv_approx), Number(1.));
+               Number rel_error = std::abs(deriv_approx - deriv_exact) / Max(std::abs(deriv_approx), derivative_test_tol_);
                char cflag = ' ';
                if( rel_error >= derivative_test_tol_ )
                {
