@@ -12,6 +12,8 @@ More detailed information about incremental changes can be found in the
 - Changed formula for relative error in derivative checker. The absolute
   error is now scaled up if the approximate derivative value is between
   derivative_test_tol and 1. [#487].
+- The second-order derivative checker now uses values for obj_factor and
+  lambda that are different from 1.
 
 ### 3.14 beta4 (2021-06-07)
 

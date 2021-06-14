@@ -3096,7 +3096,7 @@ bool TNLPAdapter::CheckDerivatives(
    const Number zero = 0.;
    if( deriv_test == SECOND_ORDER_TEST || deriv_test == ONLY_SECOND_ORDER_TEST )
    {
-      jnlst_->Printf(J_SUMMARY, J_NLP, "Starting derivative checker for second derivatives.\n\n");
+      jnlst_->Printf(J_SUMMARY, J_NLP, "Starting derivative checker for second derivatives with obj_factor or lambda[i] set to 1.5.\n\n");
 
       // Get sparsity structure of Hessian
       Index* h_iRow = new Index[nz_hess_lag];
@@ -3148,13 +3148,13 @@ bool TNLPAdapter::CheckDerivatives(
          Number objfact = 0.;
          if( icon == -1 )
          {
-            objfact = 1.;
+            objfact = 1.5;
             IpBlasCopy(nx, grad_f, 1, gradref, 1);
          }
          else
          {
             DBG_ASSERT(lambda != NULL);
-            lambda[icon] = 1.;
+            lambda[icon] = 1.5;
             IpBlasCopy(nx, &zero, 0, gradref, 1);
             for( Index i = 0; i < nz_jac_g; i++ )
             {
@@ -3205,7 +3205,7 @@ bool TNLPAdapter::CheckDerivatives(
 
             for( Index ivar2 = 0; ivar2 < nx; ivar2++ )
             {
-               Number deriv_approx = (gradpert[ivar2] - gradref[ivar2]) / this_perturbation;
+               Number deriv_approx = 1.5 * (gradpert[ivar2] - gradref[ivar2]) / this_perturbation;
                Number deriv_exact = 0.;
                bool found = false;
                for( Index i = 0; i < nz_hess_lag; i++ )
