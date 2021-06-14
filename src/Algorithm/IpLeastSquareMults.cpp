@@ -79,6 +79,8 @@ bool LeastSquareMultipliers::CalculateMultipliers(
    bool check_NegEVals = augsyssolver_->ProvidesInertia();
    retval = augsyssolver_->Solve(GetRawPtr(zeroW), 0.0, NULL, 1.0, NULL, 1.0, GetRawPtr(J_c), NULL, 0., GetRawPtr(J_d),
                                  NULL, 0., *rhs_x, *rhs_s, *rhs_c, *rhs_d, *sol_x, *sol_s, y_c, y_d, check_NegEVals, numberOfEVals);
+   // TODO should something be tried if inertia seem wrong (retval == SYMSOLVER_WRONG_INERTIA)?
+   //      PDFullSpaceSolver::SolveOnce tries asking the linear solver to increase quality or perturbs the linear system
    if( retval != SYMSOLVER_SUCCESS )
    {
       return false;
