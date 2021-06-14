@@ -95,7 +95,7 @@ MumpsSolverInterface::MumpsSolverInterface()
    MUMPS_STRUC_C* mumps_ = static_cast<MUMPS_STRUC_C*>(calloc(1, sizeof(MUMPS_STRUC_C)));
    mumps_->job = -1; //initialize mumps
    mumps_->par = 1; //working host for sequential version
-   mumps_->sym = 2; //general symetric matrix
+   mumps_->sym = 2; //general symmetric matrix
    mumps_->comm_fortran = USE_COMM_WORLD;
 
 #ifndef IPOPT_MUMPS_NOMUTEX
