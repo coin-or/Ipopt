@@ -1,15 +1,6 @@
 Ipopt
 =====
 
-# You are looking at **Ipopt 3.14 BETA**. For Ipopt 3.13, checkout branch stable/3.13 or [release 3.13.4](https://github.com/coin-or/Ipopt/releases/tag/releases/3.13.4).
-
-Documentation for this BETA is available at https://www.zib.de/vigerske/ipopt3.14/index.html.
-
-Feedback for this BETA should be left at https://github.com/coin-or/Ipopt/discussions/474.
-
-See also the BETA releases at https://github.com/coin-or/Ipopt/releases.
-
-
 Introduction
 ------------
 
@@ -37,7 +28,7 @@ Background
 
 Ipopt is written in C++ and is released as open source code under the [Eclipse Public License (EPL)](LICENSE).
 The code has been written by [Andreas Wächter](http://www.mccormick.northwestern.edu/directory/profiles/Andreas-Waechter.html) and [Carl Laird](http://allthingsoptimal.com/biography/).
-The COIN-OR project managers for Ipopt are [Andreas Wächter](http://users.iems.northwestern.edu/~andreasw) und [Stefan Vigerske](https://www.gams.com/~stefan).
+The COIN-OR project managers for Ipopt are [Andreas Wächter](http://users.iems.northwestern.edu/~andreasw) und [Stefan Vigerske](https://www.gams.com/~svigerske).
 For a list of **all contributors**, see the [AUTHORS file](AUTHORS).
 
 The C++ version has first been [released on Aug 26, 2005](http://list.coin-or.org/pipermail/ipopt/2005-August/000331.html) as version 3.0.0.
@@ -148,3 +139,27 @@ Since a lot of time and effort has gone into Ipopt's development, **please cite 
 
 * A. Wächter and L. T. Biegler, **[On the Implementation of a Primal-Dual Interior Point Filter Line Search Algorithm for Large-Scale Nonlinear Programming](http://dx.doi.org/10.1007/s10107-004-0559-y)**, _Mathematical Programming_ 106(1), pp. 25-57, 2006
   ([preprint](http://www.optimization-online.org/DB_HTML/2004/03/836.html))
+
+Versioning
+----------
+
+Ipopts version numbers have the form x.y.z.
+x.y specifies the major and minor version number of Ipopt.
+An increase in x or y can mean the addition or removal of features, backward-incompatible API changes, etc.
+Increases in y indicate less severe changes than increases in x. For example, the change from Ipopt 2 to Ipopt 3 came due to a complete rewrite of Ipopt in a different programming language.
+z specifies the release number of Ipopt.
+An increase in z usually means bugfixes or additions of small feature. Changes to the API, if any, are done in a backward-compatible way. However, the ABI may changed in a backward-incompatible way.
+
+Source code is organized in branches named stable/x.y.
+Development towards a next x.y.z release is happening on the stable/x.y branch.
+The code on branch stable/x.y already caries a x.y.z version number, which can correspond to the next x.y.z release that will be made from this branch.
+The default branch of the repository is the latest stable/x.y branch, even if x.y is still in beta testing.
+
+An Ipopt x.y.z release is associated with a tag releases/x.y.z on branch stable/x.y.
+Releases are fixed and don't change.
+
+Additional branches may exist where development of bugfixes or features is taking place.
+A branch devel may collect development for the next Ipopt x.y version. It will be renamed to stable/x.y when it is considered stable enough for beta testing.
+
+If you want to contribute a bugfix or small feature, please create a pull-request to the latest stable/x.y branch.
+If you want to contribute a larger feature or something else that changes the API, please create a pull-request to branch devel, if existing, and latest stable/x.y otherwise.
