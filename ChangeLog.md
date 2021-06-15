@@ -7,52 +7,7 @@ More detailed information about incremental changes can be found in the
 
 ## 3.14
 
-### 3.14 beta5 (2021-0x-yy)
-
-- Changed formula for relative error in derivative checker. The absolute
-  error is now scaled up if the approximate derivative value is between
-  derivative_test_tol and 1. [#487].
-- The second-order derivative checker now uses values for obj_factor and
-  lambda that are different from 1.
-
-### 3.14 beta4 (2021-06-07)
-
-- When a square problem is solved and the restoration phase only succeeded to
-  find a point that is feasible w.r.t. constr_viol_tol, but not w.r.t. tol,
-  then status Feasible_Point_Found is returned now.
-- Fixed that norm on unscaled complementarity or scaled complementarity tolerance
-  were negative when maximizing (by using a negative scaling factor for the
-  objective).
-- Fixed calculation of nlp_constraint_violation in TNLP::get_curr_violations().
-
-### 3.14 beta3 (2021-06-03)
-
-- Fixed wrong gradient of objective function and Lagrangian Hessian in
-  restoration problem [#478, by Nai-Yuan Chiang].
-- Changed more `DenseVector` methods to skip calculations when dimension is 0
-  to avoid (probably harmless) divisions by zero.
-- std::overflow_error exceptions are now caught by Ipopt even if rethrowing
-  of non-Ipopt exceptions is enabled.
-- An insufficient memory return status is now also given if the memory
-  required for a working space array of a linear solver exceeds the maximal
-  value for the working space length variable, e.g., if MA27 requires a
-  working space array of length higher than 2^31.
-- Avoid floating point overflow when computing memory increase in interfaces
-  to MA27, MA57.
-- If Ipopt is compiled for checklevel 2 or higher and the GLIBC extension `feenableexcept()`
-  is available, then floating-pointing exceptions divbyzero, overflow, and
-  invalid are raised while `IpoptAlgorithm::Optimize()` is running.
-
-### 3.14 beta2 (2021-05-20)
-
-- Fixed problem that collecting timing statistics were not disabled for
-  initialization and for solve in restoration phase. [#299]
-- Fixed compilation of `IpTNLPAdapter.cpp` if having Wsmp or HSL, but no MUMPS.
-- Fixed static build of sIpopt without GCC. Fixed that installed sIpopt
-  headers were not usable (`SIPOPTLIB_EXPORT` not defined).
-- Adjusted SPRAL interface to work with [SPRAL from RALNA](https://github.com/ralna/spral).
-
-### 3.14 beta1 (2021-05-14)
+### 3.14.0 (2021-06-15)
 
 #### Data Types
 
@@ -89,11 +44,11 @@ More detailed information about incremental changes can be found in the
   the linear solver [SPRAL](https://github.com/ralna/spral) (Sparse Parallel
   Robust Algorithms Library) with Ipopt.
   SPRAL is open-source and can, optionally, make use of NVIDIA GPUs.
-  See the installation instructions on how to build the Ipopt/SPRAL interface.
   If Ipopt has been build with SPRAL, then option `linear_solver` can be
   set to `spral` to enable use of SPRAL.
-  See also the options documentation for new options that are available
-  for the Ipopt/SPRAL interface.
+  See the installation instructions on how to build the Ipopt/SPRAL interface
+  and the options documentation for new options that are available for
+  the Ipopt/SPRAL interface.
 - Added `IpoptLinearSolvers.h` with function `IpoptGetAvailableLinearSolvers()`
   to retrieve information which linear solvers are available for Ipopt
   (linked in or loaded at runtime). Options `linear_solver` and
@@ -119,6 +74,12 @@ More detailed information about incremental changes can be found in the
   in `Ma97SolverInterface::MultiSolve()`.
 - Calls into MUMPS are now protected by a mutex if compiling for C++11 or higher.
   This prevents Ipopt from calling MUMPS concurrently from several threads.
+- An insufficient memory return status is now also given if the memory
+  required for a working space array of a linear solver exceeds the maximal
+  value for the working space length variable, e.g., if MA27 requires a
+  working space array of length higher than 2^31.
+- Avoid floating point overflow when computing memory increase in interfaces
+  to MA27 and MA57.
 
 #### Algorithm
 
@@ -160,6 +121,9 @@ More detailed information about incremental changes can be found in the
   phase. Further, the unscaled constraint violation tolerance now
   needs to be below `constr_viol_tol/10` as well in order to trigger
   this abort.
+- When a square problem is solved and the restoration phase only succeeded to
+  find a point that is feasible w.r.t. constr_viol_tol, but not w.r.t. tol,
+  then status Feasible_Point_Found is returned now.
 
 #### Ipopt interfaces
 
@@ -186,6 +150,8 @@ More detailed information about incremental changes can be found in the
   Previous versions of these methods are still available but deprecated.
   Using a NULL pointer for the `RegisteredOptions` argument is
   also deprecated.
+- `std::overflow_error` exceptions are now caught by Ipopt even if rethrowing
+  of non-Ipopt exceptions is enabled.
 
 #### Timing
 
@@ -233,6 +199,8 @@ More detailed information about incremental changes can be found in the
   a vector of dimension 0. Returned `nan` for homogeneous 0-vector
   of dimension 0 before, which may have caused the restoration phase to
   fail for problems with only equality or only inequality constraints.
+  Also other `DenseVector` methods now skip calculations when dimension
+  is 0 to avoid (probably harmless) divisions by zero.
 - Fixed a problem where moving slack away from 0 did not succeed
   when mu was very small. [#212]
 - Fixed a problem where moving slacks away from 0 resulted in `nan`
@@ -240,6 +208,21 @@ More detailed information about incremental changes can be found in the
 - Various tiny bugfixes and improvements in performance and code style
   by following suggestions of `cppcheck`.
 - Added documentation on some available C preprocessor flags for expert users.
+- Fixed static build of sIpopt without GCC. Fixed that installed sIpopt
+  headers were not usable (`SIPOPTLIB_EXPORT` not defined).
+- Fixed wrong gradient of objective function and Lagrangian Hessian in
+  restoration problem [#478, by Nai-Yuan Chiang].
+- If Ipopt is compiled for checklevel 2 or higher and the GLIBC extension `feenableexcept()`
+  is available, then floating-pointing exceptions divbyzero, overflow, and
+  invalid are raised while `IpoptAlgorithm::Optimize()` is running.
+- Fixed that norm on unscaled complementarity or scaled complementarity tolerance
+  were negative when maximizing (by using a negative scaling factor for the
+  objective).
+- Changed formula for relative error in derivative checker. The absolute
+  error is now scaled up if the approximate derivative value is between
+  derivative_test_tol and 1. [#487].
+- The second-order derivative checker now uses values for obj_factor and
+  lambda that are different from 1.
 
 
 ## 3.13
