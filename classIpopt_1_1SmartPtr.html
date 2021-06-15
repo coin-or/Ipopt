@@ -1,5 +1,5 @@
-<!-- HTML header for doxygen 1.8.13-->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- HTML header for doxygen 1.8.18-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.13.4</span-->
+   &#160;<!--span id="projectnumber">3.14.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -277,7 +277,7 @@ class Ipopt::SmartPtr&lt; T &gt;</h3>
 <p>3) This <a class="el" href="classIpopt_1_1SmartPtr.html" title="Template class for Smart Pointers.">SmartPtr</a> class could be redesigned with the Weak/Strong design concept. Here, the <a class="el" href="classIpopt_1_1SmartPtr.html" title="Template class for Smart Pointers.">SmartPtr</a> is identified as being Strong (controls lifetime of the object) or Weak (merely referencing the object). The Strong <a class="el" href="classIpopt_1_1SmartPtr.html" title="Template class for Smart Pointers.">SmartPtr</a> increments (and decrements) the reference count in <a class="el" href="classIpopt_1_1ReferencedObject.html" title="Storing the reference count of all the smart pointers that currently reference it.">ReferencedObject</a> but the Weak <a class="el" href="classIpopt_1_1SmartPtr.html" title="Template class for Smart Pointers.">SmartPtr</a> does not. In the example above, the higher level object would have Strong SmartPtrs to A and B, but A and B would have Weak SmartPtrs to each other. Then, when the higher level object was done with A and B, they would be deleted. The Weak SmartPtrs in A and B would not decrement the reference count and would, of course, not delete the object. This idea is very similar to item (2), where it is implied that the sequence of events is controlled such that A and B will not call anything using their pointers following the higher level delete (i.e. in their destructors!). This is somehow safer, however, because code can be written (however expensive) to perform run-time detection of this situation. For example, the <a class="el" href="classIpopt_1_1ReferencedObject.html" title="Storing the reference count of all the smart pointers that currently reference it.">ReferencedObject</a> could store pointers to all Weak SmartPtrs that are referencing it and, in its destructor, tell these pointers that it is dying. They could then set themselves to NULL, or set an internal flag to detect usage past this point.</p>
 <p>Comments on Non-Intrusive Design: In a non-intrusive design, the reference count is stored somewhere other than the object being referenced. This means, unless the reference counting pointer is the first referencer, it must get a pointer to the referenced object from another smart pointer (so it has access to the reference count location). In this non-intrusive design, if we are pointing to an object with a smart pointer (or a number of smart pointers), and we then give another smart pointer the address through a RAW pointer, we will have two independent, AND INCORRECT, reference counts. To avoid this pitfall, we use an intrusive reference counting technique where the reference count is stored in the object being referenced. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00171">171</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00164">164</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a22ffa06afa6920141b3123cd520f8267"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a22ffa06afa6920141b3123cd520f8267">&#9670;&nbsp;</a></span>SmartPtr() <span class="overload">[1/4]</span></h2>
@@ -295,7 +295,7 @@ template&lt;class T &gt; </div>
 
 <p>Default constructor, initialized to NULL. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00444">444</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00438">438</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
 
 </div>
 </div>
@@ -319,7 +319,7 @@ template&lt;class T &gt; </div>
 
 <p>Copy constructor, initialized from copy of type T. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00457">457</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00452">452</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
 
 </div>
 </div>
@@ -345,7 +345,7 @@ template&lt;class U &gt; </div>
 
 <p>Copy constructor, initialized from copy of type U. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00476">476</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00472">472</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
 
 </div>
 </div>
@@ -369,7 +369,7 @@ template&lt;class T &gt; </div>
 
 <p>Constructor, initialized from T* ptr. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00494">494</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00491">491</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
 
 </div>
 </div>
@@ -389,7 +389,7 @@ template&lt;class T &gt; </div>
 
 <p>Destructor, automatically decrements the reference count and deletes the object if necessary. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00512">512</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00510">510</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
 
 </div>
 </div>
@@ -410,7 +410,7 @@ template&lt;class T &gt; </div>
 
 <p>Overloaded arrow operator, allows the user to call methods using the contained pointer. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00522">522</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00520">520</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
 
 </div>
 </div>
@@ -430,7 +430,7 @@ template&lt;class T &gt; </div>
 
 <p>Overloaded dereference operator, allows the user to dereference the contained pointer. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00537">537</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00535">535</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
 
 </div>
 </div>
@@ -454,7 +454,7 @@ template&lt;class T &gt; </div>
 
 <p>Overloaded equals operator, allows the user to set the value of the <a class="el" href="classIpopt_1_1SmartPtr.html" title="Template class for Smart Pointers.">SmartPtr</a> from a raw pointer. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00552">552</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00550">550</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
 
 </div>
 </div>
@@ -478,7 +478,7 @@ template&lt;class T &gt; </div>
 
 <p>Overloaded equals operator, allows the user to set the value of the <a class="el" href="classIpopt_1_1SmartPtr.html" title="Template class for Smart Pointers.">SmartPtr</a> from another <a class="el" href="classIpopt_1_1SmartPtr.html" title="Template class for Smart Pointers.">SmartPtr</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00564">564</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00562">562</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
 
 </div>
 </div>
@@ -504,7 +504,7 @@ template&lt;class U &gt; </div>
 
 <p>Overloaded equals operator, allows the user to set the value of the <a class="el" href="classIpopt_1_1SmartPtr.html" title="Template class for Smart Pointers.">SmartPtr</a> from another <a class="el" href="classIpopt_1_1SmartPtr.html" title="Template class for Smart Pointers.">SmartPtr</a> of a different type. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00579">579</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00577">577</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
 
 </div>
 </div>
@@ -536,7 +536,7 @@ template&lt;class T &gt; </div>
 
 <p>Set the value of the internal raw pointer from another raw pointer, releasing the previously referenced object if necessary. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00593">593</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00591">591</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
 
 </div>
 </div>
@@ -568,7 +568,7 @@ template&lt;class T &gt; </div>
 
 <p>Set the value of the internal raw pointer from a <a class="el" href="classIpopt_1_1SmartPtr.html" title="Template class for Smart Pointers.">SmartPtr</a>, releasing the previously referenced object if necessary. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00616">616</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00614">614</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
 
 </div>
 </div>
@@ -596,7 +596,7 @@ template&lt;class T &gt; </div>
 
 <p>Release the currently referenced object. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00632">632</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00630">630</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
 
 </div>
 </div>
@@ -641,7 +641,7 @@ template&lt;class U1 , class U2 &gt; </div>
 
 <p>Overloaded equality comparison operator, allows the user to compare the value of two SmartPtrs. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00718">718</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00716">716</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
 
 </div>
 </div>
@@ -685,7 +685,7 @@ template&lt;class U1 , class U2 &gt; </div>
 
 <p>Overloaded equality comparison operator, allows the user to compare the value of a <a class="el" href="classIpopt_1_1SmartPtr.html" title="Template class for Smart Pointers.">SmartPtr</a> with a raw pointer. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00735">735</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00733">733</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
 
 </div>
 </div>
@@ -729,7 +729,7 @@ template&lt;class U1 , class U2 &gt; </div>
 
 <p>Overloaded equality comparison operator, allows the user to compare the value of a raw pointer with a <a class="el" href="classIpopt_1_1SmartPtr.html" title="Template class for Smart Pointers.">SmartPtr</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00751">751</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00749">749</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
 
 </div>
 </div>
@@ -773,7 +773,7 @@ template&lt;class U1 , class U2 &gt; </div>
 
 <p>Overloaded in-equality comparison operator, allows the user to compare the value of two SmartPtrs. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00767">767</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00765">765</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
 
 </div>
 </div>
@@ -817,7 +817,7 @@ template&lt;class U1 , class U2 &gt; </div>
 
 <p>Overloaded in-equality comparison operator, allows the user to compare the value of a <a class="el" href="classIpopt_1_1SmartPtr.html" title="Template class for Smart Pointers.">SmartPtr</a> with a raw pointer. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00783">783</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00781">781</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
 
 </div>
 </div>
@@ -861,7 +861,7 @@ template&lt;class U1 , class U2 &gt; </div>
 
 <p>Overloaded in-equality comparison operator, allows the user to compare the value of a <a class="el" href="classIpopt_1_1SmartPtr.html" title="Template class for Smart Pointers.">SmartPtr</a> with a raw pointer. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00799">799</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00797">797</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
 
 </div>
 </div>
@@ -938,7 +938,7 @@ template&lt;class U &gt; </div>
 <p>Returns the raw pointer contained. </p>
 <p>Use to get the value of the raw ptr (i.e. to pass to other methods/functions, etc.) Note: This method does NOT copy, therefore, modifications using this value modify the underlying object contained by the <a class="el" href="classIpopt_1_1SmartPtr.html" title="Template class for Smart Pointers.">SmartPtr</a>, NEVER delete this returned value. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00651">651</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00649">649</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
 
 </div>
 </div>
@@ -972,7 +972,7 @@ template&lt;class U &gt; </div>
 
 <p>Returns a const pointer. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00665">665</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00663">663</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
 
 </div>
 </div>
@@ -1007,7 +1007,7 @@ template&lt;class U &gt; </div>
 <p>Returns true if the <a class="el" href="classIpopt_1_1SmartPtr.html" title="Template class for Smart Pointers.">SmartPtr</a> is NOT NULL. </p>
 <p>Use this to check if the <a class="el" href="classIpopt_1_1SmartPtr.html" title="Template class for Smart Pointers.">SmartPtr</a> is not NULL. This is preferred to if(GetRawPtr(sp) != NULL) </p>
 
-<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00674">674</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00672">672</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
 
 </div>
 </div>
@@ -1042,7 +1042,7 @@ template&lt;class U &gt; </div>
 <p>Returns true if the <a class="el" href="classIpopt_1_1SmartPtr.html" title="Template class for Smart Pointers.">SmartPtr</a> is NULL. </p>
 <p>Use this to check if the <a class="el" href="classIpopt_1_1SmartPtr.html" title="Template class for Smart Pointers.">SmartPtr</a> is NULL. This is preferred to if(GetRawPtr(sp) == NULL) </p>
 
-<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00682">682</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00680">680</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
 
 </div>
 </div>
@@ -1071,7 +1071,7 @@ template&lt;class T &gt; </div>
 
 <p>Actual raw pointer to the object. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00361">361</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpSmartPtr_8hpp_source.html#l00355">355</a> of file <a class="el" href="IpSmartPtr_8hpp_source.html">IpSmartPtr.hpp</a>.</p>
 
 </div>
 </div>

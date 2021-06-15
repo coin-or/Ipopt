@@ -1,5 +1,5 @@
-<!-- HTML header for doxygen 1.8.13-->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- HTML header for doxygen 1.8.18-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.13.4</span-->
+   &#160;<!--span id="projectnumber">3.14.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -102,6 +102,7 @@ $(document).ready(function(){initNavTree('classIpopt_1_1Mc19TSymScalingMethod.ht
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="classIpopt_1_1Mc19TSymScalingMethod-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">Ipopt::Mc19TSymScalingMethod Class Reference</div>  </div>
@@ -131,18 +132,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aefe48031b8927d812eb9d7e0f997b0df"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Mc19TSymScalingMethod.html#aefe48031b8927d812eb9d7e0f997b0df">InitializeImpl</a> (const <a class="el" href="classIpopt_1_1OptionsList.html">OptionsList</a> &amp;options, const std::string &amp;prefix)</td></tr>
 <tr class="memdesc:aefe48031b8927d812eb9d7e0f997b0df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation of the initialization method that has to be overloaded by for each derived class.  <a href="classIpopt_1_1Mc19TSymScalingMethod.html#aefe48031b8927d812eb9d7e0f997b0df">More...</a><br /></td></tr>
 <tr class="separator:aefe48031b8927d812eb9d7e0f997b0df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a566a1c2434b4fd330be3a781c367edfa"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Mc19TSymScalingMethod.html#a566a1c2434b4fd330be3a781c367edfa">ComputeSymTScalingFactors</a> (<a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> n, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> nnz, const <a class="el" href="IpTypes_8hpp.html#ab1366b159c9a5e7f01e86923f6b2dd65">ipfint</a> *airn, const <a class="el" href="IpTypes_8hpp.html#ab1366b159c9a5e7f01e86923f6b2dd65">ipfint</a> *ajcn, const double *a, double *scaling_factors)</td></tr>
-<tr class="memdesc:a566a1c2434b4fd330be3a781c367edfa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method for computing the symmetric scaling factors, given the symmetric matrix in triplet (MA27) format.  <a href="classIpopt_1_1Mc19TSymScalingMethod.html#a566a1c2434b4fd330be3a781c367edfa">More...</a><br /></td></tr>
-<tr class="separator:a566a1c2434b4fd330be3a781c367edfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f4e383ee63c9b548b04049c6aa6c1e4"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Mc19TSymScalingMethod.html#a3f4e383ee63c9b548b04049c6aa6c1e4">ComputeSymTScalingFactors</a> (<a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> n, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> nnz, const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *airn, const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *ajcn, const <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *a, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *scaling_factors)</td></tr>
+<tr class="memdesc:a3f4e383ee63c9b548b04049c6aa6c1e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method for computing the symmetric scaling factors, given the symmetric matrix in triplet (MA27) format.  <a href="classIpopt_1_1Mc19TSymScalingMethod.html#a3f4e383ee63c9b548b04049c6aa6c1e4">More...</a><br /></td></tr>
+<tr class="separator:a3f4e383ee63c9b548b04049c6aa6c1e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Constructor/Destructor</div></td></tr>
-<tr class="memitem:a16d58829c9c1c98ee871d801edd38b0a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Mc19TSymScalingMethod.html#a16d58829c9c1c98ee871d801edd38b0a">Mc19TSymScalingMethod</a> ()</td></tr>
-<tr class="separator:a16d58829c9c1c98ee871d801edd38b0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a655a82cb55c8948ff571d0142a126499"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Mc19TSymScalingMethod.html#a655a82cb55c8948ff571d0142a126499">Mc19TSymScalingMethod</a> (<a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1LibraryLoader.html">LibraryLoader</a> &gt; hslloader_)</td></tr>
+<tr class="separator:a655a82cb55c8948ff571d0142a126499"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4a50b3f71aab5e6a83189b2a8fe7acdc"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Mc19TSymScalingMethod.html#a4a50b3f71aab5e6a83189b2a8fe7acdc">~Mc19TSymScalingMethod</a> ()</td></tr>
 <tr class="separator:a4a50b3f71aab5e6a83189b2a8fe7acdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classIpopt_1_1TSymScalingMethod"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classIpopt_1_1TSymScalingMethod')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classIpopt_1_1TSymScalingMethod.html">Ipopt::TSymScalingMethod</a></td></tr>
-<tr class="memitem:afb9dafd3b2dab4481e5264faf2c52fc7 inherit pub_methods_classIpopt_1_1TSymScalingMethod"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TSymScalingMethod.html#afb9dafd3b2dab4481e5264faf2c52fc7">ComputeSymTScalingFactors</a> (<a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> n, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> nnz, const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *airn, const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *ajcn, const double *a, double *scaling_factors)=0</td></tr>
-<tr class="memdesc:afb9dafd3b2dab4481e5264faf2c52fc7 inherit pub_methods_classIpopt_1_1TSymScalingMethod"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method for computing the symmetric scaling factors, given the symmetric matrix in triplet (MA27) format.  <a href="classIpopt_1_1TSymScalingMethod.html#afb9dafd3b2dab4481e5264faf2c52fc7">More...</a><br /></td></tr>
-<tr class="separator:afb9dafd3b2dab4481e5264faf2c52fc7 inherit pub_methods_classIpopt_1_1TSymScalingMethod"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8bf5436b4c2bb8d31f601c35ed211727 inherit pub_methods_classIpopt_1_1TSymScalingMethod"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TSymScalingMethod.html#a8bf5436b4c2bb8d31f601c35ed211727">TSymScalingMethod</a> ()</td></tr>
 <tr class="separator:a8bf5436b4c2bb8d31f601c35ed211727 inherit pub_methods_classIpopt_1_1TSymScalingMethod"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a43a0f25a4f97af59bbfc47b14231cc7a inherit pub_methods_classIpopt_1_1TSymScalingMethod"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TSymScalingMethod.html#a43a0f25a4f97af59bbfc47b14231cc7a">~TSymScalingMethod</a> ()</td></tr>
@@ -165,12 +163,21 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5c0f2208e3ead22bf7c5179381ed8203 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adbbf3aa5307da62ab8224ba599d4bd7a inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#adbbf3aa5307da62ab8224ba599d4bd7a">~ReferencedObject</a> ()</td></tr>
 <tr class="separator:adbbf3aa5307da62ab8224ba599d4bd7a inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac517534e10e36c946aeefc6fe337777 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#aac517534e10e36c946aeefc6fe337777">ReferenceCount</a> () const</td></tr>
+<tr class="memitem:aac517534e10e36c946aeefc6fe337777 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#aac517534e10e36c946aeefc6fe337777">ReferenceCount</a> () const</td></tr>
 <tr class="separator:aac517534e10e36c946aeefc6fe337777 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa69ecb0f026bd741e2fa84c31d4ec332 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#aa69ecb0f026bd741e2fa84c31d4ec332">AddRef</a> (const <a class="el" href="classIpopt_1_1Referencer.html">Referencer</a> *referencer) const</td></tr>
 <tr class="separator:aa69ecb0f026bd741e2fa84c31d4ec332 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6c952e7d1a63080dc8f121c008944fc inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#ae6c952e7d1a63080dc8f121c008944fc">ReleaseRef</a> (const <a class="el" href="classIpopt_1_1Referencer.html">Referencer</a> *referencer) const</td></tr>
 <tr class="separator:ae6c952e7d1a63080dc8f121c008944fc inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a667d1cac121b7c9aecd0e8d816f70feb"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Mc19TSymScalingMethod.html#a667d1cac121b7c9aecd0e8d816f70feb">SetFunctions</a> ()</td></tr>
+<tr class="memdesc:a667d1cac121b7c9aecd0e8d816f70feb"><td class="mdescLeft">&#160;</td><td class="mdescRight">set MC19 function to use for every instantiation of this class  <a href="classIpopt_1_1Mc19TSymScalingMethod.html#a667d1cac121b7c9aecd0e8d816f70feb">More...</a><br /></td></tr>
+<tr class="separator:a667d1cac121b7c9aecd0e8d816f70feb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0dda77861e3ccff4e6a3ad665a4a494c"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="IpMc19TSymScalingMethod_8hpp.html#a9a1040df91c6349975daa3ad39af7581">IPOPT_DECL_MC19A</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Mc19TSymScalingMethod.html#a0dda77861e3ccff4e6a3ad665a4a494c">GetMC19A</a> ()</td></tr>
+<tr class="memdesc:a0dda77861e3ccff4e6a3ad665a4a494c"><td class="mdescLeft">&#160;</td><td class="mdescRight">get MC19A function that has been set via SetFunctions  <a href="classIpopt_1_1Mc19TSymScalingMethod.html#a0dda77861e3ccff4e6a3ad665a4a494c">More...</a><br /></td></tr>
+<tr class="separator:a0dda77861e3ccff4e6a3ad665a4a494c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -184,6 +191,14 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:ab6569dd5b0e0dd6996e09083cb386e95"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Mc19TSymScalingMethod.html#ab6569dd5b0e0dd6996e09083cb386e95">operator=</a> (const <a class="el" href="classIpopt_1_1Mc19TSymScalingMethod.html">Mc19TSymScalingMethod</a> &amp;)</td></tr>
 <tr class="memdesc:ab6569dd5b0e0dd6996e09083cb386e95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default Assignment Operator.  <a href="classIpopt_1_1Mc19TSymScalingMethod.html#ab6569dd5b0e0dd6996e09083cb386e95">More...</a><br /></td></tr>
 <tr class="separator:ab6569dd5b0e0dd6996e09083cb386e95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr><td colspan="2"><div class="groupHeader">MC19 function pointer</div></td></tr>
+<tr class="memitem:a695a5a82423ff6930c1d8d8402626add"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1LibraryLoader.html">LibraryLoader</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Mc19TSymScalingMethod.html#a695a5a82423ff6930c1d8d8402626add">hslloader</a></td></tr>
+<tr class="separator:a695a5a82423ff6930c1d8d8402626add"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1fa6acbf38c9caafaa76df1db64f447d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="IpMc19TSymScalingMethod_8hpp.html#a9a1040df91c6349975daa3ad39af7581">IPOPT_DECL_MC19A</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Mc19TSymScalingMethod.html#a1fa6acbf38c9caafaa76df1db64f447d">mc19a</a></td></tr>
+<tr class="separator:a1fa6acbf38c9caafaa76df1db64f447d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -202,10 +217,10 @@ Additional Inherited Members</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class for the method for computing scaling factors for symmetric matrices in triplet format, using MC19. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMc19TSymScalingMethod_8hpp_source.html#l00019">19</a> of file <a class="el" href="IpMc19TSymScalingMethod_8hpp_source.html">IpMc19TSymScalingMethod.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMc19TSymScalingMethod_8hpp_source.html#l00035">35</a> of file <a class="el" href="IpMc19TSymScalingMethod_8hpp_source.html">IpMc19TSymScalingMethod.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a16d58829c9c1c98ee871d801edd38b0a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a16d58829c9c1c98ee871d801edd38b0a">&#9670;&nbsp;</a></span>Mc19TSymScalingMethod() <span class="overload">[1/2]</span></h2>
+<a id="a655a82cb55c8948ff571d0142a126499"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a655a82cb55c8948ff571d0142a126499">&#9670;&nbsp;</a></span>Mc19TSymScalingMethod() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -216,7 +231,8 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">Ipopt::Mc19TSymScalingMethod::Mc19TSymScalingMethod </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype"><a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1LibraryLoader.html">LibraryLoader</a> &gt;&#160;</td>
+          <td class="paramname"><em>hslloader_</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -226,8 +242,15 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">hslloader_</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="IpMc19TSymScalingMethod_8hpp_source.html#l00024">24</a> of file <a class="el" href="IpMc19TSymScalingMethod_8hpp_source.html">IpMc19TSymScalingMethod.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMc19TSymScalingMethod_8hpp_source.html#l00040">40</a> of file <a class="el" href="IpMc19TSymScalingMethod_8hpp_source.html">IpMc19TSymScalingMethod.hpp</a>.</p>
 
 </div>
 </div>
@@ -254,7 +277,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpMc19TSymScalingMethod_8hpp_source.html#l00027">27</a> of file <a class="el" href="IpMc19TSymScalingMethod_8hpp_source.html">IpMc19TSymScalingMethod.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMc19TSymScalingMethod_8hpp_source.html#l00046">46</a> of file <a class="el" href="IpMc19TSymScalingMethod_8hpp_source.html">IpMc19TSymScalingMethod.hpp</a>.</p>
 
 </div>
 </div>
@@ -327,8 +350,8 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a566a1c2434b4fd330be3a781c367edfa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a566a1c2434b4fd330be3a781c367edfa">&#9670;&nbsp;</a></span>ComputeSymTScalingFactors()</h2>
+<a id="a3f4e383ee63c9b548b04049c6aa6c1e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f4e383ee63c9b548b04049c6aa6c1e4">&#9670;&nbsp;</a></span>ComputeSymTScalingFactors()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -339,37 +362,37 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">virtual bool Ipopt::Mc19TSymScalingMethod::ComputeSymTScalingFactors </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>nnz</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="IpTypes_8hpp.html#ab1366b159c9a5e7f01e86923f6b2dd65">ipfint</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>airn</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="IpTypes_8hpp.html#ab1366b159c9a5e7f01e86923f6b2dd65">ipfint</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>ajcn</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const double *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>a</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double *&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>scaling_factors</em>&#160;</td>
         </tr>
         <tr>
@@ -386,6 +409,64 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Method for computing the symmetric scaling factors, given the symmetric matrix in triplet (MA27) format. </p>
+
+<p>Implements <a class="el" href="classIpopt_1_1TSymScalingMethod.html#ae06613d7ae56769dd019d70d4998346b">Ipopt::TSymScalingMethod</a>.</p>
+
+</div>
+</div>
+<a id="a667d1cac121b7c9aecd0e8d816f70feb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a667d1cac121b7c9aecd0e8d816f70feb">&#9670;&nbsp;</a></span>SetFunctions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void Ipopt::Mc19TSymScalingMethod::SetFunctions </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>set MC19 function to use for every instantiation of this class </p>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+
+</div>
+</div>
+<a id="a0dda77861e3ccff4e6a3ad665a4a494c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0dda77861e3ccff4e6a3ad665a4a494c">&#9670;&nbsp;</a></span>GetMC19A()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="IpMc19TSymScalingMethod_8hpp.html#a9a1040df91c6349975daa3ad39af7581">IPOPT_DECL_MC19A</a>* Ipopt::Mc19TSymScalingMethod::GetMC19A </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>get MC19A function that has been set via SetFunctions </p>
+<p>this does not return a MC19A that has been linked in or loaded from a library at runtime </p><dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
 </div>
 </div>
@@ -414,6 +495,55 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Default Assignment Operator. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a695a5a82423ff6930c1d8d8402626add"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a695a5a82423ff6930c1d8d8402626add">&#9670;&nbsp;</a></span>hslloader</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt;<a class="el" href="classIpopt_1_1LibraryLoader.html">LibraryLoader</a>&gt; Ipopt::Mc19TSymScalingMethod::hslloader</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="IpMc19TSymScalingMethod_8hpp_source.html#l00099">99</a> of file <a class="el" href="IpMc19TSymScalingMethod_8hpp_source.html">IpMc19TSymScalingMethod.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a1fa6acbf38c9caafaa76df1db64f447d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1fa6acbf38c9caafaa76df1db64f447d">&#9670;&nbsp;</a></span>mc19a</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="IpMc19TSymScalingMethod_8hpp.html#a9a1040df91c6349975daa3ad39af7581">IPOPT_DECL_MC19A</a>* Ipopt::Mc19TSymScalingMethod::mc19a</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="IpMc19TSymScalingMethod_8hpp_source.html#l00101">101</a> of file <a class="el" href="IpMc19TSymScalingMethod_8hpp_source.html">IpMc19TSymScalingMethod.hpp</a>.</p>
 
 </div>
 </div>

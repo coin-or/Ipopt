@@ -1,5 +1,5 @@
-<!-- HTML header for doxygen 1.8.13-->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- HTML header for doxygen 1.8.18-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.13.4</span-->
+   &#160;<!--span id="projectnumber">3.14.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -102,7 +102,8 @@ $(document).ready(function(){initNavTree('IpIterativePardisoSolverInterface_8hpp
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a>  </div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#define-members">Macros</a>  </div>
   <div class="headertitle">
 <div class="title">IpIterativePardisoSolverInterface.hpp File Reference</div>  </div>
 </div><!--header-->
@@ -110,6 +111,8 @@ $(document).ready(function(){initNavTree('IpIterativePardisoSolverInterface_8hpp
 <div class="textblock"><code>#include &quot;<a class="el" href="IpSparseSymLinearSolverInterface_8hpp_source.html">IpSparseSymLinearSolverInterface.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="IpInexactCq_8hpp_source.html">IpInexactCq.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="IpIterativeSolverTerminationTester_8hpp_source.html">IpIterativeSolverTerminationTester.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="IpTypes_8h_source.html">IpTypes.h</a>&quot;</code><br />
 </div>
 <p><a href="IpIterativePardisoSolverInterface_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -124,7 +127,42 @@ Namespaces</h2></td></tr>
 <tr class="memitem:namespaceIpopt"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceIpopt.html">Ipopt</a></td></tr>
 <tr class="memdesc:namespaceIpopt"><td class="mdescLeft">&#160;</td><td class="mdescRight">This file contains a base class for all exceptions and a set of macros to help with exceptions. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:acd95eacf8295c848cff182fe0221a9b7"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpIterativePardisoSolverInterface_8hpp.html#acd95eacf8295c848cff182fe0221a9b7">IPOPT_DECL_SETIPOPTCALLBACKFUNCTION</a>(x)</td></tr>
+<tr class="separator:acd95eacf8295c848cff182fe0221a9b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="acd95eacf8295c848cff182fe0221a9b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd95eacf8295c848cff182fe0221a9b7">&#9670;&nbsp;</a></span>IPOPT_DECL_SETIPOPTCALLBACKFUNCTION</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define IPOPT_DECL_SETIPOPTCALLBACKFUNCTION</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">x</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">   void (x)( \</div>
+<div class="line">   int (*IpoptFunction)( \</div>
+<div class="line">      int       n,  \</div>
+<div class="line">      ipnumber* xx, \</div>
+<div class="line">      ipnumber* r,  \</div>
+<div class="line">      int       k,  \</div>
+<div class="line">      ipnumber  b   \</div>
+<div class="line">   ) \</div>
+<div class="line">)</div>
+</div><!-- fragment -->
+<p class="definition">Definition at line <a class="el" href="IpIterativePardisoSolverInterface_8hpp_source.html#l00018">18</a> of file <a class="el" href="IpIterativePardisoSolverInterface_8hpp_source.html">IpIterativePardisoSolverInterface.hpp</a>.</p>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 </body>

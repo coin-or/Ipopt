@@ -12,6 +12,7 @@ var IpReturnCodes__inc_8h =
       [ "Restoration_Failed", "IpReturnCodes__inc_8h.html#ab542e0b1ca364a9b7525a876ffdae7d7a019adb1693a37754d6e4835fe9f84bd0", null ],
       [ "Error_In_Step_Computation", "IpReturnCodes__inc_8h.html#ab542e0b1ca364a9b7525a876ffdae7d7a0794dd271a1920d3994be748c35141ac", null ],
       [ "Maximum_CpuTime_Exceeded", "IpReturnCodes__inc_8h.html#ab542e0b1ca364a9b7525a876ffdae7d7ad84aa273f0cb8f39234dde9977367ee7", null ],
+      [ "Maximum_WallTime_Exceeded", "IpReturnCodes__inc_8h.html#ab542e0b1ca364a9b7525a876ffdae7d7a4fbfad0d0db07cab35a179549ed319a4", null ],
       [ "Not_Enough_Degrees_Of_Freedom", "IpReturnCodes__inc_8h.html#ab542e0b1ca364a9b7525a876ffdae7d7a34bdd4992f673fdba7e9af07aff3535e", null ],
       [ "Invalid_Problem_Definition", "IpReturnCodes__inc_8h.html#ab542e0b1ca364a9b7525a876ffdae7d7ad0a0d57cad08c84c2051c98915e3233f", null ],
       [ "Invalid_Option", "IpReturnCodes__inc_8h.html#ab542e0b1ca364a9b7525a876ffdae7d7a621c0a01dc6cedc7d03b0ff1ea4ac188", null ],

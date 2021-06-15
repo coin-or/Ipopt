@@ -1,5 +1,5 @@
-<!-- HTML header for doxygen 1.8.13-->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- HTML header for doxygen 1.8.18-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.13.4</span-->
+   &#160;<!--span id="projectnumber">3.14.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -144,6 +144,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae1d61a61ade3ef02dea4441196f42b95"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classorg_1_1coinor_1_1Ipopt.html#ae1d61a61ade3ef02dea4441196f42b95">OptimizeNLP</a> ()</td></tr>
 <tr class="memdesc:ae1d61a61ade3ef02dea4441196f42b95"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function actually solve the problem.  <a href="classorg_1_1coinor_1_1Ipopt.html#ae1d61a61ade3ef02dea4441196f42b95">More...</a><br /></td></tr>
 <tr class="separator:ae1d61a61ade3ef02dea4441196f42b95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac99c6c1aa98865aa73a2b1079a671024"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classorg_1_1coinor_1_1Ipopt.html#ac99c6c1aa98865aa73a2b1079a671024">get_curr_iterate</a> (long ip_data, long ip_cq, boolean scaled, int n, double <a class="el" href="classorg_1_1coinor_1_1Ipopt.html#a4d0279b61ddf81f2c137dc016b1f4c92">x</a>[], double z_L[], double z_U[], int m, double <a class="el" href="classorg_1_1coinor_1_1Ipopt.html#a46d765adde7a0da8980734b7c4f41aff">g</a>[], double lambda[])</td></tr>
+<tr class="memdesc:ac99c6c1aa98865aa73a2b1079a671024"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get primal and dual variable values of the current iterate.  <a href="classorg_1_1coinor_1_1Ipopt.html#ac99c6c1aa98865aa73a2b1079a671024">More...</a><br /></td></tr>
+<tr class="separator:ac99c6c1aa98865aa73a2b1079a671024"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6596d5beb266e5e60d57a9d5e52c8efa"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classorg_1_1coinor_1_1Ipopt.html#a6596d5beb266e5e60d57a9d5e52c8efa">get_curr_violations</a> (long ip_data, long ip_cq, boolean scaled, int n, double x_L_violation[], double x_U_violation[], double compl_x_L[], double compl_x_U[], double grad_lag_x[], int m, double nlp_constraint_violation[], double compl_g[])</td></tr>
+<tr class="memdesc:a6596d5beb266e5e60d57a9d5e52c8efa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get primal and dual infeasibility of the current iterate.  <a href="classorg_1_1coinor_1_1Ipopt.html#a6596d5beb266e5e60d57a9d5e52c8efa">More...</a><br /></td></tr>
+<tr class="separator:a6596d5beb266e5e60d57a9d5e52c8efa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a006f218ae1bc42c63216db173b42223f"><td class="memItemLeft" align="right" valign="top">double[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classorg_1_1coinor_1_1Ipopt.html#a006f218ae1bc42c63216db173b42223f">getVariableValues</a> ()</td></tr>
 <tr class="memdesc:a006f218ae1bc42c63216db173b42223f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gives primal variable values at final point.  <a href="classorg_1_1coinor_1_1Ipopt.html#a006f218ae1bc42c63216db173b42223f">More...</a><br /></td></tr>
 <tr class="separator:a006f218ae1bc42c63216db173b42223f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -165,6 +171,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7f559255a7c9f289644c5b320c06e3cc"><td class="memItemLeft" align="right" valign="top">double[]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classorg_1_1coinor_1_1Ipopt.html#a7f559255a7c9f289644c5b320c06e3cc">getUpperBoundMultipliers</a> ()</td></tr>
 <tr class="memdesc:a7f559255a7c9f289644c5b320c06e3cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gives dual multipliers for variable upper bounds in final point.  <a href="classorg_1_1coinor_1_1Ipopt.html#a7f559255a7c9f289644c5b320c06e3cc">More...</a><br /></td></tr>
 <tr class="separator:a7f559255a7c9f289644c5b320c06e3cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64b80dde363aebc64802b3ad950a7a06"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classorg_1_1coinor_1_1Ipopt.html#a64b80dde363aebc64802b3ad950a7a06">intermediate_callback</a> (int algorithmmode, int iter, double obj_value, double inf_pr, double inf_du, double mu, double d_norm, double regularization_size, double alpha_du, double alpha_pr, int ls_trials, long ip_data, long ip_cq)</td></tr>
+<tr class="memdesc:a64b80dde363aebc64802b3ad950a7a06"><td class="mdescLeft">&#160;</td><td class="mdescRight">Intermediate Callback method for the user.  <a href="classorg_1_1coinor_1_1Ipopt.html#a64b80dde363aebc64802b3ad950a7a06">More...</a><br /></td></tr>
+<tr class="separator:a64b80dde363aebc64802b3ad950a7a06"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a28c05534837bdcae5d2c52358d7d8929"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classorg_1_1coinor_1_1Ipopt.html#a28c05534837bdcae5d2c52358d7d8929">get_scaling_parameters</a> (double[] obj_scaling, int n, double[] x_scaling, int m, double[] g_scaling, boolean[] use_x_g_scaling)</td></tr>
 <tr class="memdesc:a28c05534837bdcae5d2c52358d7d8929"><td class="mdescLeft">&#160;</td><td class="mdescRight">If you using_scaling_parameters = true, this method should be overloaded.  <a href="classorg_1_1coinor_1_1Ipopt.html#a28c05534837bdcae5d2c52358d7d8929">More...</a><br /></td></tr>
 <tr class="separator:a28c05534837bdcae5d2c52358d7d8929"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -184,7 +193,6 @@ Static Public Attributes</h2></td></tr>
 <tr class="memdesc:ad22ccf5588351d02b727a02a7cddd933"><td class="mdescLeft">&#160;</td><td class="mdescRight">Use FORTRAN index style for iRow and jCol vectors.  <a href="classorg_1_1coinor_1_1Ipopt.html#ad22ccf5588351d02b727a02a7cddd933">More...</a><br /></td></tr>
 <tr class="separator:ad22ccf5588351d02b727a02a7cddd933"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a06e22b2ef0b1d1bf4d2d7ff49c228404"><td class="memItemLeft" align="right" valign="top">static final int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classorg_1_1coinor_1_1Ipopt.html#a06e22b2ef0b1d1bf4d2d7ff49c228404">SOLVE_SUCCEEDED</a> = 0</td></tr>
-<tr class="memdesc:a06e22b2ef0b1d1bf4d2d7ff49c228404"><td class="mdescLeft">&#160;</td><td class="mdescRight">The possible <a class="el" href="classorg_1_1coinor_1_1Ipopt.html" title="A Java Native Interface for the Ipopt optimization solver.">Ipopt</a> status return codes: should be kept in sync with <a class="el" href="classorg_1_1coinor_1_1Ipopt.html" title="A Java Native Interface for the Ipopt optimization solver.">Ipopt</a> return codes.  <a href="classorg_1_1coinor_1_1Ipopt.html#a06e22b2ef0b1d1bf4d2d7ff49c228404">More...</a><br /></td></tr>
 <tr class="separator:a06e22b2ef0b1d1bf4d2d7ff49c228404"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aabd4d7c743b373810d1cf25c64099871"><td class="memItemLeft" align="right" valign="top">static final int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classorg_1_1coinor_1_1Ipopt.html#aabd4d7c743b373810d1cf25c64099871">ACCEPTABLE_LEVEL</a> = 1</td></tr>
 <tr class="separator:aabd4d7c743b373810d1cf25c64099871"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -204,6 +212,8 @@ Static Public Attributes</h2></td></tr>
 <tr class="separator:ab7d1d406f9705fda644a3c1fdc31c904"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af915b9705da65d4ec1dfaf7b5889c61c"><td class="memItemLeft" align="right" valign="top">static final int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classorg_1_1coinor_1_1Ipopt.html#af915b9705da65d4ec1dfaf7b5889c61c">CPUTIME_EXCEEDED</a> = -4</td></tr>
 <tr class="separator:af915b9705da65d4ec1dfaf7b5889c61c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a01a8754e65054cb811e22ad371258c36"><td class="memItemLeft" align="right" valign="top">static final int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classorg_1_1coinor_1_1Ipopt.html#a01a8754e65054cb811e22ad371258c36">WALLTIME_EXCEEDED</a> = -5</td></tr>
+<tr class="separator:a01a8754e65054cb811e22ad371258c36"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5b51f92e8764572d9c48569908a22dce"><td class="memItemLeft" align="right" valign="top">static final int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classorg_1_1coinor_1_1Ipopt.html#a5b51f92e8764572d9c48569908a22dce">NOT_ENOUGH_DEGREES_OF_FRE</a> = -10</td></tr>
 <tr class="separator:a5b51f92e8764572d9c48569908a22dce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6601c123db771db778c4c25061327048"><td class="memItemLeft" align="right" valign="top">static final int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classorg_1_1coinor_1_1Ipopt.html#a6601c123db771db778c4c25061327048">INVALID_PROBLEM_DEFINITION</a> = -11</td></tr>
@@ -220,6 +230,10 @@ Static Public Attributes</h2></td></tr>
 <tr class="separator:a59b78aca47982a3930ff05caa43d89dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afd5a2fcda4688ceef6ad841d2cb7f627"><td class="memItemLeft" align="right" valign="top">static final int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classorg_1_1coinor_1_1Ipopt.html#afd5a2fcda4688ceef6ad841d2cb7f627">INTERNAL_ERROR</a> = -199</td></tr>
 <tr class="separator:afd5a2fcda4688ceef6ad841d2cb7f627"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af185184ae1fe687e64a5f5880c48813d"><td class="memItemLeft" align="right" valign="top">static final int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classorg_1_1coinor_1_1Ipopt.html#af185184ae1fe687e64a5f5880c48813d">REGULARMODE</a> = 0</td></tr>
+<tr class="separator:af185184ae1fe687e64a5f5880c48813d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f2f733983ced5bb2db465a6e9329a45"><td class="memItemLeft" align="right" valign="top">static final int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classorg_1_1coinor_1_1Ipopt.html#a3f2f733983ced5bb2db465a6e9329a45">RESTORATIONPHASEMODE</a> = 1</td></tr>
+<tr class="separator:a3f2f733983ced5bb2db465a6e9329a45"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
@@ -261,6 +275,10 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a5135398105ea5616a141397bd043ee64"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4d9fd1045e1dcef18fd16c52161be407"><td class="memItemLeft" align="right" valign="top">native int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classorg_1_1coinor_1_1Ipopt.html#a4d9fd1045e1dcef18fd16c52161be407">OptimizeTNLP</a> (long <a class="el" href="classorg_1_1coinor_1_1Ipopt.html#aaccf6965122e89d86f4ac57d950787e7">ipopt</a>, double <a class="el" href="classorg_1_1coinor_1_1Ipopt.html#a4d0279b61ddf81f2c137dc016b1f4c92">x</a>[], double <a class="el" href="classorg_1_1coinor_1_1Ipopt.html#a46d765adde7a0da8980734b7c4f41aff">g</a>[], double <a class="el" href="classorg_1_1coinor_1_1Ipopt.html#a9cdb448d319b75a8ffad2ae1df8c6551">obj_val</a>[], double <a class="el" href="classorg_1_1coinor_1_1Ipopt.html#ab0910d0da9b1a0edc3dfb655abfdf0ea">mult_g</a>[], double <a class="el" href="classorg_1_1coinor_1_1Ipopt.html#ab4cf62cbe73667cb903e9dcddae881dd">mult_x_L</a>[], double <a class="el" href="classorg_1_1coinor_1_1Ipopt.html#a43a18366b435f807bb7dc9b28de4b7f9">mult_x_U</a>[], double <a class="el" href="classorg_1_1coinor_1_1Ipopt.html#ae7d529ffa405d16fb69750e855bc6a40">callback_grad_f</a>[], double <a class="el" href="classorg_1_1coinor_1_1Ipopt.html#a3d43f354d13771f3e7c45fe66949cdf0">callback_jac_g</a>[], double <a class="el" href="classorg_1_1coinor_1_1Ipopt.html#a1294b1186358327819b4a02bbfedbd07">callback_hess</a>[])</td></tr>
 <tr class="separator:a4d9fd1045e1dcef18fd16c52161be407"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e0e0ec4d50fee0fb749a9005449a6ae"><td class="memItemLeft" align="right" valign="top">native boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classorg_1_1coinor_1_1Ipopt.html#a1e0e0ec4d50fee0fb749a9005449a6ae">GetCurrIterate</a> (long <a class="el" href="classorg_1_1coinor_1_1Ipopt.html#aaccf6965122e89d86f4ac57d950787e7">ipopt</a>, long ip_data, long ip_cq, boolean scaled, int n, double <a class="el" href="classorg_1_1coinor_1_1Ipopt.html#a4d0279b61ddf81f2c137dc016b1f4c92">x</a>[], double z_L[], double z_U[], int m, double <a class="el" href="classorg_1_1coinor_1_1Ipopt.html#a46d765adde7a0da8980734b7c4f41aff">g</a>[], double lambda[])</td></tr>
+<tr class="separator:a1e0e0ec4d50fee0fb749a9005449a6ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac63a8698afbd446181712bfd86e08f9c"><td class="memItemLeft" align="right" valign="top">native boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classorg_1_1coinor_1_1Ipopt.html#ac63a8698afbd446181712bfd86e08f9c">GetCurrViolations</a> (long <a class="el" href="classorg_1_1coinor_1_1Ipopt.html#aaccf6965122e89d86f4ac57d950787e7">ipopt</a>, long ip_data, long ip_cq, boolean scaled, int n, double x_L_violation[], double x_U_violation[], double compl_x_L[], double compl_x_U[], double grad_lag_x[], int m, double nlp_constraint_violation[], double compl_g[])</td></tr>
+<tr class="separator:ac63a8698afbd446181712bfd86e08f9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -277,7 +295,7 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a4d0279b61ddf81f2c137dc016b1f4c92"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classorg_1_1coinor_1_1Ipopt.html#a4d0279b61ddf81f2c137dc016b1f4c92">x</a> []</td></tr>
 <tr class="memdesc:a4d0279b61ddf81f2c137dc016b1f4c92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Final value of variable values.  <a href="classorg_1_1coinor_1_1Ipopt.html#a4d0279b61ddf81f2c137dc016b1f4c92">More...</a><br /></td></tr>
 <tr class="separator:a4d0279b61ddf81f2c137dc016b1f4c92"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9cdb448d319b75a8ffad2ae1df8c6551"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classorg_1_1coinor_1_1Ipopt.html#a9cdb448d319b75a8ffad2ae1df8c6551">obj_val</a> [] = {0.0}</td></tr>
+<tr class="memitem:a9cdb448d319b75a8ffad2ae1df8c6551"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classorg_1_1coinor_1_1Ipopt.html#a9cdb448d319b75a8ffad2ae1df8c6551">obj_val</a> [] = {0}</td></tr>
 <tr class="memdesc:a9cdb448d319b75a8ffad2ae1df8c6551"><td class="mdescLeft">&#160;</td><td class="mdescRight">Final value of objective function.  <a href="classorg_1_1coinor_1_1Ipopt.html#a9cdb448d319b75a8ffad2ae1df8c6551">More...</a><br /></td></tr>
 <tr class="separator:a9cdb448d319b75a8ffad2ae1df8c6551"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a46d765adde7a0da8980734b7c4f41aff"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classorg_1_1coinor_1_1Ipopt.html#a46d765adde7a0da8980734b7c4f41aff">g</a> []</td></tr>
@@ -339,7 +357,7 @@ Tong Kewei, BeiHang University </dd></dl>
 <p>This expects the the <a class="el" href="classorg_1_1coinor_1_1Ipopt.html" title="A Java Native Interface for the Ipopt optimization solver.">Ipopt</a> DLL can somehow be found and that it has the canoncial name "ipopt" (on Unix, et.al.) or "ipopt-3" or "ipopt-0" (on Windows).</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classorg_1_1coinor_1_1Ipopt.html#ab140cae4c428047f583ca789df5e5495" title="Creates a new NLP Solver using a default as the DLL name.">Ipopt()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00158">158</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00195">195</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -377,7 +395,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classorg_1_1coinor_1_1Ipopt.html#ab140cae4c428047f583ca789df5e5495" title="Creates a new NLP Solver using a default as the DLL name.">Ipopt()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00199">199</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00243">243</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -426,7 +444,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classorg_1_1coinor_1_1Ipopt.html#ab140cae4c428047f583ca789df5e5495" title="Creates a new NLP Solver using a default as the DLL name.">Ipopt()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00214">214</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00258">258</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -705,6 +723,198 @@ Tong Kewei, BeiHang University </dd></dl>
           <td></td>
           <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>callback_hess</em>[]&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1e0e0ec4d50fee0fb749a9005449a6ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e0e0ec4d50fee0fb749a9005449a6ae">&#9670;&nbsp;</a></span>GetCurrIterate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">native boolean org.coinor.Ipopt.GetCurrIterate </td>
+          <td>(</td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>ipopt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>ip_data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>ip_cq</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">boolean&#160;</td>
+          <td class="paramname"><em>scaled</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>x</em>[], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>z_L</em>[], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>z_U</em>[], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>g</em>[], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>lambda</em>[]&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac63a8698afbd446181712bfd86e08f9c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac63a8698afbd446181712bfd86e08f9c">&#9670;&nbsp;</a></span>GetCurrViolations()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">native boolean org.coinor.Ipopt.GetCurrViolations </td>
+          <td>(</td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>ipopt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>ip_data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>ip_cq</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">boolean&#160;</td>
+          <td class="paramname"><em>scaled</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>x_L_violation</em>[], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>x_U_violation</em>[], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>compl_x_L</em>[], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>compl_x_U</em>[], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>grad_lag_x</em>[], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>nlp_constraint_violation</em>[], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>compl_g</em>[]&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1309,7 +1519,7 @@ Tong Kewei, BeiHang University </dd></dl>
 <p>Programmers must call the dispose method when finished using a <a class="el" href="classorg_1_1coinor_1_1Ipopt.html" title="A Java Native Interface for the Ipopt optimization solver.">Ipopt</a> object.</p>
 <p>An JIpopt object can be reused to solve different problems by calling again <a class="el" href="classorg_1_1coinor_1_1Ipopt.html#a974f513fe0380fa5feb582855657ea49">create(int, int, int, int, int)</a>. In this case, you should call the dispose method only when you finished with the object and it is not needed anymore. </p>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00439">439</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00483">483</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -1336,7 +1546,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00450">450</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00494">494</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -1406,7 +1616,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true on success, otherwise false </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00467">467</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00511">511</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -1455,7 +1665,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>false if the option could not be set (e.g., if keyword is unknown) </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00505">505</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00549">549</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -1504,7 +1714,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>false if the option could not be set (e.g., if keyword is unknown) </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00525">525</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00569">569</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -1553,7 +1763,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>false if the option could not be set (e.g., if keyword is unknown) </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00545">545</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00589">589</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -1585,7 +1795,239 @@ Tong Kewei, BeiHang University </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>the solve status</dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classorg_1_1coinor_1_1Ipopt.html#a9eebd3ea4266623fd1e006d1d676dac5" title="Gives Ipopt status of last OptimizeNLP call.">getStatus()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00567">567</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00611">611</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+
+</div>
+</div>
+<a id="ac99c6c1aa98865aa73a2b1079a671024"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac99c6c1aa98865aa73a2b1079a671024">&#9670;&nbsp;</a></span>get_curr_iterate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">boolean org.coinor.Ipopt.get_curr_iterate </td>
+          <td>(</td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>ip_data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>ip_cq</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">boolean&#160;</td>
+          <td class="paramname"><em>scaled</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>x</em>[], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>z_L</em>[], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>z_U</em>[], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>g</em>[], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>lambda</em>[]&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get primal and dual variable values of the current iterate. </p>
+<p>This method can be used to get the values of the current iterate during <a class="el" href="classorg_1_1coinor_1_1Ipopt.html#a64b80dde363aebc64802b3ad950a7a06" title="Intermediate Callback method for the user.">intermediate_callback()</a>. The method expects the number of variables (dimension of x), number of constraints (dimension of g(x)), and allocated arrays of appropriate lengths as input.</p>
+<p>The method translates the <a class="el" href="classorg_1_1coinor_1_1Ipopt.html#a4d0279b61ddf81f2c137dc016b1f4c92" title="Final value of variable values.">x()</a>, c(), d(), y_c(), y_d(), z_L(), and z_U() vectors from <a class="el" href="classIpopt_1_1IpoptData.html#a7ea3aeb9b62b340f7671d61b88a9b056" title="Current point.">Ipopt::IpoptData::curr()</a> of the internal NLP representation into the form used by the TNLP. For the correspondence between scaled and unscaled solutions, see the detailed description of <a class="el" href="classIpopt_1_1OrigIpoptNLP.html" title="This class maps the traditional NLP into something that is more useful for Ipopt.">Ipopt::OrigIpoptNLP</a>. If Ipopt is in restoration mode, it maps the current iterate of restoration NLP (see <a class="el" href="classIpopt_1_1RestoIpoptNLP.html" title="This class maps a IpoptNLP into one that is used for the restoration phase of Ipopt.">Ipopt::RestoIpoptNLP</a>) back to the original TNLP.</p>
+<p>If there are fixed variables and fixed_variable_treatment=make_parameter, then requesting z_L and z_U can trigger a reevaluation of the Gradient of the objective function and the Jacobian of the constraint functions.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ip_data</td><td>(in) <a class="el" href="classorg_1_1coinor_1_1Ipopt.html" title="A Java Native Interface for the Ipopt optimization solver.">Ipopt</a> Data (pass on value given to intermediate_callback) </td></tr>
+    <tr><td class="paramname">ip_cq</td><td>(in) <a class="el" href="classorg_1_1coinor_1_1Ipopt.html" title="A Java Native Interface for the Ipopt optimization solver.">Ipopt</a> Calculated Quantities (pass on value given to intermediate_callback) </td></tr>
+    <tr><td class="paramname">scaled</td><td>(in) whether to retrieve scaled or unscaled iterate </td></tr>
+    <tr><td class="paramname">n</td><td>(in) the number of variables \(x\) in the problem; can be arbitrary if skipping x, z_L, and z_U </td></tr>
+    <tr><td class="paramname">x</td><td>(out) buffer to store value of primal variables \(x\), must have length at least n; pass null to skip retrieving x </td></tr>
+    <tr><td class="paramname">z_L</td><td>(out) buffer to store the lower bound multipliers \(z_L\), must have length at least n; pass null to skip retrieving z_L and z_U </td></tr>
+    <tr><td class="paramname">z_U</td><td>(out) buffer to store the upper bound multipliers \(z_U\), must have length at least n; pass null to skip retrieving z_L and z_U </td></tr>
+    <tr><td class="paramname">m</td><td>(in) the number of constraints \(g(x)\); can be arbitrary if skipping g and lambda </td></tr>
+    <tr><td class="paramname">g</td><td>(out) buffer to store the constraint values \(g(x)\), must have length at least m; pass null to skip retrieving g </td></tr>
+    <tr><td class="paramname">lambda</td><td>(out) buffer to store the constraint multipliers \(\lambda\), must have length at least m; pass null to skip retrieving lambda</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether <a class="el" href="classorg_1_1coinor_1_1Ipopt.html" title="A Java Native Interface for the Ipopt optimization solver.">Ipopt</a> has successfully filled the given arrays </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00648">648</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+
+</div>
+</div>
+<a id="a6596d5beb266e5e60d57a9d5e52c8efa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6596d5beb266e5e60d57a9d5e52c8efa">&#9670;&nbsp;</a></span>get_curr_violations()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">boolean org.coinor.Ipopt.get_curr_violations </td>
+          <td>(</td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>ip_data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>ip_cq</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">boolean&#160;</td>
+          <td class="paramname"><em>scaled</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>x_L_violation</em>[], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>x_U_violation</em>[], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>compl_x_L</em>[], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>compl_x_U</em>[], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>grad_lag_x</em>[], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>nlp_constraint_violation</em>[], </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>compl_g</em>[]&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get primal and dual infeasibility of the current iterate. </p>
+<p>This method can be used to get the violations of constraints and optimality conditions at the current iterate, e.g., during <a class="el" href="classorg_1_1coinor_1_1Ipopt.html#a64b80dde363aebc64802b3ad950a7a06" title="Intermediate Callback method for the user.">intermediate_callback()</a>. The method expects the number of variables (dimension of x), number of constraints (dimension of g(x)), and allocated arrays of appropriate lengths as input.</p>
+<p>The method makes the vectors behind (unscaled_)curr_nlp_constraint_violation(), (unscaled_)curr_dual_infeasibility(), (unscaled_)curr_complementarity() from <a class="el" href="classIpopt_1_1IpoptCalculatedQuantities.html" title="Class for all IPOPT specific calculated quantities.">Ipopt::IpoptCalculatedQuantities</a> of the internal NLP representation available into the form used by the TNLP. If Ipopt is in restoration mode, it maps the current iterate of restoration NLP (see <a class="el" href="classIpopt_1_1RestoIpoptNLP.html" title="This class maps a IpoptNLP into one that is used for the restoration phase of Ipopt.">Ipopt::RestoIpoptNLP</a>) back to the original TNLP.</p>
+<dl class="section note"><dt>Note</dt><dd>If in restoration phase, then requesting grad_lag_x can trigger a call to <a class="el" href="classorg_1_1coinor_1_1Ipopt.html#a77ead30aae6f366cdd41d566893199ef" title="Method to request the gradient of the objective function.">eval_grad_f()</a>.</dd>
+<dd>
+<a class="el" href="classorg_1_1coinor_1_1Ipopt.html" title="A Java Native Interface for the Ipopt optimization solver.">Ipopt</a> by default relaxes variable bounds (option bound_relax_factor &gt; 0.0). x_L_violation and x_U_violation report the violation of a solution w.r.t. the original unrelaxed bounds. However, compl_x_L and compl_x_U use the relaxed variable bounds to calculate the complementarity.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ip_data</td><td>(in) <a class="el" href="classorg_1_1coinor_1_1Ipopt.html" title="A Java Native Interface for the Ipopt optimization solver.">Ipopt</a> Data (pass on value given to intermediate_callback) </td></tr>
+    <tr><td class="paramname">ip_cq</td><td>(in) <a class="el" href="classorg_1_1coinor_1_1Ipopt.html" title="A Java Native Interface for the Ipopt optimization solver.">Ipopt</a> Calculated Quantities (pass on value given to intermediate_callback) </td></tr>
+    <tr><td class="paramname">scaled</td><td>(in) whether to retrieve scaled or unscaled violations </td></tr>
+    <tr><td class="paramname">n</td><td>(in) the number of variables \(x\) in the problem; can be arbitrary if skipping compl_x_L, compl_x_U, and grad_lag_x </td></tr>
+    <tr><td class="paramname">x_L_violation</td><td>(out) buffer to store violation of original lower bounds on variables (max(orig_x_L-x,0)), must have length at least n; pass NULL to skip retrieving orig_x_L </td></tr>
+    <tr><td class="paramname">x_U_violation</td><td>(out) buffer to store violation of original upper bounds on variables (max(x-orig_x_U,0)), must have length at least n; pass NULL to skip retrieving orig_x_U </td></tr>
+    <tr><td class="paramname">compl_x_L</td><td>(out) buffer to store violation of complementarity for lower bounds on variables ( \((x-x_L)z_L\)), must have length at least n; pass null to skip retrieving compl_x_L </td></tr>
+    <tr><td class="paramname">compl_x_U</td><td>(out) buffer to store violation of complementarity for upper bounds on variables ( \((x_U-x)z_U\)), must have length at least n; pass null to skip retrieving compl_x_U </td></tr>
+    <tr><td class="paramname">grad_lag_x</td><td>(out) buffer to store gradient of Lagrangian w.r.t. variables \(x\), must have length at least n; pass null to skip retrieving grad_lag_x </td></tr>
+    <tr><td class="paramname">m</td><td>(in) the number of constraints \(g(x)\); can be arbitrary if skipping lambda </td></tr>
+    <tr><td class="paramname">nlp_constraint_violation</td><td>(out) buffer to store violation of constraints \(max(g_l-g(x),g(x)-g_u,0)\), must have length at least m; pass null to skip retrieving constraint_violation </td></tr>
+    <tr><td class="paramname">compl_g</td><td>(out) buffer to store violation of complementarity of constraint ( \((g(x)-g_l)*\lambda^+ + (g_l-g(x))*\lambda^-\), where \(\lambda^+=max(0,\lambda)\) and \(\lambda^-=max(0,-\lambda)\) (componentwise)), must have length at least m; pass null to skip retrieving compl_g</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether <a class="el" href="classorg_1_1coinor_1_1Ipopt.html" title="A Java Native Interface for the Ipopt optimization solver.">Ipopt</a> has successfully filled the given arrays </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00697">697</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -1615,7 +2057,7 @@ Tong Kewei, BeiHang University </dd></dl>
 <p>Gives primal variable values at final point. </p>
 <dl class="section return"><dt>Returns</dt><dd>the primal variable values at the final point. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00579">579</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00718">718</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -1645,7 +2087,7 @@ Tong Kewei, BeiHang University </dd></dl>
 <p>Gives objective function value at final point. </p>
 <dl class="section return"><dt>Returns</dt><dd>the final value of the objective function. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00587">587</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00726">726</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -1676,7 +2118,7 @@ Tong Kewei, BeiHang University </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>the status of the solver.</dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classorg_1_1coinor_1_1Ipopt.html#ae1d61a61ade3ef02dea4441196f42b95" title="This function actually solve the problem.">OptimizeNLP()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00597">597</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00736">736</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -1706,7 +2148,7 @@ Tong Kewei, BeiHang University </dd></dl>
 <p>Gives constraint function values at final point. </p>
 <dl class="section return"><dt>Returns</dt><dd>Returns the final values for the constraints functions. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00605">605</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00744">744</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -1736,7 +2178,7 @@ Tong Kewei, BeiHang University </dd></dl>
 <p>Gives constraint dual multipliers in final point. </p>
 <dl class="section return"><dt>Returns</dt><dd>Returns the final multipliers for the constraints. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00613">613</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00752">752</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -1766,7 +2208,7 @@ Tong Kewei, BeiHang University </dd></dl>
 <p>Gives dual multipliers for variable lower bounds in final point. </p>
 <dl class="section return"><dt>Returns</dt><dd>Returns the final multipliers for the variable lower bounds. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00621">621</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00760">760</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -1796,7 +2238,118 @@ Tong Kewei, BeiHang University </dd></dl>
 <p>Gives dual multipliers for variable upper bounds in final point. </p>
 <dl class="section return"><dt>Returns</dt><dd>Returns the final multipliers for the variable upper bounds. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00629">629</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00768">768</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+
+</div>
+</div>
+<a id="a64b80dde363aebc64802b3ad950a7a06"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a64b80dde363aebc64802b3ad950a7a06">&#9670;&nbsp;</a></span>intermediate_callback()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">boolean org.coinor.Ipopt.intermediate_callback </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>algorithmmode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>iter</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>obj_value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>inf_pr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>inf_du</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>mu</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>d_norm</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>regularization_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>alpha_du</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>alpha_pr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>ls_trials</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>ip_data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">long&#160;</td>
+          <td class="paramname"><em>ip_cq</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Intermediate Callback method for the user. </p>
+<p>This method is called once per iteration (during the convergence check), and can be used to obtain information about the optimization status while Ipopt solves the problem, and also to request a premature termination.</p>
+<p>The information provided by the entities in the argument list correspond to what Ipopt prints in the iteration summary (see also <a class="el" href="OUTPUT.html">Ipopt Output</a>). The value of algorithmmode is either REGULARMODE or RESTORATIONPHASEMODE.</p>
+<p>The current iterate and violations of feasibility and optimality can be accessed via the methods <a class="el" href="classorg_1_1coinor_1_1Ipopt.html#ac99c6c1aa98865aa73a2b1079a671024" title="Get primal and dual variable values of the current iterate.">get_curr_iterate()</a> and <a class="el" href="classorg_1_1coinor_1_1Ipopt.html#a6596d5beb266e5e60d57a9d5e52c8efa" title="Get primal and dual infeasibility of the current iterate.">get_curr_violations()</a>. These methods translate values for the <em>internal representation</em> of the problem from <code>ip_data</code> and <code>ip_cq</code> objects.</p>
+<dl class="section return"><dt>Returns</dt><dd>If this method returns false, Ipopt will terminate with the User_Requested_Stop status.</dd></dl>
+<p>It is not required to implement (overload) this method. The default implementation always returns true. </p><dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00795">795</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -1873,7 +2426,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true on success, otherwise false </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00648">648</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00827">827</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -1903,7 +2456,7 @@ Tong Kewei, BeiHang University </dd></dl>
 <p>When LBFGS hessian approximation is used, this method should be overloaded. </p>
 <dl class="section return"><dt>Returns</dt><dd>number of nonlinear variables, a negative value indicates that all variables are negative </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00663">663</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00842">842</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -1951,7 +2504,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true on success, otherwise false </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00675">675</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00854">854</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -1978,7 +2531,7 @@ Tong Kewei, BeiHang University </dd></dl>
 
 <p>Use C index style for iRow and jCol vectors. </p>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00096">96</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00128">128</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2004,7 +2557,7 @@ Tong Kewei, BeiHang University </dd></dl>
 
 <p>Use FORTRAN index style for iRow and jCol vectors. </p>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00099">99</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00131">131</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2028,9 +2581,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p>The possible <a class="el" href="classorg_1_1coinor_1_1Ipopt.html" title="A Java Native Interface for the Ipopt optimization solver.">Ipopt</a> status return codes: should be kept in sync with <a class="el" href="classorg_1_1coinor_1_1Ipopt.html" title="A Java Native Interface for the Ipopt optimization solver.">Ipopt</a> return codes. </p>
-
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00102">102</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00134">134</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2054,7 +2605,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00103">103</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00135">135</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2078,7 +2629,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00104">104</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00136">136</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2102,7 +2653,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00105">105</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00137">137</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2126,7 +2677,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00106">106</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00138">138</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2150,7 +2701,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00107">107</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00139">139</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2174,7 +2725,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00108">108</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00140">140</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2198,7 +2749,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00109">109</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00141">141</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2222,7 +2773,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00110">110</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00142">142</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2246,7 +2797,32 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00111">111</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00143">143</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+
+</div>
+</div>
+<a id="a01a8754e65054cb811e22ad371258c36"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a01a8754e65054cb811e22ad371258c36">&#9670;&nbsp;</a></span>WALLTIME_EXCEEDED</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">final int org.coinor.Ipopt.WALLTIME_EXCEEDED = -5</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00144">144</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2270,7 +2846,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00112">112</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00145">145</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2294,7 +2870,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00113">113</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00146">146</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2318,7 +2894,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00114">114</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00147">147</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2342,7 +2918,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00115">115</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00148">148</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2366,7 +2942,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00116">116</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00149">149</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2390,7 +2966,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00117">117</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00150">150</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2414,7 +2990,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00118">118</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00151">151</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2438,7 +3014,57 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00119">119</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00152">152</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+
+</div>
+</div>
+<a id="af185184ae1fe687e64a5f5880c48813d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af185184ae1fe687e64a5f5880c48813d">&#9670;&nbsp;</a></span>REGULARMODE</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">final int org.coinor.Ipopt.REGULARMODE = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00155">155</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+
+</div>
+</div>
+<a id="a3f2f733983ced5bb2db465a6e9329a45"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f2f733983ced5bb2db465a6e9329a45">&#9670;&nbsp;</a></span>RESTORATIONPHASEMODE</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">final int org.coinor.Ipopt.RESTORATIONPHASEMODE = 1</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00156">156</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2464,7 +3090,7 @@ Tong Kewei, BeiHang University </dd></dl>
 
 <p>Pointer to the native optimization object. </p>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00122">122</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00159">159</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2490,7 +3116,7 @@ Tong Kewei, BeiHang University </dd></dl>
 
 <p>Callback arguments. </p>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00125">125</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00162">162</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2514,7 +3140,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00126">126</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00163">163</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2538,7 +3164,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00127">127</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00164">164</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2564,7 +3190,7 @@ Tong Kewei, BeiHang University </dd></dl>
 
 <p>Final value of variable values. </p>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00130">130</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00167">167</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2578,7 +3204,7 @@ Tong Kewei, BeiHang University </dd></dl>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">double org.coinor.Ipopt.obj_val[] = {0.0}</td>
+          <td class="memname">double org.coinor.Ipopt.obj_val[] = {0}</td>
         </tr>
       </table>
   </td>
@@ -2590,7 +3216,7 @@ Tong Kewei, BeiHang University </dd></dl>
 
 <p>Final value of objective function. </p>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00133">133</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00170">170</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2616,7 +3242,7 @@ Tong Kewei, BeiHang University </dd></dl>
 
 <p>Values of constraint at final point. </p>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00136">136</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00173">173</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2642,7 +3268,7 @@ Tong Kewei, BeiHang University </dd></dl>
 
 <p>Final multipliers for lower variable bounds. </p>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00139">139</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00176">176</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2668,7 +3294,7 @@ Tong Kewei, BeiHang University </dd></dl>
 
 <p>Final multipliers for upper variable bounds. </p>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00142">142</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00179">179</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2694,7 +3320,7 @@ Tong Kewei, BeiHang University </dd></dl>
 
 <p>Final multipliers for constraints. </p>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00145">145</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00182">182</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2720,7 +3346,7 @@ Tong Kewei, BeiHang University </dd></dl>
 
 <p>Status returned by the solver. </p>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00148">148</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00185">185</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>

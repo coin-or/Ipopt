@@ -5,7 +5,7 @@ var classIpopt_1_1AugRestoSystemSolver =
     [ "AugRestoSystemSolver", "classIpopt_1_1AugRestoSystemSolver.html#a05622e3c9bb53139c3f71d9056f20e56", null ],
     [ "AugRestoSystemSolver", "classIpopt_1_1AugRestoSystemSolver.html#ad3feb3109f750b8bfaf7085eebc0e7c0", null ],
     [ "InitializeImpl", "classIpopt_1_1AugRestoSystemSolver.html#a324a672f4b86ce15c20edb84efd127fd", null ],
-    [ "Solve", "classIpopt_1_1AugRestoSystemSolver.html#a3b3802bc01cdfb1544ea7ceac1badace", null ],
+    [ "Solve", "classIpopt_1_1AugRestoSystemSolver.html#a6af9d8a5bc72cc4825650c44a90cffae", null ],
     [ "NumberOfNegEVals", "classIpopt_1_1AugRestoSystemSolver.html#ad758a3ec14b3d1146a57062f1757d243", null ],
     [ "ProvidesInertia", "classIpopt_1_1AugRestoSystemSolver.html#a487c150bdafc737002daf8507022daf9", null ],
     [ "IncreaseQuality", "classIpopt_1_1AugRestoSystemSolver.html#ab246857f50e93090a290ea01aa69c60d", null ],

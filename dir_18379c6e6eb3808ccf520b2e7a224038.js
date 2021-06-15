@@ -1,8 +1,11 @@
 var dir_18379c6e6eb3808ccf520b2e7a224038 =
 [
     [ "hsl_ma77d.h", "hsl__ma77d_8h.html", "hsl__ma77d_8h" ],
+    [ "hsl_ma77s.h", "hsl__ma77s_8h.html", "hsl__ma77s_8h" ],
     [ "hsl_ma86d.h", "hsl__ma86d_8h.html", "hsl__ma86d_8h" ],
+    [ "hsl_ma86s.h", "hsl__ma86s_8h.html", "hsl__ma86s_8h" ],
     [ "hsl_ma97d.h", "hsl__ma97d_8h.html", "hsl__ma97d_8h" ],
+    [ "hsl_ma97s.h", "hsl__ma97s_8h.html", "hsl__ma97s_8h" ],
     [ "hsl_mc68i.h", "hsl__mc68i_8h.html", "hsl__mc68i_8h" ],
     [ "IpGenKKTSolverInterface.hpp", "IpGenKKTSolverInterface_8hpp.html", [
       [ "GenKKTSolverInterface", "classIpopt_1_1GenKKTSolverInterface.html", "classIpopt_1_1GenKKTSolverInterface" ]
@@ -10,37 +13,32 @@ var dir_18379c6e6eb3808ccf520b2e7a224038 =
     [ "IpIterativeWsmpSolverInterface.hpp", "IpIterativeWsmpSolverInterface_8hpp.html", [
       [ "IterativeWsmpSolverInterface", "classIpopt_1_1IterativeWsmpSolverInterface.html", "classIpopt_1_1IterativeWsmpSolverInterface" ]
     ] ],
+    [ "IpLinearSolvers.h", "IpLinearSolvers_8h.html", "IpLinearSolvers_8h" ],
     [ "IpLinearSolversRegOp.hpp", "IpLinearSolversRegOp_8hpp.html", "IpLinearSolversRegOp_8hpp" ],
-    [ "IpMa27TSolverInterface.hpp", "IpMa27TSolverInterface_8hpp.html", [
-      [ "Ma27TSolverInterface", "classIpopt_1_1Ma27TSolverInterface.html", "classIpopt_1_1Ma27TSolverInterface" ]
-    ] ],
+    [ "IpMa27TSolverInterface.hpp", "IpMa27TSolverInterface_8hpp.html", "IpMa27TSolverInterface_8hpp" ],
     [ "IpMa28TDependencyDetector.hpp", "IpMa28TDependencyDetector_8hpp.html", [
       [ "Ma28TDependencyDetector", "classIpopt_1_1Ma28TDependencyDetector.html", "classIpopt_1_1Ma28TDependencyDetector" ]
     ] ],
     [ "IpMa57TSolverInterface.hpp", "IpMa57TSolverInterface_8hpp.html", "IpMa57TSolverInterface_8hpp" ],
-    [ "IpMa77SolverInterface.hpp", "IpMa77SolverInterface_8hpp.html", [
-      [ "Ma77SolverInterface", "classIpopt_1_1Ma77SolverInterface.html", "classIpopt_1_1Ma77SolverInterface" ]
-    ] ],
-    [ "IpMa86SolverInterface.hpp", "IpMa86SolverInterface_8hpp.html", [
-      [ "Ma86SolverInterface", "classIpopt_1_1Ma86SolverInterface.html", "classIpopt_1_1Ma86SolverInterface" ]
-    ] ],
-    [ "IpMa97SolverInterface.hpp", "IpMa97SolverInterface_8hpp.html", [
-      [ "Ma97SolverInterface", "classIpopt_1_1Ma97SolverInterface.html", "classIpopt_1_1Ma97SolverInterface" ]
-    ] ],
-    [ "IpMc19TSymScalingMethod.hpp", "IpMc19TSymScalingMethod_8hpp.html", [
-      [ "Mc19TSymScalingMethod", "classIpopt_1_1Mc19TSymScalingMethod.html", "classIpopt_1_1Mc19TSymScalingMethod" ]
-    ] ],
+    [ "IpMa77SolverInterface.hpp", "IpMa77SolverInterface_8hpp.html", "IpMa77SolverInterface_8hpp" ],
+    [ "IpMa86SolverInterface.hpp", "IpMa86SolverInterface_8hpp.html", "IpMa86SolverInterface_8hpp" ],
+    [ "IpMa97SolverInterface.hpp", "IpMa97SolverInterface_8hpp.html", "IpMa97SolverInterface_8hpp" ],
+    [ "IpMc19TSymScalingMethod.hpp", "IpMc19TSymScalingMethod_8hpp.html", "IpMc19TSymScalingMethod_8hpp" ],
     [ "IpMumpsSolverInterface.hpp", "IpMumpsSolverInterface_8hpp.html", [
       [ "MumpsSolverInterface", "classIpopt_1_1MumpsSolverInterface.html", "classIpopt_1_1MumpsSolverInterface" ]
     ] ],
-    [ "IpPardisoSolverInterface.hpp", "IpPardisoSolverInterface_8hpp.html", [
-      [ "PardisoSolverInterface", "classIpopt_1_1PardisoSolverInterface.html", "classIpopt_1_1PardisoSolverInterface" ]
+    [ "IpPardisoMKLSolverInterface.hpp", "IpPardisoMKLSolverInterface_8hpp.html", [
+      [ "PardisoMKLSolverInterface", "classIpopt_1_1PardisoMKLSolverInterface.html", "classIpopt_1_1PardisoMKLSolverInterface" ]
     ] ],
+    [ "IpPardisoSolverInterface.hpp", "IpPardisoSolverInterface_8hpp.html", "IpPardisoSolverInterface_8hpp" ],
     [ "IpSlackBasedTSymScalingMethod.hpp", "IpSlackBasedTSymScalingMethod_8hpp.html", [
       [ "SlackBasedTSymScalingMethod", "classIpopt_1_1SlackBasedTSymScalingMethod.html", "classIpopt_1_1SlackBasedTSymScalingMethod" ]
     ] ],
     [ "IpSparseSymLinearSolverInterface.hpp", "IpSparseSymLinearSolverInterface_8hpp.html", [
       [ "SparseSymLinearSolverInterface", "classIpopt_1_1SparseSymLinearSolverInterface.html", "classIpopt_1_1SparseSymLinearSolverInterface" ]
+    ] ],
+    [ "IpSpralSolverInterface.hpp", "IpSpralSolverInterface_8hpp.html", [
+      [ "SpralSolverInterface", "classIpopt_1_1SpralSolverInterface.html", "classIpopt_1_1SpralSolverInterface" ]
     ] ],
     [ "IpSymLinearSolver.hpp", "IpSymLinearSolver_8hpp.html", "IpSymLinearSolver_8hpp" ],
     [ "IpTDependencyDetector.hpp", "IpTDependencyDetector_8hpp.html", [

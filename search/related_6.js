@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['subject_7689',['Subject',['../classIpopt_1_1Observer.html#a5daa6be80b3fbc385ac0a0d93ad161d9',1,'Ipopt::Observer']]],
-  ['symtmatrix_7690',['SymTMatrix',['../classIpopt_1_1SymTMatrixSpace.html#ab9f37d14cc9cc83a9e6c2b38dfb26355',1,'Ipopt::SymTMatrixSpace']]]
+  ['registeredoptions_8036',['RegisteredOptions',['../classIpopt_1_1RegisteredCategory.html#a6cdca39d68b836f63a73424adb096483',1,'Ipopt::RegisteredCategory::RegisteredOptions()'],['../classIpopt_1_1RegisteredOption.html#a6cdca39d68b836f63a73424adb096483',1,'Ipopt::RegisteredOption::RegisteredOptions()']]]
 ];

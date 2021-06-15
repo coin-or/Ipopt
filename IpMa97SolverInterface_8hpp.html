@@ -1,5 +1,5 @@
-<!-- HTML header for doxygen 1.8.13-->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- HTML header for doxygen 1.8.18-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.13.4</span-->
+   &#160;<!--span id="projectnumber">3.14.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -102,12 +102,15 @@ $(document).ready(function(){initNavTree('IpMa97SolverInterface_8hpp.html',''); 
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a>  </div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#define-members">Macros</a>  </div>
   <div class="headertitle">
 <div class="title">IpMa97SolverInterface.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="IpSparseSymLinearSolverInterface_8hpp_source.html">IpSparseSymLinearSolverInterface.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="IpLibraryLoader_8hpp_source.html">IpLibraryLoader.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="IpTypes_8h_source.html">IpTypes.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="hsl__ma97d_8h_source.html">hsl_ma97d.h</a>&quot;</code><br />
 </div>
 <p><a href="IpMa97SolverInterface_8hpp_source.html">Go to the source code of this file.</a></p>
@@ -122,8 +125,232 @@ Namespaces</h2></td></tr>
 <tr class="memitem:namespaceIpopt"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceIpopt.html">Ipopt</a></td></tr>
 <tr class="memdesc:namespaceIpopt"><td class="mdescLeft">&#160;</td><td class="mdescRight">This file contains a base class for all exceptions and a set of macros to help with exceptions. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:aae8248e964814e08e10d8df96df1766a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpMa97SolverInterface_8hpp.html#aae8248e964814e08e10d8df96df1766a">IPOPT_DECL_MA97_DEFAULT_CONTROL</a>(x)</td></tr>
+<tr class="separator:aae8248e964814e08e10d8df96df1766a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc01e94f62ba2e87890a26e89bebd016"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpMa97SolverInterface_8hpp.html#acc01e94f62ba2e87890a26e89bebd016">IPOPT_DECL_MA97_ANALYSE</a>(x)</td></tr>
+<tr class="separator:acc01e94f62ba2e87890a26e89bebd016"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeaabc23efbf6d3b3802d28eb3d03f1cd"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpMa97SolverInterface_8hpp.html#aeaabc23efbf6d3b3802d28eb3d03f1cd">IPOPT_DECL_MA97_FACTOR</a>(x)</td></tr>
+<tr class="separator:aeaabc23efbf6d3b3802d28eb3d03f1cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6bde8cd3df06b9ecffb82e9a1f60621"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpMa97SolverInterface_8hpp.html#ab6bde8cd3df06b9ecffb82e9a1f60621">IPOPT_DECL_MA97_FACTOR_SOLVE</a>(x)</td></tr>
+<tr class="separator:ab6bde8cd3df06b9ecffb82e9a1f60621"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56a892db13b99dfee492e05373d115d1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpMa97SolverInterface_8hpp.html#a56a892db13b99dfee492e05373d115d1">IPOPT_DECL_MA97_SOLVE</a>(x)</td></tr>
+<tr class="separator:a56a892db13b99dfee492e05373d115d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b0284c0f2ec24b261d7b97a038e573d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpMa97SolverInterface_8hpp.html#a3b0284c0f2ec24b261d7b97a038e573d">IPOPT_DECL_MA97_FINALISE</a>(x)</td></tr>
+<tr class="separator:a3b0284c0f2ec24b261d7b97a038e573d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c0001019565cd84d4e829b8afa4005e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpMa97SolverInterface_8hpp.html#a2c0001019565cd84d4e829b8afa4005e">IPOPT_DECL_MA97_FREE_AKEEP</a>(x)</td></tr>
+<tr class="separator:a2c0001019565cd84d4e829b8afa4005e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="aae8248e964814e08e10d8df96df1766a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aae8248e964814e08e10d8df96df1766a">&#9670;&nbsp;</a></span>IPOPT_DECL_MA97_DEFAULT_CONTROL</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define IPOPT_DECL_MA97_DEFAULT_CONTROL</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">x</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">   void (x)( \</div>
+<div class="line">   struct <a class="code" href="hsl__ma97d_8h.html#a9dba2844ed847b16503d2106b4a4295f">ma97_control</a>* control \</div>
+<div class="line">)</div>
+</div><!-- fragment --><dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="IpMa97SolverInterface_8hpp_source.html#l00029">29</a> of file <a class="el" href="IpMa97SolverInterface_8hpp_source.html">IpMa97SolverInterface.hpp</a>.</p>
+
+</div>
+</div>
+<a id="acc01e94f62ba2e87890a26e89bebd016"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc01e94f62ba2e87890a26e89bebd016">&#9670;&nbsp;</a></span>IPOPT_DECL_MA97_ANALYSE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define IPOPT_DECL_MA97_ANALYSE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">x</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">   void (x)( \</div>
+<div class="line">   const <span class="keywordtype">int</span>                  check,  \</div>
+<div class="line">   const <span class="keywordtype">int</span>                  n,      \</div>
+<div class="line">   const <span class="keywordtype">int</span>                  ptr[],  \</div>
+<div class="line">   const <span class="keywordtype">int</span>                  row[],  \</div>
+<div class="line">   ipnumber                   val[],  \</div>
+<div class="line">   void**                     akeep,  \</div>
+<div class="line">   const <span class="keyword">struct </span><a class="code" href="hsl__ma97d_8h.html#a9dba2844ed847b16503d2106b4a4295f">ma97_control</a>* control,\</div>
+<div class="line">   struct <a class="code" href="structma97__info.html">ma97_info</a>*          info,   \</div>
+<div class="line">   int                        order[] \</div>
+<div class="line">)</div>
+</div><!-- fragment --><dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="IpMa97SolverInterface_8hpp_source.html#l00034">34</a> of file <a class="el" href="IpMa97SolverInterface_8hpp_source.html">IpMa97SolverInterface.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aeaabc23efbf6d3b3802d28eb3d03f1cd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeaabc23efbf6d3b3802d28eb3d03f1cd">&#9670;&nbsp;</a></span>IPOPT_DECL_MA97_FACTOR</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define IPOPT_DECL_MA97_FACTOR</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">x</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">   void (x)( \</div>
+<div class="line">   int                        matrix_type, \</div>
+<div class="line">   const <span class="keywordtype">int</span>                  ptr[],       \</div>
+<div class="line">   const <span class="keywordtype">int</span>                  row[],       \</div>
+<div class="line">   const <a class="code" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a>             val[],       \</div>
+<div class="line">   void**                     akeep,       \</div>
+<div class="line">   void**                     fkeep,       \</div>
+<div class="line">   const <span class="keyword">struct </span><a class="code" href="hsl__ma97d_8h.html#a9dba2844ed847b16503d2106b4a4295f">ma97_control</a>* control,     \</div>
+<div class="line">   struct <a class="code" href="structma97__info.html">ma97_info</a>*          info,        \</div>
+<div class="line">   ipnumber                   scale[]      \</div>
+<div class="line">)</div>
+</div><!-- fragment --><dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="IpMa97SolverInterface_8hpp_source.html#l00047">47</a> of file <a class="el" href="IpMa97SolverInterface_8hpp_source.html">IpMa97SolverInterface.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ab6bde8cd3df06b9ecffb82e9a1f60621"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab6bde8cd3df06b9ecffb82e9a1f60621">&#9670;&nbsp;</a></span>IPOPT_DECL_MA97_FACTOR_SOLVE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define IPOPT_DECL_MA97_FACTOR_SOLVE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">x</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">   void (x)( \</div>
+<div class="line">   int                        matrix_type, \</div>
+<div class="line">   const <span class="keywordtype">int</span>                  ptr[],       \</div>
+<div class="line">   const <span class="keywordtype">int</span>                  row[],       \</div>
+<div class="line">   const <a class="code" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a>             val[],       \</div>
+<div class="line">   int                        nrhs,        \</div>
+<div class="line">   ipnumber                   xx[],        \</div>
+<div class="line">   int                        ldx,         \</div>
+<div class="line">   void**                     akeep,       \</div>
+<div class="line">   void**                     fkeep,       \</div>
+<div class="line">   const <span class="keyword">struct </span><a class="code" href="hsl__ma97d_8h.html#a9dba2844ed847b16503d2106b4a4295f">ma97_control</a>* control,     \</div>
+<div class="line">   struct <a class="code" href="structma97__info.html">ma97_info</a>*          info,        \</div>
+<div class="line">   ipnumber                   scale[]      \</div>
+<div class="line">)</div>
+</div><!-- fragment --><dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="IpMa97SolverInterface_8hpp_source.html#l00060">60</a> of file <a class="el" href="IpMa97SolverInterface_8hpp_source.html">IpMa97SolverInterface.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a56a892db13b99dfee492e05373d115d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56a892db13b99dfee492e05373d115d1">&#9670;&nbsp;</a></span>IPOPT_DECL_MA97_SOLVE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define IPOPT_DECL_MA97_SOLVE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">x</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">   void (x)( \</div>
+<div class="line">   const <span class="keywordtype">int</span>                  job,     \</div>
+<div class="line">   const <span class="keywordtype">int</span>                  nrhs,    \</div>
+<div class="line">   ipnumber*                  xx,      \</div>
+<div class="line">   const <span class="keywordtype">int</span>                  ldx,     \</div>
+<div class="line">   void**                     akeep,   \</div>
+<div class="line">   void**                     fkeep,   \</div>
+<div class="line">   const <span class="keyword">struct </span><a class="code" href="hsl__ma97d_8h.html#a9dba2844ed847b16503d2106b4a4295f">ma97_control</a>* control, \</div>
+<div class="line">   struct <a class="code" href="structma97__info.html">ma97_info</a>*          info     \</div>
+<div class="line">)</div>
+</div><!-- fragment --><dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="IpMa97SolverInterface_8hpp_source.html#l00076">76</a> of file <a class="el" href="IpMa97SolverInterface_8hpp_source.html">IpMa97SolverInterface.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a3b0284c0f2ec24b261d7b97a038e573d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b0284c0f2ec24b261d7b97a038e573d">&#9670;&nbsp;</a></span>IPOPT_DECL_MA97_FINALISE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define IPOPT_DECL_MA97_FINALISE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">x</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">   void (x)( \</div>
+<div class="line">   void** akeep, \</div>
+<div class="line">   void** fkeep  \</div>
+<div class="line">)</div>
+</div><!-- fragment --><dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="IpMa97SolverInterface_8hpp_source.html#l00088">88</a> of file <a class="el" href="IpMa97SolverInterface_8hpp_source.html">IpMa97SolverInterface.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a2c0001019565cd84d4e829b8afa4005e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c0001019565cd84d4e829b8afa4005e">&#9670;&nbsp;</a></span>IPOPT_DECL_MA97_FREE_AKEEP</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define IPOPT_DECL_MA97_FREE_AKEEP</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">x</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">   void (x)( \</div>
+<div class="line">   void** akeep \</div>
+<div class="line">)</div>
+</div><!-- fragment --><dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="IpMa97SolverInterface_8hpp_source.html#l00094">94</a> of file <a class="el" href="IpMa97SolverInterface_8hpp_source.html">IpMa97SolverInterface.hpp</a>.</p>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
+<div class="ttc" id="astructma97__info_html"><div class="ttname"><a href="structma97__info.html">ma97_info</a></div><div class="ttdef"><b>Definition:</b> <a href="hsl__ma97d_8h_source.html#l00099">hsl_ma97d.h:99</a></div></div>
+<div class="ttc" id="aIpTypes_8h_html_a5db07e705790a30d1c9081e6910c8b27"><div class="ttname"><a href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a></div><div class="ttdeci">double ipnumber</div><div class="ttdoc">Type for floating-point numbers.</div><div class="ttdef"><b>Definition:</b> <a href="IpTypes_8h_source.html#l00051">IpTypes.h:51</a></div></div>
+<div class="ttc" id="ahsl__ma97d_8h_html_a9dba2844ed847b16503d2106b4a4295f"><div class="ttname"><a href="hsl__ma97d_8h.html#a9dba2844ed847b16503d2106b4a4295f">ma97_control</a></div><div class="ttdeci">#define ma97_control</div><div class="ttdef"><b>Definition:</b> <a href="hsl__ma97d_8h_source.html#l00047">hsl_ma97d.h:46</a></div></div>
 </body>
 </html>

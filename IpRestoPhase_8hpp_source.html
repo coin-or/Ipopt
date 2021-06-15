@@ -1,5 +1,5 @@
-<!-- HTML header for doxygen 1.8.13-->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- HTML header for doxygen 1.8.18-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.13.4</span-->
+   &#160;<!--span id="projectnumber">3.14.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -126,49 +126,50 @@ $(document).ready(function(){initNavTree('IpRestoPhase_8hpp_source.html',''); in
 <div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="namespaceIpopt.html#af8f7d564b073bfddf07eb949e6f05f6c">   24</a></span>&#160;<a class="code" href="namespaceIpopt.html#a0f801dea559a0db57bc99d01a8d50dd4">DECLARE_STD_EXCEPTION</a>(RESTORATION_FAILED);</div>
 <div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="namespaceIpopt.html#ade551cf98a40023f7d557225749d938f">   25</a></span>&#160;<a class="code" href="namespaceIpopt.html#a0f801dea559a0db57bc99d01a8d50dd4">DECLARE_STD_EXCEPTION</a>(RESTORATION_MAXITER_EXCEEDED);</div>
 <div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="namespaceIpopt.html#abe83c927395bf87590bc94eeed7f86a7">   26</a></span>&#160;<a class="code" href="namespaceIpopt.html#a0f801dea559a0db57bc99d01a8d50dd4">DECLARE_STD_EXCEPTION</a>(RESTORATION_CPUTIME_EXCEEDED);</div>
-<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="namespaceIpopt.html#acf3d64fc01232ee59c8039ab62d26a30">   27</a></span>&#160;<a class="code" href="namespaceIpopt.html#a0f801dea559a0db57bc99d01a8d50dd4">DECLARE_STD_EXCEPTION</a>(RESTORATION_USER_STOP);</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="classIpopt_1_1RestorationPhase.html">   34</a></span>&#160;<span class="keyword">class </span><a class="code" href="classIpopt_1_1RestorationPhase.html">RestorationPhase</a>: <span class="keyword">public</span> <a class="code" href="classIpopt_1_1AlgorithmStrategyObject.html">AlgorithmStrategyObject</a></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;{</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="classIpopt_1_1RestorationPhase.html#ac5ef685cf3f924bf9ff370842b7cdfee">   40</a></span>&#160;   <a class="code" href="classIpopt_1_1RestorationPhase.html#ac5ef685cf3f924bf9ff370842b7cdfee">RestorationPhase</a>()</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;   { }</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="classIpopt_1_1RestorationPhase.html#a826b38d16fbf85228362cc97a14fe4d2">   44</a></span>&#160;   <span class="keyword">virtual</span> <a class="code" href="classIpopt_1_1RestorationPhase.html#a826b38d16fbf85228362cc97a14fe4d2">~RestorationPhase</a>()</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;   { }</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="classIpopt_1_1RestorationPhase.html#ad1633c87542a791b88d3640d20b3c71b">   48</a></span>&#160;   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classIpopt_1_1RestorationPhase.html#ad1633c87542a791b88d3640d20b3c71b">InitializeImpl</a>(</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;      <span class="keyword">const</span> <a class="code" href="classIpopt_1_1OptionsList.html">OptionsList</a>&amp; options,</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;      <span class="keyword">const</span> std::string&amp; prefix</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;   ) = 0;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00056"></a><span class="lineno"><a class="line" href="classIpopt_1_1RestorationPhase.html#ae8b715715f601762665560a4326339cd">   56</a></span>&#160;   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classIpopt_1_1RestorationPhase.html#ae8b715715f601762665560a4326339cd">PerformRestoration</a>() = 0;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
-<div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="classIpopt_1_1RestorationPhase.html#a84bf22fc34120f0f79d080d6236919bc">   69</a></span>&#160;   <a class="code" href="classIpopt_1_1RestorationPhase.html#a84bf22fc34120f0f79d080d6236919bc">RestorationPhase</a>(</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;      <span class="keyword">const</span> <a class="code" href="classIpopt_1_1RestorationPhase.html">RestorationPhase</a>&amp;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;   );</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
-<div class="line"><a name="l00074"></a><span class="lineno"><a class="line" href="classIpopt_1_1RestorationPhase.html#a0d689512944a1139d3275ec190a42d70">   74</a></span>&#160;   <span class="keywordtype">void</span> <a class="code" href="classIpopt_1_1RestorationPhase.html#a0d689512944a1139d3275ec190a42d70">operator=</a>(</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;      <span class="keyword">const</span> <a class="code" href="classIpopt_1_1RestorationPhase.html">RestorationPhase</a>&amp;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;   );</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;};</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;} <span class="comment">// namespace Ipopt</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="namespaceIpopt.html#ae5e1f83eeee0ea1c0287e4f2cc55dde9">   28</a></span>&#160;<a class="code" href="namespaceIpopt.html#a0f801dea559a0db57bc99d01a8d50dd4">DECLARE_STD_EXCEPTION</a>(RESTORATION_WALLTIME_EXCEEDED);</div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="namespaceIpopt.html#acf3d64fc01232ee59c8039ab62d26a30">   29</a></span>&#160;<a class="code" href="namespaceIpopt.html#a0f801dea559a0db57bc99d01a8d50dd4">DECLARE_STD_EXCEPTION</a>(RESTORATION_USER_STOP);</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="classIpopt_1_1RestorationPhase.html">   36</a></span>&#160;<span class="keyword">class </span><a class="code" href="classIpopt_1_1RestorationPhase.html">RestorationPhase</a>: <span class="keyword">public</span> <a class="code" href="classIpopt_1_1AlgorithmStrategyObject.html">AlgorithmStrategyObject</a></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;{</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="classIpopt_1_1RestorationPhase.html#ac5ef685cf3f924bf9ff370842b7cdfee">   42</a></span>&#160;   <a class="code" href="classIpopt_1_1RestorationPhase.html#ac5ef685cf3f924bf9ff370842b7cdfee">RestorationPhase</a>()</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;   { }</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
+<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="classIpopt_1_1RestorationPhase.html#a826b38d16fbf85228362cc97a14fe4d2">   46</a></span>&#160;   <span class="keyword">virtual</span> <a class="code" href="classIpopt_1_1RestorationPhase.html#a826b38d16fbf85228362cc97a14fe4d2">~RestorationPhase</a>()</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;   { }</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="classIpopt_1_1RestorationPhase.html#ad1633c87542a791b88d3640d20b3c71b">   50</a></span>&#160;   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classIpopt_1_1RestorationPhase.html#ad1633c87542a791b88d3640d20b3c71b">InitializeImpl</a>(</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;      <span class="keyword">const</span> <a class="code" href="classIpopt_1_1OptionsList.html">OptionsList</a>&amp; options,</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;      <span class="keyword">const</span> std::string&amp; prefix</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;   ) = 0;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00058"></a><span class="lineno"><a class="line" href="classIpopt_1_1RestorationPhase.html#ae8b715715f601762665560a4326339cd">   58</a></span>&#160;   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classIpopt_1_1RestorationPhase.html#ae8b715715f601762665560a4326339cd">PerformRestoration</a>() = 0;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno"><a class="line" href="classIpopt_1_1RestorationPhase.html#a84bf22fc34120f0f79d080d6236919bc">   71</a></span>&#160;   <a class="code" href="classIpopt_1_1RestorationPhase.html#a84bf22fc34120f0f79d080d6236919bc">RestorationPhase</a>(</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;      <span class="keyword">const</span> <a class="code" href="classIpopt_1_1RestorationPhase.html">RestorationPhase</a>&amp;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;   );</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00076"></a><span class="lineno"><a class="line" href="classIpopt_1_1RestorationPhase.html#a0d689512944a1139d3275ec190a42d70">   76</a></span>&#160;   <span class="keywordtype">void</span> <a class="code" href="classIpopt_1_1RestorationPhase.html#a0d689512944a1139d3275ec190a42d70">operator=</a>(</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;      <span class="keyword">const</span> <a class="code" href="classIpopt_1_1RestorationPhase.html">RestorationPhase</a>&amp;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;   );</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;};</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;} <span class="comment">// namespace Ipopt</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclassIpopt_1_1RestorationPhase_html_a84bf22fc34120f0f79d080d6236919bc"><div class="ttname"><a href="classIpopt_1_1RestorationPhase.html#a84bf22fc34120f0f79d080d6236919bc">Ipopt::RestorationPhase::RestorationPhase</a></div><div class="ttdeci">RestorationPhase(const RestorationPhase &amp;)</div><div class="ttdoc">Copy Constructor.</div></div>
 <div class="ttc" id="anamespaceIpopt_html"><div class="ttname"><a href="namespaceIpopt.html">Ipopt</a></div><div class="ttdoc">This file contains a base class for all exceptions and a set of macros to help with exceptions.</div><div class="ttdef"><b>Definition:</b> <a href="IpInexactAlgBuilder_8hpp_source.html#l00013">IpInexactAlgBuilder.hpp:14</a></div></div>
 <div class="ttc" id="aclassIpopt_1_1RestorationPhase_html_ae8b715715f601762665560a4326339cd"><div class="ttname"><a href="classIpopt_1_1RestorationPhase.html#ae8b715715f601762665560a4326339cd">Ipopt::RestorationPhase::PerformRestoration</a></div><div class="ttdeci">virtual bool PerformRestoration()=0</div><div class="ttdoc">Method called to perform restoration for the filter line search method.</div></div>
-<div class="ttc" id="aclassIpopt_1_1RestorationPhase_html"><div class="ttname"><a href="classIpopt_1_1RestorationPhase.html">Ipopt::RestorationPhase</a></div><div class="ttdoc">Base class for different restoration phases.</div><div class="ttdef"><b>Definition:</b> <a href="IpRestoPhase_8hpp_source.html#l00034">IpRestoPhase.hpp:35</a></div></div>
-<div class="ttc" id="aclassIpopt_1_1RestorationPhase_html_ac5ef685cf3f924bf9ff370842b7cdfee"><div class="ttname"><a href="classIpopt_1_1RestorationPhase.html#ac5ef685cf3f924bf9ff370842b7cdfee">Ipopt::RestorationPhase::RestorationPhase</a></div><div class="ttdeci">RestorationPhase()</div><div class="ttdoc">Default Constructor.</div><div class="ttdef"><b>Definition:</b> <a href="IpRestoPhase_8hpp_source.html#l00040">IpRestoPhase.hpp:40</a></div></div>
+<div class="ttc" id="aclassIpopt_1_1RestorationPhase_html"><div class="ttname"><a href="classIpopt_1_1RestorationPhase.html">Ipopt::RestorationPhase</a></div><div class="ttdoc">Base class for different restoration phases.</div><div class="ttdef"><b>Definition:</b> <a href="IpRestoPhase_8hpp_source.html#l00036">IpRestoPhase.hpp:37</a></div></div>
+<div class="ttc" id="aclassIpopt_1_1RestorationPhase_html_ac5ef685cf3f924bf9ff370842b7cdfee"><div class="ttname"><a href="classIpopt_1_1RestorationPhase.html#ac5ef685cf3f924bf9ff370842b7cdfee">Ipopt::RestorationPhase::RestorationPhase</a></div><div class="ttdeci">RestorationPhase()</div><div class="ttdoc">Default Constructor.</div><div class="ttdef"><b>Definition:</b> <a href="IpRestoPhase_8hpp_source.html#l00042">IpRestoPhase.hpp:42</a></div></div>
 <div class="ttc" id="aIpIpoptCalculatedQuantities_8hpp_html"><div class="ttname"><a href="IpIpoptCalculatedQuantities_8hpp.html">IpIpoptCalculatedQuantities.hpp</a></div></div>
 <div class="ttc" id="aclassIpopt_1_1RestorationPhase_html_ad1633c87542a791b88d3640d20b3c71b"><div class="ttname"><a href="classIpopt_1_1RestorationPhase.html#ad1633c87542a791b88d3640d20b3c71b">Ipopt::RestorationPhase::InitializeImpl</a></div><div class="ttdeci">virtual bool InitializeImpl(const OptionsList &amp;options, const std::string &amp;prefix)=0</div><div class="ttdoc">Implementation of the initialization method that has to be overloaded by for each derived class.</div></div>
-<div class="ttc" id="aclassIpopt_1_1RestorationPhase_html_a826b38d16fbf85228362cc97a14fe4d2"><div class="ttname"><a href="classIpopt_1_1RestorationPhase.html#a826b38d16fbf85228362cc97a14fe4d2">Ipopt::RestorationPhase::~RestorationPhase</a></div><div class="ttdeci">virtual ~RestorationPhase()</div><div class="ttdoc">Destructor.</div><div class="ttdef"><b>Definition:</b> <a href="IpRestoPhase_8hpp_source.html#l00044">IpRestoPhase.hpp:44</a></div></div>
+<div class="ttc" id="aclassIpopt_1_1RestorationPhase_html_a826b38d16fbf85228362cc97a14fe4d2"><div class="ttname"><a href="classIpopt_1_1RestorationPhase.html#a826b38d16fbf85228362cc97a14fe4d2">Ipopt::RestorationPhase::~RestorationPhase</a></div><div class="ttdeci">virtual ~RestorationPhase()</div><div class="ttdoc">Destructor.</div><div class="ttdef"><b>Definition:</b> <a href="IpRestoPhase_8hpp_source.html#l00046">IpRestoPhase.hpp:46</a></div></div>
 <div class="ttc" id="aIpIpoptData_8hpp_html"><div class="ttname"><a href="IpIpoptData_8hpp.html">IpIpoptData.hpp</a></div></div>
 <div class="ttc" id="aclassIpopt_1_1AlgorithmStrategyObject_html"><div class="ttname"><a href="classIpopt_1_1AlgorithmStrategyObject.html">Ipopt::AlgorithmStrategyObject</a></div><div class="ttdoc">This is the base class for all algorithm strategy objects.</div><div class="ttdef"><b>Definition:</b> <a href="IpAlgStrategy_8hpp_source.html#l00034">IpAlgStrategy.hpp:35</a></div></div>
 <div class="ttc" id="aIpAlgStrategy_8hpp_html"><div class="ttname"><a href="IpAlgStrategy_8hpp.html">IpAlgStrategy.hpp</a></div></div>

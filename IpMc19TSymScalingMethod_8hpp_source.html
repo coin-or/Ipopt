@@ -1,5 +1,5 @@
-<!-- HTML header for doxygen 1.8.13-->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- HTML header for doxygen 1.8.18-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.13.4</span-->
+   &#160;<!--span id="projectnumber">3.14.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -115,62 +115,98 @@ $(document).ready(function(){initNavTree('IpMc19TSymScalingMethod_8hpp_source.ht
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="IpUtils_8hpp.html">IpUtils.hpp</a>&quot;</span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="IpTSymScalingMethod_8hpp.html">IpTSymScalingMethod.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespaceIpopt.html">Ipopt</a></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;{</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
-<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="classIpopt_1_1Mc19TSymScalingMethod.html">   19</a></span>&#160;<span class="keyword">class </span><a class="code" href="classIpopt_1_1Mc19TSymScalingMethod.html">Mc19TSymScalingMethod</a>: <span class="keyword">public</span> <a class="code" href="classIpopt_1_1TSymScalingMethod.html">TSymScalingMethod</a></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;{</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;   <a class="code" href="classIpopt_1_1Mc19TSymScalingMethod.html#a16d58829c9c1c98ee871d801edd38b0a">Mc19TSymScalingMethod</a>()</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;   { }</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="classIpopt_1_1Mc19TSymScalingMethod.html#a4a50b3f71aab5e6a83189b2a8fe7acdc">   27</a></span>&#160;   <span class="keyword">virtual</span> <a class="code" href="classIpopt_1_1Mc19TSymScalingMethod.html#a4a50b3f71aab5e6a83189b2a8fe7acdc">~Mc19TSymScalingMethod</a>()</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;   { }</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="classIpopt_1_1Mc19TSymScalingMethod.html#aefe48031b8927d812eb9d7e0f997b0df">   31</a></span>&#160;   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classIpopt_1_1Mc19TSymScalingMethod.html#aefe48031b8927d812eb9d7e0f997b0df">InitializeImpl</a>(</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;      <span class="keyword">const</span> <a class="code" href="classIpopt_1_1OptionsList.html">OptionsList</a>&amp; options,</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;      <span class="keyword">const</span> std::string&amp; prefix</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;   );</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="classIpopt_1_1Mc19TSymScalingMethod.html#a566a1c2434b4fd330be3a781c367edfa">   39</a></span>&#160;   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classIpopt_1_1Mc19TSymScalingMethod.html#a566a1c2434b4fd330be3a781c367edfa">ComputeSymTScalingFactors</a>(</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;      <a class="code" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>         n,</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;      <a class="code" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>         nnz,</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;      <span class="keyword">const</span> <a class="code" href="IpTypes_8hpp.html#ab1366b159c9a5e7f01e86923f6b2dd65">ipfint</a>* airn,</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;      <span class="keyword">const</span> <a class="code" href="IpTypes_8hpp.html#ab1366b159c9a5e7f01e86923f6b2dd65">ipfint</a>* ajcn,</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;      <span class="keyword">const</span> <span class="keywordtype">double</span>* a,</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;      <span class="keywordtype">double</span>*       scaling_factors</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;   );</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="IpLibraryLoader_8hpp.html">IpLibraryLoader.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="IpTypes_8h.html">IpTypes.h</a>&quot;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">// note that R,C,W are single-precision also in the double-precision version of MC19 (MC19AD)</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">// here we assume that float corresponds to Fortran&#39;s single precision</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment"></span><span class="preprocessor">#define IPOPT_DECL_MC19A(x) void (x)( \</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="IpMc19TSymScalingMethod_8hpp.html#a9a1040df91c6349975daa3ad39af7581">   19</a></span>&#160;<span class="preprocessor">   const ipindex* N,   \</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">   const ipindex* NZ,  \</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">   ipnumber*      A,   \</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">   ipindex*       IRN, \</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">   ipindex*       ICN, \</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">   float*         R,   \</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">   float*         C,   \</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">   float*         W    \</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">)</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespaceIpopt.html">Ipopt</a></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;{</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="classIpopt_1_1Mc19TSymScalingMethod.html">   35</a></span>&#160;<span class="keyword">class </span><a class="code" href="classIpopt_1_1Mc19TSymScalingMethod.html">Mc19TSymScalingMethod</a>: <span class="keyword">public</span> <a class="code" href="classIpopt_1_1TSymScalingMethod.html">TSymScalingMethod</a></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;{</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;   <a class="code" href="classIpopt_1_1Mc19TSymScalingMethod.html#a655a82cb55c8948ff571d0142a126499">Mc19TSymScalingMethod</a>(</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;      <a class="code" href="classIpopt_1_1SmartPtr.html">SmartPtr&lt;LibraryLoader&gt;</a> hslloader_  </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;   ) : <a class="code" href="classIpopt_1_1Mc19TSymScalingMethod.html#a695a5a82423ff6930c1d8d8402626add">hslloader</a>(hslloader_),</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;      <a class="code" href="classIpopt_1_1Mc19TSymScalingMethod.html#a1fa6acbf38c9caafaa76df1db64f447d">mc19a</a>(NULL)</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;   { }</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="classIpopt_1_1Mc19TSymScalingMethod.html#a4a50b3f71aab5e6a83189b2a8fe7acdc">   46</a></span>&#160;   <span class="keyword">virtual</span> <a class="code" href="classIpopt_1_1Mc19TSymScalingMethod.html#a4a50b3f71aab5e6a83189b2a8fe7acdc">~Mc19TSymScalingMethod</a>()</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;   { }</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="classIpopt_1_1Mc19TSymScalingMethod.html#aefe48031b8927d812eb9d7e0f997b0df">   50</a></span>&#160;   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classIpopt_1_1Mc19TSymScalingMethod.html#aefe48031b8927d812eb9d7e0f997b0df">InitializeImpl</a>(</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;      <span class="keyword">const</span> <a class="code" href="classIpopt_1_1OptionsList.html">OptionsList</a>&amp; options,</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;      <span class="keyword">const</span> std::string&amp; prefix</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;   );</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00056"></a><span class="lineno"><a class="line" href="classIpopt_1_1Mc19TSymScalingMethod.html#a71806fb007f5e1b2b3088da8bde9963b">   56</a></span>&#160;   <a class="code" href="classIpopt_1_1Mc19TSymScalingMethod.html#a71806fb007f5e1b2b3088da8bde9963b">Mc19TSymScalingMethod</a>(</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;      <span class="keyword">const</span> <a class="code" href="classIpopt_1_1Mc19TSymScalingMethod.html">Mc19TSymScalingMethod</a>&amp;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;   );</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="classIpopt_1_1Mc19TSymScalingMethod.html#ab6569dd5b0e0dd6996e09083cb386e95">   61</a></span>&#160;   <span class="keywordtype">void</span> <a class="code" href="classIpopt_1_1Mc19TSymScalingMethod.html#ab6569dd5b0e0dd6996e09083cb386e95">operator=</a>(</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;      <span class="keyword">const</span> <a class="code" href="classIpopt_1_1Mc19TSymScalingMethod.html">Mc19TSymScalingMethod</a>&amp;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;   );</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;};</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;} <span class="comment">// namespace Ipopt</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno"><a class="line" href="classIpopt_1_1Mc19TSymScalingMethod.html#a3f4e383ee63c9b548b04049c6aa6c1e4">   58</a></span>&#160;   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classIpopt_1_1Mc19TSymScalingMethod.html#a3f4e383ee63c9b548b04049c6aa6c1e4">ComputeSymTScalingFactors</a>(</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;      <a class="code" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>         n,</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;      <a class="code" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>         nnz,</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;      <span class="keyword">const</span> <a class="code" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>*  airn,</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;      <span class="keyword">const</span> <a class="code" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>*  ajcn,</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;      <span class="keyword">const</span> <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>* a,</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>*       scaling_factors</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;   );</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="classIpopt_1_1Mc19TSymScalingMethod.html#a667d1cac121b7c9aecd0e8d816f70feb">   69</a></span>&#160;   <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classIpopt_1_1Mc19TSymScalingMethod.html#a667d1cac121b7c9aecd0e8d816f70feb">SetFunctions</a>(</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;      <a class="code" href="IpMc19TSymScalingMethod_8hpp.html#a9a1040df91c6349975daa3ad39af7581">IPOPT_DECL_MC19A</a>(*<a class="code" href="classIpopt_1_1Mc19TSymScalingMethod.html#a1fa6acbf38c9caafaa76df1db64f447d">mc19a</a>)</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;   );</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="classIpopt_1_1Mc19TSymScalingMethod.html#a0dda77861e3ccff4e6a3ad665a4a494c">   77</a></span>&#160;   <span class="keyword">static</span> <a class="code" href="IpMc19TSymScalingMethod_8hpp.html#a9a1040df91c6349975daa3ad39af7581">IPOPT_DECL_MC19A</a>(*<a class="code" href="classIpopt_1_1Mc19TSymScalingMethod.html#a0dda77861e3ccff4e6a3ad665a4a494c">GetMC19A</a>());</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
+<div class="line"><a name="l00087"></a><span class="lineno"><a class="line" href="classIpopt_1_1Mc19TSymScalingMethod.html#a71806fb007f5e1b2b3088da8bde9963b">   87</a></span>&#160;   <a class="code" href="classIpopt_1_1Mc19TSymScalingMethod.html#a71806fb007f5e1b2b3088da8bde9963b">Mc19TSymScalingMethod</a>(</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;      <span class="keyword">const</span> <a class="code" href="classIpopt_1_1Mc19TSymScalingMethod.html">Mc19TSymScalingMethod</a>&amp;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;   );</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
+<div class="line"><a name="l00092"></a><span class="lineno"><a class="line" href="classIpopt_1_1Mc19TSymScalingMethod.html#ab6569dd5b0e0dd6996e09083cb386e95">   92</a></span>&#160;   <span class="keywordtype">void</span> <a class="code" href="classIpopt_1_1Mc19TSymScalingMethod.html#ab6569dd5b0e0dd6996e09083cb386e95">operator=</a>(</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;      <span class="keyword">const</span> <a class="code" href="classIpopt_1_1Mc19TSymScalingMethod.html">Mc19TSymScalingMethod</a>&amp;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;   );</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
+<div class="line"><a name="l00099"></a><span class="lineno"><a class="line" href="classIpopt_1_1Mc19TSymScalingMethod.html#a695a5a82423ff6930c1d8d8402626add">   99</a></span>&#160;   <a class="code" href="classIpopt_1_1SmartPtr.html">SmartPtr&lt;LibraryLoader&gt;</a> <a class="code" href="classIpopt_1_1Mc19TSymScalingMethod.html#a695a5a82423ff6930c1d8d8402626add">hslloader</a>;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
+<div class="line"><a name="l00101"></a><span class="lineno"><a class="line" href="classIpopt_1_1Mc19TSymScalingMethod.html#a1fa6acbf38c9caafaa76df1db64f447d">  101</a></span>&#160;   <a class="code" href="IpMc19TSymScalingMethod_8hpp.html#a9a1040df91c6349975daa3ad39af7581">IPOPT_DECL_MC19A</a>(*<a class="code" href="classIpopt_1_1Mc19TSymScalingMethod.html#a1fa6acbf38c9caafaa76df1db64f447d">mc19a</a>);</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;};</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;} <span class="comment">// namespace Ipopt</span></div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aIpUtils_8hpp_html"><div class="ttname"><a href="IpUtils_8hpp.html">IpUtils.hpp</a></div></div>
 <div class="ttc" id="aclassIpopt_1_1Mc19TSymScalingMethod_html_aefe48031b8927d812eb9d7e0f997b0df"><div class="ttname"><a href="classIpopt_1_1Mc19TSymScalingMethod.html#aefe48031b8927d812eb9d7e0f997b0df">Ipopt::Mc19TSymScalingMethod::InitializeImpl</a></div><div class="ttdeci">virtual bool InitializeImpl(const OptionsList &amp;options, const std::string &amp;prefix)</div><div class="ttdoc">Implementation of the initialization method that has to be overloaded by for each derived class.</div></div>
+<div class="ttc" id="aclassIpopt_1_1Mc19TSymScalingMethod_html_a1fa6acbf38c9caafaa76df1db64f447d"><div class="ttname"><a href="classIpopt_1_1Mc19TSymScalingMethod.html#a1fa6acbf38c9caafaa76df1db64f447d">Ipopt::Mc19TSymScalingMethod::mc19a</a></div><div class="ttdeci">IPOPT_DECL_MC19A * mc19a</div><div class="ttdef"><b>Definition:</b> <a href="IpMc19TSymScalingMethod_8hpp_source.html#l00101">IpMc19TSymScalingMethod.hpp:101</a></div></div>
 <div class="ttc" id="aIpTSymScalingMethod_8hpp_html"><div class="ttname"><a href="IpTSymScalingMethod_8hpp.html">IpTSymScalingMethod.hpp</a></div></div>
 <div class="ttc" id="aclassIpopt_1_1Mc19TSymScalingMethod_html_ab6569dd5b0e0dd6996e09083cb386e95"><div class="ttname"><a href="classIpopt_1_1Mc19TSymScalingMethod.html#ab6569dd5b0e0dd6996e09083cb386e95">Ipopt::Mc19TSymScalingMethod::operator=</a></div><div class="ttdeci">void operator=(const Mc19TSymScalingMethod &amp;)</div><div class="ttdoc">Default Assignment Operator.</div></div>
+<div class="ttc" id="aclassIpopt_1_1Mc19TSymScalingMethod_html_a667d1cac121b7c9aecd0e8d816f70feb"><div class="ttname"><a href="classIpopt_1_1Mc19TSymScalingMethod.html#a667d1cac121b7c9aecd0e8d816f70feb">Ipopt::Mc19TSymScalingMethod::SetFunctions</a></div><div class="ttdeci">static void SetFunctions()</div><div class="ttdoc">set MC19 function to use for every instantiation of this class</div></div>
 <div class="ttc" id="anamespaceIpopt_html"><div class="ttname"><a href="namespaceIpopt.html">Ipopt</a></div><div class="ttdoc">This file contains a base class for all exceptions and a set of macros to help with exceptions.</div><div class="ttdef"><b>Definition:</b> <a href="IpInexactAlgBuilder_8hpp_source.html#l00013">IpInexactAlgBuilder.hpp:14</a></div></div>
-<div class="ttc" id="anamespaceIpopt_html_a8728e67558138991e8ee3fea451dca94"><div class="ttname"><a href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Ipopt::Index</a></div><div class="ttdeci">int Index</div><div class="ttdoc">Type of all indices of vectors, matrices etc.</div><div class="ttdef"><b>Definition:</b> <a href="IpTypes_8hpp_source.html#l00017">IpTypes.hpp:17</a></div></div>
-<div class="ttc" id="aclassIpopt_1_1Mc19TSymScalingMethod_html"><div class="ttname"><a href="classIpopt_1_1Mc19TSymScalingMethod.html">Ipopt::Mc19TSymScalingMethod</a></div><div class="ttdoc">Class for the method for computing scaling factors for symmetric matrices in triplet format,...</div><div class="ttdef"><b>Definition:</b> <a href="IpMc19TSymScalingMethod_8hpp_source.html#l00019">IpMc19TSymScalingMethod.hpp:20</a></div></div>
+<div class="ttc" id="aIpLibraryLoader_8hpp_html"><div class="ttname"><a href="IpLibraryLoader_8hpp.html">IpLibraryLoader.hpp</a></div></div>
+<div class="ttc" id="aclassIpopt_1_1SmartPtr_html"><div class="ttname"><a href="classIpopt_1_1SmartPtr.html">Ipopt::SmartPtr</a></div><div class="ttdoc">Template class for Smart Pointers.</div><div class="ttdef"><b>Definition:</b> <a href="IpSmartPtr_8hpp_source.html#l00164">IpSmartPtr.hpp:165</a></div></div>
+<div class="ttc" id="aIpMc19TSymScalingMethod_8hpp_html_a9a1040df91c6349975daa3ad39af7581"><div class="ttname"><a href="IpMc19TSymScalingMethod_8hpp.html#a9a1040df91c6349975daa3ad39af7581">IPOPT_DECL_MC19A</a></div><div class="ttdeci">#define IPOPT_DECL_MC19A(x)</div><div class="ttdef"><b>Definition:</b> <a href="IpMc19TSymScalingMethod_8hpp_source.html#l00019">IpMc19TSymScalingMethod.hpp:18</a></div></div>
+<div class="ttc" id="anamespaceIpopt_html_a5a4a27f325033a0e5d85a4ebc4038b57"><div class="ttname"><a href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Ipopt::Index</a></div><div class="ttdeci">ipindex Index</div><div class="ttdoc">Type of all indices of vectors, matrices etc.</div><div class="ttdef"><b>Definition:</b> <a href="IpTypes_8hpp_source.html#l00020">IpTypes.hpp:20</a></div></div>
+<div class="ttc" id="anamespaceIpopt_html_ab75ce5f2ad60aa86e4dff723998e653f"><div class="ttname"><a href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Ipopt::Number</a></div><div class="ttdeci">ipnumber Number</div><div class="ttdoc">Type of all numbers.</div><div class="ttdef"><b>Definition:</b> <a href="IpTypes_8hpp_source.html#l00017">IpTypes.hpp:17</a></div></div>
+<div class="ttc" id="aclassIpopt_1_1Mc19TSymScalingMethod_html_a655a82cb55c8948ff571d0142a126499"><div class="ttname"><a href="classIpopt_1_1Mc19TSymScalingMethod.html#a655a82cb55c8948ff571d0142a126499">Ipopt::Mc19TSymScalingMethod::Mc19TSymScalingMethod</a></div><div class="ttdeci">Mc19TSymScalingMethod(SmartPtr&lt; LibraryLoader &gt; hslloader_)</div><div class="ttdef"><b>Definition:</b> <a href="IpMc19TSymScalingMethod_8hpp_source.html#l00040">IpMc19TSymScalingMethod.hpp:40</a></div></div>
+<div class="ttc" id="aclassIpopt_1_1Mc19TSymScalingMethod_html"><div class="ttname"><a href="classIpopt_1_1Mc19TSymScalingMethod.html">Ipopt::Mc19TSymScalingMethod</a></div><div class="ttdoc">Class for the method for computing scaling factors for symmetric matrices in triplet format,...</div><div class="ttdef"><b>Definition:</b> <a href="IpMc19TSymScalingMethod_8hpp_source.html#l00035">IpMc19TSymScalingMethod.hpp:36</a></div></div>
 <div class="ttc" id="aclassIpopt_1_1Mc19TSymScalingMethod_html_a71806fb007f5e1b2b3088da8bde9963b"><div class="ttname"><a href="classIpopt_1_1Mc19TSymScalingMethod.html#a71806fb007f5e1b2b3088da8bde9963b">Ipopt::Mc19TSymScalingMethod::Mc19TSymScalingMethod</a></div><div class="ttdeci">Mc19TSymScalingMethod(const Mc19TSymScalingMethod &amp;)</div><div class="ttdoc">Copy Constructor.</div></div>
+<div class="ttc" id="aclassIpopt_1_1Mc19TSymScalingMethod_html_a695a5a82423ff6930c1d8d8402626add"><div class="ttname"><a href="classIpopt_1_1Mc19TSymScalingMethod.html#a695a5a82423ff6930c1d8d8402626add">Ipopt::Mc19TSymScalingMethod::hslloader</a></div><div class="ttdeci">SmartPtr&lt; LibraryLoader &gt; hslloader</div><div class="ttdef"><b>Definition:</b> <a href="IpMc19TSymScalingMethod_8hpp_source.html#l00099">IpMc19TSymScalingMethod.hpp:99</a></div></div>
+<div class="ttc" id="aclassIpopt_1_1Mc19TSymScalingMethod_html_a3f4e383ee63c9b548b04049c6aa6c1e4"><div class="ttname"><a href="classIpopt_1_1Mc19TSymScalingMethod.html#a3f4e383ee63c9b548b04049c6aa6c1e4">Ipopt::Mc19TSymScalingMethod::ComputeSymTScalingFactors</a></div><div class="ttdeci">virtual bool ComputeSymTScalingFactors(Index n, Index nnz, const Index *airn, const Index *ajcn, const Number *a, Number *scaling_factors)</div><div class="ttdoc">Method for computing the symmetric scaling factors, given the symmetric matrix in triplet (MA27) form...</div></div>
 <div class="ttc" id="aclassIpopt_1_1TSymScalingMethod_html"><div class="ttname"><a href="classIpopt_1_1TSymScalingMethod.html">Ipopt::TSymScalingMethod</a></div><div class="ttdoc">Base class for the method for computing scaling factors for symmetric matrices in triplet format.</div><div class="ttdef"><b>Definition:</b> <a href="IpTSymScalingMethod_8hpp_source.html#l00021">IpTSymScalingMethod.hpp:22</a></div></div>
-<div class="ttc" id="aclassIpopt_1_1Mc19TSymScalingMethod_html_a16d58829c9c1c98ee871d801edd38b0a"><div class="ttname"><a href="classIpopt_1_1Mc19TSymScalingMethod.html#a16d58829c9c1c98ee871d801edd38b0a">Ipopt::Mc19TSymScalingMethod::Mc19TSymScalingMethod</a></div><div class="ttdeci">Mc19TSymScalingMethod()</div><div class="ttdef"><b>Definition:</b> <a href="IpMc19TSymScalingMethod_8hpp_source.html#l00024">IpMc19TSymScalingMethod.hpp:24</a></div></div>
+<div class="ttc" id="aclassIpopt_1_1Mc19TSymScalingMethod_html_a0dda77861e3ccff4e6a3ad665a4a494c"><div class="ttname"><a href="classIpopt_1_1Mc19TSymScalingMethod.html#a0dda77861e3ccff4e6a3ad665a4a494c">Ipopt::Mc19TSymScalingMethod::GetMC19A</a></div><div class="ttdeci">static IPOPT_DECL_MC19A * GetMC19A()</div><div class="ttdoc">get MC19A function that has been set via SetFunctions</div></div>
 <div class="ttc" id="aclassIpopt_1_1OptionsList_html"><div class="ttname"><a href="classIpopt_1_1OptionsList.html">Ipopt::OptionsList</a></div><div class="ttdoc">This class stores a list of user set options.</div><div class="ttdef"><b>Definition:</b> <a href="IpOptionsList_8hpp_source.html#l00032">IpOptionsList.hpp:33</a></div></div>
-<div class="ttc" id="aclassIpopt_1_1Mc19TSymScalingMethod_html_a566a1c2434b4fd330be3a781c367edfa"><div class="ttname"><a href="classIpopt_1_1Mc19TSymScalingMethod.html#a566a1c2434b4fd330be3a781c367edfa">Ipopt::Mc19TSymScalingMethod::ComputeSymTScalingFactors</a></div><div class="ttdeci">virtual bool ComputeSymTScalingFactors(Index n, Index nnz, const ipfint *airn, const ipfint *ajcn, const double *a, double *scaling_factors)</div><div class="ttdoc">Method for computing the symmetric scaling factors, given the symmetric matrix in triplet (MA27) form...</div></div>
-<div class="ttc" id="aclassIpopt_1_1Mc19TSymScalingMethod_html_a4a50b3f71aab5e6a83189b2a8fe7acdc"><div class="ttname"><a href="classIpopt_1_1Mc19TSymScalingMethod.html#a4a50b3f71aab5e6a83189b2a8fe7acdc">Ipopt::Mc19TSymScalingMethod::~Mc19TSymScalingMethod</a></div><div class="ttdeci">virtual ~Mc19TSymScalingMethod()</div><div class="ttdef"><b>Definition:</b> <a href="IpMc19TSymScalingMethod_8hpp_source.html#l00027">IpMc19TSymScalingMethod.hpp:27</a></div></div>
-<div class="ttc" id="aIpTypes_8hpp_html_ab1366b159c9a5e7f01e86923f6b2dd65"><div class="ttname"><a href="IpTypes_8hpp.html#ab1366b159c9a5e7f01e86923f6b2dd65">ipfint</a></div><div class="ttdeci">IPOPT_FORTRAN_INTEGER_TYPE ipfint</div><div class="ttdef"><b>Definition:</b> <a href="IpTypes_8hpp_source.html#l00024">IpTypes.hpp:24</a></div></div>
+<div class="ttc" id="aclassIpopt_1_1Mc19TSymScalingMethod_html_a4a50b3f71aab5e6a83189b2a8fe7acdc"><div class="ttname"><a href="classIpopt_1_1Mc19TSymScalingMethod.html#a4a50b3f71aab5e6a83189b2a8fe7acdc">Ipopt::Mc19TSymScalingMethod::~Mc19TSymScalingMethod</a></div><div class="ttdeci">virtual ~Mc19TSymScalingMethod()</div><div class="ttdef"><b>Definition:</b> <a href="IpMc19TSymScalingMethod_8hpp_source.html#l00046">IpMc19TSymScalingMethod.hpp:46</a></div></div>
+<div class="ttc" id="aIpTypes_8h_html"><div class="ttname"><a href="IpTypes_8h.html">IpTypes.h</a></div></div>
 </body>
 </html>

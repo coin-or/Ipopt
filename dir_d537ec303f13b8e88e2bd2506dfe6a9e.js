@@ -54,7 +54,9 @@ var dir_d537ec303f13b8e88e2bd2506dfe6a9e =
     [ "IpHessianUpdater.hpp", "IpHessianUpdater_8hpp.html", [
       [ "HessianUpdater", "classIpopt_1_1HessianUpdater.html", "classIpopt_1_1HessianUpdater" ]
     ] ],
-    [ "IpIpoptAlg.hpp", "IpIpoptAlg_8hpp.html", "IpIpoptAlg_8hpp" ],
+    [ "IpIpoptAlg.hpp", "IpIpoptAlg_8hpp.html", [
+      [ "IpoptAlgorithm", "classIpopt_1_1IpoptAlgorithm.html", "classIpopt_1_1IpoptAlgorithm" ]
+    ] ],
     [ "IpIpoptCalculatedQuantities.hpp", "IpIpoptCalculatedQuantities_8hpp.html", "IpIpoptCalculatedQuantities_8hpp" ],
     [ "IpIpoptData.hpp", "IpIpoptData_8hpp.html", [
       [ "IpoptAdditionalData", "classIpopt_1_1IpoptAdditionalData.html", "classIpopt_1_1IpoptAdditionalData" ],

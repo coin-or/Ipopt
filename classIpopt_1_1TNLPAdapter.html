@@ -1,5 +1,5 @@
-<!-- HTML header for doxygen 1.8.13-->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- HTML header for doxygen 1.8.18-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.13.4</span-->
+   &#160;<!--span id="projectnumber">3.14.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -111,7 +111,7 @@ $(document).ready(function(){initNavTree('classIpopt_1_1TNLPAdapter.html',''); i
 </div><!--header-->
 <div class="contents">
 
-<p>This class adapts the <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> interface so it looks like an <a class="el" href="classIpopt_1_1NLP.html">NLP</a> interface.  
+<p>This class adapts the <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> interface so it looks like an <a class="el" href="classIpopt_1_1NLP.html" title="Traditional NLP.">NLP</a> interface.  
  <a href="classIpopt_1_1TNLPAdapter.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>&gt;</code></p>
@@ -123,7 +123,7 @@ $(document).ready(function(){initNavTree('classIpopt_1_1TNLPAdapter.html',''); i
 <div class="center"><img src="classIpopt_1_1TNLPAdapter__inherit__graph.png" border="0" usemap="#Ipopt_1_1TNLPAdapter_inherit__map" alt="Inheritance graph"/></div>
 <map name="Ipopt_1_1TNLPAdapter_inherit__map" id="Ipopt_1_1TNLPAdapter_inherit__map">
 <area shape="rect" title="This class adapts the TNLP interface so it looks like an NLP interface." alt="" coords="21,155,168,181"/>
-<area shape="rect" href="classIpopt_1_1NLP.html" title=" " alt="" coords="51,80,139,107"/>
+<area shape="rect" href="classIpopt_1_1NLP.html" title="Traditional NLP." alt="" coords="51,80,139,107"/>
 <area shape="rect" href="classIpopt_1_1ReferencedObject.html" title="Storing the reference count of all the smart pointers that currently reference it." alt="" coords="5,5,184,32"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
@@ -131,6 +131,7 @@ $(document).ready(function(){initNavTree('classIpopt_1_1TNLPAdapter.html',''); i
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:a9613d9f090849cf038c2e27d847fe723"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a9613d9f090849cf038c2e27d847fe723">FixedVariableTreatmentEnum</a> { <a class="el" href="classIpopt_1_1TNLPAdapter.html#a9613d9f090849cf038c2e27d847fe723a89a51b89a28b01886edbe0ea5f43a5bf">MAKE_PARAMETER</a> = 0, 
+<a class="el" href="classIpopt_1_1TNLPAdapter.html#a9613d9f090849cf038c2e27d847fe723a6c9f76d1180c198af960c238e95c0789">MAKE_PARAMETER_NODUAL</a>, 
 <a class="el" href="classIpopt_1_1TNLPAdapter.html#a9613d9f090849cf038c2e27d847fe723a110776c2a658b233d3798b792ee1b2d8">MAKE_CONSTRAINT</a>, 
 <a class="el" href="classIpopt_1_1TNLPAdapter.html#a9613d9f090849cf038c2e27d847fe723a23d6783c50ae47d4d8f6f486db23ff5a">RELAX_BOUNDS</a>
  }</td></tr>
@@ -154,7 +155,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a65dd2fbd322b71a48d17818efde117d8"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a65dd2fbd322b71a48d17818efde117d8">GetQuasiNewtonApproximationSpaces</a> (<a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1VectorSpace.html">VectorSpace</a> &gt; &amp;approx_space, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1Matrix.html">Matrix</a> &gt; &amp;P_approx)</td></tr>
 <tr class="memdesc:a65dd2fbd322b71a48d17818efde117d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method returning information on quasi-Newton approximation.  <a href="classIpopt_1_1TNLPAdapter.html#a65dd2fbd322b71a48d17818efde117d8">More...</a><br /></td></tr>
 <tr class="separator:a65dd2fbd322b71a48d17818efde117d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a78902bb3776b2bc23865eae0c8423664"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a78902bb3776b2bc23865eae0c8423664">CheckDerivatives</a> (<a class="el" href="classIpopt_1_1TNLPAdapter.html#af8cb74ea21f4e825c746861f8d1e515a">DerivativeTestEnum</a> deriv_test, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> deriv_test_start_index)</td></tr>
+<tr class="memitem:a78902bb3776b2bc23865eae0c8423664"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a78902bb3776b2bc23865eae0c8423664">CheckDerivatives</a> (<a class="el" href="classIpopt_1_1TNLPAdapter.html#af8cb74ea21f4e825c746861f8d1e515a">DerivativeTestEnum</a> deriv_test, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> deriv_test_start_index)</td></tr>
 <tr class="memdesc:a78902bb3776b2bc23865eae0c8423664"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method for performing the derivative test.  <a href="classIpopt_1_1TNLPAdapter.html#a78902bb3776b2bc23865eae0c8423664">More...</a><br /></td></tr>
 <tr class="separator:a78902bb3776b2bc23865eae0c8423664"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adef109fc376fda66a344ec9c88e279b0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1TNLP.html">TNLP</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#adef109fc376fda66a344ec9c88e279b0">tnlp</a> () const</td></tr>
@@ -174,7 +175,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a025f45b3fcce2cce7d5283363032360a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">TNLPAdapter Initialization.</div></td></tr>
 <tr class="memitem:aef5ac8f39376b72253a6d6d6b1831b70"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#aef5ac8f39376b72253a6d6d6b1831b70">ProcessOptions</a> (const <a class="el" href="classIpopt_1_1OptionsList.html">OptionsList</a> &amp;options, const std::string &amp;prefix)</td></tr>
-<tr class="memdesc:aef5ac8f39376b72253a6d6d6b1831b70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload if you want the chance to process options or parameters that may be specific to the <a class="el" href="classIpopt_1_1NLP.html">NLP</a>.  <a href="classIpopt_1_1TNLPAdapter.html#aef5ac8f39376b72253a6d6d6b1831b70">More...</a><br /></td></tr>
+<tr class="memdesc:aef5ac8f39376b72253a6d6d6b1831b70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload if you want the chance to process options or parameters that may be specific to the <a class="el" href="classIpopt_1_1NLP.html" title="Traditional NLP.">NLP</a>.  <a href="classIpopt_1_1TNLPAdapter.html#aef5ac8f39376b72253a6d6d6b1831b70">More...</a><br /></td></tr>
 <tr class="separator:aef5ac8f39376b72253a6d6d6b1831b70"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae30c484cb956f1beb507e8fbc7462b5f"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#ae30c484cb956f1beb507e8fbc7462b5f">GetSpaces</a> (<a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1VectorSpace.html">VectorSpace</a> &gt; &amp;x_space, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1VectorSpace.html">VectorSpace</a> &gt; &amp;c_space, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1VectorSpace.html">VectorSpace</a> &gt; &amp;d_space, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1VectorSpace.html">VectorSpace</a> &gt; &amp;x_l_space, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1MatrixSpace.html">MatrixSpace</a> &gt; &amp;px_l_space, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1VectorSpace.html">VectorSpace</a> &gt; &amp;x_u_space, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1MatrixSpace.html">MatrixSpace</a> &gt; &amp;px_u_space, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1VectorSpace.html">VectorSpace</a> &gt; &amp;d_l_space, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1MatrixSpace.html">MatrixSpace</a> &gt; &amp;pd_l_space, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1VectorSpace.html">VectorSpace</a> &gt; &amp;d_u_space, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1MatrixSpace.html">MatrixSpace</a> &gt; &amp;pd_u_space, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1MatrixSpace.html">MatrixSpace</a> &gt; &amp;Jac_c_space, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1MatrixSpace.html">MatrixSpace</a> &gt; &amp;Jac_d_space, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1SymMatrixSpace.html">SymMatrixSpace</a> &gt; &amp;Hess_lagrangian_space)</td></tr>
 <tr class="memdesc:ae30c484cb956f1beb507e8fbc7462b5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method for creating the derived vector / matrix types.  <a href="classIpopt_1_1TNLPAdapter.html#ae30c484cb956f1beb507e8fbc7462b5f">More...</a><br /></td></tr>
@@ -189,7 +190,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:aa6c8a9528f9e5b3bce28977aed64a7f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method for obtaining an entire iterate as a warmstart point.  <a href="classIpopt_1_1TNLPAdapter.html#aa6c8a9528f9e5b3bce28977aed64a7f5">More...</a><br /></td></tr>
 <tr class="separator:aa6c8a9528f9e5b3bce28977aed64a7f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">TNLPAdapter evaluation routines.</div></td></tr>
-<tr class="memitem:acd3957eacad73c45281d211a1325fd10"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#acd3957eacad73c45281d211a1325fd10">Eval_f</a> (const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> &amp;f)</td></tr>
+<tr class="memitem:acd3957eacad73c45281d211a1325fd10"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#acd3957eacad73c45281d211a1325fd10">Eval_f</a> (const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> &amp;f)</td></tr>
 <tr class="separator:acd3957eacad73c45281d211a1325fd10"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a400dcedb66ba2256d4a0a062f6b01daf"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a400dcedb66ba2256d4a0a062f6b01daf">Eval_grad_f</a> (const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x, <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;g_f)</td></tr>
 <tr class="separator:a400dcedb66ba2256d4a0a062f6b01daf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -201,29 +202,48 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a7f371d2d1ffc584cf9c7df4c84d98908"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a43d697bfe05eb19bc6f85ed24872ec60"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a43d697bfe05eb19bc6f85ed24872ec60">Eval_jac_d</a> (const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x, <a class="el" href="classIpopt_1_1Matrix.html">Matrix</a> &amp;jac_d)</td></tr>
 <tr class="separator:a43d697bfe05eb19bc6f85ed24872ec60"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abfdd1e3b48bf4ddd8a60577f4fa889c4"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#abfdd1e3b48bf4ddd8a60577f4fa889c4">Eval_h</a> (const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> obj_factor, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;yc, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;yd, <a class="el" href="classIpopt_1_1SymMatrix.html">SymMatrix</a> &amp;h)</td></tr>
+<tr class="memitem:abfdd1e3b48bf4ddd8a60577f4fa889c4"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#abfdd1e3b48bf4ddd8a60577f4fa889c4">Eval_h</a> (const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> obj_factor, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;yc, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;yd, <a class="el" href="classIpopt_1_1SymMatrix.html">SymMatrix</a> &amp;h)</td></tr>
 <tr class="separator:abfdd1e3b48bf4ddd8a60577f4fa889c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1c825d04ad8225964669a7a238244846"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a1c825d04ad8225964669a7a238244846">GetScalingParameters</a> (const <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1VectorSpace.html">VectorSpace</a> &gt; x_space, const <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1VectorSpace.html">VectorSpace</a> &gt; c_space, const <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1VectorSpace.html">VectorSpace</a> &gt; d_space, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> &amp;obj_scaling, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &gt; &amp;x_scaling, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &gt; &amp;c_scaling, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &gt; &amp;d_scaling) const</td></tr>
+<tr class="memitem:a1c825d04ad8225964669a7a238244846"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a1c825d04ad8225964669a7a238244846">GetScalingParameters</a> (const <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1VectorSpace.html">VectorSpace</a> &gt; x_space, const <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1VectorSpace.html">VectorSpace</a> &gt; c_space, const <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1VectorSpace.html">VectorSpace</a> &gt; d_space, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> &amp;obj_scaling, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &gt; &amp;x_scaling, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &gt; &amp;c_scaling, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &gt; &amp;d_scaling) const</td></tr>
 <tr class="memdesc:a1c825d04ad8225964669a7a238244846"><td class="mdescLeft">&#160;</td><td class="mdescRight">Routines to get the scaling parameters.  <a href="classIpopt_1_1TNLPAdapter.html#a1c825d04ad8225964669a7a238244846">More...</a><br /></td></tr>
 <tr class="separator:a1c825d04ad8225964669a7a238244846"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Solution Reporting Methods</div></td></tr>
-<tr class="memitem:ad9cf67460407b60c7abceed37a47a6b7"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#ad9cf67460407b60c7abceed37a47a6b7">FinalizeSolution</a> (<a class="el" href="namespaceIpopt.html#a53a5dc5f64f568252ba7bb7385e7f834">SolverReturn</a> status, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;z_L, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;z_U, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;c, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;d, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;y_c, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;y_d, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> obj_value, const <a class="el" href="classIpopt_1_1IpoptData.html">IpoptData</a> *ip_data, <a class="el" href="classIpopt_1_1IpoptCalculatedQuantities.html">IpoptCalculatedQuantities</a> *ip_cq)</td></tr>
+<tr class="memitem:ad9cf67460407b60c7abceed37a47a6b7"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#ad9cf67460407b60c7abceed37a47a6b7">FinalizeSolution</a> (<a class="el" href="namespaceIpopt.html#a53a5dc5f64f568252ba7bb7385e7f834">SolverReturn</a> status, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;z_L, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;z_U, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;c, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;d, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;y_c, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;y_d, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> obj_value, const <a class="el" href="classIpopt_1_1IpoptData.html">IpoptData</a> *ip_data, <a class="el" href="classIpopt_1_1IpoptCalculatedQuantities.html">IpoptCalculatedQuantities</a> *ip_cq)</td></tr>
 <tr class="memdesc:ad9cf67460407b60c7abceed37a47a6b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method is called at the very end of the optimization.  <a href="classIpopt_1_1TNLPAdapter.html#ad9cf67460407b60c7abceed37a47a6b7">More...</a><br /></td></tr>
 <tr class="separator:ad9cf67460407b60c7abceed37a47a6b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa7d7c5e4706688897b2cd6579168f3af"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#aa7d7c5e4706688897b2cd6579168f3af">IntermediateCallBack</a> (<a class="el" href="IpReturnCodes__inc_8h.html#a5daff61568f9909c518fb61116260387">AlgorithmMode</a> mode, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> iter, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> obj_value, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> inf_pr, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> inf_du, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> mu, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> d_norm, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> regularization_size, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> alpha_du, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> alpha_pr, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> ls_trials, const <a class="el" href="classIpopt_1_1IpoptData.html">IpoptData</a> *ip_data, <a class="el" href="classIpopt_1_1IpoptCalculatedQuantities.html">IpoptCalculatedQuantities</a> *ip_cq)</td></tr>
+<tr class="memitem:aa7d7c5e4706688897b2cd6579168f3af"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#aa7d7c5e4706688897b2cd6579168f3af">IntermediateCallBack</a> (<a class="el" href="IpReturnCodes__inc_8h.html#a5daff61568f9909c518fb61116260387">AlgorithmMode</a> mode, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> iter, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> obj_value, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> inf_pr, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> inf_du, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> mu, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> d_norm, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> regularization_size, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> alpha_du, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> alpha_pr, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> ls_trials, const <a class="el" href="classIpopt_1_1IpoptData.html">IpoptData</a> *ip_data, <a class="el" href="classIpopt_1_1IpoptCalculatedQuantities.html">IpoptCalculatedQuantities</a> *ip_cq)</td></tr>
 <tr class="memdesc:aa7d7c5e4706688897b2cd6579168f3af"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method is called once per iteration, after the iteration summary output has been printed.  <a href="classIpopt_1_1TNLPAdapter.html#aa7d7c5e4706688897b2cd6579168f3af">More...</a><br /></td></tr>
 <tr class="separator:aa7d7c5e4706688897b2cd6579168f3af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Methods for translating data for IpoptNLP into the TNLP data.</div></td></tr>
 <tr><td colspan="2"><div class="groupText"><p>These methods are used to obtain the current (or final) data for the <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> formulation from the <a class="el" href="classIpopt_1_1IpoptNLP.html" title="This is the abstract base class for classes that map the traditional NLP into something that is more ...">IpoptNLP</a> structure. </p>
 </div></td></tr>
-<tr class="memitem:a9d1679322cc963f1e58aed0d9416247c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a9d1679322cc963f1e58aed0d9416247c">ResortX</a> (const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *x_orig)</td></tr>
-<tr class="memdesc:a9d1679322cc963f1e58aed0d9416247c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sort the primal variables, and add the fixed values in x.  <a href="classIpopt_1_1TNLPAdapter.html#a9d1679322cc963f1e58aed0d9416247c">More...</a><br /></td></tr>
-<tr class="separator:a9d1679322cc963f1e58aed0d9416247c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a33e37afa89a562815460ccbe63d2e659"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a33e37afa89a562815460ccbe63d2e659">ResortG</a> (const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;c, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;d, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *g_orig)</td></tr>
-<tr class="separator:a33e37afa89a562815460ccbe63d2e659"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a36f2cffa17853a2dbf02d85705e57bac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a36f2cffa17853a2dbf02d85705e57bac">ResortBnds</a> (const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x_L, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *x_L_orig, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x_U, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *x_U_orig, bool clearorig=true)</td></tr>
-<tr class="memdesc:a36f2cffa17853a2dbf02d85705e57bac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Provides values for lower and upper bounds on variables for given Ipopt-internal vectors.  <a href="classIpopt_1_1TNLPAdapter.html#a36f2cffa17853a2dbf02d85705e57bac">More...</a><br /></td></tr>
-<tr class="separator:a36f2cffa17853a2dbf02d85705e57bac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f19ad31a25cbed6090f504857e85959"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a1f19ad31a25cbed6090f504857e85959">ResortX</a> (const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *x_orig, bool usefixedvals=true)</td></tr>
+<tr class="memdesc:a1f19ad31a25cbed6090f504857e85959"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sort the primal variables, and add the fixed values in x_orig.  <a href="classIpopt_1_1TNLPAdapter.html#a1f19ad31a25cbed6090f504857e85959">More...</a><br /></td></tr>
+<tr class="separator:a1f19ad31a25cbed6090f504857e85959"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7d13eace81ff7d3181ef629ce3a4a6d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#aa7d13eace81ff7d3181ef629ce3a4a6d">ResortG</a> (const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;c, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;d, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *g_orig, bool correctrhs=false)</td></tr>
+<tr class="memdesc:aa7d13eace81ff7d3181ef629ce3a4a6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sort constraint values.  <a href="classIpopt_1_1TNLPAdapter.html#aa7d13eace81ff7d3181ef629ce3a4a6d">More...</a><br /></td></tr>
+<tr class="separator:aa7d13eace81ff7d3181ef629ce3a4a6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c135f4a0ca1a65154feb164ff3e45ae"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a0c135f4a0ca1a65154feb164ff3e45ae">ResortBounds</a> (const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x_L, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *x_L_orig, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x_U, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *x_U_orig)</td></tr>
+<tr class="memdesc:a0c135f4a0ca1a65154feb164ff3e45ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Provides values for lower and upper bounds on variables for given Ipopt-internal vectors.  <a href="classIpopt_1_1TNLPAdapter.html#a0c135f4a0ca1a65154feb164ff3e45ae">More...</a><br /></td></tr>
+<tr class="separator:a0c135f4a0ca1a65154feb164ff3e45ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27af8d1553bc89fc1c003459bb082fcc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="IpTypes_8h.html#a24c578b20e2cd4eeb0060056ea13cbe5">IPOPT_DEPRECATED</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a27af8d1553bc89fc1c003459bb082fcc">ResortBnds</a> (const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x_L, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *x_L_orig, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x_U, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *x_U_orig, bool clearorig=true)</td></tr>
+<tr class="memdesc:a27af8d1553bc89fc1c003459bb082fcc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Provides values for lower and upper bounds on variables for given Ipopt-internal vectors.  <a href="classIpopt_1_1TNLPAdapter.html#a27af8d1553bc89fc1c003459bb082fcc">More...</a><br /></td></tr>
+<tr class="separator:a27af8d1553bc89fc1c003459bb082fcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd0254ec27ef13e6dc8527154f9713bc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#acd0254ec27ef13e6dc8527154f9713bc">ResortBoundMultipliers</a> (const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;y_c, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;y_d, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;z_L, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *z_L_orig, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;z_U, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *z_U_orig)</td></tr>
+<tr class="memdesc:acd0254ec27ef13e6dc8527154f9713bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Provides values for dual multipliers on lower and upper bounds on variables for given Ipopt-internal vectors.  <a href="classIpopt_1_1TNLPAdapter.html#acd0254ec27ef13e6dc8527154f9713bc">More...</a><br /></td></tr>
+<tr class="separator:acd0254ec27ef13e6dc8527154f9713bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a17ea7f7ddfff70fe7854e6480ff15423"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a17ea7f7ddfff70fe7854e6480ff15423">GetFullDimensions</a> (<a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> &amp;n, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> &amp;m) const</td></tr>
+<tr class="memdesc:a17ea7f7ddfff70fe7854e6480ff15423"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get number of variables and number of constraints in <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a>.  <a href="classIpopt_1_1TNLPAdapter.html#a17ea7f7ddfff70fe7854e6480ff15423">More...</a><br /></td></tr>
+<tr class="separator:a17ea7f7ddfff70fe7854e6480ff15423"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e804930a7b33c865fb617c592bc3df0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a6e804930a7b33c865fb617c592bc3df0">GetFixedVariables</a> (<a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> &amp;n_x_fixed, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&amp;x_fixed_map, <a class="el" href="classIpopt_1_1TNLPAdapter.html#a9613d9f090849cf038c2e27d847fe723">FixedVariableTreatmentEnum</a> &amp;fixed_variable_treatment) const</td></tr>
+<tr class="memdesc:a6e804930a7b33c865fb617c592bc3df0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get number and indices of fixed variables.  <a href="classIpopt_1_1TNLPAdapter.html#a6e804930a7b33c865fb617c592bc3df0">More...</a><br /></td></tr>
+<tr class="separator:a6e804930a7b33c865fb617c592bc3df0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a362ee0bc15da61231e129d88cd8ab1f3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a362ee0bc15da61231e129d88cd8ab1f3">GetPermutationMatrices</a> (<a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1ExpansionMatrix.html">ExpansionMatrix</a> &gt; &amp;P_x_full_x, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1ExpansionMatrix.html">ExpansionMatrix</a> &gt; &amp;P_x_x_L, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1ExpansionMatrix.html">ExpansionMatrix</a> &gt; &amp;P_x_x_U, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1ExpansionMatrix.html">ExpansionMatrix</a> &gt; &amp;P_c_g, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1ExpansionMatrix.html">ExpansionMatrix</a> &gt; &amp;P_d_g) const</td></tr>
+<tr class="memdesc:a362ee0bc15da61231e129d88cd8ab1f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get mappings between <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> indices and <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> internal indices for variables and constraints.  <a href="classIpopt_1_1TNLPAdapter.html#a362ee0bc15da61231e129d88cd8ab1f3">More...</a><br /></td></tr>
+<tr class="separator:a362ee0bc15da61231e129d88cd8ab1f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e4021449895d7f4afb51c17dece33d9"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a0e4021449895d7f4afb51c17dece33d9">GetC_Rhs</a> () const</td></tr>
+<tr class="memdesc:a0e4021449895d7f4afb51c17dece33d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get right-hand-sides that are added into c(x)  <a href="classIpopt_1_1TNLPAdapter.html#a0e4021449895d7f4afb51c17dece33d9">More...</a><br /></td></tr>
+<tr class="separator:a0e4021449895d7f4afb51c17dece33d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classIpopt_1_1NLP"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classIpopt_1_1NLP')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classIpopt_1_1NLP.html">Ipopt::NLP</a></td></tr>
 <tr class="memitem:a4352bb88edb772f6d4eeb5a90f019f24 inherit pub_methods_classIpopt_1_1NLP"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1NLP.html#a4352bb88edb772f6d4eeb5a90f019f24">NLP</a> ()</td></tr>
 <tr class="memdesc:a4352bb88edb772f6d4eeb5a90f019f24 inherit pub_methods_classIpopt_1_1NLP"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="classIpopt_1_1NLP.html#a4352bb88edb772f6d4eeb5a90f019f24">More...</a><br /></td></tr>
@@ -241,7 +261,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5c0f2208e3ead22bf7c5179381ed8203 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adbbf3aa5307da62ab8224ba599d4bd7a inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#adbbf3aa5307da62ab8224ba599d4bd7a">~ReferencedObject</a> ()</td></tr>
 <tr class="separator:adbbf3aa5307da62ab8224ba599d4bd7a inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac517534e10e36c946aeefc6fe337777 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#aac517534e10e36c946aeefc6fe337777">ReferenceCount</a> () const</td></tr>
+<tr class="memitem:aac517534e10e36c946aeefc6fe337777 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#aac517534e10e36c946aeefc6fe337777">ReferenceCount</a> () const</td></tr>
 <tr class="separator:aac517534e10e36c946aeefc6fe337777 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa69ecb0f026bd741e2fa84c31d4ec332 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#aa69ecb0f026bd741e2fa84c31d4ec332">AddRef</a> (const <a class="el" href="classIpopt_1_1Referencer.html">Referencer</a> *referencer) const</td></tr>
 <tr class="separator:aa69ecb0f026bd741e2fa84c31d4ec332 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -278,7 +298,7 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:aa507ff72122064ba2eb5392c866cad55"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#aa507ff72122064ba2eb5392c866cad55">internal_eval_jac_g</a> (bool new_x)</td></tr>
 <tr class="separator:aa507ff72122064ba2eb5392c866cad55"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Internal methods for dealing with finite difference approximation</div></td></tr>
-<tr class="memitem:a691bf0d928a5ec26e67452b9cbdc891e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a691bf0d928a5ec26e67452b9cbdc891e">initialize_findiff_jac</a> (const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *iRow, const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *jCol)</td></tr>
+<tr class="memitem:a691bf0d928a5ec26e67452b9cbdc891e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a691bf0d928a5ec26e67452b9cbdc891e">initialize_findiff_jac</a> (const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *iRow, const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *jCol)</td></tr>
 <tr class="memdesc:a691bf0d928a5ec26e67452b9cbdc891e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize sparsity structure for finite difference Jacobian.  <a href="classIpopt_1_1TNLPAdapter.html#a691bf0d928a5ec26e67452b9cbdc891e">More...</a><br /></td></tr>
 <tr class="separator:a691bf0d928a5ec26e67452b9cbdc891e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -288,31 +308,31 @@ Private Attributes</h2></td></tr>
 <tr class="memdesc:a554c2c4ee8035734214610b44294faeb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Numbering style of variables and constraints.  <a href="classIpopt_1_1TNLPAdapter.html#a554c2c4ee8035734214610b44294faeb">More...</a><br /></td></tr>
 <tr class="separator:a554c2c4ee8035734214610b44294faeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Algorithmic parameters</div></td></tr>
-<tr class="memitem:a55a9f36413e638f99e3396cd62f15021"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a55a9f36413e638f99e3396cd62f15021">nlp_lower_bound_inf_</a></td></tr>
+<tr class="memitem:a55a9f36413e638f99e3396cd62f15021"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a55a9f36413e638f99e3396cd62f15021">nlp_lower_bound_inf_</a></td></tr>
 <tr class="memdesc:a55a9f36413e638f99e3396cd62f15021"><td class="mdescLeft">&#160;</td><td class="mdescRight">Value for a lower bound that denotes -infinity.  <a href="classIpopt_1_1TNLPAdapter.html#a55a9f36413e638f99e3396cd62f15021">More...</a><br /></td></tr>
 <tr class="separator:a55a9f36413e638f99e3396cd62f15021"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a73934bc602a15b1d00db9edd768451ff"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a73934bc602a15b1d00db9edd768451ff">nlp_upper_bound_inf_</a></td></tr>
+<tr class="memitem:a73934bc602a15b1d00db9edd768451ff"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a73934bc602a15b1d00db9edd768451ff">nlp_upper_bound_inf_</a></td></tr>
 <tr class="memdesc:a73934bc602a15b1d00db9edd768451ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Value for a upper bound that denotes infinity.  <a href="classIpopt_1_1TNLPAdapter.html#a73934bc602a15b1d00db9edd768451ff">More...</a><br /></td></tr>
 <tr class="separator:a73934bc602a15b1d00db9edd768451ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f1363a005ada005adc24204e8e46938"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a9613d9f090849cf038c2e27d847fe723">FixedVariableTreatmentEnum</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a2f1363a005ada005adc24204e8e46938">fixed_variable_treatment_</a></td></tr>
 <tr class="memdesc:a2f1363a005ada005adc24204e8e46938"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag indicating how fixed variables should be handled.  <a href="classIpopt_1_1TNLPAdapter.html#a2f1363a005ada005adc24204e8e46938">More...</a><br /></td></tr>
 <tr class="separator:a2f1363a005ada005adc24204e8e46938"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad4a8b824853edd54d59d6aa420d512c7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#ad4a8b824853edd54d59d6aa420d512c7">bound_relax_factor_</a></td></tr>
+<tr class="memitem:ad4a8b824853edd54d59d6aa420d512c7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#ad4a8b824853edd54d59d6aa420d512c7">bound_relax_factor_</a></td></tr>
 <tr class="memdesc:ad4a8b824853edd54d59d6aa420d512c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines relaxation of fixing bound for RELAX_BOUNDS.  <a href="classIpopt_1_1TNLPAdapter.html#ad4a8b824853edd54d59d6aa420d512c7">More...</a><br /></td></tr>
 <tr class="separator:ad4a8b824853edd54d59d6aa420d512c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1261ee96503e7ca8229b128e5ab06f14"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIpopt_1_1TNLPAdapter.html#af8cb74ea21f4e825c746861f8d1e515a">DerivativeTestEnum</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a1261ee96503e7ca8229b128e5ab06f14">derivative_test_</a></td></tr>
 <tr class="memdesc:a1261ee96503e7ca8229b128e5ab06f14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximal slack for one-sidedly bounded variables.  <a href="classIpopt_1_1TNLPAdapter.html#a1261ee96503e7ca8229b128e5ab06f14">More...</a><br /></td></tr>
 <tr class="separator:a1261ee96503e7ca8229b128e5ab06f14"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6c82304cab784ff69d79b53f43b95c79"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a6c82304cab784ff69d79b53f43b95c79">derivative_test_perturbation_</a></td></tr>
+<tr class="memitem:a6c82304cab784ff69d79b53f43b95c79"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a6c82304cab784ff69d79b53f43b95c79">derivative_test_perturbation_</a></td></tr>
 <tr class="memdesc:a6c82304cab784ff69d79b53f43b95c79"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size of the perturbation for the derivative test.  <a href="classIpopt_1_1TNLPAdapter.html#a6c82304cab784ff69d79b53f43b95c79">More...</a><br /></td></tr>
 <tr class="separator:a6c82304cab784ff69d79b53f43b95c79"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a43de1e980b0cafcb6236e165836deb6d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a43de1e980b0cafcb6236e165836deb6d">derivative_test_tol_</a></td></tr>
+<tr class="memitem:a43de1e980b0cafcb6236e165836deb6d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a43de1e980b0cafcb6236e165836deb6d">derivative_test_tol_</a></td></tr>
 <tr class="memdesc:a43de1e980b0cafcb6236e165836deb6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Relative threshold for marking deviation from finite difference test.  <a href="classIpopt_1_1TNLPAdapter.html#a43de1e980b0cafcb6236e165836deb6d">More...</a><br /></td></tr>
 <tr class="separator:a43de1e980b0cafcb6236e165836deb6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0879d963308043bb1dfcac0edc18d316"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a0879d963308043bb1dfcac0edc18d316">derivative_test_print_all_</a></td></tr>
 <tr class="memdesc:a0879d963308043bb1dfcac0edc18d316"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag indicating if all test values should be printed, or only those violating the threshold.  <a href="classIpopt_1_1TNLPAdapter.html#a0879d963308043bb1dfcac0edc18d316">More...</a><br /></td></tr>
 <tr class="separator:a0879d963308043bb1dfcac0edc18d316"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a91286b1f3f75370abfd908bfb9f1fbeb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a91286b1f3f75370abfd908bfb9f1fbeb">derivative_test_first_index_</a></td></tr>
+<tr class="memitem:a91286b1f3f75370abfd908bfb9f1fbeb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a91286b1f3f75370abfd908bfb9f1fbeb">derivative_test_first_index_</a></td></tr>
 <tr class="memdesc:a91286b1f3f75370abfd908bfb9f1fbeb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Index of first quantity to be checked.  <a href="classIpopt_1_1TNLPAdapter.html#a91286b1f3f75370abfd908bfb9f1fbeb">More...</a><br /></td></tr>
 <tr class="separator:a91286b1f3f75370abfd908bfb9f1fbeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3817d595582446a9e1152447b3f319ff"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a3817d595582446a9e1152447b3f319ff">warm_start_same_structure_</a></td></tr>
@@ -321,50 +341,50 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:ad1a16aaeab49d5fe2e47722318985223"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a45350a854761d20f431a5cf3a33ebc98">HessianApproximationType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#ad1a16aaeab49d5fe2e47722318985223">hessian_approximation_</a></td></tr>
 <tr class="memdesc:ad1a16aaeab49d5fe2e47722318985223"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag indicating what Hessian information is to be used.  <a href="classIpopt_1_1TNLPAdapter.html#ad1a16aaeab49d5fe2e47722318985223">More...</a><br /></td></tr>
 <tr class="separator:ad1a16aaeab49d5fe2e47722318985223"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae56c1e08c018c1276dd3461b420b965b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#ae56c1e08c018c1276dd3461b420b965b">num_linear_variables_</a></td></tr>
+<tr class="memitem:ae56c1e08c018c1276dd3461b420b965b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#ae56c1e08c018c1276dd3461b420b965b">num_linear_variables_</a></td></tr>
 <tr class="memdesc:ae56c1e08c018c1276dd3461b420b965b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of linear variables.  <a href="classIpopt_1_1TNLPAdapter.html#ae56c1e08c018c1276dd3461b420b965b">More...</a><br /></td></tr>
 <tr class="separator:ae56c1e08c018c1276dd3461b420b965b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac90a8a4dc8a93ace500039c2dea12b7e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a52c4e476a807a7beadf5180890345785">JacobianApproxEnum</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#ac90a8a4dc8a93ace500039c2dea12b7e">jacobian_approximation_</a></td></tr>
 <tr class="memdesc:ac90a8a4dc8a93ace500039c2dea12b7e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag indicating how Jacobian is computed.  <a href="classIpopt_1_1TNLPAdapter.html#ac90a8a4dc8a93ace500039c2dea12b7e">More...</a><br /></td></tr>
 <tr class="separator:ac90a8a4dc8a93ace500039c2dea12b7e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a079cfab19250d3e241d54e893605a24a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a079cfab19250d3e241d54e893605a24a">findiff_perturbation_</a></td></tr>
+<tr class="memitem:a079cfab19250d3e241d54e893605a24a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a079cfab19250d3e241d54e893605a24a">findiff_perturbation_</a></td></tr>
 <tr class="memdesc:a079cfab19250d3e241d54e893605a24a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Size of the perturbation for the derivative approximation.  <a href="classIpopt_1_1TNLPAdapter.html#a079cfab19250d3e241d54e893605a24a">More...</a><br /></td></tr>
 <tr class="separator:a079cfab19250d3e241d54e893605a24a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0093b439306068e7373bd3a9fb46ec5e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a0093b439306068e7373bd3a9fb46ec5e">point_perturbation_radius_</a></td></tr>
+<tr class="memitem:a0093b439306068e7373bd3a9fb46ec5e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a0093b439306068e7373bd3a9fb46ec5e">point_perturbation_radius_</a></td></tr>
 <tr class="memdesc:a0093b439306068e7373bd3a9fb46ec5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximal perturbation of the initial point.  <a href="classIpopt_1_1TNLPAdapter.html#a0093b439306068e7373bd3a9fb46ec5e">More...</a><br /></td></tr>
 <tr class="separator:a0093b439306068e7373bd3a9fb46ec5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a00c3fc0f69fd1d499c2a3f52910c6ac5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a00c3fc0f69fd1d499c2a3f52910c6ac5">dependency_detection_with_rhs_</a></td></tr>
 <tr class="memdesc:a00c3fc0f69fd1d499c2a3f52910c6ac5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag indicating if rhs should be considered during dependency detection.  <a href="classIpopt_1_1TNLPAdapter.html#a00c3fc0f69fd1d499c2a3f52910c6ac5">More...</a><br /></td></tr>
 <tr class="separator:a00c3fc0f69fd1d499c2a3f52910c6ac5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad582f7f663c71f909878d88255010b32"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#ad582f7f663c71f909878d88255010b32">tol_</a></td></tr>
+<tr class="memitem:ad582f7f663c71f909878d88255010b32"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#ad582f7f663c71f909878d88255010b32">tol_</a></td></tr>
 <tr class="memdesc:ad582f7f663c71f909878d88255010b32"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overall convergence tolerance.  <a href="classIpopt_1_1TNLPAdapter.html#ad582f7f663c71f909878d88255010b32">More...</a><br /></td></tr>
 <tr class="separator:ad582f7f663c71f909878d88255010b32"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Problem Size Data</div></td></tr>
-<tr class="memitem:a485a1089277a67b7f8cc6add3d8a5318"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a485a1089277a67b7f8cc6add3d8a5318">n_full_x_</a></td></tr>
+<tr class="memitem:a485a1089277a67b7f8cc6add3d8a5318"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a485a1089277a67b7f8cc6add3d8a5318">n_full_x_</a></td></tr>
 <tr class="memdesc:a485a1089277a67b7f8cc6add3d8a5318"><td class="mdescLeft">&#160;</td><td class="mdescRight">full dimension of x (fixed + non-fixed)  <a href="classIpopt_1_1TNLPAdapter.html#a485a1089277a67b7f8cc6add3d8a5318">More...</a><br /></td></tr>
 <tr class="separator:a485a1089277a67b7f8cc6add3d8a5318"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5a45f8099edd4bc75fe2c763ab4746fc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a5a45f8099edd4bc75fe2c763ab4746fc">n_full_g_</a></td></tr>
+<tr class="memitem:a5a45f8099edd4bc75fe2c763ab4746fc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a5a45f8099edd4bc75fe2c763ab4746fc">n_full_g_</a></td></tr>
 <tr class="memdesc:a5a45f8099edd4bc75fe2c763ab4746fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">full dimension of g (c + d)  <a href="classIpopt_1_1TNLPAdapter.html#a5a45f8099edd4bc75fe2c763ab4746fc">More...</a><br /></td></tr>
 <tr class="separator:a5a45f8099edd4bc75fe2c763ab4746fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a05b40d12473106aa158e867b684f2100"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a05b40d12473106aa158e867b684f2100">nz_jac_c_</a></td></tr>
+<tr class="memitem:a05b40d12473106aa158e867b684f2100"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a05b40d12473106aa158e867b684f2100">nz_jac_c_</a></td></tr>
 <tr class="memdesc:a05b40d12473106aa158e867b684f2100"><td class="mdescLeft">&#160;</td><td class="mdescRight">non-zeros of the jacobian of c  <a href="classIpopt_1_1TNLPAdapter.html#a05b40d12473106aa158e867b684f2100">More...</a><br /></td></tr>
 <tr class="separator:a05b40d12473106aa158e867b684f2100"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a16244abda7e6915831d2236205891c1a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a16244abda7e6915831d2236205891c1a">nz_jac_c_no_extra_</a></td></tr>
+<tr class="memitem:a16244abda7e6915831d2236205891c1a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a16244abda7e6915831d2236205891c1a">nz_jac_c_no_extra_</a></td></tr>
 <tr class="memdesc:a16244abda7e6915831d2236205891c1a"><td class="mdescLeft">&#160;</td><td class="mdescRight">non-zeros of the jacobian of c without added constraints for fixed variables.  <a href="classIpopt_1_1TNLPAdapter.html#a16244abda7e6915831d2236205891c1a">More...</a><br /></td></tr>
 <tr class="separator:a16244abda7e6915831d2236205891c1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0ecfd8e8eeb843c8ee80e758a8ded757"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a0ecfd8e8eeb843c8ee80e758a8ded757">nz_jac_d_</a></td></tr>
+<tr class="memitem:a0ecfd8e8eeb843c8ee80e758a8ded757"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a0ecfd8e8eeb843c8ee80e758a8ded757">nz_jac_d_</a></td></tr>
 <tr class="memdesc:a0ecfd8e8eeb843c8ee80e758a8ded757"><td class="mdescLeft">&#160;</td><td class="mdescRight">non-zeros of the jacobian of d  <a href="classIpopt_1_1TNLPAdapter.html#a0ecfd8e8eeb843c8ee80e758a8ded757">More...</a><br /></td></tr>
 <tr class="separator:a0ecfd8e8eeb843c8ee80e758a8ded757"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a89b8ab19a8d219e6e7d38f812d33b78b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a89b8ab19a8d219e6e7d38f812d33b78b">nz_full_jac_g_</a></td></tr>
+<tr class="memitem:a89b8ab19a8d219e6e7d38f812d33b78b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a89b8ab19a8d219e6e7d38f812d33b78b">nz_full_jac_g_</a></td></tr>
 <tr class="memdesc:a89b8ab19a8d219e6e7d38f812d33b78b"><td class="mdescLeft">&#160;</td><td class="mdescRight">number of non-zeros in full-size Jacobian of g  <a href="classIpopt_1_1TNLPAdapter.html#a89b8ab19a8d219e6e7d38f812d33b78b">More...</a><br /></td></tr>
 <tr class="separator:a89b8ab19a8d219e6e7d38f812d33b78b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a541eed42ee80f8a1bbf30c4ced039b72"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a541eed42ee80f8a1bbf30c4ced039b72">nz_full_h_</a></td></tr>
+<tr class="memitem:a541eed42ee80f8a1bbf30c4ced039b72"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a541eed42ee80f8a1bbf30c4ced039b72">nz_full_h_</a></td></tr>
 <tr class="memdesc:a541eed42ee80f8a1bbf30c4ced039b72"><td class="mdescLeft">&#160;</td><td class="mdescRight">number of non-zeros in full-size Hessian  <a href="classIpopt_1_1TNLPAdapter.html#a541eed42ee80f8a1bbf30c4ced039b72">More...</a><br /></td></tr>
 <tr class="separator:a541eed42ee80f8a1bbf30c4ced039b72"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae5ef6fefe2d722ca0f58045c224ff734"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#ae5ef6fefe2d722ca0f58045c224ff734">nz_h_</a></td></tr>
+<tr class="memitem:ae5ef6fefe2d722ca0f58045c224ff734"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#ae5ef6fefe2d722ca0f58045c224ff734">nz_h_</a></td></tr>
 <tr class="memdesc:ae5ef6fefe2d722ca0f58045c224ff734"><td class="mdescLeft">&#160;</td><td class="mdescRight">number of non-zeros in the non-fixed-size Hessian  <a href="classIpopt_1_1TNLPAdapter.html#ae5ef6fefe2d722ca0f58045c224ff734">More...</a><br /></td></tr>
 <tr class="separator:ae5ef6fefe2d722ca0f58045c224ff734"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2d144c00950b6b8df3f158e601453bf9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a2d144c00950b6b8df3f158e601453bf9">n_x_fixed_</a></td></tr>
+<tr class="memitem:a2d144c00950b6b8df3f158e601453bf9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a2d144c00950b6b8df3f158e601453bf9">n_x_fixed_</a></td></tr>
 <tr class="memdesc:a2d144c00950b6b8df3f158e601453bf9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of fixed variables.  <a href="classIpopt_1_1TNLPAdapter.html#a2d144c00950b6b8df3f158e601453bf9">More...</a><br /></td></tr>
 <tr class="separator:a2d144c00950b6b8df3f158e601453bf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Local copy of spaces (for warm start)</div></td></tr>
@@ -397,18 +417,18 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:ab8a576b0db9a2f3debd13ea99416e3ec"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1SymMatrixSpace.html">SymMatrixSpace</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#ab8a576b0db9a2f3debd13ea99416e3ec">Hess_lagrangian_space_</a></td></tr>
 <tr class="separator:ab8a576b0db9a2f3debd13ea99416e3ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Local Copy of the Data</div></td></tr>
-<tr class="memitem:ae45511d41c1482f2a25e3800b4cd7627"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#ae45511d41c1482f2a25e3800b4cd7627">full_x_</a></td></tr>
+<tr class="memitem:ae45511d41c1482f2a25e3800b4cd7627"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#ae45511d41c1482f2a25e3800b4cd7627">full_x_</a></td></tr>
 <tr class="separator:ae45511d41c1482f2a25e3800b4cd7627"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a70c491d8ce531e705b7e6c68af2415a6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a70c491d8ce531e705b7e6c68af2415a6">full_lambda_</a></td></tr>
+<tr class="memitem:a70c491d8ce531e705b7e6c68af2415a6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a70c491d8ce531e705b7e6c68af2415a6">full_lambda_</a></td></tr>
 <tr class="memdesc:a70c491d8ce531e705b7e6c68af2415a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">copy of the full x vector (fixed &amp; non-fixed)  <a href="classIpopt_1_1TNLPAdapter.html#a70c491d8ce531e705b7e6c68af2415a6">More...</a><br /></td></tr>
 <tr class="separator:a70c491d8ce531e705b7e6c68af2415a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a18a4549bcd6b661bc7d30c6a70ebea5b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a18a4549bcd6b661bc7d30c6a70ebea5b">full_g_</a></td></tr>
+<tr class="memitem:a18a4549bcd6b661bc7d30c6a70ebea5b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a18a4549bcd6b661bc7d30c6a70ebea5b">full_g_</a></td></tr>
 <tr class="memdesc:a18a4549bcd6b661bc7d30c6a70ebea5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">copy of lambda (yc &amp; yd)  <a href="classIpopt_1_1TNLPAdapter.html#a18a4549bcd6b661bc7d30c6a70ebea5b">More...</a><br /></td></tr>
 <tr class="separator:a18a4549bcd6b661bc7d30c6a70ebea5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7572d0a3f91ff277bbfde425d825a0aa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a7572d0a3f91ff277bbfde425d825a0aa">jac_g_</a></td></tr>
+<tr class="memitem:a7572d0a3f91ff277bbfde425d825a0aa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a7572d0a3f91ff277bbfde425d825a0aa">jac_g_</a></td></tr>
 <tr class="memdesc:a7572d0a3f91ff277bbfde425d825a0aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">copy of g (c &amp; d)  <a href="classIpopt_1_1TNLPAdapter.html#a7572d0a3f91ff277bbfde425d825a0aa">More...</a><br /></td></tr>
 <tr class="separator:a7572d0a3f91ff277bbfde425d825a0aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7c21b0451d9d98aa8aee6d1919866a9e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a7c21b0451d9d98aa8aee6d1919866a9e">c_rhs_</a></td></tr>
+<tr class="memitem:a7c21b0451d9d98aa8aee6d1919866a9e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a7c21b0451d9d98aa8aee6d1919866a9e">c_rhs_</a></td></tr>
 <tr class="memdesc:a7c21b0451d9d98aa8aee6d1919866a9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">the values for the full jacobian of g  <a href="classIpopt_1_1TNLPAdapter.html#a7c21b0451d9d98aa8aee6d1919866a9e">More...</a><br /></td></tr>
 <tr class="separator:a7c21b0451d9d98aa8aee6d1919866a9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Tags for deciding when to update internal copies of vectors</div></td></tr>
@@ -450,30 +470,39 @@ Private Attributes</h2></td></tr>
 <tr class="separator:acf99acf791374c529e733ba9eadb3ae7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a97661716fed42086f8f44a5195165e42"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1ExpansionMatrix.html">ExpansionMatrix</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a97661716fed42086f8f44a5195165e42">P_d_g_</a></td></tr>
 <tr class="separator:a97661716fed42086f8f44a5195165e42"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a02e7fe0e1f1f0f56e677fe4bcd33e187"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a02e7fe0e1f1f0f56e677fe4bcd33e187">jac_idx_map_</a></td></tr>
+<tr class="memitem:a02e7fe0e1f1f0f56e677fe4bcd33e187"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a02e7fe0e1f1f0f56e677fe4bcd33e187">jac_idx_map_</a></td></tr>
 <tr class="separator:a02e7fe0e1f1f0f56e677fe4bcd33e187"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aee096b36c667539676af3a842bbd8e4b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#aee096b36c667539676af3a842bbd8e4b">h_idx_map_</a></td></tr>
+<tr class="memitem:aee096b36c667539676af3a842bbd8e4b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#aee096b36c667539676af3a842bbd8e4b">h_idx_map_</a></td></tr>
 <tr class="separator:aee096b36c667539676af3a842bbd8e4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a08b4eaae0a2a1e657927b719d2f81232"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a08b4eaae0a2a1e657927b719d2f81232">x_fixed_map_</a></td></tr>
+<tr class="memitem:a08b4eaae0a2a1e657927b719d2f81232"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a08b4eaae0a2a1e657927b719d2f81232">x_fixed_map_</a></td></tr>
 <tr class="memdesc:a08b4eaae0a2a1e657927b719d2f81232"><td class="mdescLeft">&#160;</td><td class="mdescRight">Position of fixed variables.  <a href="classIpopt_1_1TNLPAdapter.html#a08b4eaae0a2a1e657927b719d2f81232">More...</a><br /></td></tr>
 <tr class="separator:a08b4eaae0a2a1e657927b719d2f81232"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d6a750f7915c324151c9caf3d9375ce"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a7d6a750f7915c324151c9caf3d9375ce">jac_fixed_idx_map_</a></td></tr>
+<tr class="memdesc:a7d6a750f7915c324151c9caf3d9375ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Index mapping of Jacobian w.r.t.  <a href="classIpopt_1_1TNLPAdapter.html#a7d6a750f7915c324151c9caf3d9375ce">More...</a><br /></td></tr>
+<tr class="separator:a7d6a750f7915c324151c9caf3d9375ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb9287abae233f624480be2b73471bf0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#afb9287abae233f624480be2b73471bf0">jac_fixed_iRow_</a></td></tr>
+<tr class="separator:afb9287abae233f624480be2b73471bf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3cc86a398f70f92171b4c5c6652c6f7c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a3cc86a398f70f92171b4c5c6652c6f7c">jac_fixed_jCol_</a></td></tr>
+<tr class="separator:a3cc86a398f70f92171b4c5c6652c6f7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa67f5efa81246e1a2eed5e1aadb6902c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#aa67f5efa81246e1a2eed5e1aadb6902c">nz_jac_fixed_</a></td></tr>
+<tr class="separator:aa67f5efa81246e1a2eed5e1aadb6902c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Data for finite difference approximations of derivatives</div></td></tr>
-<tr class="memitem:a709b6094a5897c6e0619b2ac4d53da62"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a709b6094a5897c6e0619b2ac4d53da62">findiff_jac_nnz_</a></td></tr>
+<tr class="memitem:a709b6094a5897c6e0619b2ac4d53da62"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a709b6094a5897c6e0619b2ac4d53da62">findiff_jac_nnz_</a></td></tr>
 <tr class="memdesc:a709b6094a5897c6e0619b2ac4d53da62"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of unique nonzeros in constraint Jacobian.  <a href="classIpopt_1_1TNLPAdapter.html#a709b6094a5897c6e0619b2ac4d53da62">More...</a><br /></td></tr>
 <tr class="separator:a709b6094a5897c6e0619b2ac4d53da62"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb5178736563cb929d8621aa0b39510d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#acb5178736563cb929d8621aa0b39510d">findiff_jac_ia_</a></td></tr>
+<tr class="memitem:acb5178736563cb929d8621aa0b39510d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#acb5178736563cb929d8621aa0b39510d">findiff_jac_ia_</a></td></tr>
 <tr class="memdesc:acb5178736563cb929d8621aa0b39510d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start position for nonzero indices in ja for each column of Jacobian.  <a href="classIpopt_1_1TNLPAdapter.html#acb5178736563cb929d8621aa0b39510d">More...</a><br /></td></tr>
 <tr class="separator:acb5178736563cb929d8621aa0b39510d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1986ae7d0d837358076dc1c61a5d2234"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a1986ae7d0d837358076dc1c61a5d2234">findiff_jac_ja_</a></td></tr>
+<tr class="memitem:a1986ae7d0d837358076dc1c61a5d2234"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a1986ae7d0d837358076dc1c61a5d2234">findiff_jac_ja_</a></td></tr>
 <tr class="memdesc:a1986ae7d0d837358076dc1c61a5d2234"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ordered by columns, for each column the row indices in Jacobian.  <a href="classIpopt_1_1TNLPAdapter.html#a1986ae7d0d837358076dc1c61a5d2234">More...</a><br /></td></tr>
 <tr class="separator:a1986ae7d0d837358076dc1c61a5d2234"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4c7dded6dd780c57c78a458294595f33"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a4c7dded6dd780c57c78a458294595f33">findiff_jac_postriplet_</a></td></tr>
+<tr class="memitem:a4c7dded6dd780c57c78a458294595f33"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a4c7dded6dd780c57c78a458294595f33">findiff_jac_postriplet_</a></td></tr>
 <tr class="memdesc:a4c7dded6dd780c57c78a458294595f33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Position of entry in original triplet matrix.  <a href="classIpopt_1_1TNLPAdapter.html#a4c7dded6dd780c57c78a458294595f33">More...</a><br /></td></tr>
 <tr class="separator:a4c7dded6dd780c57c78a458294595f33"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac02aa4430d27febd078980751b462dd9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#ac02aa4430d27febd078980751b462dd9">findiff_x_l_</a></td></tr>
+<tr class="memitem:ac02aa4430d27febd078980751b462dd9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#ac02aa4430d27febd078980751b462dd9">findiff_x_l_</a></td></tr>
 <tr class="memdesc:ac02aa4430d27febd078980751b462dd9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy of the lower bounds.  <a href="classIpopt_1_1TNLPAdapter.html#ac02aa4430d27febd078980751b462dd9">More...</a><br /></td></tr>
 <tr class="separator:ac02aa4430d27febd078980751b462dd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a808dc8c97da2102d356b05f08c3f5cd8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a808dc8c97da2102d356b05f08c3f5cd8">findiff_x_u_</a></td></tr>
+<tr class="memitem:a808dc8c97da2102d356b05f08c3f5cd8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a808dc8c97da2102d356b05f08c3f5cd8">findiff_x_u_</a></td></tr>
 <tr class="memdesc:a808dc8c97da2102d356b05f08c3f5cd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy of the upper bounds.  <a href="classIpopt_1_1TNLPAdapter.html#a808dc8c97da2102d356b05f08c3f5cd8">More...</a><br /></td></tr>
 <tr class="separator:a808dc8c97da2102d356b05f08c3f5cd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -488,14 +517,27 @@ Method implementing the detection of linearly dependent equality constraints</h2
 <tr class="memitem:ababbcdc76666d5f8eaa1d259185d48f9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1TDependencyDetector.html">TDependencyDetector</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#ababbcdc76666d5f8eaa1d259185d48f9">dependency_detector_</a></td></tr>
 <tr class="memdesc:ababbcdc76666d5f8eaa1d259185d48f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Object that can be used to detect linearly dependent rows in the equality constraint Jacobian.  <a href="classIpopt_1_1TNLPAdapter.html#ababbcdc76666d5f8eaa1d259185d48f9">More...</a><br /></td></tr>
 <tr class="separator:ababbcdc76666d5f8eaa1d259185d48f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa1af539a2cf5c9267c906854e62eb6d6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#aa1af539a2cf5c9267c906854e62eb6d6">DetermineDependentConstraints</a> (<a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> n_x_var, const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *x_not_fixed_map, const <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *x_l, const <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *x_u, const <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *g_l, const <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *g_u, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> n_c, const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *c_map, std::list&lt; <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> &gt; &amp;c_deps)</td></tr>
+<tr class="memitem:aa1af539a2cf5c9267c906854e62eb6d6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#aa1af539a2cf5c9267c906854e62eb6d6">DetermineDependentConstraints</a> (<a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> n_x_var, const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *x_not_fixed_map, const <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *x_l, const <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *x_u, const <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *g_l, const <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *g_u, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> n_c, const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *c_map, std::list&lt; <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> &gt; &amp;c_deps)</td></tr>
 <tr class="separator:aa1af539a2cf5c9267c906854e62eb6d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>This class adapts the <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> interface so it looks like an <a class="el" href="classIpopt_1_1NLP.html">NLP</a> interface. </p>
-<p>This is an Adapter class (Design Patterns) that converts a <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> to an <a class="el" href="classIpopt_1_1NLP.html">NLP</a>. This allows users to write to the "more convenient" <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> interface. </p>
+<div class="textblock"><p>This class adapts the <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> interface so it looks like an <a class="el" href="classIpopt_1_1NLP.html" title="Traditional NLP.">NLP</a> interface. </p>
+<p>This is an Adapter class (Design Patterns) that converts a <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> to an <a class="el" href="classIpopt_1_1NLP.html" title="Traditional NLP.">NLP</a>. This allows users to write to the "more convenient" <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> interface.</p>
+<p>Given a <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> </p><p class="formulaDsp">
+\begin{eqnarray*} \mathrm{min} &amp;&amp; f(x), \\ \mathrm{s.t.} &amp;&amp; g_L \leq g(x) \leq g_U, &amp;\qquad \lambda\\ &amp;&amp; x_L \leq x \leq x_U, &amp;\qquad z_L, z_U \end{eqnarray*}
+</p>
+<p> let \(E = \{i : g_{L,i} = g_{U,i}\}\) and \(I = \{i : g_{L,i} \neq g_{U,i}\}\) be the indices of equality and inequality constraints, respectively. The dual variables for the constraints are \(\lambda\). The dual variables for the variable bounds are \(z_L\) and \(z_U\).</p>
+<p>A <a class="el" href="classIpopt_1_1TNLPAdapter.html" title="This class adapts the TNLP interface so it looks like an NLP interface.">TNLPAdapter</a> represents the problem </p><p class="formulaDsp">
+\begin{eqnarray*} \mathrm{min} &amp;&amp; f(x), \\ \mathrm{s.t.} &amp;&amp; c(x) = 0, &amp;\qquad y_c\\ &amp;&amp; d_L \leq d(x) \leq d_U, &amp;\qquad y_d \\ &amp;&amp; x_L \leq x \leq x_U, &amp;\qquad z_L, z_U \end{eqnarray*}
+</p>
+<p> where \(c(x) = g_E(x) - g_{L,E}\), i.e., corresponding to equality constraints of <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a>, and \(d(x) = g_I(x)\), \(d_L = g_{L,I}\), \(d_U = g_{U,I}\), i.e., corresponding to inequality constraints of <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a>.</p>
+<p>The dual variables for the constraints are \(y_c\) and \(y_d\). The dual variables for the bounds on slack and original variables are \(s_L\), \(s_U\), \(z_L\), \(z_U\).</p>
+<p>Internally, Ipopt reformulates \(d_L \leq d(x) \leq d_U\) as </p><p class="formulaDsp">
+\begin{eqnarray*} &amp;&amp; d(x) - s = 0 &amp;\qquad y_d\\ &amp;&amp; d_L \leq s \leq d_U &amp;\qquad v_L, v_U \\ \end{eqnarray*}
+</p>
+<p>If fixed variables are present ( \(x_{L,i} = x_{U,i}\)) in the <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> and fixed_variable_treatment is set to make_parameter, then these variables are not made visible to <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> internally. If fixed_variable_treatment is set to make_constraint, then their bounds relaxed and equality constraints \(x_i - x_{L,i} = 0\) are added to the end of \(c(x) = 0\). </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00029">29</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00065">65</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 </div><h2 class="groupheader">Member Enumeration Documentation</h2>
 <a id="a9613d9f090849cf038c2e27d847fe723"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9613d9f090849cf038c2e27d847fe723">&#9670;&nbsp;</a></span>FixedVariableTreatmentEnum</h2>
@@ -512,11 +554,13 @@ Method implementing the detection of linearly dependent equality constraints</h2
 <p>Enum for treatment of fixed variables option. </p>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a9613d9f090849cf038c2e27d847fe723a89a51b89a28b01886edbe0ea5f43a5bf"></a>MAKE_PARAMETER&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a9613d9f090849cf038c2e27d847fe723a6c9f76d1180c198af960c238e95c0789"></a>MAKE_PARAMETER_NODUAL&#160;</td><td class="fielddoc"><dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+</td></tr>
 <tr><td class="fieldname"><a id="a9613d9f090849cf038c2e27d847fe723a110776c2a658b233d3798b792ee1b2d8"></a>MAKE_CONSTRAINT&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a9613d9f090849cf038c2e27d847fe723a23d6783c50ae47d4d8f6f486db23ff5a"></a>RELAX_BOUNDS&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00204">204</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00240">240</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -540,7 +584,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 <tr><td class="fieldname"><a id="af8cb74ea21f4e825c746861f8d1e515aa42d317820b025c3ffa9bf02db91c2c0b"></a>ONLY_SECOND_ORDER_TEST&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00212">212</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00249">249</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -562,7 +606,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 <tr><td class="fieldname"><a id="a52c4e476a807a7beadf5180890345785a462616fd854f81d1bc564abc687f81a6"></a>JAC_FINDIFF_VALUES&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00221">221</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00258">258</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -723,7 +767,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p>Overload if you want the chance to process options or parameters that may be specific to the <a class="el" href="classIpopt_1_1NLP.html">NLP</a>. </p>
+<p>Overload if you want the chance to process options or parameters that may be specific to the <a class="el" href="classIpopt_1_1NLP.html" title="Traditional NLP.">NLP</a>. </p>
 
 <p>Reimplemented from <a class="el" href="classIpopt_1_1NLP.html#a57e81a7b5f494899c4dd6279f30fa9f0">Ipopt::NLP</a>.</p>
 
@@ -1055,7 +1099,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> &amp;&#160;</td>
           <td class="paramname"><em>f</em>&#160;</td>
         </tr>
         <tr>
@@ -1283,7 +1327,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>obj_factor</em>, </td>
         </tr>
         <tr>
@@ -1351,7 +1395,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> &amp;&#160;</td>
           <td class="paramname">, </td>
         </tr>
         <tr>
@@ -1452,7 +1496,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname">, </td>
         </tr>
         <tr>
@@ -1506,61 +1550,61 @@ Method implementing the detection of linearly dependent equality constraints</h2
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname">, </td>
         </tr>
         <tr>
@@ -1650,7 +1694,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>deriv_test_start_index</em>&#160;</td>
         </tr>
         <tr>
@@ -1716,12 +1760,12 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Accessor method for the underlying <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00238">238</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00275">275</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a9d1679322cc963f1e58aed0d9416247c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9d1679322cc963f1e58aed0d9416247c">&#9670;&nbsp;</a></span>ResortX()</h2>
+<a id="a1f19ad31a25cbed6090f504857e85959"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f19ad31a25cbed6090f504857e85959">&#9670;&nbsp;</a></span>ResortX()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1735,8 +1779,14 @@ Method implementing the detection of linearly dependent equality constraints</h2
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td>
-          <td class="paramname"><em>x_orig</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
+          <td class="paramname"><em>x_orig</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>usefixedvals</em> = <code>true</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1746,12 +1796,21 @@ Method implementing the detection of linearly dependent equality constraints</h2
       </table>
 </div><div class="memdoc">
 
-<p>Sort the primal variables, and add the fixed values in x. </p>
+<p>Sort the primal variables, and add the fixed values in x_orig. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>internal values for primal variables x </td></tr>
+    <tr><td class="paramname">x_orig</td><td>vector to fill with values from x </td></tr>
+    <tr><td class="paramname">usefixedvals</td><td>whether to use stored variable fixings for fixed variables (true), or zero (false) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
 </div>
 </div>
-<a id="a33e37afa89a562815460ccbe63d2e659"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a33e37afa89a562815460ccbe63d2e659">&#9670;&nbsp;</a></span>ResortG()</h2>
+<a id="aa7d13eace81ff7d3181ef629ce3a4a6d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa7d13eace81ff7d3181ef629ce3a4a6d">&#9670;&nbsp;</a></span>ResortG()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1771,8 +1830,14 @@ Method implementing the detection of linearly dependent equality constraints</h2
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td>
-          <td class="paramname"><em>g_orig</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
+          <td class="paramname"><em>g_orig</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>correctrhs</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1782,16 +1847,29 @@ Method implementing the detection of linearly dependent equality constraints</h2
       </table>
 </div><div class="memdoc">
 
+<p>Sort constraint values. </p>
+<p>To <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a>, the equality constraints are presented with right hand side zero. Specifying correctrhs=true corrects for the original right hand side. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">c</td><td>internal activity for equality constraints </td></tr>
+    <tr><td class="paramname">d</td><td>internal activity for inequality constraints </td></tr>
+    <tr><td class="paramname">g_orig</td><td>vector to fill with values from c and d </td></tr>
+    <tr><td class="paramname">correctrhs</td><td>whether to add unscaled rhs-values for constraints that internally correspond to c(x)=0 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+
 </div>
 </div>
-<a id="a36f2cffa17853a2dbf02d85705e57bac"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a36f2cffa17853a2dbf02d85705e57bac">&#9670;&nbsp;</a></span>ResortBnds()</h2>
+<a id="a0c135f4a0ca1a65154feb164ff3e45ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c135f4a0ca1a65154feb164ff3e45ae">&#9670;&nbsp;</a></span>ResortBounds()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void Ipopt::TNLPAdapter::ResortBnds </td>
+          <td class="memname">void Ipopt::TNLPAdapter::ResortBounds </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;&#160;</td>
           <td class="paramname"><em>x_L</em>, </td>
@@ -1799,7 +1877,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>x_L_orig</em>, </td>
         </tr>
         <tr>
@@ -1811,7 +1889,62 @@ Method implementing the detection of linearly dependent equality constraints</h2
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
+          <td class="paramname"><em>x_U_orig</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Provides values for lower and upper bounds on variables for given Ipopt-internal vectors. </p>
+<p>Similar to ResortX, but does so for two arrays and does not set any values for fixed variables. </p><dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x_L</td><td>internal values for lower bounds on x </td></tr>
+    <tr><td class="paramname">x_L_orig</td><td>vector to fill with values from x_L </td></tr>
+    <tr><td class="paramname">x_U</td><td>internal values for upper bounds on x </td></tr>
+    <tr><td class="paramname">x_U_orig</td><td>vector to fill with values from x_U </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a27af8d1553bc89fc1c003459bb082fcc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27af8d1553bc89fc1c003459bb082fcc">&#9670;&nbsp;</a></span>ResortBnds()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="IpTypes_8h.html#a24c578b20e2cd4eeb0060056ea13cbe5">IPOPT_DEPRECATED</a> void Ipopt::TNLPAdapter::ResortBnds </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;&#160;</td>
+          <td class="paramname"><em>x_L</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
+          <td class="paramname"><em>x_L_orig</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;&#160;</td>
+          <td class="paramname"><em>x_U</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>x_U_orig</em>, </td>
         </tr>
         <tr>
@@ -1826,20 +1959,308 @@ Method implementing the detection of linearly dependent equality constraints</h2
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Provides values for lower and upper bounds on variables for given Ipopt-internal vectors. </p>
-<p>Similar to ResortX, but does so for two arrays and does not set any values for fixed variables. </p>
+<p>Similar to ResortX, but does so for two arrays and does not set any values for fixed variables.</p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000020">Deprecated:</a></b></dt><dd>Use <a class="el" href="classIpopt_1_1TNLPAdapter.html#a0c135f4a0ca1a65154feb164ff3e45ae" title="Provides values for lower and upper bounds on variables for given Ipopt-internal vectors.">ResortBounds()</a> instead. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">x_L</td><td>internal values for lower bounds on x </td></tr>
     <tr><td class="paramname">x_L_orig</td><td>vector to fill with values from x_L </td></tr>
     <tr><td class="paramname">x_U</td><td>internal values for upper bounds on x </td></tr>
     <tr><td class="paramname">x_U_orig</td><td>vector to fill with values from x_U </td></tr>
-    <tr><td class="paramname">clearorig</td><td>whether to initialize complete x_L_orig and x_U_orig to 0.0 before setting values for non-fixed variables </td></tr>
+    <tr><td class="paramname">clearorig</td><td>whether to initialize complete x_L_orig and x_U_orig to 0.0 before setting values for non-fixed variables - ignored </td></tr>
   </table>
   </dd>
 </dl>
+
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00324">324</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+
+</div>
+</div>
+<a id="acd0254ec27ef13e6dc8527154f9713bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd0254ec27ef13e6dc8527154f9713bc">&#9670;&nbsp;</a></span>ResortBoundMultipliers()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ipopt::TNLPAdapter::ResortBoundMultipliers </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;&#160;</td>
+          <td class="paramname"><em>y_c</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;&#160;</td>
+          <td class="paramname"><em>y_d</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;&#160;</td>
+          <td class="paramname"><em>z_L</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
+          <td class="paramname"><em>z_L_orig</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;&#160;</td>
+          <td class="paramname"><em>z_U</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
+          <td class="paramname"><em>z_U_orig</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Provides values for dual multipliers on lower and upper bounds on variables for given Ipopt-internal vectors. </p>
+<p>Similar to ResortBounds, but also provides dual values for fixed variables if fixed_variable_treatment is set to make_constraint or make_parameter.</p>
+<dl class="section attention"><dt>Attention</dt><dd>If there are fixed variables and fixed_variable_treatment is make_parameter (the default), then the Gradient of f(x) and the Jacobian of g(x) may be reevaluated here (that's why the function needs x). Further, in this setting, this function only provides correct bound multipliers for fixed variables if x, y_c, and y_d correspond to the unscaled problem.</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>True, if bound multipliers could be assigned. False if there was an evaluation error when calculating bound multipliers for fixed variables. </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>internal values for primal variables x </td></tr>
+    <tr><td class="paramname">y_c</td><td>internal values for equality constraint multipliers </td></tr>
+    <tr><td class="paramname">y_d</td><td>internal values for inequality constraint multipliers </td></tr>
+    <tr><td class="paramname">z_L</td><td>internal values for lower bound multipliers </td></tr>
+    <tr><td class="paramname">z_L_orig</td><td>vector to fill with values from z_L </td></tr>
+    <tr><td class="paramname">z_U</td><td>internal values for upper bound multipliers </td></tr>
+    <tr><td class="paramname">z_U_orig</td><td>vector to fill with values from z_U </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a17ea7f7ddfff70fe7854e6480ff15423"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a17ea7f7ddfff70fe7854e6480ff15423">&#9670;&nbsp;</a></span>GetFullDimensions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ipopt::TNLPAdapter::GetFullDimensions </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> &amp;&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> &amp;&#160;</td>
+          <td class="paramname"><em>m</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get number of variables and number of constraints in <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a>. </p>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n</td><td>storage for full dimension of x (fixed + non-fixed) </td></tr>
+    <tr><td class="paramname">m</td><td>storage for full dimension of g (c + d) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00361">361</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a6e804930a7b33c865fb617c592bc3df0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e804930a7b33c865fb617c592bc3df0">&#9670;&nbsp;</a></span>GetFixedVariables()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ipopt::TNLPAdapter::GetFixedVariables </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> &amp;&#160;</td>
+          <td class="paramname"><em>n_x_fixed</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&amp;&#160;</td>
+          <td class="paramname"><em>x_fixed_map</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a9613d9f090849cf038c2e27d847fe723">FixedVariableTreatmentEnum</a> &amp;&#160;</td>
+          <td class="paramname"><em>fixed_variable_treatment</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get number and indices of fixed variables. </p>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">n_x_fixed</td><td>storage for number of fixed variables in <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> </td></tr>
+    <tr><td class="paramname">x_fixed_map</td><td>storage for pointer to array that holds indices of fixed variables (has length n_fixed_x, can be NULL if n_fixed_x=0) </td></tr>
+    <tr><td class="paramname">fixed_variable_treatment</td><td>treatment for fixed variables as used by <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00373">373</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a362ee0bc15da61231e129d88cd8ab1f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a362ee0bc15da61231e129d88cd8ab1f3">&#9670;&nbsp;</a></span>GetPermutationMatrices()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ipopt::TNLPAdapter::GetPermutationMatrices </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1ExpansionMatrix.html">ExpansionMatrix</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>P_x_full_x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1ExpansionMatrix.html">ExpansionMatrix</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>P_x_x_L</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1ExpansionMatrix.html">ExpansionMatrix</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>P_x_x_U</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1ExpansionMatrix.html">ExpansionMatrix</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>P_c_g</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1ExpansionMatrix.html">ExpansionMatrix</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>P_d_g</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get mappings between <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> indices and <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> internal indices for variables and constraints. </p>
+<p>See the various ResortXyz functions on usage.</p>
+<dl class="section attention"><dt>Attention</dt><dd>P_x_full_x is set to NULL if there are no fixed variables or fixed_variable_treatment is not make_parameter </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">P_x_full_x</td><td>map from <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> variable indices to <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> internal indices, filtered variables get mapped to -1 </td></tr>
+    <tr><td class="paramname">P_x_x_L</td><td>map from indices on lower bounds on x to <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> internal indices for x </td></tr>
+    <tr><td class="paramname">P_x_x_U</td><td>map from indices on upper bounds on x to <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> internal indices for x </td></tr>
+    <tr><td class="paramname">P_c_g</td><td>map from indices on equality constraints (c(x)=0) into <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> constraint indices (g_l &lt;= g(x) &lt;= g_u) </td></tr>
+    <tr><td class="paramname">P_d_g</td><td>map from indices on inequality constraints (d(x)-s=0) into <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> constraint indices (g_l &lt;= g(x) &lt;= g_u) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00391">391</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a0e4021449895d7f4afb51c17dece33d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e4021449895d7f4afb51c17dece33d9">&#9670;&nbsp;</a></span>GetC_Rhs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>* Ipopt::TNLPAdapter::GetC_Rhs </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get right-hand-sides that are added into c(x) </p>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00409">409</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -1883,55 +2304,55 @@ Method implementing the detection of linearly dependent equality constraints</h2
         <tr>
           <td class="memname">bool Ipopt::TNLPAdapter::DetermineDependentConstraints </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>n_x_var</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>x_not_fixed_map</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>x_l</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>x_u</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>g_l</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>g_u</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>n_c</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>c_map</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::list&lt; <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">std::list&lt; <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>c_deps</em>&#160;</td>
         </tr>
         <tr>
@@ -2075,13 +2496,13 @@ Method implementing the detection of linearly dependent equality constraints</h2
         <tr>
           <td class="memname">void Ipopt::TNLPAdapter::initialize_findiff_jac </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>iRow</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>jCol</em>&#160;</td>
         </tr>
         <tr>
@@ -2124,7 +2545,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Pointer to the <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> class (class specific to Number* vectors and triplet matrices) </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00309">309</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00451">451</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2150,7 +2571,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p><a class="el" href="classIpopt_1_1Journalist.html" title="Class responsible for all message output.">Journalist</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00312">312</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00454">454</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2176,7 +2597,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Object that can be used to detect linearly dependent rows in the equality constraint Jacobian. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00315">315</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00457">457</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2190,7 +2611,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> Ipopt::TNLPAdapter::nlp_lower_bound_inf_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> Ipopt::TNLPAdapter::nlp_lower_bound_inf_</td>
         </tr>
       </table>
   </td>
@@ -2202,7 +2623,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Value for a lower bound that denotes -infinity. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00320">320</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00462">462</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2216,7 +2637,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> Ipopt::TNLPAdapter::nlp_upper_bound_inf_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> Ipopt::TNLPAdapter::nlp_upper_bound_inf_</td>
         </tr>
       </table>
   </td>
@@ -2228,7 +2649,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Value for a upper bound that denotes infinity. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00322">322</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00464">464</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2254,7 +2675,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Flag indicating how fixed variables should be handled. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00324">324</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00466">466</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2268,7 +2689,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> Ipopt::TNLPAdapter::bound_relax_factor_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> Ipopt::TNLPAdapter::bound_relax_factor_</td>
         </tr>
       </table>
   </td>
@@ -2280,7 +2701,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Determines relaxation of fixing bound for RELAX_BOUNDS. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00326">326</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00468">468</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2307,7 +2728,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 <p>Maximal slack for one-sidedly bounded variables. </p>
 <p>If a variable has only one bound, say a lower bound xL, then an upper bound xL + max_onesided_bound_slack_. If this value is zero, no upper bound is added. Whether and which derivative test should be performed at starting point </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00333">333</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00475">475</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2321,7 +2742,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> Ipopt::TNLPAdapter::derivative_test_perturbation_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> Ipopt::TNLPAdapter::derivative_test_perturbation_</td>
         </tr>
       </table>
   </td>
@@ -2333,7 +2754,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Size of the perturbation for the derivative test. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00335">335</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00477">477</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2347,7 +2768,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> Ipopt::TNLPAdapter::derivative_test_tol_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> Ipopt::TNLPAdapter::derivative_test_tol_</td>
         </tr>
       </table>
   </td>
@@ -2359,7 +2780,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Relative threshold for marking deviation from finite difference test. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00337">337</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00479">479</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2385,7 +2806,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Flag indicating if all test values should be printed, or only those violating the threshold. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00339">339</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00481">481</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2399,7 +2820,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::TNLPAdapter::derivative_test_first_index_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::TNLPAdapter::derivative_test_first_index_</td>
         </tr>
       </table>
   </td>
@@ -2411,7 +2832,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Index of first quantity to be checked. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00341">341</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00483">483</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2437,7 +2858,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Flag indicating whether the <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> with identical structure has already been solved before. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00343">343</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00485">485</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2463,7 +2884,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Flag indicating what Hessian information is to be used. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00345">345</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00487">487</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2477,7 +2898,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::TNLPAdapter::num_linear_variables_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::TNLPAdapter::num_linear_variables_</td>
         </tr>
       </table>
   </td>
@@ -2489,7 +2910,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Number of linear variables. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00347">347</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00489">489</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2515,7 +2936,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Flag indicating how Jacobian is computed. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00349">349</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00491">491</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2529,7 +2950,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> Ipopt::TNLPAdapter::findiff_perturbation_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> Ipopt::TNLPAdapter::findiff_perturbation_</td>
         </tr>
       </table>
   </td>
@@ -2541,7 +2962,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Size of the perturbation for the derivative approximation. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00351">351</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00493">493</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2555,7 +2976,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> Ipopt::TNLPAdapter::point_perturbation_radius_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> Ipopt::TNLPAdapter::point_perturbation_radius_</td>
         </tr>
       </table>
   </td>
@@ -2567,7 +2988,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Maximal perturbation of the initial point. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00353">353</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00495">495</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2593,7 +3014,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Flag indicating if rhs should be considered during dependency detection. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00355">355</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00497">497</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2607,7 +3028,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> Ipopt::TNLPAdapter::tol_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> Ipopt::TNLPAdapter::tol_</td>
         </tr>
       </table>
   </td>
@@ -2619,7 +3040,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Overall convergence tolerance. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00358">358</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00500">500</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2633,7 +3054,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::TNLPAdapter::n_full_x_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::TNLPAdapter::n_full_x_</td>
         </tr>
       </table>
   </td>
@@ -2645,7 +3066,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>full dimension of x (fixed + non-fixed) </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00364">364</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00506">506</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2659,7 +3080,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::TNLPAdapter::n_full_g_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::TNLPAdapter::n_full_g_</td>
         </tr>
       </table>
   </td>
@@ -2671,7 +3092,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>full dimension of g (c + d) </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00366">366</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00508">508</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2685,7 +3106,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::TNLPAdapter::nz_jac_c_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::TNLPAdapter::nz_jac_c_</td>
         </tr>
       </table>
   </td>
@@ -2697,7 +3118,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>non-zeros of the jacobian of c </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00368">368</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00510">510</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2711,7 +3132,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::TNLPAdapter::nz_jac_c_no_extra_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::TNLPAdapter::nz_jac_c_no_extra_</td>
         </tr>
       </table>
   </td>
@@ -2723,7 +3144,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>non-zeros of the jacobian of c without added constraints for fixed variables. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00370">370</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00512">512</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2737,7 +3158,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::TNLPAdapter::nz_jac_d_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::TNLPAdapter::nz_jac_d_</td>
         </tr>
       </table>
   </td>
@@ -2749,7 +3170,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>non-zeros of the jacobian of d </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00372">372</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00514">514</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2763,7 +3184,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::TNLPAdapter::nz_full_jac_g_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::TNLPAdapter::nz_full_jac_g_</td>
         </tr>
       </table>
   </td>
@@ -2775,7 +3196,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>number of non-zeros in full-size Jacobian of g </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00374">374</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00516">516</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2789,7 +3210,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::TNLPAdapter::nz_full_h_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::TNLPAdapter::nz_full_h_</td>
         </tr>
       </table>
   </td>
@@ -2801,7 +3222,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>number of non-zeros in full-size Hessian </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00376">376</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00518">518</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2815,7 +3236,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::TNLPAdapter::nz_h_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::TNLPAdapter::nz_h_</td>
         </tr>
       </table>
   </td>
@@ -2827,7 +3248,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>number of non-zeros in the non-fixed-size Hessian </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00378">378</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00520">520</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2841,7 +3262,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::TNLPAdapter::n_x_fixed_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::TNLPAdapter::n_x_fixed_</td>
         </tr>
       </table>
   </td>
@@ -2853,7 +3274,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Number of fixed variables. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00380">380</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00522">522</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2879,7 +3300,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Numbering style of variables and constraints. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00384">384</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00526">526</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2903,7 +3324,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00388">388</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00530">530</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2927,7 +3348,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00389">389</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00531">531</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2951,7 +3372,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00390">390</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00532">532</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2975,7 +3396,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00391">391</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00533">533</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -2999,7 +3420,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00392">392</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00534">534</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3023,7 +3444,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00393">393</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00535">535</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3047,7 +3468,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00394">394</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00536">536</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3071,7 +3492,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00395">395</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00537">537</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3095,7 +3516,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00396">396</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00538">538</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3119,7 +3540,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00397">397</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00539">539</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3143,7 +3564,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00398">398</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00540">540</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3167,7 +3588,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00399">399</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00541">541</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3191,7 +3612,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00400">400</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00542">542</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3215,7 +3636,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00401">401</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00543">543</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3229,7 +3650,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>* Ipopt::TNLPAdapter::full_x_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>* Ipopt::TNLPAdapter::full_x_</td>
         </tr>
       </table>
   </td>
@@ -3239,7 +3660,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00406">406</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00548">548</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3253,7 +3674,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>* Ipopt::TNLPAdapter::full_lambda_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>* Ipopt::TNLPAdapter::full_lambda_</td>
         </tr>
       </table>
   </td>
@@ -3265,7 +3686,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>copy of the full x vector (fixed &amp; non-fixed) </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00407">407</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00549">549</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3279,7 +3700,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>* Ipopt::TNLPAdapter::full_g_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>* Ipopt::TNLPAdapter::full_g_</td>
         </tr>
       </table>
   </td>
@@ -3291,7 +3712,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>copy of lambda (yc &amp; yd) </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00408">408</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00550">550</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3305,7 +3726,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>* Ipopt::TNLPAdapter::jac_g_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>* Ipopt::TNLPAdapter::jac_g_</td>
         </tr>
       </table>
   </td>
@@ -3317,7 +3738,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>copy of g (c &amp; d) </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00409">409</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00551">551</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3331,7 +3752,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>* Ipopt::TNLPAdapter::c_rhs_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>* Ipopt::TNLPAdapter::c_rhs_</td>
         </tr>
       </table>
   </td>
@@ -3343,7 +3764,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>the values for the full jacobian of g </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00410">410</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00552">552</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3367,7 +3788,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00415">415</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00557">557</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3391,7 +3812,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00416">416</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00558">558</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3415,7 +3836,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00417">417</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00559">559</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3439,7 +3860,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00418">418</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00560">560</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3463,7 +3884,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00419">419</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00561">561</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3489,7 +3910,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Expansion from fixed x (ipopt) to full x. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00447">447</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00589">589</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3513,7 +3934,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00448">448</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00590">590</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3539,7 +3960,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Expansion from fixed x_L (ipopt) to full x. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00451">451</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00593">593</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3563,7 +3984,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00452">452</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00594">594</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3589,7 +4010,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Expansion from fixed x_U (ipopt) to full x. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00455">455</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00597">597</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3613,7 +4034,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00456">456</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00598">598</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3639,7 +4060,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Expansion from c only (ipopt) to full ampl c. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00459">459</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00601">601</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3663,7 +4084,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00460">460</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00602">602</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3689,7 +4110,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Expansion from d only (ipopt) to full ampl d. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00463">463</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00605">605</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3713,7 +4134,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00464">464</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00606">606</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3727,7 +4148,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>* Ipopt::TNLPAdapter::jac_idx_map_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>* Ipopt::TNLPAdapter::jac_idx_map_</td>
         </tr>
       </table>
   </td>
@@ -3737,7 +4158,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00466">466</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00608">608</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3751,7 +4172,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>* Ipopt::TNLPAdapter::h_idx_map_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>* Ipopt::TNLPAdapter::h_idx_map_</td>
         </tr>
       </table>
   </td>
@@ -3761,7 +4182,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00467">467</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00609">609</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3775,7 +4196,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>* Ipopt::TNLPAdapter::x_fixed_map_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>* Ipopt::TNLPAdapter::x_fixed_map_</td>
         </tr>
       </table>
   </td>
@@ -3788,7 +4209,106 @@ Method implementing the detection of linearly dependent equality constraints</h2
 <p>Position of fixed variables. </p>
 <p>This is required for a warm start </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00470">470</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00612">612</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a7d6a750f7915c324151c9caf3d9375ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d6a750f7915c324151c9caf3d9375ce">&#9670;&nbsp;</a></span>jac_fixed_idx_map_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>* Ipopt::TNLPAdapter::jac_fixed_idx_map_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Index mapping of Jacobian w.r.t. </p>
+<p>fixed variables. </p>
+
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00615">615</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+
+</div>
+</div>
+<a id="afb9287abae233f624480be2b73471bf0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb9287abae233f624480be2b73471bf0">&#9670;&nbsp;</a></span>jac_fixed_iRow_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>* Ipopt::TNLPAdapter::jac_fixed_iRow_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00616">616</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a3cc86a398f70f92171b4c5c6652c6f7c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3cc86a398f70f92171b4c5c6652c6f7c">&#9670;&nbsp;</a></span>jac_fixed_jCol_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>* Ipopt::TNLPAdapter::jac_fixed_jCol_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00617">617</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aa67f5efa81246e1a2eed5e1aadb6902c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa67f5efa81246e1a2eed5e1aadb6902c">&#9670;&nbsp;</a></span>nz_jac_fixed_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::TNLPAdapter::nz_jac_fixed_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00618">618</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3802,7 +4322,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::TNLPAdapter::findiff_jac_nnz_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::TNLPAdapter::findiff_jac_nnz_</td>
         </tr>
       </table>
   </td>
@@ -3814,7 +4334,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Number of unique nonzeros in constraint Jacobian. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00476">476</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00624">624</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3828,7 +4348,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>* Ipopt::TNLPAdapter::findiff_jac_ia_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>* Ipopt::TNLPAdapter::findiff_jac_ia_</td>
         </tr>
       </table>
   </td>
@@ -3840,7 +4360,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Start position for nonzero indices in ja for each column of Jacobian. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00478">478</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00626">626</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3854,7 +4374,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>* Ipopt::TNLPAdapter::findiff_jac_ja_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>* Ipopt::TNLPAdapter::findiff_jac_ja_</td>
         </tr>
       </table>
   </td>
@@ -3866,7 +4386,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Ordered by columns, for each column the row indices in Jacobian. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00480">480</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00628">628</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3880,7 +4400,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>* Ipopt::TNLPAdapter::findiff_jac_postriplet_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>* Ipopt::TNLPAdapter::findiff_jac_postriplet_</td>
         </tr>
       </table>
   </td>
@@ -3892,7 +4412,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Position of entry in original triplet matrix. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00482">482</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00630">630</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3906,7 +4426,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>* Ipopt::TNLPAdapter::findiff_x_l_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>* Ipopt::TNLPAdapter::findiff_x_l_</td>
         </tr>
       </table>
   </td>
@@ -3918,7 +4438,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Copy of the lower bounds. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00484">484</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00632">632</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>
@@ -3932,7 +4452,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>* Ipopt::TNLPAdapter::findiff_x_u_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>* Ipopt::TNLPAdapter::findiff_x_u_</td>
         </tr>
       </table>
   </td>
@@ -3944,7 +4464,7 @@ Method implementing the detection of linearly dependent equality constraints</h2
 
 <p>Copy of the upper bounds. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00486">486</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00634">634</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 
 </div>
 </div>

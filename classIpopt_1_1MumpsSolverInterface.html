@@ -1,5 +1,5 @@
-<!-- HTML header for doxygen 1.8.13-->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- HTML header for doxygen 1.8.18-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.13.4</span-->
+   &#160;<!--span id="projectnumber">3.14.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -136,7 +136,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:afab6cecc19a070b331f1a6b4d00322bc"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#afab6cecc19a070b331f1a6b4d00322bc">ProvidesDegeneracyDetection</a> () const</td></tr>
 <tr class="memdesc:afab6cecc19a070b331f1a6b4d00322bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Query whether the indices of linearly dependent rows/columns can be determined by this linear solver.  <a href="classIpopt_1_1MumpsSolverInterface.html#afab6cecc19a070b331f1a6b4d00322bc">More...</a><br /></td></tr>
 <tr class="separator:afab6cecc19a070b331f1a6b4d00322bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a87f08f29818d2baa26a55caaae43b87f"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#a87f08f29818d2baa26a55caaae43b87f">DetermineDependentRows</a> (const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *ia, const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *ja, std::list&lt; <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> &gt; &amp;c_deps)</td></tr>
+<tr class="memitem:a87f08f29818d2baa26a55caaae43b87f"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#a87f08f29818d2baa26a55caaae43b87f">DetermineDependentRows</a> (const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *ia, const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *ja, std::list&lt; <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> &gt; &amp;c_deps)</td></tr>
 <tr class="memdesc:a87f08f29818d2baa26a55caaae43b87f"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method determines the list of row indices of the linearly dependent rows.  <a href="classIpopt_1_1MumpsSolverInterface.html#a87f08f29818d2baa26a55caaae43b87f">More...</a><br /></td></tr>
 <tr class="separator:a87f08f29818d2baa26a55caaae43b87f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Constructor/Destructor</div></td></tr>
@@ -147,16 +147,16 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a09e5ce15d5b7eaf0a2b18e97e36332c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="classIpopt_1_1MumpsSolverInterface.html#a09e5ce15d5b7eaf0a2b18e97e36332c7">More...</a><br /></td></tr>
 <tr class="separator:a09e5ce15d5b7eaf0a2b18e97e36332c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Methods for requesting solution of the linear system.</div></td></tr>
-<tr class="memitem:a9498bc4d8b9f944657f5e4b25281fa93"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#a9498bc4d8b9f944657f5e4b25281fa93">InitializeStructure</a> (<a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> dim, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> nonzeros, const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *airn, const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *ajcn)</td></tr>
+<tr class="memitem:a9498bc4d8b9f944657f5e4b25281fa93"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#a9498bc4d8b9f944657f5e4b25281fa93">InitializeStructure</a> (<a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> dim, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> nonzeros, const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *airn, const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *ajcn)</td></tr>
 <tr class="memdesc:a9498bc4d8b9f944657f5e4b25281fa93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method for initializing internal structures.  <a href="classIpopt_1_1MumpsSolverInterface.html#a9498bc4d8b9f944657f5e4b25281fa93">More...</a><br /></td></tr>
 <tr class="separator:a9498bc4d8b9f944657f5e4b25281fa93"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5ecf741a64461a3032da9733e61dea29"><td class="memItemLeft" align="right" valign="top">virtual double *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#a5ecf741a64461a3032da9733e61dea29">GetValuesArrayPtr</a> ()</td></tr>
-<tr class="memdesc:a5ecf741a64461a3032da9733e61dea29"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method returning an internal array into which the nonzero elements (in the same order as ja) will be stored by the calling routine before a call to MultiSolve with a new_matrix=true (or after a return of MultiSolve with SYMSOLV_CALL_AGAIN).  <a href="classIpopt_1_1MumpsSolverInterface.html#a5ecf741a64461a3032da9733e61dea29">More...</a><br /></td></tr>
-<tr class="separator:a5ecf741a64461a3032da9733e61dea29"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac81bc39ba74498671cf698c001bbc727"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#ac81bc39ba74498671cf698c001bbc727">MultiSolve</a> (bool new_matrix, const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *airn, const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *ajcn, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> nrhs, double *rhs_vals, bool check_NegEVals, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> numberOfNegEVals)</td></tr>
-<tr class="memdesc:ac81bc39ba74498671cf698c001bbc727"><td class="mdescLeft">&#160;</td><td class="mdescRight">Solve operation for multiple right hand sides.  <a href="classIpopt_1_1MumpsSolverInterface.html#ac81bc39ba74498671cf698c001bbc727">More...</a><br /></td></tr>
-<tr class="separator:ac81bc39ba74498671cf698c001bbc727"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0af2f4b72066324eeb4cde5b9a8ad3b2"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#a0af2f4b72066324eeb4cde5b9a8ad3b2">NumberOfNegEVals</a> () const</td></tr>
+<tr class="memitem:a8e773fa0562c9b1b4eaff0898dadda90"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#a8e773fa0562c9b1b4eaff0898dadda90">GetValuesArrayPtr</a> ()</td></tr>
+<tr class="memdesc:a8e773fa0562c9b1b4eaff0898dadda90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method returning an internal array into which the nonzero elements (in the same order as ja) will be stored by the calling routine before a call to MultiSolve with a new_matrix=true (or after a return of MultiSolve with SYMSOLV_CALL_AGAIN).  <a href="classIpopt_1_1MumpsSolverInterface.html#a8e773fa0562c9b1b4eaff0898dadda90">More...</a><br /></td></tr>
+<tr class="separator:a8e773fa0562c9b1b4eaff0898dadda90"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57b1cab7f45b4aef85e062b7e62e8084"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#a57b1cab7f45b4aef85e062b7e62e8084">MultiSolve</a> (bool new_matrix, const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *airn, const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *ajcn, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> nrhs, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *rhs_vals, bool check_NegEVals, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> numberOfNegEVals)</td></tr>
+<tr class="memdesc:a57b1cab7f45b4aef85e062b7e62e8084"><td class="mdescLeft">&#160;</td><td class="mdescRight">Solve operation for multiple right hand sides.  <a href="classIpopt_1_1MumpsSolverInterface.html#a57b1cab7f45b4aef85e062b7e62e8084">More...</a><br /></td></tr>
+<tr class="separator:a57b1cab7f45b4aef85e062b7e62e8084"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0af2f4b72066324eeb4cde5b9a8ad3b2"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#a0af2f4b72066324eeb4cde5b9a8ad3b2">NumberOfNegEVals</a> () const</td></tr>
 <tr class="memdesc:a0af2f4b72066324eeb4cde5b9a8ad3b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of negative eigenvalues detected during last factorization.  <a href="classIpopt_1_1MumpsSolverInterface.html#a0af2f4b72066324eeb4cde5b9a8ad3b2">More...</a><br /></td></tr>
 <tr class="separator:a0af2f4b72066324eeb4cde5b9a8ad3b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader"></div></td></tr>
@@ -192,7 +192,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5c0f2208e3ead22bf7c5179381ed8203 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adbbf3aa5307da62ab8224ba599d4bd7a inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#adbbf3aa5307da62ab8224ba599d4bd7a">~ReferencedObject</a> ()</td></tr>
 <tr class="separator:adbbf3aa5307da62ab8224ba599d4bd7a inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac517534e10e36c946aeefc6fe337777 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#aac517534e10e36c946aeefc6fe337777">ReferenceCount</a> () const</td></tr>
+<tr class="memitem:aac517534e10e36c946aeefc6fe337777 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#aac517534e10e36c946aeefc6fe337777">ReferenceCount</a> () const</td></tr>
 <tr class="separator:aac517534e10e36c946aeefc6fe337777 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa69ecb0f026bd741e2fa84c31d4ec332 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#aa69ecb0f026bd741e2fa84c31d4ec332">AddRef</a> (const <a class="el" href="classIpopt_1_1Referencer.html">Referencer</a> *referencer) const</td></tr>
 <tr class="separator:aa69ecb0f026bd741e2fa84c31d4ec332 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -203,6 +203,9 @@ Public Member Functions</h2></td></tr>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a1c87092ecca460918419008593c3f140"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#a1c87092ecca460918419008593c3f140">RegisterOptions</a> (<a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1RegisteredOptions.html">RegisteredOptions</a> &gt; roptions)</td></tr>
 <tr class="separator:a1c87092ecca460918419008593c3f140"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a97dcc17337bef6eea5732dd4319c12ab"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#a97dcc17337bef6eea5732dd4319c12ab">GetName</a> ()</td></tr>
+<tr class="memdesc:a97dcc17337bef6eea5732dd4319c12ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">give name of MUMPS with version info  <a href="classIpopt_1_1MumpsSolverInterface.html#a97dcc17337bef6eea5732dd4319c12ab">More...</a><br /></td></tr>
+<tr class="separator:a97dcc17337bef6eea5732dd4319c12ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -220,12 +223,12 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:a82a94b807cd621390a316c85a473d36c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#a82a94b807cd621390a316c85a473d36c">SymbolicFactorization</a> ()</td></tr>
 <tr class="memdesc:a82a94b807cd621390a316c85a473d36c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call MUMPS (job=1) to perform symbolic manipulations, and reserve memory.  <a href="classIpopt_1_1MumpsSolverInterface.html#a82a94b807cd621390a316c85a473d36c">More...</a><br /></td></tr>
 <tr class="separator:a82a94b807cd621390a316c85a473d36c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a16f8c274ebef282a347cb99e65f65748"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#a16f8c274ebef282a347cb99e65f65748">Factorization</a> (bool check_NegEVals, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> numberOfNegEVals)</td></tr>
+<tr class="memitem:a16f8c274ebef282a347cb99e65f65748"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#a16f8c274ebef282a347cb99e65f65748">Factorization</a> (bool check_NegEVals, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> numberOfNegEVals)</td></tr>
 <tr class="memdesc:a16f8c274ebef282a347cb99e65f65748"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call MUMPS (job=2) to factorize the <a class="el" href="classIpopt_1_1Matrix.html" title="Matrix Base Class.">Matrix</a>.  <a href="classIpopt_1_1MumpsSolverInterface.html#a16f8c274ebef282a347cb99e65f65748">More...</a><br /></td></tr>
 <tr class="separator:a16f8c274ebef282a347cb99e65f65748"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac0f38e6995336b1a4b0260fe2a5fc3a7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#ac0f38e6995336b1a4b0260fe2a5fc3a7">Solve</a> (<a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> nrhs, double *rhs_vals)</td></tr>
-<tr class="memdesc:ac0f38e6995336b1a4b0260fe2a5fc3a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call MUMPS (job=3) to do the solve.  <a href="classIpopt_1_1MumpsSolverInterface.html#ac0f38e6995336b1a4b0260fe2a5fc3a7">More...</a><br /></td></tr>
-<tr class="separator:ac0f38e6995336b1a4b0260fe2a5fc3a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1e34d981c0b0f5b2e7a77f46de87f1e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#ae1e34d981c0b0f5b2e7a77f46de87f1e">Solve</a> (<a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> nrhs, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *rhs_vals)</td></tr>
+<tr class="memdesc:ae1e34d981c0b0f5b2e7a77f46de87f1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call MUMPS (job=3) to do the solve.  <a href="classIpopt_1_1MumpsSolverInterface.html#ae1e34d981c0b0f5b2e7a77f46de87f1e">More...</a><br /></td></tr>
+<tr class="separator:ae1e34d981c0b0f5b2e7a77f46de87f1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -237,29 +240,29 @@ Private Attributes</h2></td></tr>
 <tr class="memdesc:a914eb90eb0086a3cd1a70f50d415802d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Primary MUMP data structure.  <a href="classIpopt_1_1MumpsSolverInterface.html#a914eb90eb0086a3cd1a70f50d415802d">More...</a><br /></td></tr>
 <tr class="separator:a914eb90eb0086a3cd1a70f50d415802d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Information about most recent factorization/solve</div></td></tr>
-<tr class="memitem:ab75d84e60be8fa575ae29d82970ca3eb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#ab75d84e60be8fa575ae29d82970ca3eb">negevals_</a></td></tr>
+<tr class="memitem:ab75d84e60be8fa575ae29d82970ca3eb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#ab75d84e60be8fa575ae29d82970ca3eb">negevals_</a></td></tr>
 <tr class="memdesc:ab75d84e60be8fa575ae29d82970ca3eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of negative eigenvalues.  <a href="classIpopt_1_1MumpsSolverInterface.html#ab75d84e60be8fa575ae29d82970ca3eb">More...</a><br /></td></tr>
 <tr class="separator:ab75d84e60be8fa575ae29d82970ca3eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Solver specific data/options</div></td></tr>
-<tr class="memitem:a3758fd445724622637593827effc9889"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#a3758fd445724622637593827effc9889">pivtol_</a></td></tr>
+<tr class="memitem:a3758fd445724622637593827effc9889"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#a3758fd445724622637593827effc9889">pivtol_</a></td></tr>
 <tr class="memdesc:a3758fd445724622637593827effc9889"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pivot tolerance.  <a href="classIpopt_1_1MumpsSolverInterface.html#a3758fd445724622637593827effc9889">More...</a><br /></td></tr>
 <tr class="separator:a3758fd445724622637593827effc9889"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae07abe718e386ee7e01973bbe62a3ca6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#ae07abe718e386ee7e01973bbe62a3ca6">pivtolmax_</a></td></tr>
+<tr class="memitem:ae07abe718e386ee7e01973bbe62a3ca6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#ae07abe718e386ee7e01973bbe62a3ca6">pivtolmax_</a></td></tr>
 <tr class="memdesc:ae07abe718e386ee7e01973bbe62a3ca6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximal pivot tolerance.  <a href="classIpopt_1_1MumpsSolverInterface.html#ae07abe718e386ee7e01973bbe62a3ca6">More...</a><br /></td></tr>
 <tr class="separator:ae07abe718e386ee7e01973bbe62a3ca6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae0300ad4241b1a4f5ee2b6cacc2fa268"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#ae0300ad4241b1a4f5ee2b6cacc2fa268">mem_percent_</a></td></tr>
+<tr class="memitem:ae0300ad4241b1a4f5ee2b6cacc2fa268"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#ae0300ad4241b1a4f5ee2b6cacc2fa268">mem_percent_</a></td></tr>
 <tr class="memdesc:ae0300ad4241b1a4f5ee2b6cacc2fa268"><td class="mdescLeft">&#160;</td><td class="mdescRight">Percent increase in memory.  <a href="classIpopt_1_1MumpsSolverInterface.html#ae0300ad4241b1a4f5ee2b6cacc2fa268">More...</a><br /></td></tr>
 <tr class="separator:ae0300ad4241b1a4f5ee2b6cacc2fa268"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a77947037908559f044e5c723e204ff55"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#a77947037908559f044e5c723e204ff55">mumps_permuting_scaling_</a></td></tr>
+<tr class="memitem:a77947037908559f044e5c723e204ff55"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#a77947037908559f044e5c723e204ff55">mumps_permuting_scaling_</a></td></tr>
 <tr class="memdesc:a77947037908559f044e5c723e204ff55"><td class="mdescLeft">&#160;</td><td class="mdescRight">Permutation and scaling method in MUMPS.  <a href="classIpopt_1_1MumpsSolverInterface.html#a77947037908559f044e5c723e204ff55">More...</a><br /></td></tr>
 <tr class="separator:a77947037908559f044e5c723e204ff55"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afe6cf38c047534ceefa9fbc3e04bb642"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#afe6cf38c047534ceefa9fbc3e04bb642">mumps_pivot_order_</a></td></tr>
+<tr class="memitem:afe6cf38c047534ceefa9fbc3e04bb642"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#afe6cf38c047534ceefa9fbc3e04bb642">mumps_pivot_order_</a></td></tr>
 <tr class="memdesc:afe6cf38c047534ceefa9fbc3e04bb642"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pivot order in MUMPS.  <a href="classIpopt_1_1MumpsSolverInterface.html#afe6cf38c047534ceefa9fbc3e04bb642">More...</a><br /></td></tr>
 <tr class="separator:afe6cf38c047534ceefa9fbc3e04bb642"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a74bd5dd47612b2dae373bc4ea50d311c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#a74bd5dd47612b2dae373bc4ea50d311c">mumps_scaling_</a></td></tr>
+<tr class="memitem:a74bd5dd47612b2dae373bc4ea50d311c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#a74bd5dd47612b2dae373bc4ea50d311c">mumps_scaling_</a></td></tr>
 <tr class="memdesc:a74bd5dd47612b2dae373bc4ea50d311c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Scaling in MUMPS.  <a href="classIpopt_1_1MumpsSolverInterface.html#a74bd5dd47612b2dae373bc4ea50d311c">More...</a><br /></td></tr>
 <tr class="separator:a74bd5dd47612b2dae373bc4ea50d311c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae175fc39595323d64a7bb528870bee24"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#ae175fc39595323d64a7bb528870bee24">mumps_dep_tol_</a></td></tr>
+<tr class="memitem:ae175fc39595323d64a7bb528870bee24"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#ae175fc39595323d64a7bb528870bee24">mumps_dep_tol_</a></td></tr>
 <tr class="memdesc:ae175fc39595323d64a7bb528870bee24"><td class="mdescLeft">&#160;</td><td class="mdescRight">Threshold in MUMPS to state that a constraint is linearly dependent.  <a href="classIpopt_1_1MumpsSolverInterface.html#ae175fc39595323d64a7bb528870bee24">More...</a><br /></td></tr>
 <tr class="separator:ae175fc39595323d64a7bb528870bee24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af838e5548c543997dd46d4be58034c49"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#af838e5548c543997dd46d4be58034c49">warm_start_same_structure_</a></td></tr>
@@ -439,25 +442,25 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">virtual <a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a> Ipopt::MumpsSolverInterface::InitializeStructure </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>dim</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>nonzeros</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>ia</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>ja</em>&#160;</td>
         </tr>
         <tr>
@@ -480,8 +483,8 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a5ecf741a64461a3032da9733e61dea29"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5ecf741a64461a3032da9733e61dea29">&#9670;&nbsp;</a></span>GetValuesArrayPtr()</h2>
+<a id="a8e773fa0562c9b1b4eaff0898dadda90"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e773fa0562c9b1b4eaff0898dadda90">&#9670;&nbsp;</a></span>GetValuesArrayPtr()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -490,7 +493,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual double* Ipopt::MumpsSolverInterface::GetValuesArrayPtr </td>
+          <td class="memname">virtual <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>* Ipopt::MumpsSolverInterface::GetValuesArrayPtr </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -506,12 +509,12 @@ Additional Inherited Members</h2></td></tr>
 <p>Method returning an internal array into which the nonzero elements (in the same order as ja) will be stored by the calling routine before a call to MultiSolve with a new_matrix=true (or after a return of MultiSolve with SYMSOLV_CALL_AGAIN). </p>
 <p>The returned array must have space for at least nonzero elements. </p>
 
-<p>Implements <a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html#a63e20915d52fe30d5340472e79d19f5b">Ipopt::SparseSymLinearSolverInterface</a>.</p>
+<p>Implements <a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html#a04d12ba6e29e4b945e112b574cab8e09">Ipopt::SparseSymLinearSolverInterface</a>.</p>
 
 </div>
 </div>
-<a id="ac81bc39ba74498671cf698c001bbc727"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac81bc39ba74498671cf698c001bbc727">&#9670;&nbsp;</a></span>MultiSolve()</h2>
+<a id="a57b1cab7f45b4aef85e062b7e62e8084"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a57b1cab7f45b4aef85e062b7e62e8084">&#9670;&nbsp;</a></span>MultiSolve()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -528,25 +531,25 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>ia</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>ja</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>nrhs</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double *&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>rhs_vals</em>, </td>
         </tr>
         <tr>
@@ -558,7 +561,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>numberOfNegEVals</em>&#160;</td>
         </tr>
         <tr>
@@ -580,7 +583,7 @@ Additional Inherited Members</h2></td></tr>
 <p>The number of right-hand sides is given by nrhs, the values of the right-hand sides are given in rhs_vals (one full right-hand side stored immediately after the other), and solutions are to be returned in the same array.</p>
 <p>check_NegEVals will not be chosen true, if <a class="el" href="classIpopt_1_1MumpsSolverInterface.html#a9905c9f116e6abe0f1e08a39d9583b39" title="Query whether inertia is computed by linear solver.">ProvidesInertia()</a> returns false. </p>
 
-<p>Implements <a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html#aaa533d84b06d8bf76a0a4bc6b0b8dba3">Ipopt::SparseSymLinearSolverInterface</a>.</p>
+<p>Implements <a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html#abb894fd70f83310a1c39ab7242efdf2a">Ipopt::SparseSymLinearSolverInterface</a>.</p>
 
 </div>
 </div>
@@ -594,7 +597,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::MumpsSolverInterface::NumberOfNegEVals </td>
+          <td class="memname">virtual <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::MumpsSolverInterface::NumberOfNegEVals </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -735,6 +738,34 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="a97dcc17337bef6eea5732dd4319c12ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a97dcc17337bef6eea5732dd4319c12ab">&#9670;&nbsp;</a></span>GetName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::string Ipopt::MumpsSolverInterface::GetName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>give name of MUMPS with version info </p>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+
+</div>
+</div>
 <a id="afab6cecc19a070b331f1a6b4d00322bc"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afab6cecc19a070b331f1a6b4d00322bc">&#9670;&nbsp;</a></span>ProvidesDegeneracyDetection()</h2>
 
@@ -776,19 +807,19 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">virtual <a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a> Ipopt::MumpsSolverInterface::DetermineDependentRows </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::list&lt; <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> &gt; &amp;&#160;</td>
+          <td class="paramtype">std::list&lt; <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> &gt; &amp;&#160;</td>
           <td class="paramname">&#160;</td>
         </tr>
         <tr>
@@ -883,7 +914,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>numberOfNegEVals</em>&#160;</td>
         </tr>
         <tr>
@@ -904,8 +935,8 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="ac0f38e6995336b1a4b0260fe2a5fc3a7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac0f38e6995336b1a4b0260fe2a5fc3a7">&#9670;&nbsp;</a></span>Solve()</h2>
+<a id="ae1e34d981c0b0f5b2e7a77f46de87f1e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1e34d981c0b0f5b2e7a77f46de87f1e">&#9670;&nbsp;</a></span>Solve()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -916,13 +947,13 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a> Ipopt::MumpsSolverInterface::Solve </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>nrhs</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double *&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>rhs_vals</em>&#160;</td>
         </tr>
         <tr>
@@ -965,7 +996,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Primary MUMP data structure. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00115">115</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00119">119</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -979,7 +1010,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::MumpsSolverInterface::negevals_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::MumpsSolverInterface::negevals_</td>
         </tr>
       </table>
   </td>
@@ -991,7 +1022,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Number of negative eigenvalues. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00121">121</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00125">125</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1018,7 +1049,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Flag indicating if internal data is initialized. </p>
 <p>For initialization, this object needs to have seen a matrix. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00129">129</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00133">133</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1044,7 +1075,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Flag indicating if the matrix has to be refactorized because the pivot tolerance has been changed. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00133">133</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00137">137</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1070,7 +1101,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Flag that is true if we just requested the values of the matrix again (SYMSOLVER_CALL_AGAIN) and have to factorize again. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00138">138</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00142">142</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1097,7 +1128,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Counter on number of alive Mumps interface objects, if we have called MPI_Initialize. </p>
 <p>When the last object is destroyed, we will call MPI_Finalize. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00143">143</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00147">147</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1111,7 +1142,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> Ipopt::MumpsSolverInterface::pivtol_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> Ipopt::MumpsSolverInterface::pivtol_</td>
         </tr>
       </table>
   </td>
@@ -1123,7 +1154,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Pivot tolerance. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00149">149</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00153">153</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1137,7 +1168,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> Ipopt::MumpsSolverInterface::pivtolmax_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> Ipopt::MumpsSolverInterface::pivtolmax_</td>
         </tr>
       </table>
   </td>
@@ -1149,7 +1180,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Maximal pivot tolerance. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00152">152</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00156">156</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1163,7 +1194,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::MumpsSolverInterface::mem_percent_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::MumpsSolverInterface::mem_percent_</td>
         </tr>
       </table>
   </td>
@@ -1175,7 +1206,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Percent increase in memory. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00155">155</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00159">159</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1189,7 +1220,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::MumpsSolverInterface::mumps_permuting_scaling_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::MumpsSolverInterface::mumps_permuting_scaling_</td>
         </tr>
       </table>
   </td>
@@ -1201,7 +1232,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Permutation and scaling method in MUMPS. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00158">158</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00162">162</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1215,7 +1246,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::MumpsSolverInterface::mumps_pivot_order_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::MumpsSolverInterface::mumps_pivot_order_</td>
         </tr>
       </table>
   </td>
@@ -1227,7 +1258,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Pivot order in MUMPS. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00161">161</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00165">165</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1241,7 +1272,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::MumpsSolverInterface::mumps_scaling_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::MumpsSolverInterface::mumps_scaling_</td>
         </tr>
       </table>
   </td>
@@ -1253,7 +1284,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Scaling in MUMPS. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00164">164</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00168">168</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1267,7 +1298,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> Ipopt::MumpsSolverInterface::mumps_dep_tol_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> Ipopt::MumpsSolverInterface::mumps_dep_tol_</td>
         </tr>
       </table>
   </td>
@@ -1279,7 +1310,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Threshold in MUMPS to state that a constraint is linearly dependent. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00167">167</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00171">171</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1305,7 +1336,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Flag indicating whether the <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> with identical structure has already been solved before. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00172">172</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00176">176</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1331,7 +1362,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Flag indicating if symbolic factorization has already been called. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00176">176</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00180">180</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
 
 </div>
 </div>

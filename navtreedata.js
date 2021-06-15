@@ -45,12 +45,14 @@ var NAVTREE =
       [ "File Members", "globals.html", [
         [ "All", "globals.html", "globals_dup" ],
         [ "Functions", "globals_func.html", null ],
+        [ "Variables", "globals_vars.html", null ],
         [ "Typedefs", "globals_type.html", null ],
         [ "Enumerations", "globals_enum.html", null ],
         [ "Enumerator", "globals_eval.html", null ],
-        [ "Macros", "globals_defs.html", null ]
+        [ "Macros", "globals_defs.html", "globals_defs" ]
       ] ]
     ] ],
+    [ "Deprecated List", "deprecated.html", null ],
     [ "Bibliography", "citelist.html", null ]
   ] ]
 ];
@@ -58,31 +60,33 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "AUTHORS.html",
-"IpDenseVector_8hpp.html#a08458195ba30ac6f9e88a2a48c87df52",
-"IpRegOptions_8hpp.html#a8fa4729b02ed5a27c39209cc75864bb6a2d58ddf2aa6542f6a8afee6539d0d9cc",
-"SPECIALS.html#AMPL_WARMSTART",
+"IpIpoptCalculatedQuantities_8hpp.html#a168170a804e6c2f0721e134d5ec0f2e5a5cc46573cba24270f1830018e377c596",
+"IpRestoConvCheck_8hpp.html",
+"SensAlgorithm_8hpp_source.html",
 "classIpopt_1_1AmplTNLP.html#a5cfa70d32b5ddfb565347f8c479462b1",
-"classIpopt_1_1CGPenaltyData.html#acc9a6f88285d4f7dee774029e35a1f3d",
-"classIpopt_1_1CompoundSymMatrix.html#a9950caa7ba5e0f7d476b81119ca71ac0",
-"classIpopt_1_1DenseVector.html#ace8a6150d4287c818225166065235ed0",
-"classIpopt_1_1GenAugSystemSolver.html#a0ce0d2914da0ed9bd8ba72a063ccfc4b",
-"classIpopt_1_1InexactLSAcceptor.html#a2b92f6a1995bb52215707f4f5495f51e",
-"classIpopt_1_1IpoptApplication.html#ab92fa64e176440496ef8c4986752b369",
-"classIpopt_1_1IpoptData.html#a0604067e11504ff7af3568e6bea2996b",
-"classIpopt_1_1IterationOutput.html#aadaec4d7ec1d3a12338b05939907a19f",
-"classIpopt_1_1LimMemQuasiNewtonUpdater.html#af68441d4e1f531996c893ef537aefdd2",
-"classIpopt_1_1Ma86SolverInterface.html#a3c28497a682b30c6542fec3b0d01d247",
-"classIpopt_1_1MumpsSolverInterface.html#a914eb90eb0086a3cd1a70f50d415802d",
-"classIpopt_1_1OrigIpoptNLP.html#a65ee7ef6abb4ace316758ae9631c566b",
-"classIpopt_1_1PenaltyLSAcceptor.html#a7bca23a29a2ebc1544dc56e183c7cf5c",
-"classIpopt_1_1RegisteredOptions.html#aac6e85b65a64902d7e07c57ad34df7bc",
-"classIpopt_1_1SchurDriver.html#ac80b7bce84312beb0c65647a21e844d8",
-"classIpopt_1_1StandardScalingBase.html#ac8422605cbab9cfb704e65dcc6f3d94b",
-"classIpopt_1_1SymTMatrix.html",
-"classIpopt_1_1TSymLinearSolver.html#a3e2c26034635ad069515fe8f54b3b405",
-"classIpopt_1_1Vector.html#a1ebbd5dba7e8e777786aa64d2dfdf8a8",
-"config__default_8h.html#afdd4f08c71f65f539cead88f16217a52",
-"hsl__ma97d_8h.html#aa9af485ec8970fbb88f6ace945a7ef58"
+"classIpopt_1_1CGPenaltyData.html#abbfa1e792362839c7c8438e26957ac60",
+"classIpopt_1_1CompoundVector.html#a23fe9f85d94a98f3de2d9d618a5c140d",
+"classIpopt_1_1DenseVectorSpace.html#ae41977efc786dd75b303841c8732a039",
+"classIpopt_1_1GenKKTSolverInterface.html",
+"classIpopt_1_1InexactLSAcceptor.html#add7635a0c6b4acfd1180f576ffc904ca",
+"classIpopt_1_1IpoptCalculatedQuantities.html#a11842779cfbe1a24435df5599be6222a",
+"classIpopt_1_1IpoptData.html#a34cf8a2de5f1b46345fa9c31e53e1e9e",
+"classIpopt_1_1IterativePardisoSolverInterface.html#a1ed6dcb2f1eda947e40aa31254abdd8c",
+"classIpopt_1_1LimMemQuasiNewtonUpdater.html#afc1b44ee463310533e3412c274d134ed",
+"classIpopt_1_1Ma77SolverInterface.html#a701302f53e51d8537e2c218f777c255f",
+"classIpopt_1_1MuUpdate.html#ac89dc21645cb7a9c99d0c309fdb3fa6f",
+"classIpopt_1_1OptionsList_1_1OptionValue.html#a8c609b23eb5e5413c0d7a91a3055f28d",
+"classIpopt_1_1PardisoMKLSolverInterface.html#a62f2e50b486dc70ac7277c3389aa7524a045cdb54b7e13d33bfdc3fb7ad1fde01",
+"classIpopt_1_1RegisteredCategory.html#a6cdca39d68b836f63a73424adb096483",
+"classIpopt_1_1RestoIterateInitializer.html",
+"classIpopt_1_1SensitivityStepCalculator.html#aac22e9e047c136947c1f68070097b6a2",
+"classIpopt_1_1StdInterfaceTNLP.html#a9f949ff104114155f4f359137c119eb8",
+"classIpopt_1_1TNLP.html#af81cb3ab5772b440360cfcb48b620514",
+"classIpopt_1_1TimedTask.html#a81d1c4643ce4facd62b5a2019759fc35",
+"classIpopt_1_1Vector.html#a91ca096062de235f2b0ee26026102770",
+"configall__system__msc_8h.html#a34d6c379f30f7070f7ae75abb128e5a8",
+"hsl__ma86d_8h.html#a8846c55589d0d9afdd1e24e5e22253eb",
+"structma77__control__s.html#a097b072d38eb476abe3bb5cf00706a16"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

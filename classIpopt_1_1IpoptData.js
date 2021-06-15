@@ -1,6 +1,6 @@
 var classIpopt_1_1IpoptData =
 [
-    [ "IpoptData", "classIpopt_1_1IpoptData.html#a5c4563fe0d14f7aecaf5aa8ecbffa567", null ],
+    [ "IpoptData", "classIpopt_1_1IpoptData.html#ada1c79e9529b534a5aa92d4893200e3b", null ],
     [ "~IpoptData", "classIpopt_1_1IpoptData.html#abe5c89932e89ab0a1ff589b6f57211bc", null ],
     [ "IpoptData", "classIpopt_1_1IpoptData.html#a7783c9076f9e6057786e6658165a4f76", null ],
     [ "InitializeDataStructures", "classIpopt_1_1IpoptData.html#aca3bd1ad4d743ed17c30f0f0ed6b7409", null ],
@@ -38,7 +38,7 @@ var classIpopt_1_1IpoptData =
     [ "tiny_step_flag", "classIpopt_1_1IpoptData.html#a2748523a530161b8b3e8a7e336b26cbb", null ],
     [ "tol", "classIpopt_1_1IpoptData.html#aa83f50828576bb3f483d90ea2b5579fe", null ],
     [ "Set_tol", "classIpopt_1_1IpoptData.html#aaecad66ba8c29b4da56f41d0e77a851e", null ],
-    [ "cpu_time_start", "classIpopt_1_1IpoptData.html#a01eb4ca626afe4ed56e0b9e6bd7fcf7a", null ],
+    [ "cpu_time_start", "classIpopt_1_1IpoptData.html#ab73f3c309f066a25ab858507b46475c5", null ],
     [ "info_regu_x", "classIpopt_1_1IpoptData.html#a1490936f4d770bb1598f839e507ceb3c", null ],
     [ "Set_info_regu_x", "classIpopt_1_1IpoptData.html#a2ccb9a1d283b02c9cca7d8779cc26793", null ],
     [ "info_alpha_primal", "classIpopt_1_1IpoptData.html#a03226ae8e014d6f5761352ccbae40fc2", null ],
@@ -60,7 +60,6 @@ var classIpopt_1_1IpoptData =
     [ "Set_info_iters_since_header", "classIpopt_1_1IpoptData.html#a9c1abeb297b312199a03445d5f1a917d", null ],
     [ "ResetInfo", "classIpopt_1_1IpoptData.html#a885f82e4eed0d97b5f0e99a862a4bc42", null ],
     [ "TimingStats", "classIpopt_1_1IpoptData.html#a53fde5ffec9d56518fb90db19d39aac7", null ],
-    [ "ResetCpuStartTime", "classIpopt_1_1IpoptData.html#a77660003ddb02068109d1dc91a0ba347", null ],
     [ "HaveAddData", "classIpopt_1_1IpoptData.html#a0c0d13009f52550be24d2d9f2a30929f", null ],
     [ "AdditionalData", "classIpopt_1_1IpoptData.html#a9b8dbecac8cb57d39fc8f403b662526e", null ],
     [ "SetAddData", "classIpopt_1_1IpoptData.html#afdf738c0b7cf2bba1e4584ed850f200f", null ],
@@ -96,7 +95,6 @@ var classIpopt_1_1IpoptData =
     [ "info_iters_since_header_", "classIpopt_1_1IpoptData.html#a3c2b8b2cd98e4c844157633a557f2bc9", null ],
     [ "iterates_space_", "classIpopt_1_1IpoptData.html#a9ca143d0ba9a1023a613cae517a1513d", null ],
     [ "timing_statistics_", "classIpopt_1_1IpoptData.html#a017c5c0f6ed6f6f3e733b4ab6deba7a0", null ],
-    [ "cpu_time_start_", "classIpopt_1_1IpoptData.html#a5b18823c273d4929c18acd5f06fd147e", null ],
     [ "add_data_", "classIpopt_1_1IpoptData.html#a54fc7e29cf181623469c2b3e2c9a4143", null ],
     [ "pd_pert_x_", "classIpopt_1_1IpoptData.html#aed447fe747b69442c953cbc586eb0f74", null ],
     [ "pd_pert_s_", "classIpopt_1_1IpoptData.html#a0220a27582f7fbdfe27c7a051bbfa00e", null ],

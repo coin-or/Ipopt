@@ -1,5 +1,5 @@
-<!-- HTML header for doxygen 1.8.13-->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- HTML header for doxygen 1.8.18-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.13.4</span-->
+   &#160;<!--span id="projectnumber">3.14.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -106,11 +106,11 @@ $(document).ready(function(){initNavTree('IMPL.html',''); initResizable(); });
 <div class="contents">
 <div class="textblock"><h1><a class="anchor" id="TRIPLET"></a>
 Triplet Format for Sparse Matrices</h1>
-<p><code>Ipopt</code> was designed for optimizing large sparse nonlinear programs. Because of problem sparsity, the required matrices (like the constraints Jacobian or Lagrangian Hessian) are not stored as dense matrices, but rather in a sparse matrix format. For the tutorials in this document, we use the triplet format. Consider the matrix </p><p class="formulaDsp">
+<p>Ipopt was designed for optimizing large sparse nonlinear programs. Because of problem sparsity, the required matrices (like the constraints Jacobian or Lagrangian Hessian) are not stored as dense matrices, but rather in a sparse matrix format. For the tutorials in this document, we use the triplet format. Consider the matrix </p><p class="formulaDsp">
 \[ \left[ \begin{array}{ccccccc} 1.1 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0.5 \\ 0 &amp; 1.9 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0.5 \\ 0 &amp; 0 &amp; 2.6 &amp; 0 &amp; 0 &amp; 0 &amp; 0.5 \\ 0 &amp; 0 &amp; 7.8 &amp; 0.6 &amp; 0 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; 0 &amp; 1.5 &amp; 2.7 &amp; 0 &amp; 0 \\ 1.6 &amp; 0 &amp; 0 &amp; 0 &amp; 0.4 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0.9 &amp; 1.7 \\ \end{array} \right] \]
 </p>
 <p>A standard dense matrix representation would need to store 7 * 7 = 49 floating point numbers, where many entries would be zero. In triplet format, however, only the nonzero entries are stored. The triplet format records the row number, the column number, and the value of all nonzero entries in the matrix. For the matrix above, this means storing 14 integers for the rows, 14 integers for the columns, and 14 floating point numbers for the values. While this does not seem like a huge space saving over the 49 floating point numbers stored in the dense representation, for larger matrices, the space savings are very dramatic. (For an \(n \times n\) matrix, the dense representation grows with the the square of \(n\), while the sparse representation grows linearly in the number of nonzeros.)</p>
-<p>The parameter <code>index_style</code> in <a class="el" href="classIpopt_1_1TNLP.html#a5da5791365764706aeda02b78f7719b6" title="Method to request the initial information about the problem.">Ipopt::TNLP::get_nlp_info</a> tells <code>Ipopt</code> if you prefer to use C style indexing (0-based, i.e., starting the counting at 0) for the row and column indices or Fortran style (1-based). The following table shows the triplet format for the above example matrix when using the Fortran indexing style.</p>
+<p>The parameter <code>index_style</code> in <a class="el" href="classIpopt_1_1TNLP.html#a5da5791365764706aeda02b78f7719b6" title="Method to request the initial information about the problem.">Ipopt::TNLP::get_nlp_info</a> tells Ipopt if you prefer to use C style indexing (0-based, i.e., starting the counting at 0) for the row and column indices or Fortran style (1-based). The following table shows the triplet format for the above example matrix when using the Fortran indexing style.</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadLeft">row </th><th class="markdownTableHeadLeft">col </th><th class="markdownTableHeadLeft">value  </th></tr>
@@ -232,8 +232,8 @@ Triplet Format for Sparse Matrices</h1>
 <h1><a class="anchor" id="SMARTPTR"></a>
 The Smart Pointer Implementation: SmartPtr&lt;T&gt;</h1>
 <p>The <a class="el" href="classIpopt_1_1SmartPtr.html" title="Template class for Smart Pointers.">Ipopt::SmartPtr</a> class is described in <a class="el" href="IpSmartPtr_8hpp.html">IpSmartPtr.hpp</a>. It is a template class that takes care of counting references to objects and deleting them when there are no references anymore. Instead of pointing to an object with a raw C++ pointer (e.g. <code>HS071_NLP*</code>), we use a <a class="el" href="classIpopt_1_1SmartPtr.html" title="Template class for Smart Pointers.">Ipopt::SmartPtr</a>. Every time a <code>SmartPtr</code> is set to reference an object, it increments a counter in that object (see the <a class="el" href="classIpopt_1_1ReferencedObject.html" title="Storing the reference count of all the smart pointers that currently reference it.">Ipopt::ReferencedObject</a> base class if you are interested). If a <code>SmartPtr</code> is done with the object, either by leaving scope or being set to point to another object, the counter is decremented. When the count of the object goes to zero, the object is automatically deleted. <code>SmartPtr</code>'s are very simple, just use them as you would use a standard pointer.</p>
-<p>It is very important to use <code>SmartPtr</code>'s instead of raw pointers when passing objects to <code>Ipopt</code>. Internally, <code>Ipopt</code> uses smart pointers for referencing objects. If you use a raw pointer in your executable, the object's counter will NOT get incremented. Then, when <code>Ipopt</code> uses smart pointers inside its own code, the counter will get incremented. However, before <code>Ipopt</code> returns control to your code, it will decrement as many times as it incremented earlier, and the counter will return to zero. Therefore, <code>Ipopt</code> will delete the object. When control returns to you, you now have a raw pointer that points to a deleted object.</p>
-<p>This might sound difficult to anyone not familiar with the use of smart pointers, but just follow one simple rule; always use a <a class="el" href="classIpopt_1_1SmartPtr.html" title="Template class for Smart Pointers.">Ipopt::SmartPtr</a> when creating or passing an <code>Ipopt</code> object. </p>
+<p>It is very important to use <code>SmartPtr</code>'s instead of raw pointers when passing objects to Ipopt. Internally, Ipopt uses smart pointers for referencing objects. If you use a raw pointer in your executable, the object's counter will NOT get incremented. Then, when Ipopt uses smart pointers inside its own code, the counter will get incremented. However, before Ipopt returns control to your code, it will decrement as many times as it incremented earlier, and the counter will return to zero. Therefore, Ipopt will delete the object. When control returns to you, you now have a raw pointer that points to a deleted object.</p>
+<p>This might sound difficult to anyone not familiar with the use of smart pointers, but just follow one simple rule; always use a <a class="el" href="classIpopt_1_1SmartPtr.html" title="Template class for Smart Pointers.">Ipopt::SmartPtr</a> when creating or passing an Ipopt object. </p>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 </div><!-- doc-content -->

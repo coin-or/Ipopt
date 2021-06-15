@@ -1,5 +1,7 @@
 var IpRegOptions_8hpp =
 [
+    [ "RegisteredCategory", "classIpopt_1_1RegisteredCategory.html", "classIpopt_1_1RegisteredCategory" ],
+    [ "ComparePriority", "classIpopt_1_1RegisteredCategory_1_1ComparePriority.html", "classIpopt_1_1RegisteredCategory_1_1ComparePriority" ],
     [ "RegisteredOption", "classIpopt_1_1RegisteredOption.html", "classIpopt_1_1RegisteredOption" ],
     [ "string_entry", "classIpopt_1_1RegisteredOption_1_1string__entry.html", "classIpopt_1_1RegisteredOption_1_1string__entry" ],
     [ "RegisteredOptions", "classIpopt_1_1RegisteredOptions.html", "classIpopt_1_1RegisteredOptions" ],

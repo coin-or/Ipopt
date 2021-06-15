@@ -1,6 +1,6 @@
 var classIpopt_1_1AmplOptionsList_1_1PrivatInfo =
 [
-    [ "PrivatInfo", "classIpopt_1_1AmplOptionsList_1_1PrivatInfo.html#a84007fef541e864f0ff2ee7c19e7cf20", null ],
+    [ "PrivatInfo", "classIpopt_1_1AmplOptionsList_1_1PrivatInfo.html#afd8794c59f1aae443f4e3a903161511a", null ],
     [ "IpoptName", "classIpopt_1_1AmplOptionsList_1_1PrivatInfo.html#a1d8d84c49f13bdec7bbaf7f7b40eb41e", null ],
     [ "Options", "classIpopt_1_1AmplOptionsList_1_1PrivatInfo.html#ac672b5ea836f11510d7985a93160e3c3", null ],
     [ "Jnlst", "classIpopt_1_1AmplOptionsList_1_1PrivatInfo.html#ade8863df37a849a9bfb21c98b478cf03", null ],

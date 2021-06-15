@@ -24,6 +24,7 @@ var classIpopt_1_1DenseVector =
     [ "SetImpl", "classIpopt_1_1DenseVector.html#a4dc98fe049ece50ef19361b10e44c4cd", null ],
     [ "ElementWiseDivideImpl", "classIpopt_1_1DenseVector.html#a4195011f8b4d80ef892f12b0e1816133", null ],
     [ "ElementWiseMultiplyImpl", "classIpopt_1_1DenseVector.html#ad36fedac1f04ba1fd2a3c5e7ec37e399", null ],
+    [ "ElementWiseSelectImpl", "classIpopt_1_1DenseVector.html#a7e9c318ba82a08b343e52ae985e9e0a1", null ],
     [ "ElementWiseMaxImpl", "classIpopt_1_1DenseVector.html#ae3985a2f9a7db8e238ce797504246539", null ],
     [ "ElementWiseMinImpl", "classIpopt_1_1DenseVector.html#af4fe8e334ed384864ace82f93617286c", null ],
     [ "ElementWiseReciprocalImpl", "classIpopt_1_1DenseVector.html#aba71165120e92e8cf510646d0d28771c", null ],

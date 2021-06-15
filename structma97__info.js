@@ -17,6 +17,7 @@ var structma97__info =
     [ "num_two", "structma97__info.html#af04c9c002049f35a6d9870d38b24f4a6", null ],
     [ "ordering", "structma97__info.html#a93c9def7b902638b35c85ddd6dd827b9", null ],
     [ "stat", "structma97__info.html#a3e5783d8a60118a11338f0db5152a0bb", null ],
-    [ "ispare", "structma97__info.html#a4021d0e67a1626e7f572af929b737c5a", null ],
-    [ "rspare", "structma97__info.html#afcb9ed0afb30e7375c327abbb71ef13b", null ]
+    [ "ispare", "structma97__info.html#ae2c3d0bae4906de4b6d1942149d0ea83", null ],
+    [ "rspare", "structma97__info.html#afcb9ed0afb30e7375c327abbb71ef13b", null ],
+    [ "rspare", "structma97__info.html#a313af667370bf2cfacae9af84423c04c", null ]
 ];

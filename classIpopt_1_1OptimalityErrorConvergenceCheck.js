@@ -20,6 +20,7 @@ var classIpopt_1_1OptimalityErrorConvergenceCheck =
     [ "acceptable_obj_change_tol_", "classIpopt_1_1OptimalityErrorConvergenceCheck.html#a2a35c9abe9499d9d157964cda4b45b33", null ],
     [ "diverging_iterates_tol_", "classIpopt_1_1OptimalityErrorConvergenceCheck.html#aefcd697225e4324b7c2b14f0ee299001", null ],
     [ "mu_target_", "classIpopt_1_1OptimalityErrorConvergenceCheck.html#af939526a4e316237664b083709157f3f", null ],
+    [ "max_wall_time_", "classIpopt_1_1OptimalityErrorConvergenceCheck.html#a792cc4d22456685ddee42cb9386ab774", null ],
     [ "max_cpu_time_", "classIpopt_1_1OptimalityErrorConvergenceCheck.html#ad2e9545cff58214b9ab7e18abac79918", null ],
     [ "acceptable_counter_", "classIpopt_1_1OptimalityErrorConvergenceCheck.html#a8bc01bc6427849e4683005e66e625c24", null ],
     [ "last_obj_val_", "classIpopt_1_1OptimalityErrorConvergenceCheck.html#a91188cedd60d7a5f3ce83cb7662e7f4e", null ],

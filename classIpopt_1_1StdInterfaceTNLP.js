@@ -15,6 +15,8 @@ var classIpopt_1_1StdInterfaceTNLP =
     [ "eval_h", "classIpopt_1_1StdInterfaceTNLP.html#a8f2d9b4988313f8caa6ac55cc67188dc", null ],
     [ "intermediate_callback", "classIpopt_1_1StdInterfaceTNLP.html#ab4fcfcfb900e02cfa1f9a6c8f2498fcc", null ],
     [ "finalize_solution", "classIpopt_1_1StdInterfaceTNLP.html#a5c79fda73fd0a7e477bd8b82f35516c5", null ],
+    [ "get_curr_iterate", "classIpopt_1_1StdInterfaceTNLP.html#accdb3016a2bc38e277ad4b91df64584d", null ],
+    [ "get_curr_violations", "classIpopt_1_1StdInterfaceTNLP.html#a5082e17ab6fca431e9840a3d4e2608b3", null ],
     [ "apply_new_x", "classIpopt_1_1StdInterfaceTNLP.html#aec3afa900495ea5f1e6da24166e29734", null ],
     [ "operator=", "classIpopt_1_1StdInterfaceTNLP.html#a4f09fc237e8049f586c8311589caf2f9", null ],
     [ "jnlst_", "classIpopt_1_1StdInterfaceTNLP.html#afaac233eacff891ca808f09d8c591b5b", null ],
@@ -47,5 +49,7 @@ var classIpopt_1_1StdInterfaceTNLP =
     [ "z_U_sol_", "classIpopt_1_1StdInterfaceTNLP.html#a9956ba3a0116497a6ab7167e89b8c04d", null ],
     [ "g_sol_", "classIpopt_1_1StdInterfaceTNLP.html#afd5ba12e15ae1af6b7d8f0b3e7d284d3", null ],
     [ "lambda_sol_", "classIpopt_1_1StdInterfaceTNLP.html#afdbdde4c512b1f52aa480db9b654211f", null ],
-    [ "obj_sol_", "classIpopt_1_1StdInterfaceTNLP.html#a5914c525cdd617b63f9759a0eb6cd014", null ]
+    [ "obj_sol_", "classIpopt_1_1StdInterfaceTNLP.html#a5914c525cdd617b63f9759a0eb6cd014", null ],
+    [ "ip_data_", "classIpopt_1_1StdInterfaceTNLP.html#af10e7bdc6187d34ef274f58cf61b330f", null ],
+    [ "ip_cq_", "classIpopt_1_1StdInterfaceTNLP.html#a0778c94409d27fc57d3a9b31ea02d44f", null ]
 ];

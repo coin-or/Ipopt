@@ -12,7 +12,7 @@ var classIpopt_1_1AmplOptionsList =
     [ "AmplOptionsList", "classIpopt_1_1AmplOptionsList.html#ae5aa08c0cf914da15d99b2ddd155c5ba", null ],
     [ "~AmplOptionsList", "classIpopt_1_1AmplOptionsList.html#ad98567e7ead8d92694b734f5ef3d9ce3", null ],
     [ "AmplOptionsList", "classIpopt_1_1AmplOptionsList.html#a6ad24ebc99ae89285b661280ace47236", null ],
-    [ "AddAmplOption", "classIpopt_1_1AmplOptionsList.html#a7d236c88cb9b60cc254bc92d2befd3c8", null ],
+    [ "AddAmplOption", "classIpopt_1_1AmplOptionsList.html#a42fbe9e3e8a63b991d4afe91d5c9bc47", null ],
     [ "NumberOfAmplOptions", "classIpopt_1_1AmplOptionsList.html#a8b60f057be05a2cc06ebcbd1dcca39dc", null ],
     [ "Keywords", "classIpopt_1_1AmplOptionsList.html#ab40140ffb569d7933ebba41defcffdba", null ],
     [ "operator=", "classIpopt_1_1AmplOptionsList.html#ade0ba8909ed3789b3cafb1c0a5d52e71", null ],

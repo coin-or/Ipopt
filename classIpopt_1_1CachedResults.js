@@ -1,6 +1,6 @@
 var classIpopt_1_1CachedResults =
 [
-    [ "CachedResults", "classIpopt_1_1CachedResults.html#a36d5c06e61dfeba0b98d02735bf98c2a", null ],
+    [ "CachedResults", "classIpopt_1_1CachedResults.html#a95da391d00cebb8bd60fd9bafd1b301f", null ],
     [ "~CachedResults", "classIpopt_1_1CachedResults.html#ab5e2f2a7463c31a5653e222c8cb463ef", null ],
     [ "CachedResults", "classIpopt_1_1CachedResults.html#a02da3d9dba67c2c1393e127256a8ce75", null ],
     [ "CachedResults", "classIpopt_1_1CachedResults.html#a52bca50f280a276ec29d37263af06dc1", null ],
@@ -22,10 +22,10 @@ var classIpopt_1_1CachedResults =
     [ "AddCachedResult3Dep", "classIpopt_1_1CachedResults.html#a6a0618748095bc4767ba008aebab1633", null ],
     [ "InvalidateResult", "classIpopt_1_1CachedResults.html#a4f5dbf98deb6438dd5cef7162600c3b5", null ],
     [ "Clear", "classIpopt_1_1CachedResults.html#a1382321cb2355b6a06cf77ebf3dbd9c7", null ],
-    [ "Clear", "classIpopt_1_1CachedResults.html#a0b5caa0bf154eaf2d61846453bd24bf8", null ],
+    [ "Clear", "classIpopt_1_1CachedResults.html#a9b91e184dc7a61d7b5f980fe3e427c47", null ],
     [ "operator=", "classIpopt_1_1CachedResults.html#a094616862992ae284450b1feb074cfcc", null ],
     [ "CleanupInvalidatedResults", "classIpopt_1_1CachedResults.html#a6f65c53c87a03c3045d74fbdd1af57e5", null ],
     [ "DebugPrintCachedResults", "classIpopt_1_1CachedResults.html#a2bde127abd6894d6864cc48061c4d053", null ],
-    [ "max_cache_size_", "classIpopt_1_1CachedResults.html#acb2d0663fcb90fa36fe7183f526ec7f4", null ],
+    [ "max_cache_size_", "classIpopt_1_1CachedResults.html#a910a723286635abe7907bde3ae5c6eb2", null ],
     [ "cached_results_", "classIpopt_1_1CachedResults.html#a0ead55fd598e27c70f0b1c3a06e7cd06", null ]
 ];

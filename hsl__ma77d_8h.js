@@ -36,7 +36,7 @@ var hsl__ma77d_8h =
     [ "ma77_scale_d", "hsl__ma77d_8h.html#a766b03c4a252eac8f98bb05a671bad96", null ],
     [ "ma77_enquire_posdef_d", "hsl__ma77d_8h.html#a8f274a9ee09a336ba183b7c40eb8863b", null ],
     [ "ma77_enquire_indef_d", "hsl__ma77d_8h.html#acd9b6c44d42eb1f62dd1a0d6d1b7aeed", null ],
-    [ "ma77_alter_d", "hsl__ma77d_8h.html#a06218ae9372819d2804ea9bfc722ac03", null ],
+    [ "ma77_alter_d", "hsl__ma77d_8h.html#a33af7ea906d151eb017939b0d72fe757", null ],
     [ "ma77_restart_d", "hsl__ma77d_8h.html#a4936584b9defd6bcdb9fc2bb4a90a118", null ],
     [ "ma77_solve_fredholm_d", "hsl__ma77d_8h.html#a418368d3bd2e96dd1fe39e5ed964ccff", null ],
     [ "ma77_lmultiply_d", "hsl__ma77d_8h.html#a0d311b18a0d790231e0dbecf83b7bb8b", null ],

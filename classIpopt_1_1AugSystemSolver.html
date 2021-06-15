@@ -1,5 +1,5 @@
-<!-- HTML header for doxygen 1.8.13-->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- HTML header for doxygen 1.8.18-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.13.4</span-->
+   &#160;<!--span id="projectnumber">3.14.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -135,13 +135,13 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab4e182094fc0f28b1f24ee13014d13e5"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1AugSystemSolver.html#ab4e182094fc0f28b1f24ee13014d13e5">InitializeImpl</a> (const <a class="el" href="classIpopt_1_1OptionsList.html">OptionsList</a> &amp;options, const std::string &amp;prefix)=0</td></tr>
 <tr class="memdesc:ab4e182094fc0f28b1f24ee13014d13e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">overloaded from <a class="el" href="classIpopt_1_1AlgorithmStrategyObject.html" title="This is the base class for all algorithm strategy objects.">AlgorithmStrategyObject</a>  <a href="classIpopt_1_1AugSystemSolver.html#ab4e182094fc0f28b1f24ee13014d13e5">More...</a><br /></td></tr>
 <tr class="separator:ab4e182094fc0f28b1f24ee13014d13e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a82861d121f8e87f5ed5ff936663d0ece"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1AugSystemSolver.html#a82861d121f8e87f5ed5ff936663d0ece">Solve</a> (const <a class="el" href="classIpopt_1_1SymMatrix.html">SymMatrix</a> *W, double W_factor, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> *D_x, double delta_x, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> *D_s, double delta_s, const <a class="el" href="classIpopt_1_1Matrix.html">Matrix</a> *J_c, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> *D_c, double delta_c, const <a class="el" href="classIpopt_1_1Matrix.html">Matrix</a> *J_d, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> *D_d, double delta_d, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;rhs_x, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;rhs_s, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;rhs_c, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;rhs_d, <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;sol_x, <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;sol_s, <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;sol_c, <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;sol_d, bool check_NegEVals, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> numberOfNegEVals)</td></tr>
-<tr class="memdesc:a82861d121f8e87f5ed5ff936663d0ece"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set up the augmented system and solve it for a given right hand side.  <a href="classIpopt_1_1AugSystemSolver.html#a82861d121f8e87f5ed5ff936663d0ece">More...</a><br /></td></tr>
-<tr class="separator:a82861d121f8e87f5ed5ff936663d0ece"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afe76a8c7a1c56f08901db97646377016"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1AugSystemSolver.html#afe76a8c7a1c56f08901db97646377016">MultiSolve</a> (const <a class="el" href="classIpopt_1_1SymMatrix.html">SymMatrix</a> *W, double W_factor, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> *D_x, double delta_x, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> *D_s, double delta_s, const <a class="el" href="classIpopt_1_1Matrix.html">Matrix</a> *J_c, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> *D_c, double delta_c, const <a class="el" href="classIpopt_1_1Matrix.html">Matrix</a> *J_d, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> *D_d, double delta_d, std::vector&lt; <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &gt; &gt; &amp;rhs_xV, std::vector&lt; <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &gt; &gt; &amp;rhs_sV, std::vector&lt; <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &gt; &gt; &amp;rhs_cV, std::vector&lt; <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &gt; &gt; &amp;rhs_dV, std::vector&lt; <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &gt; &gt; &amp;sol_xV, std::vector&lt; <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &gt; &gt; &amp;sol_sV, std::vector&lt; <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &gt; &gt; &amp;sol_cV, std::vector&lt; <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &gt; &gt; &amp;sol_dV, bool check_NegEVals, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> numberOfNegEVals)</td></tr>
-<tr class="memdesc:afe76a8c7a1c56f08901db97646377016"><td class="mdescLeft">&#160;</td><td class="mdescRight">Like Solve, but for multiple right hand sides.  <a href="classIpopt_1_1AugSystemSolver.html#afe76a8c7a1c56f08901db97646377016">More...</a><br /></td></tr>
-<tr class="separator:afe76a8c7a1c56f08901db97646377016"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a08139bdc802b7ac60b9e223673af8d0b"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1AugSystemSolver.html#a08139bdc802b7ac60b9e223673af8d0b">NumberOfNegEVals</a> () const =0</td></tr>
+<tr class="memitem:abb55393775ad33b7a0850dc080fe1fbe"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1AugSystemSolver.html#abb55393775ad33b7a0850dc080fe1fbe">Solve</a> (const <a class="el" href="classIpopt_1_1SymMatrix.html">SymMatrix</a> *W, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> W_factor, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> *D_x, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> delta_x, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> *D_s, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> delta_s, const <a class="el" href="classIpopt_1_1Matrix.html">Matrix</a> *J_c, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> *D_c, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> delta_c, const <a class="el" href="classIpopt_1_1Matrix.html">Matrix</a> *J_d, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> *D_d, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> delta_d, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;rhs_x, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;rhs_s, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;rhs_c, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;rhs_d, <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;sol_x, <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;sol_s, <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;sol_c, <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;sol_d, bool check_NegEVals, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> numberOfNegEVals)</td></tr>
+<tr class="memdesc:abb55393775ad33b7a0850dc080fe1fbe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set up the augmented system and solve it for a given right hand side.  <a href="classIpopt_1_1AugSystemSolver.html#abb55393775ad33b7a0850dc080fe1fbe">More...</a><br /></td></tr>
+<tr class="separator:abb55393775ad33b7a0850dc080fe1fbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a4e0585e102dd1a13c23b7aab1c3e36"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1AugSystemSolver.html#a2a4e0585e102dd1a13c23b7aab1c3e36">MultiSolve</a> (const <a class="el" href="classIpopt_1_1SymMatrix.html">SymMatrix</a> *W, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> W_factor, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> *D_x, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> delta_x, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> *D_s, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> delta_s, const <a class="el" href="classIpopt_1_1Matrix.html">Matrix</a> *J_c, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> *D_c, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> delta_c, const <a class="el" href="classIpopt_1_1Matrix.html">Matrix</a> *J_d, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> *D_d, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> delta_d, std::vector&lt; <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &gt; &gt; &amp;rhs_xV, std::vector&lt; <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &gt; &gt; &amp;rhs_sV, std::vector&lt; <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &gt; &gt; &amp;rhs_cV, std::vector&lt; <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &gt; &gt; &amp;rhs_dV, std::vector&lt; <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &gt; &gt; &amp;sol_xV, std::vector&lt; <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &gt; &gt; &amp;sol_sV, std::vector&lt; <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &gt; &gt; &amp;sol_cV, std::vector&lt; <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &gt; &gt; &amp;sol_dV, bool check_NegEVals, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> numberOfNegEVals)</td></tr>
+<tr class="memdesc:a2a4e0585e102dd1a13c23b7aab1c3e36"><td class="mdescLeft">&#160;</td><td class="mdescRight">Like Solve, but for multiple right hand sides.  <a href="classIpopt_1_1AugSystemSolver.html#a2a4e0585e102dd1a13c23b7aab1c3e36">More...</a><br /></td></tr>
+<tr class="separator:a2a4e0585e102dd1a13c23b7aab1c3e36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08139bdc802b7ac60b9e223673af8d0b"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1AugSystemSolver.html#a08139bdc802b7ac60b9e223673af8d0b">NumberOfNegEVals</a> () const =0</td></tr>
 <tr class="memdesc:a08139bdc802b7ac60b9e223673af8d0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of negative eigenvalues detected during last solve.  <a href="classIpopt_1_1AugSystemSolver.html#a08139bdc802b7ac60b9e223673af8d0b">More...</a><br /></td></tr>
 <tr class="separator:a08139bdc802b7ac60b9e223673af8d0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab88a753f03e07ee1491759833d5d8ec1"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1AugSystemSolver.html#ab88a753f03e07ee1491759833d5d8ec1">ProvidesInertia</a> () const =0</td></tr>
@@ -175,7 +175,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5c0f2208e3ead22bf7c5179381ed8203 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adbbf3aa5307da62ab8224ba599d4bd7a inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#adbbf3aa5307da62ab8224ba599d4bd7a">~ReferencedObject</a> ()</td></tr>
 <tr class="separator:adbbf3aa5307da62ab8224ba599d4bd7a inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac517534e10e36c946aeefc6fe337777 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#aac517534e10e36c946aeefc6fe337777">ReferenceCount</a> () const</td></tr>
+<tr class="memitem:aac517534e10e36c946aeefc6fe337777 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#aac517534e10e36c946aeefc6fe337777">ReferenceCount</a> () const</td></tr>
 <tr class="separator:aac517534e10e36c946aeefc6fe337777 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa69ecb0f026bd741e2fa84c31d4ec332 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#aa69ecb0f026bd741e2fa84c31d4ec332">AddRef</a> (const <a class="el" href="classIpopt_1_1Referencer.html">Referencer</a> *referencer) const</td></tr>
 <tr class="separator:aa69ecb0f026bd741e2fa84c31d4ec332 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -346,8 +346,8 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a82861d121f8e87f5ed5ff936663d0ece"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a82861d121f8e87f5ed5ff936663d0ece">&#9670;&nbsp;</a></span>Solve()</h2>
+<a id="abb55393775ad33b7a0850dc080fe1fbe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb55393775ad33b7a0850dc080fe1fbe">&#9670;&nbsp;</a></span>Solve()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -364,7 +364,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>W_factor</em>, </td>
         </tr>
         <tr>
@@ -376,7 +376,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>delta_x</em>, </td>
         </tr>
         <tr>
@@ -388,7 +388,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>delta_s</em>, </td>
         </tr>
         <tr>
@@ -406,7 +406,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>delta_c</em>, </td>
         </tr>
         <tr>
@@ -424,7 +424,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>delta_d</em>, </td>
         </tr>
         <tr>
@@ -484,7 +484,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>numberOfNegEVals</em>&#160;</td>
         </tr>
         <tr>
@@ -504,14 +504,14 @@ Additional Inherited Members</h2></td></tr>
 <p>If desired (i.e. if check_NegEVals is true), then the solution is only computed if the number of negative eigenvalues matches numberOfNegEVals.</p>
 <dl class="section return"><dt>Returns</dt><dd>return value of the linear solver object. </dd></dl>
 
-<p>Reimplemented in <a class="el" href="classIpopt_1_1AugRestoSystemSolver.html#a3b3802bc01cdfb1544ea7ceac1badace">Ipopt::AugRestoSystemSolver</a>, <a class="el" href="classIpopt_1_1LowRankSSAugSystemSolver.html#aafad3c10735315e3a8c50012dee582bf">Ipopt::LowRankSSAugSystemSolver</a>, and <a class="el" href="classIpopt_1_1LowRankAugSystemSolver.html#a13c609acb87f93aacf0ad61e2e4b5d17">Ipopt::LowRankAugSystemSolver</a>.</p>
+<p>Reimplemented in <a class="el" href="classIpopt_1_1AugRestoSystemSolver.html#a6af9d8a5bc72cc4825650c44a90cffae">Ipopt::AugRestoSystemSolver</a>, <a class="el" href="classIpopt_1_1LowRankSSAugSystemSolver.html#ac598162c57dcbc083441922ec12c5372">Ipopt::LowRankSSAugSystemSolver</a>, and <a class="el" href="classIpopt_1_1LowRankAugSystemSolver.html#ad8a673a2ad8b20774fe2fdb3787ccbc4">Ipopt::LowRankAugSystemSolver</a>.</p>
 
 <p class="definition">Definition at line <a class="el" href="IpAugSystemSolver_8hpp_source.html#l00063">63</a> of file <a class="el" href="IpAugSystemSolver_8hpp_source.html">IpAugSystemSolver.hpp</a>.</p>
 
 </div>
 </div>
-<a id="afe76a8c7a1c56f08901db97646377016"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afe76a8c7a1c56f08901db97646377016">&#9670;&nbsp;</a></span>MultiSolve()</h2>
+<a id="a2a4e0585e102dd1a13c23b7aab1c3e36"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a4e0585e102dd1a13c23b7aab1c3e36">&#9670;&nbsp;</a></span>MultiSolve()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -528,7 +528,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>W_factor</em>, </td>
         </tr>
         <tr>
@@ -540,7 +540,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>delta_x</em>, </td>
         </tr>
         <tr>
@@ -552,7 +552,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>delta_s</em>, </td>
         </tr>
         <tr>
@@ -570,7 +570,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>delta_c</em>, </td>
         </tr>
         <tr>
@@ -588,7 +588,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>delta_d</em>, </td>
         </tr>
         <tr>
@@ -648,7 +648,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>numberOfNegEVals</em>&#160;</td>
         </tr>
         <tr>
@@ -667,7 +667,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Like Solve, but for multiple right hand sides. </p>
 <p>The inheriting class has to overload at least one of Solve and MultiSolve. </p>
 
-<p>Reimplemented in <a class="el" href="classIpopt_1_1StdAugSystemSolver.html#a8a8b39ad70dc9ec9ec6cdb7940e60749">Ipopt::StdAugSystemSolver</a>, and <a class="el" href="classIpopt_1_1GenAugSystemSolver.html#a6aa715059af2281bdf5bbba84c9bb8e1">Ipopt::GenAugSystemSolver</a>.</p>
+<p>Reimplemented in <a class="el" href="classIpopt_1_1StdAugSystemSolver.html#a2462309b0e59e8afbda8c94cee957f90">Ipopt::StdAugSystemSolver</a>, and <a class="el" href="classIpopt_1_1GenAugSystemSolver.html#ad83b87439b5cd4ccb13317befdd37400">Ipopt::GenAugSystemSolver</a>.</p>
 
 <p class="definition">Definition at line <a class="el" href="IpAugSystemSolver_8hpp_source.html#l00113">113</a> of file <a class="el" href="IpAugSystemSolver_8hpp_source.html">IpAugSystemSolver.hpp</a>.</p>
 
@@ -683,7 +683,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::AugSystemSolver::NumberOfNegEVals </td>
+          <td class="memname">virtual <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::AugSystemSolver::NumberOfNegEVals </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>

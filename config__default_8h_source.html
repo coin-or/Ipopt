@@ -1,5 +1,5 @@
-<!-- HTML header for doxygen 1.8.13-->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- HTML header for doxygen 1.8.18-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.13.4</span-->
+   &#160;<!--span id="projectnumber">3.14.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -126,11 +126,11 @@ $(document).ready(function(){initNavTree('config__default_8h_source.html',''); i
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">/***************************************************************************/</span></div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">/* Define to the debug sanity check level (0 is no test) */</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#define IPOPT_CHECKLEVEL 0</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="config__default_8h.html#aee7eb79e1e5393f437efc832b7919f5c">   24</a></span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment">/* #define IPOPT_CHECKLEVEL 0 */</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="comment">/* Define to the debug verbosity level (0 is no output) */</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#define IPOPT_VERBOSITY 0</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="config__default_8h.html#a5d050e78bd81677969d6b3850b1624a4">   27</a></span>&#160; </div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment">/* #define IPOPT_VERBOSITY 0 */</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="comment">/* If defined, the Ampl Solver Library is available. */</span></div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="comment">/* #undef IPOPT_HAS_ASL 1 */</span></div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
@@ -147,35 +147,27 @@ $(document).ready(function(){initNavTree('config__default_8h_source.html',''); i
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="comment">   loading of shared libraries with linear solvers */</span></div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="comment">/* #undef IPOPT_HAS_LINEARSOLVERLOADER */</span></div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment">/* Define to 1 if Pardiso is available */</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="comment">/* #undef IPOPT_HAS_PARDISO */</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment">/* Define to 1 if you are using Pardiso from MKL */</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="comment">/* #undef IPOPT_HAS_PARDISO_MKL */</span></div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="comment">/* Define to 1 if you are using Pardiso from MKL */</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="comment">/* #undef IPOPT_HAS_PARDISO_MKL */</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="comment">/* Define to 1 if SPRAL is available */</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="comment">/* #undef IPOPT_HAS_SPRAL */</span></div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="comment">/* Define to 1 if you are using the parallel version of Pardiso */</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="comment">/* #undef IPOPT_HAS_PARDISO_PARALLEL */</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="comment">/* Define to 1 if WSMP is available */</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="comment">/* #undef IPOPT_HAS_WSMP */</span></div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="comment">/* Define to 1 if WSMP is available */</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="comment">/* #undef IPOPT_HAS_WSMP */</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment">/* Define to the C type corresponding to Fortran INTEGER */</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="preprocessor">#ifndef IPOPT_FORTRAN_INTEGER_TYPE</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="preprocessor">#define IPOPT_FORTRAN_INTEGER_TYPE int</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="comment">/* Define to be the name of C-function for Inf check */</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="preprocessor">#ifdef _MSC_VER</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="preprocessor">#define IPOPT_C_FINITE _finite</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="preprocessor">#define IPOPT_C_FINITE std::isfinite</span></div>
-<div class="line"><a name="l00066"></a><span class="lineno"><a class="line" href="config__default_8h.html#aec30f36872c5acb4dee3c14dfa531456">   66</a></span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="preprocessor">#define IPOPT_BLAS_FUNC(name,NAME)    F77_FUNC(name,NAME)</span></div>
-<div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="config__default_8h.html#ab924fb02d467f6e4842c78bd87219a66">   69</a></span>&#160;<span class="preprocessor">#define IPOPT_LAPACK_FUNC(name,NAME)  F77_FUNC(name,NAME)</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno"><a class="line" href="config__default_8h.html#af8ba164b2911f1ff6ac15a0453dbabba">   70</a></span>&#160;<span class="preprocessor">#define IPOPT_PARDISO_FUNC(name,NAME) F77_FUNC(name,NAME)</span></div>
-<div class="line"><a name="l00071"></a><span class="lineno"><a class="line" href="config__default_8h.html#afdd4f08c71f65f539cead88f16217a52">   71</a></span>&#160;<span class="preprocessor">#define IPOPT_WSMP_FUNC(name,NAME)    F77_FUNC(name,NAME)</span></div>
-<div class="line"><a name="l00072"></a><span class="lineno"><a class="line" href="config__default_8h.html#a4648adf92cc2c04c0a61c44372f7654d">   72</a></span>&#160;<span class="preprocessor">#define IPOPT_WSMP_FUNC_(name,NAME)   F77_FUNC_(name,NAME)</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="comment">/* Define to be the name of C-function for Inf check */</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="preprocessor">#ifdef _MSC_VER</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="preprocessor">#define IPOPT_C_FINITE _finite</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="preprocessor">#define IPOPT_C_FINITE std::isfinite</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno"><a class="line" href="config__default_8h.html#aec30f36872c5acb4dee3c14dfa531456">   58</a></span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="preprocessor">#define IPOPT_BLAS_FUNC(name,NAME)    F77_FUNC(name,NAME)</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="config__default_8h.html#ab924fb02d467f6e4842c78bd87219a66">   61</a></span>&#160;<span class="preprocessor">#define IPOPT_LAPACK_FUNC(name,NAME)  F77_FUNC(name,NAME)</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno"><a class="line" href="config__default_8h.html#af8ba164b2911f1ff6ac15a0453dbabba">   62</a></span>&#160;<span class="preprocessor">#define IPOPT_PARDISO_FUNC(name,NAME) F77_FUNC(name,NAME)</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno"><a class="line" href="config__default_8h.html#afdd4f08c71f65f539cead88f16217a52">   63</a></span>&#160;<span class="preprocessor">#define IPOPT_WSMP_FUNC(name,NAME)    F77_FUNC(name,NAME)</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno"><a class="line" href="config__default_8h.html#a4648adf92cc2c04c0a61c44372f7654d">   64</a></span>&#160;<span class="preprocessor">#define IPOPT_WSMP_FUNC_(name,NAME)   F77_FUNC_(name,NAME)</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aconfigall__system_8h_html"><div class="ttname"><a href="configall__system_8h.html">configall_system.h</a></div></div>

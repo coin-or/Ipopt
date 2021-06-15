@@ -1,6 +1,6 @@
 var classIpopt_1_1IpoptAlgorithm =
 [
-    [ "IpoptAlgorithm", "classIpopt_1_1IpoptAlgorithm.html#a9cd9e4988684102c87358b97c08938cc", null ],
+    [ "IpoptAlgorithm", "classIpopt_1_1IpoptAlgorithm.html#ad4c9f88e50caf9561af1ff076e940060", null ],
     [ "~IpoptAlgorithm", "classIpopt_1_1IpoptAlgorithm.html#a1ae33580941d94f13124edb896011449", null ],
     [ "IpoptAlgorithm", "classIpopt_1_1IpoptAlgorithm.html#a0ad61e8f4c25f363593a0d0305610339", null ],
     [ "IpoptAlgorithm", "classIpopt_1_1IpoptAlgorithm.html#a6a8218a6544e0a698019ea0f32154cd8", null ],
@@ -34,5 +34,5 @@ var classIpopt_1_1IpoptAlgorithm =
     [ "recalc_y_", "classIpopt_1_1IpoptAlgorithm.html#a3daabe007c91d175bf946dfd6ea64c92", null ],
     [ "recalc_y_feas_tol_", "classIpopt_1_1IpoptAlgorithm.html#ad491f2679dab2acf0355e298436a65b4", null ],
     [ "mehrotra_algorithm_", "classIpopt_1_1IpoptAlgorithm.html#a174974faf857114ff07429be6e648ef5", null ],
-    [ "linear_solver_", "classIpopt_1_1IpoptAlgorithm.html#a6d3aa17358b3e854cb8ef6af9b1c2e17", null ]
+    [ "linear_solver_name_", "classIpopt_1_1IpoptAlgorithm.html#ac04d5d1e83e09dfcd7507fb85ef822fa", null ]
 ];

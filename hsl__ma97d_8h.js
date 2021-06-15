@@ -33,7 +33,7 @@ var hsl__ma97d_8h =
     [ "ma97_enquire_posdef_d", "hsl__ma97d_8h.html#a3ab0326f34bdf5c3548b0b8b674711f1", null ],
     [ "ma97_enquire_indef_d", "hsl__ma97d_8h.html#a5587ade6f3317939c22cfebea4d0bed9", null ],
     [ "ma97_alter_d", "hsl__ma97d_8h.html#aa1f371030d51a003e2af3b018ebb9282", null ],
-    [ "ma97_solve_fredholm_d", "hsl__ma97d_8h.html#a8ac86e602b17e758da0023bba122d878", null ],
+    [ "ma97_solve_fredholm_d", "hsl__ma97d_8h.html#a9b0242c7585380f4bb464d7bfc0e4908", null ],
     [ "ma97_lmultiply_d", "hsl__ma97d_8h.html#a958d23937d4332b2b09db7fd792b2864", null ],
     [ "ma97_sparse_fwd_solve_d", "hsl__ma97d_8h.html#a35a662cdcbd7ac6b3cc55a70df039171", null ]
 ];

@@ -30,6 +30,6 @@ var classIpopt_1_1IterativeWsmpSolverInterface =
     [ "initialized_", "classIpopt_1_1IterativeWsmpSolverInterface.html#a170ce8487655c2185a0debec27d171ba", null ],
     [ "pivtol_changed_", "classIpopt_1_1IterativeWsmpSolverInterface.html#a4e8c4401fb0f991383089c25bdbaa8e0", null ],
     [ "have_symbolic_factorization_", "classIpopt_1_1IterativeWsmpSolverInterface.html#a6111c75e4141771944a6317d8e65e711", null ],
-    [ "IPARM_", "classIpopt_1_1IterativeWsmpSolverInterface.html#a789c2c280300fa611214685c1347980b", null ],
+    [ "IPARM_", "classIpopt_1_1IterativeWsmpSolverInterface.html#a444879d68e90f950c07b662108bb8ea7", null ],
     [ "DPARM_", "classIpopt_1_1IterativeWsmpSolverInterface.html#a7fc4811f0a45111b2aec13f3afc61cd0", null ]
 ];

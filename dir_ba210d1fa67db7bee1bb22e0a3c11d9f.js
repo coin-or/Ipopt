@@ -12,11 +12,12 @@ var dir_ba210d1fa67db7bee1bb22e0a3c11d9f =
     [ "IpDebug.hpp", "IpDebug_8hpp.html", "IpDebug_8hpp" ],
     [ "IpException.hpp", "IpException_8hpp.html", "IpException_8hpp" ],
     [ "IpJournalist.hpp", "IpJournalist_8hpp.html", "IpJournalist_8hpp" ],
+    [ "IpLibraryLoader.hpp", "IpLibraryLoader_8hpp.html", "IpLibraryLoader_8hpp" ],
     [ "IpObserver.hpp", "IpObserver_8hpp.html", [
       [ "Observer", "classIpopt_1_1Observer.html", "classIpopt_1_1Observer" ],
       [ "Subject", "classIpopt_1_1Subject.html", "classIpopt_1_1Subject" ]
     ] ],
-    [ "IpoptConfig.h", "IpoptConfig_8h.html", "IpoptConfig_8h" ],
+    [ "IpoptConfig.h", "IpoptConfig_8h.html", null ],
     [ "IpOptionsList.hpp", "IpOptionsList_8hpp.html", "IpOptionsList_8hpp" ],
     [ "IpReferenced.hpp", "IpReferenced_8hpp.html", [
       [ "Referencer", "classIpopt_1_1Referencer.html", null ],
@@ -30,6 +31,7 @@ var dir_ba210d1fa67db7bee1bb22e0a3c11d9f =
     [ "IpTimedTask.hpp", "IpTimedTask_8hpp.html", [
       [ "TimedTask", "classIpopt_1_1TimedTask.html", "classIpopt_1_1TimedTask" ]
     ] ],
+    [ "IpTypes.h", "IpTypes_8h.html", "IpTypes_8h" ],
     [ "IpTypes.hpp", "IpTypes_8hpp.html", "IpTypes_8hpp" ],
     [ "IpUtils.hpp", "IpUtils_8hpp.html", "IpUtils_8hpp" ]
 ];

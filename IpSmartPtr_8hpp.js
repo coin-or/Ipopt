@@ -1,7 +1,6 @@
 var IpSmartPtr_8hpp =
 [
     [ "SmartPtr", "classIpopt_1_1SmartPtr.html", "classIpopt_1_1SmartPtr" ],
-    [ "IPOPT_UNUSED", "IpSmartPtr_8hpp.html#a0a972dee3128bbb38cad3cebd28b9fd8", null ],
     [ "ipopt_dbg_smartptr_verbosity", "IpSmartPtr_8hpp.html#a471697db00ab19588c793b1b76bbaf60", null ],
     [ "GetRawPtr", "IpSmartPtr_8hpp.html#a4ae001947e506b5b8f4f134b8a4ead23", null ],
     [ "ConstPtr", "IpSmartPtr_8hpp.html#a3e8cc2c607c17995786c1929bd006be9", null ],

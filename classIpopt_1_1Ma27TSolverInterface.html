@@ -1,5 +1,5 @@
-<!-- HTML header for doxygen 1.8.13-->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- HTML header for doxygen 1.8.18-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.13.4</span-->
+   &#160;<!--span id="projectnumber">3.14.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -102,6 +102,7 @@ $(document).ready(function(){initNavTree('classIpopt_1_1Ma27TSolverInterface.htm
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="classIpopt_1_1Ma27TSolverInterface-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">Ipopt::Ma27TSolverInterface Class Reference</div>  </div>
@@ -132,23 +133,23 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a08b9b2fa8c0f426503363f810405f56b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation of the initialization method that has to be overloaded by for each derived class.  <a href="classIpopt_1_1Ma27TSolverInterface.html#a08b9b2fa8c0f426503363f810405f56b">More...</a><br /></td></tr>
 <tr class="separator:a08b9b2fa8c0f426503363f810405f56b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Constructor/Destructor</div></td></tr>
-<tr class="memitem:ae245f2676c602be03ff9cfe7b0a74d0c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#ae245f2676c602be03ff9cfe7b0a74d0c">Ma27TSolverInterface</a> ()</td></tr>
-<tr class="memdesc:ae245f2676c602be03ff9cfe7b0a74d0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="classIpopt_1_1Ma27TSolverInterface.html#ae245f2676c602be03ff9cfe7b0a74d0c">More...</a><br /></td></tr>
-<tr class="separator:ae245f2676c602be03ff9cfe7b0a74d0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7abd6e94c988a22ab82e419ee7680245"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a7abd6e94c988a22ab82e419ee7680245">Ma27TSolverInterface</a> (<a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1LibraryLoader.html">LibraryLoader</a> &gt; hslloader_)</td></tr>
+<tr class="memdesc:a7abd6e94c988a22ab82e419ee7680245"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="classIpopt_1_1Ma27TSolverInterface.html#a7abd6e94c988a22ab82e419ee7680245">More...</a><br /></td></tr>
+<tr class="separator:a7abd6e94c988a22ab82e419ee7680245"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a361bb989d3550a6a0fbcc066033f55ab"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a361bb989d3550a6a0fbcc066033f55ab">~Ma27TSolverInterface</a> ()</td></tr>
 <tr class="memdesc:a361bb989d3550a6a0fbcc066033f55ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="classIpopt_1_1Ma27TSolverInterface.html#a361bb989d3550a6a0fbcc066033f55ab">More...</a><br /></td></tr>
 <tr class="separator:a361bb989d3550a6a0fbcc066033f55ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Methods for requesting solution of the linear system.</div></td></tr>
-<tr class="memitem:a84e002daaedddab9359bd252e5363888"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a84e002daaedddab9359bd252e5363888">InitializeStructure</a> (<a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> dim, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> nonzeros, const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *airn, const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *ajcn)</td></tr>
+<tr class="memitem:a84e002daaedddab9359bd252e5363888"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a84e002daaedddab9359bd252e5363888">InitializeStructure</a> (<a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> dim, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> nonzeros, const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *airn, const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *ajcn)</td></tr>
 <tr class="memdesc:a84e002daaedddab9359bd252e5363888"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method for initializing internal structures.  <a href="classIpopt_1_1Ma27TSolverInterface.html#a84e002daaedddab9359bd252e5363888">More...</a><br /></td></tr>
 <tr class="separator:a84e002daaedddab9359bd252e5363888"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af4823e8f19e1a4f76082fbdccc60dd8b"><td class="memItemLeft" align="right" valign="top">virtual double *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#af4823e8f19e1a4f76082fbdccc60dd8b">GetValuesArrayPtr</a> ()</td></tr>
-<tr class="memdesc:af4823e8f19e1a4f76082fbdccc60dd8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method returning an internal array into which the nonzero elements (in the same order as ja) will be stored by the calling routine before a call to MultiSolve with a new_matrix=true (or after a return of MultiSolve with SYMSOLV_CALL_AGAIN).  <a href="classIpopt_1_1Ma27TSolverInterface.html#af4823e8f19e1a4f76082fbdccc60dd8b">More...</a><br /></td></tr>
-<tr class="separator:af4823e8f19e1a4f76082fbdccc60dd8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa78ca5ace951ca63038a2640eab0e02"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#afa78ca5ace951ca63038a2640eab0e02">MultiSolve</a> (bool new_matrix, const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *airn, const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *ajcn, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> nrhs, double *rhs_vals, bool check_NegEVals, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> numberOfNegEVals)</td></tr>
-<tr class="memdesc:afa78ca5ace951ca63038a2640eab0e02"><td class="mdescLeft">&#160;</td><td class="mdescRight">Solve operation for multiple right hand sides.  <a href="classIpopt_1_1Ma27TSolverInterface.html#afa78ca5ace951ca63038a2640eab0e02">More...</a><br /></td></tr>
-<tr class="separator:afa78ca5ace951ca63038a2640eab0e02"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a12f9ee4c651ac61276e25ca51791b2a7"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a12f9ee4c651ac61276e25ca51791b2a7">NumberOfNegEVals</a> () const</td></tr>
+<tr class="memitem:ad015d479b08de1bcb6176b8240168246"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#ad015d479b08de1bcb6176b8240168246">GetValuesArrayPtr</a> ()</td></tr>
+<tr class="memdesc:ad015d479b08de1bcb6176b8240168246"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method returning an internal array into which the nonzero elements (in the same order as ja) will be stored by the calling routine before a call to MultiSolve with a new_matrix=true (or after a return of MultiSolve with SYMSOLV_CALL_AGAIN).  <a href="classIpopt_1_1Ma27TSolverInterface.html#ad015d479b08de1bcb6176b8240168246">More...</a><br /></td></tr>
+<tr class="separator:ad015d479b08de1bcb6176b8240168246"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc46f5a3efa5656374d6c50e931271b0"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#adc46f5a3efa5656374d6c50e931271b0">MultiSolve</a> (bool new_matrix, const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *airn, const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *ajcn, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> nrhs, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *rhs_vals, bool check_NegEVals, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> numberOfNegEVals)</td></tr>
+<tr class="memdesc:adc46f5a3efa5656374d6c50e931271b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Solve operation for multiple right hand sides.  <a href="classIpopt_1_1Ma27TSolverInterface.html#adc46f5a3efa5656374d6c50e931271b0">More...</a><br /></td></tr>
+<tr class="separator:adc46f5a3efa5656374d6c50e931271b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12f9ee4c651ac61276e25ca51791b2a7"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a12f9ee4c651ac61276e25ca51791b2a7">NumberOfNegEVals</a> () const</td></tr>
 <tr class="memdesc:a12f9ee4c651ac61276e25ca51791b2a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of negative eigenvalues detected during last factorization.  <a href="classIpopt_1_1Ma27TSolverInterface.html#a12f9ee4c651ac61276e25ca51791b2a7">More...</a><br /></td></tr>
 <tr class="separator:a12f9ee4c651ac61276e25ca51791b2a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader"></div></td></tr>
@@ -169,7 +170,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a437afeb947fb9c081a69ddebb3bd70fd inherit pub_methods_classIpopt_1_1SparseSymLinearSolverInterface"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html#a437afeb947fb9c081a69ddebb3bd70fd">ProvidesDegeneracyDetection</a> () const</td></tr>
 <tr class="memdesc:a437afeb947fb9c081a69ddebb3bd70fd inherit pub_methods_classIpopt_1_1SparseSymLinearSolverInterface"><td class="mdescLeft">&#160;</td><td class="mdescRight">Query whether the indices of linearly dependent rows/columns can be determined by this linear solver.  <a href="classIpopt_1_1SparseSymLinearSolverInterface.html#a437afeb947fb9c081a69ddebb3bd70fd">More...</a><br /></td></tr>
 <tr class="separator:a437afeb947fb9c081a69ddebb3bd70fd inherit pub_methods_classIpopt_1_1SparseSymLinearSolverInterface"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac0acf21743d7d571959bd5b432d2d58f inherit pub_methods_classIpopt_1_1SparseSymLinearSolverInterface"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html#ac0acf21743d7d571959bd5b432d2d58f">DetermineDependentRows</a> (const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *, const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *, std::list&lt; <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> &gt; &amp;)</td></tr>
+<tr class="memitem:ac0acf21743d7d571959bd5b432d2d58f inherit pub_methods_classIpopt_1_1SparseSymLinearSolverInterface"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html#ac0acf21743d7d571959bd5b432d2d58f">DetermineDependentRows</a> (const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *, const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *, std::list&lt; <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> &gt; &amp;)</td></tr>
 <tr class="memdesc:ac0acf21743d7d571959bd5b432d2d58f inherit pub_methods_classIpopt_1_1SparseSymLinearSolverInterface"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method determines the list of row indices of the linearly dependent rows.  <a href="classIpopt_1_1SparseSymLinearSolverInterface.html#ac0acf21743d7d571959bd5b432d2d58f">More...</a><br /></td></tr>
 <tr class="separator:ac0acf21743d7d571959bd5b432d2d58f inherit pub_methods_classIpopt_1_1SparseSymLinearSolverInterface"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classIpopt_1_1AlgorithmStrategyObject"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classIpopt_1_1AlgorithmStrategyObject')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classIpopt_1_1AlgorithmStrategyObject.html">Ipopt::AlgorithmStrategyObject</a></td></tr>
@@ -190,7 +191,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5c0f2208e3ead22bf7c5179381ed8203 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adbbf3aa5307da62ab8224ba599d4bd7a inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#adbbf3aa5307da62ab8224ba599d4bd7a">~ReferencedObject</a> ()</td></tr>
 <tr class="separator:adbbf3aa5307da62ab8224ba599d4bd7a inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac517534e10e36c946aeefc6fe337777 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#aac517534e10e36c946aeefc6fe337777">ReferenceCount</a> () const</td></tr>
+<tr class="memitem:aac517534e10e36c946aeefc6fe337777 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#aac517534e10e36c946aeefc6fe337777">ReferenceCount</a> () const</td></tr>
 <tr class="separator:aac517534e10e36c946aeefc6fe337777 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa69ecb0f026bd741e2fa84c31d4ec332 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#aa69ecb0f026bd741e2fa84c31d4ec332">AddRef</a> (const <a class="el" href="classIpopt_1_1Referencer.html">Referencer</a> *referencer) const</td></tr>
 <tr class="separator:aa69ecb0f026bd741e2fa84c31d4ec332 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -199,6 +200,9 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a300cbb21732b2520833d09fb765b1d2b"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a300cbb21732b2520833d09fb765b1d2b">SetFunctions</a> (<a class="el" href="IpMa27TSolverInterface_8hpp.html#ad6bab4c0daee3ff96349cbae519ddc5d">IPOPT_DECL_MA27A</a>(*<a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a4f3b8b4342190385707b9c4acdfd7843">ma27a</a>), <a class="el" href="IpMa27TSolverInterface_8hpp.html#ad42dbbfd7d579fd1b45fe7e017244624">IPOPT_DECL_MA27B</a>(*<a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a4ace5d91fa07a02a3ea74ac87d32430f">ma27b</a>), <a class="el" href="IpMa27TSolverInterface_8hpp.html#a4f6f434a1cb91ebdcf31fa2f33ac4d32">IPOPT_DECL_MA27C</a>(*<a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a0c4e7750fece5ed4de21ccc4d14dcf47">ma27c</a>),)</td></tr>
+<tr class="memdesc:a300cbb21732b2520833d09fb765b1d2b"><td class="mdescLeft">&#160;</td><td class="mdescRight">set MA27 functions to use for every instantiation of this class  <a href="classIpopt_1_1Ma27TSolverInterface.html#a300cbb21732b2520833d09fb765b1d2b">More...</a><br /></td></tr>
+<tr class="separator:a300cbb21732b2520833d09fb765b1d2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader"></div></td></tr>
 <tr class="memitem:a75956e60e11e47f9defd21448168e187"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a75956e60e11e47f9defd21448168e187">RegisterOptions</a> (<a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1RegisteredOptions.html">RegisteredOptions</a> &gt; roptions)</td></tr>
 <tr class="separator:a75956e60e11e47f9defd21448168e187"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -216,27 +220,38 @@ Private Member Functions</h2></td></tr>
 <tr class="memdesc:a948eab89178e1be71b8cb77e4de6f3d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default Assignment Operator.  <a href="classIpopt_1_1Ma27TSolverInterface.html#a948eab89178e1be71b8cb77e4de6f3d3">More...</a><br /></td></tr>
 <tr class="separator:a948eab89178e1be71b8cb77e4de6f3d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Internal functions</div></td></tr>
-<tr class="memitem:a8a62a3054aa8d2e772209707796531a6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a8a62a3054aa8d2e772209707796531a6">SymbolicFactorization</a> (const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *airn, const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *ajcn)</td></tr>
-<tr class="memdesc:a8a62a3054aa8d2e772209707796531a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call MA27AD and reserve memory for MA27 data.  <a href="classIpopt_1_1Ma27TSolverInterface.html#a8a62a3054aa8d2e772209707796531a6">More...</a><br /></td></tr>
+<tr class="memitem:a8a62a3054aa8d2e772209707796531a6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a8a62a3054aa8d2e772209707796531a6">SymbolicFactorization</a> (const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *airn, const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *ajcn)</td></tr>
+<tr class="memdesc:a8a62a3054aa8d2e772209707796531a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call MA27AX and reserve memory for MA27 data.  <a href="classIpopt_1_1Ma27TSolverInterface.html#a8a62a3054aa8d2e772209707796531a6">More...</a><br /></td></tr>
 <tr class="separator:a8a62a3054aa8d2e772209707796531a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab8d9bf0846e2ed7e471cf90e4655d162"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#ab8d9bf0846e2ed7e471cf90e4655d162">Factorization</a> (const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *airn, const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *ajcn, bool check_NegEVals, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> numberOfNegEVals)</td></tr>
-<tr class="memdesc:ab8d9bf0846e2ed7e471cf90e4655d162"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call MA27BD to factorize the <a class="el" href="classIpopt_1_1Matrix.html" title="Matrix Base Class.">Matrix</a>.  <a href="classIpopt_1_1Ma27TSolverInterface.html#ab8d9bf0846e2ed7e471cf90e4655d162">More...</a><br /></td></tr>
+<tr class="memitem:ab8d9bf0846e2ed7e471cf90e4655d162"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#ab8d9bf0846e2ed7e471cf90e4655d162">Factorization</a> (const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *airn, const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *ajcn, bool check_NegEVals, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> numberOfNegEVals)</td></tr>
+<tr class="memdesc:ab8d9bf0846e2ed7e471cf90e4655d162"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call MA27BX to factorize the <a class="el" href="classIpopt_1_1Matrix.html" title="Matrix Base Class.">Matrix</a>.  <a href="classIpopt_1_1Ma27TSolverInterface.html#ab8d9bf0846e2ed7e471cf90e4655d162">More...</a><br /></td></tr>
 <tr class="separator:ab8d9bf0846e2ed7e471cf90e4655d162"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afad8eb8d25a3fe83b1ff438a91df8697"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#afad8eb8d25a3fe83b1ff438a91df8697">Backsolve</a> (<a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> nrhs, double *rhs_vals)</td></tr>
-<tr class="memdesc:afad8eb8d25a3fe83b1ff438a91df8697"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call MA27CD to do the backsolve.  <a href="classIpopt_1_1Ma27TSolverInterface.html#afad8eb8d25a3fe83b1ff438a91df8697">More...</a><br /></td></tr>
-<tr class="separator:afad8eb8d25a3fe83b1ff438a91df8697"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12cee6f1699a32b68ef4e433be00bd32"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a12cee6f1699a32b68ef4e433be00bd32">Backsolve</a> (<a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> nrhs, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *rhs_vals)</td></tr>
+<tr class="memdesc:a12cee6f1699a32b68ef4e433be00bd32"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call MA27CX to do the backsolve.  <a href="classIpopt_1_1Ma27TSolverInterface.html#a12cee6f1699a32b68ef4e433be00bd32">More...</a><br /></td></tr>
+<tr class="separator:a12cee6f1699a32b68ef4e433be00bd32"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr><td colspan="2"><div class="groupHeader">MA27 function pointers</div></td></tr>
+<tr class="memitem:a02a2d1643a7695b045946048dbf3f4ef"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1LibraryLoader.html">LibraryLoader</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a02a2d1643a7695b045946048dbf3f4ef">hslloader</a></td></tr>
+<tr class="separator:a02a2d1643a7695b045946048dbf3f4ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f3b8b4342190385707b9c4acdfd7843"><td class="memItemLeft" align="right" valign="top"><a class="el" href="IpMa27TSolverInterface_8hpp.html#ad6bab4c0daee3ff96349cbae519ddc5d">IPOPT_DECL_MA27A</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a4f3b8b4342190385707b9c4acdfd7843">ma27a</a></td></tr>
+<tr class="separator:a4f3b8b4342190385707b9c4acdfd7843"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ace5d91fa07a02a3ea74ac87d32430f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="IpMa27TSolverInterface_8hpp.html#ad42dbbfd7d579fd1b45fe7e017244624">IPOPT_DECL_MA27B</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a4ace5d91fa07a02a3ea74ac87d32430f">ma27b</a></td></tr>
+<tr class="separator:a4ace5d91fa07a02a3ea74ac87d32430f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c4e7750fece5ed4de21ccc4d14dcf47"><td class="memItemLeft" align="right" valign="top"><a class="el" href="IpMa27TSolverInterface_8hpp.html#a4f6f434a1cb91ebdcf31fa2f33ac4d32">IPOPT_DECL_MA27C</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a0c4e7750fece5ed4de21ccc4d14dcf47">ma27c</a></td></tr>
+<tr class="separator:a0c4e7750fece5ed4de21ccc4d14dcf47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e8ba8d279e688dbdd7176814369fc58"><td class="memItemLeft" align="right" valign="top"><a class="el" href="IpMa27TSolverInterface_8hpp.html#a7a87cf631391836b6af79564851bdda6">IPOPT_DECL_MA27I</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a2e8ba8d279e688dbdd7176814369fc58">ma27i</a></td></tr>
+<tr class="separator:a2e8ba8d279e688dbdd7176814369fc58"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Information about the matrix</div></td></tr>
-<tr class="memitem:aa767f5e40ae57347cf74dc38484c782c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#aa767f5e40ae57347cf74dc38484c782c">dim_</a></td></tr>
+<tr class="memitem:aa767f5e40ae57347cf74dc38484c782c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#aa767f5e40ae57347cf74dc38484c782c">dim_</a></td></tr>
 <tr class="memdesc:aa767f5e40ae57347cf74dc38484c782c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of rows and columns of the matrix.  <a href="classIpopt_1_1Ma27TSolverInterface.html#aa767f5e40ae57347cf74dc38484c782c">More...</a><br /></td></tr>
 <tr class="separator:aa767f5e40ae57347cf74dc38484c782c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af3204245e78c42a654af3a39af7c249c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#af3204245e78c42a654af3a39af7c249c">nonzeros_</a></td></tr>
+<tr class="memitem:af3204245e78c42a654af3a39af7c249c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#af3204245e78c42a654af3a39af7c249c">nonzeros_</a></td></tr>
 <tr class="memdesc:af3204245e78c42a654af3a39af7c249c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of nonzeros of the matrix.  <a href="classIpopt_1_1Ma27TSolverInterface.html#af3204245e78c42a654af3a39af7c249c">More...</a><br /></td></tr>
 <tr class="separator:af3204245e78c42a654af3a39af7c249c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Information about most recent factorization/solve</div></td></tr>
-<tr class="memitem:ac689c7a40095eadb3c973ea19955c3a7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#ac689c7a40095eadb3c973ea19955c3a7">negevals_</a></td></tr>
+<tr class="memitem:ac689c7a40095eadb3c973ea19955c3a7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#ac689c7a40095eadb3c973ea19955c3a7">negevals_</a></td></tr>
 <tr class="memdesc:ac689c7a40095eadb3c973ea19955c3a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of negative eigenvalues.  <a href="classIpopt_1_1Ma27TSolverInterface.html#ac689c7a40095eadb3c973ea19955c3a7">More...</a><br /></td></tr>
 <tr class="separator:ac689c7a40095eadb3c973ea19955c3a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Initialization flags</div></td></tr>
@@ -250,19 +265,19 @@ Private Attributes</h2></td></tr>
 <tr class="memdesc:a5a5c0d9e17b4f8fcc13e885c3961a0da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag that is true if we just requested the values of the matrix again (SYMSOLVER_CALL_AGAIN) and have to factorize again.  <a href="classIpopt_1_1Ma27TSolverInterface.html#a5a5c0d9e17b4f8fcc13e885c3961a0da">More...</a><br /></td></tr>
 <tr class="separator:a5a5c0d9e17b4f8fcc13e885c3961a0da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Solver specific data/options</div></td></tr>
-<tr class="memitem:a08f316dc4c5ab3be49eadf4b32f6c401"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a08f316dc4c5ab3be49eadf4b32f6c401">pivtol_</a></td></tr>
+<tr class="memitem:a08f316dc4c5ab3be49eadf4b32f6c401"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a08f316dc4c5ab3be49eadf4b32f6c401">pivtol_</a></td></tr>
 <tr class="memdesc:a08f316dc4c5ab3be49eadf4b32f6c401"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pivot tolerance.  <a href="classIpopt_1_1Ma27TSolverInterface.html#a08f316dc4c5ab3be49eadf4b32f6c401">More...</a><br /></td></tr>
 <tr class="separator:a08f316dc4c5ab3be49eadf4b32f6c401"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abf1bb4720f012e433c2e21fd17c7a111"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#abf1bb4720f012e433c2e21fd17c7a111">pivtolmax_</a></td></tr>
+<tr class="memitem:abf1bb4720f012e433c2e21fd17c7a111"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#abf1bb4720f012e433c2e21fd17c7a111">pivtolmax_</a></td></tr>
 <tr class="memdesc:abf1bb4720f012e433c2e21fd17c7a111"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximal pivot tolerance.  <a href="classIpopt_1_1Ma27TSolverInterface.html#abf1bb4720f012e433c2e21fd17c7a111">More...</a><br /></td></tr>
 <tr class="separator:abf1bb4720f012e433c2e21fd17c7a111"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a87c42cc95e64c52ee39e34ba1d4464cd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a87c42cc95e64c52ee39e34ba1d4464cd">liw_init_factor_</a></td></tr>
+<tr class="memitem:a87c42cc95e64c52ee39e34ba1d4464cd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a87c42cc95e64c52ee39e34ba1d4464cd">liw_init_factor_</a></td></tr>
 <tr class="memdesc:a87c42cc95e64c52ee39e34ba1d4464cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Factor for estimating initial value of liw.  <a href="classIpopt_1_1Ma27TSolverInterface.html#a87c42cc95e64c52ee39e34ba1d4464cd">More...</a><br /></td></tr>
 <tr class="separator:a87c42cc95e64c52ee39e34ba1d4464cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a73f4efd253c4dfadce568c09a0b30723"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a73f4efd253c4dfadce568c09a0b30723">la_init_factor_</a></td></tr>
+<tr class="memitem:a73f4efd253c4dfadce568c09a0b30723"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a73f4efd253c4dfadce568c09a0b30723">la_init_factor_</a></td></tr>
 <tr class="memdesc:a73f4efd253c4dfadce568c09a0b30723"><td class="mdescLeft">&#160;</td><td class="mdescRight">Factor for estimating initial value of la.  <a href="classIpopt_1_1Ma27TSolverInterface.html#a73f4efd253c4dfadce568c09a0b30723">More...</a><br /></td></tr>
 <tr class="separator:a73f4efd253c4dfadce568c09a0b30723"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afeecbc15bd4266ba0621edd207f41f78"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#afeecbc15bd4266ba0621edd207f41f78">meminc_factor_</a></td></tr>
+<tr class="memitem:afeecbc15bd4266ba0621edd207f41f78"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#afeecbc15bd4266ba0621edd207f41f78">meminc_factor_</a></td></tr>
 <tr class="memdesc:afeecbc15bd4266ba0621edd207f41f78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Factor for increaseing memory.  <a href="classIpopt_1_1Ma27TSolverInterface.html#afeecbc15bd4266ba0621edd207f41f78">More...</a><br /></td></tr>
 <tr class="separator:afeecbc15bd4266ba0621edd207f41f78"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a81a22dd78e7c3ca62848580c23f0ba07"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a81a22dd78e7c3ca62848580c23f0ba07">warm_start_same_structure_</a></td></tr>
@@ -277,33 +292,33 @@ Private Attributes</h2></td></tr>
 <tr><td colspan="2"><div class="groupHeader">Data for the linear solver.</div></td></tr>
 <tr><td colspan="2"><div class="groupText"><p>Storing factorization and other solver specific data structure. </p>
 </div></td></tr>
-<tr class="memitem:a1c2444480392b714129252cbe0de1d08"><td class="memItemLeft" align="right" valign="top"><a class="el" href="IpTypes_8hpp.html#ab1366b159c9a5e7f01e86923f6b2dd65">ipfint</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a1c2444480392b714129252cbe0de1d08">icntl_</a> [30]</td></tr>
-<tr class="memdesc:a1c2444480392b714129252cbe0de1d08"><td class="mdescLeft">&#160;</td><td class="mdescRight">integer control values  <a href="classIpopt_1_1Ma27TSolverInterface.html#a1c2444480392b714129252cbe0de1d08">More...</a><br /></td></tr>
-<tr class="separator:a1c2444480392b714129252cbe0de1d08"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8b12ab6c009b100ce37526355d7dc764"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a8b12ab6c009b100ce37526355d7dc764">cntl_</a> [5]</td></tr>
-<tr class="memdesc:a8b12ab6c009b100ce37526355d7dc764"><td class="mdescLeft">&#160;</td><td class="mdescRight">real control values  <a href="classIpopt_1_1Ma27TSolverInterface.html#a8b12ab6c009b100ce37526355d7dc764">More...</a><br /></td></tr>
-<tr class="separator:a8b12ab6c009b100ce37526355d7dc764"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af29f9d40b91a575169f18887794c71c6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="IpTypes_8hpp.html#ab1366b159c9a5e7f01e86923f6b2dd65">ipfint</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#af29f9d40b91a575169f18887794c71c6">liw_</a></td></tr>
-<tr class="memdesc:af29f9d40b91a575169f18887794c71c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">length of integer work space  <a href="classIpopt_1_1Ma27TSolverInterface.html#af29f9d40b91a575169f18887794c71c6">More...</a><br /></td></tr>
-<tr class="separator:af29f9d40b91a575169f18887794c71c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9aa7c94e197777269cb8852c99ae505f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="IpTypes_8hpp.html#ab1366b159c9a5e7f01e86923f6b2dd65">ipfint</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a9aa7c94e197777269cb8852c99ae505f">iw_</a></td></tr>
-<tr class="memdesc:a9aa7c94e197777269cb8852c99ae505f"><td class="mdescLeft">&#160;</td><td class="mdescRight">integer work space  <a href="classIpopt_1_1Ma27TSolverInterface.html#a9aa7c94e197777269cb8852c99ae505f">More...</a><br /></td></tr>
-<tr class="separator:a9aa7c94e197777269cb8852c99ae505f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a49a6a90ac188c5c6ecc53a84d8b0de5d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="IpTypes_8hpp.html#ab1366b159c9a5e7f01e86923f6b2dd65">ipfint</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a49a6a90ac188c5c6ecc53a84d8b0de5d">ikeep_</a></td></tr>
-<tr class="memdesc:a49a6a90ac188c5c6ecc53a84d8b0de5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">MA27's IKEEP.  <a href="classIpopt_1_1Ma27TSolverInterface.html#a49a6a90ac188c5c6ecc53a84d8b0de5d">More...</a><br /></td></tr>
-<tr class="separator:a49a6a90ac188c5c6ecc53a84d8b0de5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3f170bb5e435e04368e09f25bd26f476"><td class="memItemLeft" align="right" valign="top"><a class="el" href="IpTypes_8hpp.html#ab1366b159c9a5e7f01e86923f6b2dd65">ipfint</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a3f170bb5e435e04368e09f25bd26f476">nsteps_</a></td></tr>
-<tr class="memdesc:a3f170bb5e435e04368e09f25bd26f476"><td class="mdescLeft">&#160;</td><td class="mdescRight">MA27's NSTEPS.  <a href="classIpopt_1_1Ma27TSolverInterface.html#a3f170bb5e435e04368e09f25bd26f476">More...</a><br /></td></tr>
-<tr class="separator:a3f170bb5e435e04368e09f25bd26f476"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec8065baec969c9450a30826a0e22bb5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="IpTypes_8hpp.html#ab1366b159c9a5e7f01e86923f6b2dd65">ipfint</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#aec8065baec969c9450a30826a0e22bb5">maxfrt_</a></td></tr>
-<tr class="memdesc:aec8065baec969c9450a30826a0e22bb5"><td class="mdescLeft">&#160;</td><td class="mdescRight">MA27's MAXFRT.  <a href="classIpopt_1_1Ma27TSolverInterface.html#aec8065baec969c9450a30826a0e22bb5">More...</a><br /></td></tr>
-<tr class="separator:aec8065baec969c9450a30826a0e22bb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1fab3d506fc494fd9c7b7afe6276a5cb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="IpTypes_8hpp.html#ab1366b159c9a5e7f01e86923f6b2dd65">ipfint</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a1fab3d506fc494fd9c7b7afe6276a5cb">la_</a></td></tr>
-<tr class="memdesc:a1fab3d506fc494fd9c7b7afe6276a5cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">length LA of A  <a href="classIpopt_1_1Ma27TSolverInterface.html#a1fab3d506fc494fd9c7b7afe6276a5cb">More...</a><br /></td></tr>
-<tr class="separator:a1fab3d506fc494fd9c7b7afe6276a5cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7328594a2a73b76ac72f731cb0516bc8"><td class="memItemLeft" align="right" valign="top">double *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a7328594a2a73b76ac72f731cb0516bc8">a_</a></td></tr>
-<tr class="memdesc:a7328594a2a73b76ac72f731cb0516bc8"><td class="mdescLeft">&#160;</td><td class="mdescRight">factor A of matrix  <a href="classIpopt_1_1Ma27TSolverInterface.html#a7328594a2a73b76ac72f731cb0516bc8">More...</a><br /></td></tr>
-<tr class="separator:a7328594a2a73b76ac72f731cb0516bc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a451ce0954af83ab1077dff5b07b4fb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a6a451ce0954af83ab1077dff5b07b4fb">icntl_</a> [30]</td></tr>
+<tr class="memdesc:a6a451ce0954af83ab1077dff5b07b4fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">integer control values  <a href="classIpopt_1_1Ma27TSolverInterface.html#a6a451ce0954af83ab1077dff5b07b4fb">More...</a><br /></td></tr>
+<tr class="separator:a6a451ce0954af83ab1077dff5b07b4fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe4299e1d2a13db4b3be5540fe614c72"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#afe4299e1d2a13db4b3be5540fe614c72">cntl_</a> [5]</td></tr>
+<tr class="memdesc:afe4299e1d2a13db4b3be5540fe614c72"><td class="mdescLeft">&#160;</td><td class="mdescRight">real control values  <a href="classIpopt_1_1Ma27TSolverInterface.html#afe4299e1d2a13db4b3be5540fe614c72">More...</a><br /></td></tr>
+<tr class="separator:afe4299e1d2a13db4b3be5540fe614c72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a623719d23d8558d3e1cbecd103d49a2f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a623719d23d8558d3e1cbecd103d49a2f">liw_</a></td></tr>
+<tr class="memdesc:a623719d23d8558d3e1cbecd103d49a2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">length of integer work space  <a href="classIpopt_1_1Ma27TSolverInterface.html#a623719d23d8558d3e1cbecd103d49a2f">More...</a><br /></td></tr>
+<tr class="separator:a623719d23d8558d3e1cbecd103d49a2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4ccf91952c454b5878c1313606ee27b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#aa4ccf91952c454b5878c1313606ee27b">iw_</a></td></tr>
+<tr class="memdesc:aa4ccf91952c454b5878c1313606ee27b"><td class="mdescLeft">&#160;</td><td class="mdescRight">integer work space  <a href="classIpopt_1_1Ma27TSolverInterface.html#aa4ccf91952c454b5878c1313606ee27b">More...</a><br /></td></tr>
+<tr class="separator:aa4ccf91952c454b5878c1313606ee27b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab183e9b61bb7481ac3075cb51b791ce2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#ab183e9b61bb7481ac3075cb51b791ce2">ikeep_</a></td></tr>
+<tr class="memdesc:ab183e9b61bb7481ac3075cb51b791ce2"><td class="mdescLeft">&#160;</td><td class="mdescRight">MA27's IKEEP.  <a href="classIpopt_1_1Ma27TSolverInterface.html#ab183e9b61bb7481ac3075cb51b791ce2">More...</a><br /></td></tr>
+<tr class="separator:ab183e9b61bb7481ac3075cb51b791ce2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ccbc97641d119a3647a0ab33c9ec225"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a7ccbc97641d119a3647a0ab33c9ec225">nsteps_</a></td></tr>
+<tr class="memdesc:a7ccbc97641d119a3647a0ab33c9ec225"><td class="mdescLeft">&#160;</td><td class="mdescRight">MA27's NSTEPS.  <a href="classIpopt_1_1Ma27TSolverInterface.html#a7ccbc97641d119a3647a0ab33c9ec225">More...</a><br /></td></tr>
+<tr class="separator:a7ccbc97641d119a3647a0ab33c9ec225"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0e91884cc003b5b726d5ce823880e77"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#aa0e91884cc003b5b726d5ce823880e77">maxfrt_</a></td></tr>
+<tr class="memdesc:aa0e91884cc003b5b726d5ce823880e77"><td class="mdescLeft">&#160;</td><td class="mdescRight">MA27's MAXFRT.  <a href="classIpopt_1_1Ma27TSolverInterface.html#aa0e91884cc003b5b726d5ce823880e77">More...</a><br /></td></tr>
+<tr class="separator:aa0e91884cc003b5b726d5ce823880e77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa34e155711ae16408af9a241430e5173"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#aa34e155711ae16408af9a241430e5173">la_</a></td></tr>
+<tr class="memdesc:aa34e155711ae16408af9a241430e5173"><td class="mdescLeft">&#160;</td><td class="mdescRight">length LA of A  <a href="classIpopt_1_1Ma27TSolverInterface.html#aa34e155711ae16408af9a241430e5173">More...</a><br /></td></tr>
+<tr class="separator:aa34e155711ae16408af9a241430e5173"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b40087eafa0fd04d7c1f0f255a6e8d1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a5b40087eafa0fd04d7c1f0f255a6e8d1">a_</a></td></tr>
+<tr class="memdesc:a5b40087eafa0fd04d7c1f0f255a6e8d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">factor A of matrix  <a href="classIpopt_1_1Ma27TSolverInterface.html#a5b40087eafa0fd04d7c1f0f255a6e8d1">More...</a><br /></td></tr>
+<tr class="separator:a5b40087eafa0fd04d7c1f0f255a6e8d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf985dc462fa434ce6a1fdfa4290f9c0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#abf985dc462fa434ce6a1fdfa4290f9c0">la_increase_</a></td></tr>
 <tr class="memdesc:abf985dc462fa434ce6a1fdfa4290f9c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">flag indicating that la should be increased before next factorization  <a href="classIpopt_1_1Ma27TSolverInterface.html#abf985dc462fa434ce6a1fdfa4290f9c0">More...</a><br /></td></tr>
 <tr class="separator:abf985dc462fa434ce6a1fdfa4290f9c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -340,10 +355,10 @@ Additional Inherited Members</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Interface to the symmetric linear solver MA27, derived from <a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html" title="Base class for interfaces to symmetric indefinite linear solvers for sparse matrices.">SparseSymLinearSolverInterface</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00017">17</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00078">78</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ae245f2676c602be03ff9cfe7b0a74d0c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae245f2676c602be03ff9cfe7b0a74d0c">&#9670;&nbsp;</a></span>Ma27TSolverInterface() <span class="overload">[1/2]</span></h2>
+<a id="a7abd6e94c988a22ab82e419ee7680245"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7abd6e94c988a22ab82e419ee7680245">&#9670;&nbsp;</a></span>Ma27TSolverInterface() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -351,13 +366,21 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">Ipopt::Ma27TSolverInterface::Ma27TSolverInterface </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype"><a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1LibraryLoader.html">LibraryLoader</a> &gt;&#160;</td>
+          <td class="paramname"><em>hslloader_</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">hslloader_</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
 </div>
 </div>
@@ -469,25 +492,25 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">virtual <a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a> Ipopt::Ma27TSolverInterface::InitializeStructure </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>dim</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>nonzeros</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>ia</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>ja</em>&#160;</td>
         </tr>
         <tr>
@@ -510,8 +533,8 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="af4823e8f19e1a4f76082fbdccc60dd8b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af4823e8f19e1a4f76082fbdccc60dd8b">&#9670;&nbsp;</a></span>GetValuesArrayPtr()</h2>
+<a id="ad015d479b08de1bcb6176b8240168246"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad015d479b08de1bcb6176b8240168246">&#9670;&nbsp;</a></span>GetValuesArrayPtr()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -520,7 +543,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual double* Ipopt::Ma27TSolverInterface::GetValuesArrayPtr </td>
+          <td class="memname">virtual <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>* Ipopt::Ma27TSolverInterface::GetValuesArrayPtr </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -536,12 +559,12 @@ Additional Inherited Members</h2></td></tr>
 <p>Method returning an internal array into which the nonzero elements (in the same order as ja) will be stored by the calling routine before a call to MultiSolve with a new_matrix=true (or after a return of MultiSolve with SYMSOLV_CALL_AGAIN). </p>
 <p>The returned array must have space for at least nonzero elements. </p>
 
-<p>Implements <a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html#a63e20915d52fe30d5340472e79d19f5b">Ipopt::SparseSymLinearSolverInterface</a>.</p>
+<p>Implements <a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html#a04d12ba6e29e4b945e112b574cab8e09">Ipopt::SparseSymLinearSolverInterface</a>.</p>
 
 </div>
 </div>
-<a id="afa78ca5ace951ca63038a2640eab0e02"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afa78ca5ace951ca63038a2640eab0e02">&#9670;&nbsp;</a></span>MultiSolve()</h2>
+<a id="adc46f5a3efa5656374d6c50e931271b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc46f5a3efa5656374d6c50e931271b0">&#9670;&nbsp;</a></span>MultiSolve()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -558,25 +581,25 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>ia</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>ja</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>nrhs</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double *&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>rhs_vals</em>, </td>
         </tr>
         <tr>
@@ -588,7 +611,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>numberOfNegEVals</em>&#160;</td>
         </tr>
         <tr>
@@ -610,7 +633,7 @@ Additional Inherited Members</h2></td></tr>
 <p>The number of right-hand sides is given by nrhs, the values of the right-hand sides are given in rhs_vals (one full right-hand side stored immediately after the other), and solutions are to be returned in the same array.</p>
 <p>check_NegEVals will not be chosen true, if <a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#aa4bc1d6cacd95a72d4498d969de02875" title="Query whether inertia is computed by linear solver.">ProvidesInertia()</a> returns false. </p>
 
-<p>Implements <a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html#aaa533d84b06d8bf76a0a4bc6b0b8dba3">Ipopt::SparseSymLinearSolverInterface</a>.</p>
+<p>Implements <a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html#abb894fd70f83310a1c39ab7242efdf2a">Ipopt::SparseSymLinearSolverInterface</a>.</p>
 
 </div>
 </div>
@@ -624,7 +647,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::Ma27TSolverInterface::NumberOfNegEVals </td>
+          <td class="memname">virtual <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::Ma27TSolverInterface::NumberOfNegEVals </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -704,7 +727,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html#a19b3c3b0daec34ff3c44e9d79f3b3b5d">Ipopt::SparseSymLinearSolverInterface</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00061">61</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00124">124</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -735,7 +758,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html#acdaeb282c301a02371ec206cb0c8277a">Ipopt::SparseSymLinearSolverInterface</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00066">66</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00129">129</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -762,6 +785,51 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a300cbb21732b2520833d09fb765b1d2b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a300cbb21732b2520833d09fb765b1d2b">&#9670;&nbsp;</a></span>SetFunctions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void Ipopt::Ma27TSolverInterface::SetFunctions </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="IpMa27TSolverInterface_8hpp.html#ad6bab4c0daee3ff96349cbae519ddc5d">IPOPT_DECL_MA27A</a> *&#160;</td>
+          <td class="paramname"><em>ma27a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="IpMa27TSolverInterface_8hpp.html#ad42dbbfd7d579fd1b45fe7e017244624">IPOPT_DECL_MA27B</a> *&#160;</td>
+          <td class="paramname"><em>ma27b</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="IpMa27TSolverInterface_8hpp.html#a4f6f434a1cb91ebdcf31fa2f33ac4d32">IPOPT_DECL_MA27C</a> *&#160;</td>
+          <td class="paramname"><em>ma27c</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>set MA27 functions to use for every instantiation of this class </p>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
 </div>
 </div>
@@ -805,13 +873,13 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a> Ipopt::Ma27TSolverInterface::SymbolicFactorization </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>airn</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>ajcn</em>&#160;</td>
         </tr>
         <tr>
@@ -827,7 +895,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Call MA27AD and reserve memory for MA27 data. </p>
+<p>Call MA27AX and reserve memory for MA27 data. </p>
 <p>Reserve memory for iw_ and ikeep_, call MA27AD to perform symbolic manipulations, and reserve all the remaining data memory </p>
 
 </div>
@@ -844,13 +912,13 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a> Ipopt::Ma27TSolverInterface::Factorization </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>airn</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>ajcn</em>, </td>
         </tr>
         <tr>
@@ -862,7 +930,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>numberOfNegEVals</em>&#160;</td>
         </tr>
         <tr>
@@ -878,13 +946,13 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Call MA27BD to factorize the <a class="el" href="classIpopt_1_1Matrix.html" title="Matrix Base Class.">Matrix</a>. </p>
+<p>Call MA27BX to factorize the <a class="el" href="classIpopt_1_1Matrix.html" title="Matrix Base Class.">Matrix</a>. </p>
 <p>It is assumed that the first nonzeros_ element of a_ contain the values of the matrix to be factorized. </p>
 
 </div>
 </div>
-<a id="afad8eb8d25a3fe83b1ff438a91df8697"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afad8eb8d25a3fe83b1ff438a91df8697">&#9670;&nbsp;</a></span>Backsolve()</h2>
+<a id="a12cee6f1699a32b68ef4e433be00bd32"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12cee6f1699a32b68ef4e433be00bd32">&#9670;&nbsp;</a></span>Backsolve()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -895,13 +963,13 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a> Ipopt::Ma27TSolverInterface::Backsolve </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>nrhs</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double *&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>rhs_vals</em>&#160;</td>
         </tr>
         <tr>
@@ -917,11 +985,131 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Call MA27CD to do the backsolve. </p>
+<p>Call MA27CX to do the backsolve. </p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a02a2d1643a7695b045946048dbf3f4ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02a2d1643a7695b045946048dbf3f4ef">&#9670;&nbsp;</a></span>hslloader</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt;<a class="el" href="classIpopt_1_1LibraryLoader.html">LibraryLoader</a>&gt; Ipopt::Ma27TSolverInterface::hslloader</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00173">173</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a4f3b8b4342190385707b9c4acdfd7843"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f3b8b4342190385707b9c4acdfd7843">&#9670;&nbsp;</a></span>ma27a</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="IpMa27TSolverInterface_8hpp.html#ad6bab4c0daee3ff96349cbae519ddc5d">IPOPT_DECL_MA27A</a>* Ipopt::Ma27TSolverInterface::ma27a</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00175">175</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a4ace5d91fa07a02a3ea74ac87d32430f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ace5d91fa07a02a3ea74ac87d32430f">&#9670;&nbsp;</a></span>ma27b</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="IpMa27TSolverInterface_8hpp.html#ad42dbbfd7d579fd1b45fe7e017244624">IPOPT_DECL_MA27B</a>* Ipopt::Ma27TSolverInterface::ma27b</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00176">176</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a0c4e7750fece5ed4de21ccc4d14dcf47"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c4e7750fece5ed4de21ccc4d14dcf47">&#9670;&nbsp;</a></span>ma27c</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="IpMa27TSolverInterface_8hpp.html#a4f6f434a1cb91ebdcf31fa2f33ac4d32">IPOPT_DECL_MA27C</a>* Ipopt::Ma27TSolverInterface::ma27c</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00177">177</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a2e8ba8d279e688dbdd7176814369fc58"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e8ba8d279e688dbdd7176814369fc58">&#9670;&nbsp;</a></span>ma27i</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="IpMa27TSolverInterface_8hpp.html#a7a87cf631391836b6af79564851bdda6">IPOPT_DECL_MA27I</a>* Ipopt::Ma27TSolverInterface::ma27i</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00178">178</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
+
+</div>
+</div>
 <a id="aa767f5e40ae57347cf74dc38484c782c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa767f5e40ae57347cf74dc38484c782c">&#9670;&nbsp;</a></span>dim_</h2>
 
@@ -932,7 +1120,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::Ma27TSolverInterface::dim_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::Ma27TSolverInterface::dim_</td>
         </tr>
       </table>
   </td>
@@ -944,7 +1132,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Number of rows and columns of the matrix. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00101">101</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00184">184</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -958,7 +1146,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::Ma27TSolverInterface::nonzeros_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::Ma27TSolverInterface::nonzeros_</td>
         </tr>
       </table>
   </td>
@@ -970,7 +1158,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Number of nonzeros of the matrix. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00104">104</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00187">187</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -984,7 +1172,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::Ma27TSolverInterface::negevals_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::Ma27TSolverInterface::negevals_</td>
         </tr>
       </table>
   </td>
@@ -996,7 +1184,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Number of negative eigenvalues. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00110">110</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00193">193</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1023,7 +1211,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Flag indicating if internal data is initialized. </p>
 <p>For initialization, this object needs to have seen a matrix. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00119">119</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00202">202</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1049,7 +1237,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Flag indicating if the matrix has to be refactorized because the pivot tolerance has been changed. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00123">123</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00206">206</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1075,7 +1263,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Flag that is true if we just requested the values of the matrix again (SYMSOLVER_CALL_AGAIN) and have to factorize again. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00128">128</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00211">211</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1089,7 +1277,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> Ipopt::Ma27TSolverInterface::pivtol_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> Ipopt::Ma27TSolverInterface::pivtol_</td>
         </tr>
       </table>
   </td>
@@ -1101,7 +1289,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Pivot tolerance. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00134">134</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00217">217</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1115,7 +1303,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> Ipopt::Ma27TSolverInterface::pivtolmax_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> Ipopt::Ma27TSolverInterface::pivtolmax_</td>
         </tr>
       </table>
   </td>
@@ -1127,7 +1315,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Maximal pivot tolerance. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00137">137</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00220">220</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1141,7 +1329,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> Ipopt::Ma27TSolverInterface::liw_init_factor_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> Ipopt::Ma27TSolverInterface::liw_init_factor_</td>
         </tr>
       </table>
   </td>
@@ -1153,7 +1341,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Factor for estimating initial value of liw. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00140">140</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00223">223</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1167,7 +1355,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> Ipopt::Ma27TSolverInterface::la_init_factor_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> Ipopt::Ma27TSolverInterface::la_init_factor_</td>
         </tr>
       </table>
   </td>
@@ -1179,7 +1367,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Factor for estimating initial value of la. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00142">142</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00225">225</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1193,7 +1381,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> Ipopt::Ma27TSolverInterface::meminc_factor_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> Ipopt::Ma27TSolverInterface::meminc_factor_</td>
         </tr>
       </table>
   </td>
@@ -1205,7 +1393,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Factor for increaseing memory. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00144">144</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00227">227</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1231,7 +1419,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Flag indicating whether the <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> with identical structure has already been solved before. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00148">148</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00231">231</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1257,7 +1445,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Flag indicating if the inertia is always assumed to be correct. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00150">150</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00233">233</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1283,12 +1471,12 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Flag indicating if MA27 should continue if a singular matrix is detected, but right hands sides are still accepted. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00154">154</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00237">237</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a1c2444480392b714129252cbe0de1d08"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1c2444480392b714129252cbe0de1d08">&#9670;&nbsp;</a></span>icntl_</h2>
+<a id="a6a451ce0954af83ab1077dff5b07b4fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a451ce0954af83ab1077dff5b07b4fb">&#9670;&nbsp;</a></span>icntl_</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1297,7 +1485,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="IpTypes_8hpp.html#ab1366b159c9a5e7f01e86923f6b2dd65">ipfint</a> Ipopt::Ma27TSolverInterface::icntl_[30]</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::Ma27TSolverInterface::icntl_[30]</td>
         </tr>
       </table>
   </td>
@@ -1309,12 +1497,12 @@ Additional Inherited Members</h2></td></tr>
 
 <p>integer control values </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00162">162</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00245">245</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a8b12ab6c009b100ce37526355d7dc764"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8b12ab6c009b100ce37526355d7dc764">&#9670;&nbsp;</a></span>cntl_</h2>
+<a id="afe4299e1d2a13db4b3be5540fe614c72"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afe4299e1d2a13db4b3be5540fe614c72">&#9670;&nbsp;</a></span>cntl_</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1323,7 +1511,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">double Ipopt::Ma27TSolverInterface::cntl_[5]</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> Ipopt::Ma27TSolverInterface::cntl_[5]</td>
         </tr>
       </table>
   </td>
@@ -1335,12 +1523,12 @@ Additional Inherited Members</h2></td></tr>
 
 <p>real control values </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00164">164</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00247">247</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
-<a id="af29f9d40b91a575169f18887794c71c6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af29f9d40b91a575169f18887794c71c6">&#9670;&nbsp;</a></span>liw_</h2>
+<a id="a623719d23d8558d3e1cbecd103d49a2f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a623719d23d8558d3e1cbecd103d49a2f">&#9670;&nbsp;</a></span>liw_</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1349,7 +1537,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="IpTypes_8hpp.html#ab1366b159c9a5e7f01e86923f6b2dd65">ipfint</a> Ipopt::Ma27TSolverInterface::liw_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::Ma27TSolverInterface::liw_</td>
         </tr>
       </table>
   </td>
@@ -1361,12 +1549,12 @@ Additional Inherited Members</h2></td></tr>
 
 <p>length of integer work space </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00167">167</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00250">250</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a9aa7c94e197777269cb8852c99ae505f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9aa7c94e197777269cb8852c99ae505f">&#9670;&nbsp;</a></span>iw_</h2>
+<a id="aa4ccf91952c454b5878c1313606ee27b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4ccf91952c454b5878c1313606ee27b">&#9670;&nbsp;</a></span>iw_</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1375,7 +1563,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="IpTypes_8hpp.html#ab1366b159c9a5e7f01e86923f6b2dd65">ipfint</a>* Ipopt::Ma27TSolverInterface::iw_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>* Ipopt::Ma27TSolverInterface::iw_</td>
         </tr>
       </table>
   </td>
@@ -1387,12 +1575,12 @@ Additional Inherited Members</h2></td></tr>
 
 <p>integer work space </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00169">169</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00252">252</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a49a6a90ac188c5c6ecc53a84d8b0de5d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a49a6a90ac188c5c6ecc53a84d8b0de5d">&#9670;&nbsp;</a></span>ikeep_</h2>
+<a id="ab183e9b61bb7481ac3075cb51b791ce2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab183e9b61bb7481ac3075cb51b791ce2">&#9670;&nbsp;</a></span>ikeep_</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1401,7 +1589,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="IpTypes_8hpp.html#ab1366b159c9a5e7f01e86923f6b2dd65">ipfint</a>* Ipopt::Ma27TSolverInterface::ikeep_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>* Ipopt::Ma27TSolverInterface::ikeep_</td>
         </tr>
       </table>
   </td>
@@ -1413,12 +1601,12 @@ Additional Inherited Members</h2></td></tr>
 
 <p>MA27's IKEEP. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00172">172</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00255">255</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a3f170bb5e435e04368e09f25bd26f476"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3f170bb5e435e04368e09f25bd26f476">&#9670;&nbsp;</a></span>nsteps_</h2>
+<a id="a7ccbc97641d119a3647a0ab33c9ec225"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ccbc97641d119a3647a0ab33c9ec225">&#9670;&nbsp;</a></span>nsteps_</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1427,7 +1615,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="IpTypes_8hpp.html#ab1366b159c9a5e7f01e86923f6b2dd65">ipfint</a> Ipopt::Ma27TSolverInterface::nsteps_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::Ma27TSolverInterface::nsteps_</td>
         </tr>
       </table>
   </td>
@@ -1439,12 +1627,12 @@ Additional Inherited Members</h2></td></tr>
 
 <p>MA27's NSTEPS. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00174">174</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00257">257</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
-<a id="aec8065baec969c9450a30826a0e22bb5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aec8065baec969c9450a30826a0e22bb5">&#9670;&nbsp;</a></span>maxfrt_</h2>
+<a id="aa0e91884cc003b5b726d5ce823880e77"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa0e91884cc003b5b726d5ce823880e77">&#9670;&nbsp;</a></span>maxfrt_</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1453,7 +1641,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="IpTypes_8hpp.html#ab1366b159c9a5e7f01e86923f6b2dd65">ipfint</a> Ipopt::Ma27TSolverInterface::maxfrt_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::Ma27TSolverInterface::maxfrt_</td>
         </tr>
       </table>
   </td>
@@ -1465,12 +1653,12 @@ Additional Inherited Members</h2></td></tr>
 
 <p>MA27's MAXFRT. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00176">176</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00259">259</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a1fab3d506fc494fd9c7b7afe6276a5cb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1fab3d506fc494fd9c7b7afe6276a5cb">&#9670;&nbsp;</a></span>la_</h2>
+<a id="aa34e155711ae16408af9a241430e5173"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa34e155711ae16408af9a241430e5173">&#9670;&nbsp;</a></span>la_</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1479,7 +1667,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="IpTypes_8hpp.html#ab1366b159c9a5e7f01e86923f6b2dd65">ipfint</a> Ipopt::Ma27TSolverInterface::la_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::Ma27TSolverInterface::la_</td>
         </tr>
       </table>
   </td>
@@ -1491,12 +1679,12 @@ Additional Inherited Members</h2></td></tr>
 
 <p>length LA of A </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00179">179</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00262">262</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a7328594a2a73b76ac72f731cb0516bc8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7328594a2a73b76ac72f731cb0516bc8">&#9670;&nbsp;</a></span>a_</h2>
+<a id="a5b40087eafa0fd04d7c1f0f255a6e8d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b40087eafa0fd04d7c1f0f255a6e8d1">&#9670;&nbsp;</a></span>a_</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1505,7 +1693,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">double* Ipopt::Ma27TSolverInterface::a_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>* Ipopt::Ma27TSolverInterface::a_</td>
         </tr>
       </table>
   </td>
@@ -1517,7 +1705,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>factor A of matrix </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00181">181</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00264">264</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1543,7 +1731,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>flag indicating that la should be increased before next factorization </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00184">184</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00267">267</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1569,7 +1757,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>flag indicating that liw should be increased before next factorization </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00186">186</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMa27TSolverInterface_8hpp_source.html#l00269">269</a> of file <a class="el" href="IpMa27TSolverInterface_8hpp_source.html">IpMa27TSolverInterface.hpp</a>.</p>
 
 </div>
 </div>

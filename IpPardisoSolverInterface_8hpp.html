@@ -1,5 +1,5 @@
-<!-- HTML header for doxygen 1.8.13-->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- HTML header for doxygen 1.8.18-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.13.4</span-->
+   &#160;<!--span id="projectnumber">3.14.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -102,19 +102,23 @@ $(document).ready(function(){initNavTree('IpPardisoSolverInterface_8hpp.html',''
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a>  </div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#define-members">Macros</a>  </div>
   <div class="headertitle">
 <div class="title">IpPardisoSolverInterface.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;<a class="el" href="IpSparseSymLinearSolverInterface_8hpp_source.html">IpSparseSymLinearSolverInterface.hpp</a>&quot;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="IpoptConfig_8h_source.html">IpoptConfig.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="IpSparseSymLinearSolverInterface_8hpp_source.html">IpSparseSymLinearSolverInterface.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="IpLibraryLoader_8hpp_source.html">IpLibraryLoader.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="IpTypes_8h_source.html">IpTypes.h</a>&quot;</code><br />
 </div>
 <p><a href="IpPardisoSolverInterface_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html">Ipopt::PardisoSolverInterface</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Interface to the linear solver Pardiso, derived from <a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html" title="Base class for interfaces to symmetric indefinite linear solvers for sparse matrices.">SparseSymLinearSolverInterface</a>.  <a href="classIpopt_1_1PardisoSolverInterface.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Interface to the linear solver Pardiso as distributed by pardiso-project.org, derived from <a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html" title="Base class for interfaces to symmetric indefinite linear solvers for sparse matrices.">SparseSymLinearSolverInterface</a>.  <a href="classIpopt_1_1PardisoSolverInterface.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -122,8 +126,123 @@ Namespaces</h2></td></tr>
 <tr class="memitem:namespaceIpopt"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceIpopt.html">Ipopt</a></td></tr>
 <tr class="memdesc:namespaceIpopt"><td class="mdescLeft">&#160;</td><td class="mdescRight">This file contains a base class for all exceptions and a set of macros to help with exceptions. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a7c232a8f2dea188eb23655695d0be950"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpPardisoSolverInterface_8hpp.html#a7c232a8f2dea188eb23655695d0be950">IPOPT_DECL_PARDISOINIT</a>(x)</td></tr>
+<tr class="separator:a7c232a8f2dea188eb23655695d0be950"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51db38aa19fe7bd16897a84b125a7695"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpPardisoSolverInterface_8hpp.html#a51db38aa19fe7bd16897a84b125a7695">IPOPT_DECL_PARDISO</a>(x)</td></tr>
+<tr class="separator:a51db38aa19fe7bd16897a84b125a7695"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f4a38a97f359a9dcd8b6f1dce1fa843"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpPardisoSolverInterface_8hpp.html#a3f4a38a97f359a9dcd8b6f1dce1fa843">IPOPT_DECL_SMAT_REORDERING_PARDISO_WSMP</a>(x)</td></tr>
+<tr class="separator:a3f4a38a97f359a9dcd8b6f1dce1fa843"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a7c232a8f2dea188eb23655695d0be950"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c232a8f2dea188eb23655695d0be950">&#9670;&nbsp;</a></span>IPOPT_DECL_PARDISOINIT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define IPOPT_DECL_PARDISOINIT</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">x</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">   void (x)( \</div>
+<div class="line">   void*          PT,     \</div>
+<div class="line">   const <a class="code" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a>* MTYPE,  \</div>
+<div class="line">   const <a class="code" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a>* SOLVER, \</div>
+<div class="line">   ipindex*       IPARM,  \</div>
+<div class="line">   ipnumber*      DPARM,  \</div>
+<div class="line">   ipindex*       E       \</div>
+<div class="line">)</div>
+</div><!-- fragment --><dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00020">20</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a51db38aa19fe7bd16897a84b125a7695"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a51db38aa19fe7bd16897a84b125a7695">&#9670;&nbsp;</a></span>IPOPT_DECL_PARDISO</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define IPOPT_DECL_PARDISO</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">x</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">   void (x)( \</div>
+<div class="line">   void**           PT,     \</div>
+<div class="line">   const <a class="code" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a>*   MAXFCT, \</div>
+<div class="line">   const <a class="code" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a>*   MNUM,   \</div>
+<div class="line">   const <a class="code" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a>*   MTYPE,  \</div>
+<div class="line">   const <a class="code" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a>*   PHASE,  \</div>
+<div class="line">   const <a class="code" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a>*   N,      \</div>
+<div class="line">   const <a class="code" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a>*  A,      \</div>
+<div class="line">   const <a class="code" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a>*   IA,     \</div>
+<div class="line">   const <a class="code" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a>*   JA,     \</div>
+<div class="line">   const <a class="code" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a>*   PERM,   \</div>
+<div class="line">   const <a class="code" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a>*   NRHS,   \</div>
+<div class="line">   ipindex*         IPARM,  \</div>
+<div class="line">   const <a class="code" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a>*   MSGLVL, \</div>
+<div class="line">   ipnumber*        B,      \</div>
+<div class="line">   ipnumber*        X,      \</div>
+<div class="line">   ipindex*         E,      \</div>
+<div class="line">   ipnumber*        DPARM   \</div>
+<div class="line">)</div>
+</div><!-- fragment --><dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00030">30</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a3f4a38a97f359a9dcd8b6f1dce1fa843"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3f4a38a97f359a9dcd8b6f1dce1fa843">&#9670;&nbsp;</a></span>IPOPT_DECL_SMAT_REORDERING_PARDISO_WSMP</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define IPOPT_DECL_SMAT_REORDERING_PARDISO_WSMP</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">x</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">   void (x)( \</div>
+<div class="line">   const <a class="code" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a>*   N,          \</div>
+<div class="line">   const <a class="code" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a>*   ia,         \</div>
+<div class="line">   const <a class="code" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a>*   ja,         \</div>
+<div class="line">   const <a class="code" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a>*  a_,         \</div>
+<div class="line">   ipindex*         a2,         \</div>
+<div class="line">   ipindex*         ja2,        \</div>
+<div class="line">   ipnumber*        a2_,        \</div>
+<div class="line">   ipindex*         perm2,      \</div>
+<div class="line">   ipnumber*        scale2,     \</div>
+<div class="line">   ipindex*         tmp2_,      \</div>
+<div class="line">   ipindex          preprocess  \</div>
+<div class="line">)</div>
+</div><!-- fragment --><dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00051">51</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
+<div class="ttc" id="aIpTypes_8h_html_a5db07e705790a30d1c9081e6910c8b27"><div class="ttname"><a href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a></div><div class="ttdeci">double ipnumber</div><div class="ttdoc">Type for floating-point numbers.</div><div class="ttdef"><b>Definition:</b> <a href="IpTypes_8h_source.html#l00051">IpTypes.h:51</a></div></div>
+<div class="ttc" id="aIpTypes_8h_html_ad45d5b046bfaf56789665c747d5a8cb9"><div class="ttname"><a href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a></div><div class="ttdeci">int ipindex</div><div class="ttdoc">Type of all indices of vectors, matrices etc.</div><div class="ttdef"><b>Definition:</b> <a href="IpTypes_8h_source.html#l00068">IpTypes.h:68</a></div></div>
 </body>
 </html>

@@ -20,6 +20,8 @@ var classIpopt_1_1AlgorithmBuilder =
     [ "BuildIterateInitializer", "classIpopt_1_1AlgorithmBuilder.html#a2e6b45ff582a9f53b2f276bbe8772234", null ],
     [ "BuildLineSearch", "classIpopt_1_1AlgorithmBuilder.html#ad0f2e4da5b89ba9427a2e6c16b7c51e6", null ],
     [ "BuildMuUpdate", "classIpopt_1_1AlgorithmBuilder.html#aca97676a45d30990cc7331fa32f66d9f", null ],
+    [ "GetHSLLoader", "classIpopt_1_1AlgorithmBuilder.html#ab11e150dab91f35013c5a6df6e490e5d", null ],
+    [ "GetPardisoLoader", "classIpopt_1_1AlgorithmBuilder.html#a43dd8b351517c5aae6aac89ba24d7b6a", null ],
     [ "operator=", "classIpopt_1_1AlgorithmBuilder.html#aaeaeac5231b27b60d8e609b381c34fd2", null ],
     [ "IterOutput_", "classIpopt_1_1AlgorithmBuilder.html#a25b5ea1d912348a3366d15b2250b167d", null ],
     [ "HessUpdater_", "classIpopt_1_1AlgorithmBuilder.html#aa2dd530dc64edd2e192df383cb9493d8", null ],
@@ -32,5 +34,8 @@ var classIpopt_1_1AlgorithmBuilder =
     [ "SymSolver_", "classIpopt_1_1AlgorithmBuilder.html#a8ce5db5fee1a45eb5002a6201d2ee18e", null ],
     [ "AugSolver_", "classIpopt_1_1AlgorithmBuilder.html#ab0742230fea632ba454d0131313f1b4f", null ],
     [ "PDSolver_", "classIpopt_1_1AlgorithmBuilder.html#aeaac1bde5d745bd769a2d79edad33a95", null ],
-    [ "custom_solver_", "classIpopt_1_1AlgorithmBuilder.html#a5ec5728bfc607550d2aa959ea21c0aeb", null ]
+    [ "custom_solver_", "classIpopt_1_1AlgorithmBuilder.html#a5ec5728bfc607550d2aa959ea21c0aeb", null ],
+    [ "linear_solver", "classIpopt_1_1AlgorithmBuilder.html#a6e27141c7973772601b94ba6951ded3a", null ],
+    [ "hslloader", "classIpopt_1_1AlgorithmBuilder.html#a85319d417ac6fd8e8ced7bf1a7f32425", null ],
+    [ "pardisoloader", "classIpopt_1_1AlgorithmBuilder.html#a7580ffc652324bb5b198ff50cc0110ec", null ]
 ];

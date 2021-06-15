@@ -1,5 +1,5 @@
-<!-- HTML header for doxygen 1.8.13-->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- HTML header for doxygen 1.8.18-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.13.4</span-->
+   &#160;<!--span id="projectnumber">3.14.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -109,7 +109,7 @@ $(document).ready(function(){initNavTree('classIpopt_1_1IpoptNLP.html',''); init
 </div><!--header-->
 <div class="contents">
 
-<p>This is the abstract base class for classes that map the traditional <a class="el" href="classIpopt_1_1NLP.html">NLP</a> into something that is more useful by <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a>.  
+<p>This is the abstract base class for classes that map the traditional <a class="el" href="classIpopt_1_1NLP.html" title="Traditional NLP.">NLP</a> into something that is more useful for Ipopt.  
  <a href="classIpopt_1_1IpoptNLP.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="IpIpoptNLP_8hpp_source.html">IpIpoptNLP.hpp</a>&gt;</code></p>
@@ -121,8 +121,8 @@ $(document).ready(function(){initNavTree('classIpopt_1_1IpoptNLP.html',''); init
 <div class="center"><img src="classIpopt_1_1IpoptNLP__inherit__graph.png" border="0" usemap="#Ipopt_1_1IpoptNLP_inherit__map" alt="Inheritance graph"/></div>
 <map name="Ipopt_1_1IpoptNLP_inherit__map" id="Ipopt_1_1IpoptNLP_inherit__map">
 <area shape="rect" title="This is the abstract base class for classes that map the traditional NLP into something that is more ..." alt="" coords="107,80,228,107"/>
-<area shape="rect" href="classIpopt_1_1OrigIpoptNLP.html" title="This class maps the traditional NLP into something that is more useful by Ipopt." alt="" coords="5,155,153,181"/>
-<area shape="rect" href="classIpopt_1_1RestoIpoptNLP.html" title="This class maps the traditional NLP into something that is more useful by Ipopt." alt="" coords="177,155,336,181"/>
+<area shape="rect" href="classIpopt_1_1OrigIpoptNLP.html" title="This class maps the traditional NLP into something that is more useful for Ipopt." alt="" coords="5,155,153,181"/>
+<area shape="rect" href="classIpopt_1_1RestoIpoptNLP.html" title="This class maps a IpoptNLP into one that is used for the restoration phase of Ipopt." alt="" coords="177,155,336,181"/>
 <area shape="rect" href="classIpopt_1_1ReferencedObject.html" title="Storing the reference count of all the smart pointers that currently reference it." alt="" coords="78,5,257,32"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
@@ -136,7 +136,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a70e6fc80da13309678a3a446087b9016"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize (create) structures for the iteration data.  <a href="classIpopt_1_1IpoptNLP.html#a70e6fc80da13309678a3a446087b9016">More...</a><br /></td></tr>
 <tr class="separator:a70e6fc80da13309678a3a446087b9016"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6603973606103eb06dc1c37366a00910"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptNLP.html#a6603973606103eb06dc1c37366a00910">GetWarmStartIterate</a> (<a class="el" href="classIpopt_1_1IteratesVector.html">IteratesVector</a> &amp;warm_start_iterate)=0</td></tr>
-<tr class="memdesc:a6603973606103eb06dc1c37366a00910"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method accessing the GetWarmStartIterate of the <a class="el" href="classIpopt_1_1NLP.html">NLP</a>.  <a href="classIpopt_1_1IpoptNLP.html#a6603973606103eb06dc1c37366a00910">More...</a><br /></td></tr>
+<tr class="memdesc:a6603973606103eb06dc1c37366a00910"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method accessing the GetWarmStartIterate of the <a class="el" href="classIpopt_1_1NLP.html" title="Traditional NLP.">NLP</a>.  <a href="classIpopt_1_1IpoptNLP.html#a6603973606103eb06dc1c37366a00910">More...</a><br /></td></tr>
 <tr class="separator:a6603973606103eb06dc1c37366a00910"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a3987d27e6bd002a12168de5fd5600a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptNLP.html#a1a3987d27e6bd002a12168de5fd5600a">GetSpaces</a> (<a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1VectorSpace.html">VectorSpace</a> &gt; &amp;<a class="el" href="classIpopt_1_1IpoptNLP.html#a4b4ff07de1cb8b58eb27c18b45a788fc">x_space</a>, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1VectorSpace.html">VectorSpace</a> &gt; &amp;c_space, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1VectorSpace.html">VectorSpace</a> &gt; &amp;d_space, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1VectorSpace.html">VectorSpace</a> &gt; &amp;x_l_space, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1MatrixSpace.html">MatrixSpace</a> &gt; &amp;px_l_space, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1VectorSpace.html">VectorSpace</a> &gt; &amp;x_u_space, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1MatrixSpace.html">MatrixSpace</a> &gt; &amp;px_u_space, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1VectorSpace.html">VectorSpace</a> &gt; &amp;d_l_space, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1MatrixSpace.html">MatrixSpace</a> &gt; &amp;pd_l_space, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1VectorSpace.html">VectorSpace</a> &gt; &amp;d_u_space, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1MatrixSpace.html">MatrixSpace</a> &gt; &amp;pd_u_space, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1MatrixSpace.html">MatrixSpace</a> &gt; &amp;Jac_c_space, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1MatrixSpace.html">MatrixSpace</a> &gt; &amp;Jac_d_space, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1SymMatrixSpace.html">SymMatrixSpace</a> &gt; &amp;Hess_lagrangian_space)=0</td></tr>
 <tr class="memdesc:a1a3987d27e6bd002a12168de5fd5600a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accessor method for vector/matrix spaces pointers.  <a href="classIpopt_1_1IpoptNLP.html#a1a3987d27e6bd002a12168de5fd5600a">More...</a><br /></td></tr>
@@ -158,7 +158,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a387e82247bdf1199033334d535b330af"><td class="mdescLeft">&#160;</td><td class="mdescRight">thrown if there is any error evaluating values from the nlp  <a href="classIpopt_1_1IpoptNLP.html#a387e82247bdf1199033334d535b330af">More...</a><br /></td></tr>
 <tr class="separator:a387e82247bdf1199033334d535b330af"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader"></div></td></tr>
-<tr class="memitem:a517a6f7cda1138f6adb6ab460f129ce5"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptNLP.html#a517a6f7cda1138f6adb6ab460f129ce5">f</a> (const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x)=0</td></tr>
+<tr class="memitem:a517a6f7cda1138f6adb6ab460f129ce5"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptNLP.html#a517a6f7cda1138f6adb6ab460f129ce5">f</a> (const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x)=0</td></tr>
 <tr class="memdesc:a517a6f7cda1138f6adb6ab460f129ce5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accessor methods for model data.  <a href="classIpopt_1_1IpoptNLP.html#a517a6f7cda1138f6adb6ab460f129ce5">More...</a><br /></td></tr>
 <tr class="separator:a517a6f7cda1138f6adb6ab460f129ce5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a69862aeed84d4f896287fdaada587401"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptNLP.html#a69862aeed84d4f896287fdaada587401">grad_f</a> (const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x)=0</td></tr>
@@ -176,7 +176,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0c3c1dd454ec49556065a1e8da912b09"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1Matrix.html">Matrix</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptNLP.html#a0c3c1dd454ec49556065a1e8da912b09">jac_d</a> (const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x)=0</td></tr>
 <tr class="memdesc:a0c3c1dd454ec49556065a1e8da912b09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Jacobian <a class="el" href="classIpopt_1_1Matrix.html" title="Matrix Base Class.">Matrix</a> for inequality constraints.  <a href="classIpopt_1_1IpoptNLP.html#a0c3c1dd454ec49556065a1e8da912b09">More...</a><br /></td></tr>
 <tr class="separator:a0c3c1dd454ec49556065a1e8da912b09"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a575f7667506c60531be1db1329a8bb6c"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1SymMatrix.html">SymMatrix</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptNLP.html#a575f7667506c60531be1db1329a8bb6c">h</a> (const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> obj_factor, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;yc, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;yd)=0</td></tr>
+<tr class="memitem:a575f7667506c60531be1db1329a8bb6c"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1SymMatrix.html">SymMatrix</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptNLP.html#a575f7667506c60531be1db1329a8bb6c">h</a> (const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> obj_factor, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;yc, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;yd)=0</td></tr>
 <tr class="memdesc:a575f7667506c60531be1db1329a8bb6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Hessian of the Lagrangian.  <a href="classIpopt_1_1IpoptNLP.html#a575f7667506c60531be1db1329a8bb6c">More...</a><br /></td></tr>
 <tr class="separator:a575f7667506c60531be1db1329a8bb6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0a8487ffd973a43aecd653028bdc20b5"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptNLP.html#a0a8487ffd973a43aecd653028bdc20b5">x_L</a> () const =0</td></tr>
@@ -210,19 +210,19 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:aa9e6ccff3e44a36add3ab5a239a67e5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accessor method to obtain the <a class="el" href="classIpopt_1_1MatrixSpace.html" title="MatrixSpace base class, corresponding to the Matrix base class.">MatrixSpace</a> for the Hessian matrix (or it's approximation)  <a href="classIpopt_1_1IpoptNLP.html#aa9e6ccff3e44a36add3ab5a239a67e5d">More...</a><br /></td></tr>
 <tr class="separator:aa9e6ccff3e44a36add3ab5a239a67e5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Counters for the number of function evaluations.</div></td></tr>
-<tr class="memitem:a2ffab0bc6351f661c852a5b8af4a3806"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptNLP.html#a2ffab0bc6351f661c852a5b8af4a3806">f_evals</a> () const =0</td></tr>
+<tr class="memitem:a2ffab0bc6351f661c852a5b8af4a3806"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptNLP.html#a2ffab0bc6351f661c852a5b8af4a3806">f_evals</a> () const =0</td></tr>
 <tr class="separator:a2ffab0bc6351f661c852a5b8af4a3806"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acaa0bb9fd1a192eb3054b266a57b49f8"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptNLP.html#acaa0bb9fd1a192eb3054b266a57b49f8">grad_f_evals</a> () const =0</td></tr>
+<tr class="memitem:acaa0bb9fd1a192eb3054b266a57b49f8"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptNLP.html#acaa0bb9fd1a192eb3054b266a57b49f8">grad_f_evals</a> () const =0</td></tr>
 <tr class="separator:acaa0bb9fd1a192eb3054b266a57b49f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a77738f5e762f18d89d79ee0dbab22b8e"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptNLP.html#a77738f5e762f18d89d79ee0dbab22b8e">c_evals</a> () const =0</td></tr>
+<tr class="memitem:a77738f5e762f18d89d79ee0dbab22b8e"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptNLP.html#a77738f5e762f18d89d79ee0dbab22b8e">c_evals</a> () const =0</td></tr>
 <tr class="separator:a77738f5e762f18d89d79ee0dbab22b8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ace941433752a08ea1a3a802d70d7394f"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptNLP.html#ace941433752a08ea1a3a802d70d7394f">jac_c_evals</a> () const =0</td></tr>
+<tr class="memitem:ace941433752a08ea1a3a802d70d7394f"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptNLP.html#ace941433752a08ea1a3a802d70d7394f">jac_c_evals</a> () const =0</td></tr>
 <tr class="separator:ace941433752a08ea1a3a802d70d7394f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5904d8ed12251843bfe66fb4ddbfc3e0"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptNLP.html#a5904d8ed12251843bfe66fb4ddbfc3e0">d_evals</a> () const =0</td></tr>
+<tr class="memitem:a5904d8ed12251843bfe66fb4ddbfc3e0"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptNLP.html#a5904d8ed12251843bfe66fb4ddbfc3e0">d_evals</a> () const =0</td></tr>
 <tr class="separator:a5904d8ed12251843bfe66fb4ddbfc3e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9b3cd186c84eafe0936149403076064b"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptNLP.html#a9b3cd186c84eafe0936149403076064b">jac_d_evals</a> () const =0</td></tr>
+<tr class="memitem:a9b3cd186c84eafe0936149403076064b"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptNLP.html#a9b3cd186c84eafe0936149403076064b">jac_d_evals</a> () const =0</td></tr>
 <tr class="separator:a9b3cd186c84eafe0936149403076064b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aea2902047ff72c2821cdc50f15d49e69"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptNLP.html#aea2902047ff72c2821cdc50f15d49e69">h_evals</a> () const =0</td></tr>
+<tr class="memitem:aea2902047ff72c2821cdc50f15d49e69"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptNLP.html#aea2902047ff72c2821cdc50f15d49e69">h_evals</a> () const =0</td></tr>
 <tr class="separator:aea2902047ff72c2821cdc50f15d49e69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Special method for dealing with the fact that the</div></td></tr>
 <tr><td colspan="2"><div class="groupText"><p>restoration phase objective function depends on the barrier parameter </p>
@@ -230,29 +230,29 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a11018a9bd2cae56e4a92e5a920d8e452"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptNLP.html#a11018a9bd2cae56e4a92e5a920d8e452">objective_depends_on_mu</a> () const</td></tr>
 <tr class="memdesc:a11018a9bd2cae56e4a92e5a920d8e452"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method for telling the <a class="el" href="classIpopt_1_1IpoptCalculatedQuantities.html" title="Class for all IPOPT specific calculated quantities.">IpoptCalculatedQuantities</a> class whether the objective function depends on the barrier function.  <a href="classIpopt_1_1IpoptNLP.html#a11018a9bd2cae56e4a92e5a920d8e452">More...</a><br /></td></tr>
 <tr class="separator:a11018a9bd2cae56e4a92e5a920d8e452"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab0f91d868694f977cc7c8d09eadb9c28"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptNLP.html#ab0f91d868694f977cc7c8d09eadb9c28">f</a> (const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> mu)=0</td></tr>
+<tr class="memitem:ab0f91d868694f977cc7c8d09eadb9c28"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptNLP.html#ab0f91d868694f977cc7c8d09eadb9c28">f</a> (const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> mu)=0</td></tr>
 <tr class="memdesc:ab0f91d868694f977cc7c8d09eadb9c28"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replacement for the default objective function method which knows about the barrier parameter.  <a href="classIpopt_1_1IpoptNLP.html#ab0f91d868694f977cc7c8d09eadb9c28">More...</a><br /></td></tr>
 <tr class="separator:ab0f91d868694f977cc7c8d09eadb9c28"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aca6cbd452e177a6acf0be582c5fc31b3"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptNLP.html#aca6cbd452e177a6acf0be582c5fc31b3">grad_f</a> (const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> mu)=0</td></tr>
+<tr class="memitem:aca6cbd452e177a6acf0be582c5fc31b3"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptNLP.html#aca6cbd452e177a6acf0be582c5fc31b3">grad_f</a> (const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> mu)=0</td></tr>
 <tr class="memdesc:aca6cbd452e177a6acf0be582c5fc31b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replacement for the default objective gradient method which knows about the barrier parameter.  <a href="classIpopt_1_1IpoptNLP.html#aca6cbd452e177a6acf0be582c5fc31b3">More...</a><br /></td></tr>
 <tr class="separator:aca6cbd452e177a6acf0be582c5fc31b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a76e5d4c3a8c0b754b14f14934f85d7fc"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1SymMatrix.html">SymMatrix</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptNLP.html#a76e5d4c3a8c0b754b14f14934f85d7fc">h</a> (const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> obj_factor, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;yc, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;yd, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> mu)=0</td></tr>
+<tr class="memitem:a76e5d4c3a8c0b754b14f14934f85d7fc"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1SymMatrix.html">SymMatrix</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptNLP.html#a76e5d4c3a8c0b754b14f14934f85d7fc">h</a> (const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> obj_factor, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;yc, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;yd, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> mu)=0</td></tr>
 <tr class="memdesc:a76e5d4c3a8c0b754b14f14934f85d7fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replacement for the default Lagrangian Hessian method which knows about the barrier parameter.  <a href="classIpopt_1_1IpoptNLP.html#a76e5d4c3a8c0b754b14f14934f85d7fc">More...</a><br /></td></tr>
 <tr class="separator:a76e5d4c3a8c0b754b14f14934f85d7fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe3cca9adebb3bcc95c22c398dd86d46"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1SymMatrix.html">SymMatrix</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptNLP.html#abe3cca9adebb3bcc95c22c398dd86d46">uninitialized_h</a> ()=0</td></tr>
 <tr class="memdesc:abe3cca9adebb3bcc95c22c398dd86d46"><td class="mdescLeft">&#160;</td><td class="mdescRight">Provides a Hessian matrix from the correct matrix space with uninitialized values.  <a href="classIpopt_1_1IpoptNLP.html#abe3cca9adebb3bcc95c22c398dd86d46">More...</a><br /></td></tr>
 <tr class="separator:abe3cca9adebb3bcc95c22c398dd86d46"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">solution routines</div></td></tr>
-<tr class="memitem:a60987910a9e5b98a8b7d0a6de159dbc9"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptNLP.html#a60987910a9e5b98a8b7d0a6de159dbc9">FinalizeSolution</a> (<a class="el" href="namespaceIpopt.html#a53a5dc5f64f568252ba7bb7385e7f834">SolverReturn</a> status, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;z_L, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;z_U, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;<a class="el" href="classIpopt_1_1IpoptNLP.html#a91c2b699a51efb6de45acabc8b2c0c54">c</a>, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;<a class="el" href="classIpopt_1_1IpoptNLP.html#acecae7eb775e3be2f4db18269badfc83">d</a>, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;y_c, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;y_d, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> obj_value, const <a class="el" href="classIpopt_1_1IpoptData.html">IpoptData</a> *ip_data, <a class="el" href="classIpopt_1_1IpoptCalculatedQuantities.html">IpoptCalculatedQuantities</a> *ip_cq)=0</td></tr>
+<tr class="memitem:a60987910a9e5b98a8b7d0a6de159dbc9"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptNLP.html#a60987910a9e5b98a8b7d0a6de159dbc9">FinalizeSolution</a> (<a class="el" href="namespaceIpopt.html#a53a5dc5f64f568252ba7bb7385e7f834">SolverReturn</a> status, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;z_L, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;z_U, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;<a class="el" href="classIpopt_1_1IpoptNLP.html#a91c2b699a51efb6de45acabc8b2c0c54">c</a>, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;<a class="el" href="classIpopt_1_1IpoptNLP.html#acecae7eb775e3be2f4db18269badfc83">d</a>, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;y_c, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;y_d, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> obj_value, const <a class="el" href="classIpopt_1_1IpoptData.html">IpoptData</a> *ip_data, <a class="el" href="classIpopt_1_1IpoptCalculatedQuantities.html">IpoptCalculatedQuantities</a> *ip_cq)=0</td></tr>
 <tr class="separator:a60987910a9e5b98a8b7d0a6de159dbc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4288990eceacf3c09c663f3954ff27d6"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptNLP.html#a4288990eceacf3c09c663f3954ff27d6">IntermediateCallBack</a> (<a class="el" href="IpReturnCodes__inc_8h.html#a5daff61568f9909c518fb61116260387">AlgorithmMode</a> mode, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> iter, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> obj_value, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> inf_pr, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> inf_du, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> mu, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> d_norm, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> regularization_size, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> alpha_du, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> alpha_pr, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> ls_trials, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1IpoptData.html">IpoptData</a> &gt; ip_data, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1IpoptCalculatedQuantities.html">IpoptCalculatedQuantities</a> &gt; ip_cq)=0</td></tr>
+<tr class="memitem:a4288990eceacf3c09c663f3954ff27d6"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptNLP.html#a4288990eceacf3c09c663f3954ff27d6">IntermediateCallBack</a> (<a class="el" href="IpReturnCodes__inc_8h.html#a5daff61568f9909c518fb61116260387">AlgorithmMode</a> mode, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> iter, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> obj_value, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> inf_pr, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> inf_du, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> mu, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> d_norm, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> regularization_size, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> alpha_du, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> alpha_pr, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> ls_trials, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1IpoptData.html">IpoptData</a> &gt; ip_data, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1IpoptCalculatedQuantities.html">IpoptCalculatedQuantities</a> &gt; ip_cq)=0</td></tr>
 <tr class="separator:a4288990eceacf3c09c663f3954ff27d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classIpopt_1_1ReferencedObject"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classIpopt_1_1ReferencedObject')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classIpopt_1_1ReferencedObject.html">Ipopt::ReferencedObject</a></td></tr>
 <tr class="memitem:a5c0f2208e3ead22bf7c5179381ed8203 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#a5c0f2208e3ead22bf7c5179381ed8203">ReferencedObject</a> ()</td></tr>
 <tr class="separator:a5c0f2208e3ead22bf7c5179381ed8203 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adbbf3aa5307da62ab8224ba599d4bd7a inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#adbbf3aa5307da62ab8224ba599d4bd7a">~ReferencedObject</a> ()</td></tr>
 <tr class="separator:adbbf3aa5307da62ab8224ba599d4bd7a inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac517534e10e36c946aeefc6fe337777 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#aac517534e10e36c946aeefc6fe337777">ReferenceCount</a> () const</td></tr>
+<tr class="memitem:aac517534e10e36c946aeefc6fe337777 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#aac517534e10e36c946aeefc6fe337777">ReferenceCount</a> () const</td></tr>
 <tr class="separator:aac517534e10e36c946aeefc6fe337777 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa69ecb0f026bd741e2fa84c31d4ec332 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#aa69ecb0f026bd741e2fa84c31d4ec332">AddRef</a> (const <a class="el" href="classIpopt_1_1Referencer.html">Referencer</a> *referencer) const</td></tr>
 <tr class="separator:aa69ecb0f026bd741e2fa84c31d4ec332 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -278,10 +278,14 @@ Private Attributes</h2></td></tr>
 <tr class="separator:aab65358b304095a3bf3d5865df20dc58"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>This is the abstract base class for classes that map the traditional <a class="el" href="classIpopt_1_1NLP.html">NLP</a> into something that is more useful by <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a>. </p>
-<p>This class takes care of storing the calculated model results, handles caching, and (some day) takes care of addition of slacks. </p>
+<div class="textblock"><p>This is the abstract base class for classes that map the traditional <a class="el" href="classIpopt_1_1NLP.html" title="Traditional NLP.">NLP</a> into something that is more useful for Ipopt. </p>
+<p>As for <a class="el" href="classIpopt_1_1NLP.html" title="Traditional NLP.">NLP</a>, the represented NLP is </p><p class="formulaDsp">
+\begin{eqnarray*} \mathrm{min} &amp;&amp; f(x), \\ \mathrm{s.t.} &amp;&amp; c(x) = 0, &amp;\qquad y_c\\ &amp;&amp; d_L \leq d(x) \leq d_U, &amp;\qquad y_d \\ &amp;&amp; x_L \leq x \leq x_U, &amp;\qquad z_L, z_U \end{eqnarray*}
+</p>
+<p> where \(y_c\), \(y_d\), \(z_L\), \(z_U\) name the dual variables of the corresponding constraints.</p>
+<p>This class takes care of storing the calculated model results, handles caching, scaling, and (some day) takes care of addition of slacks. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptNLP_8hpp_source.html#l00027">27</a> of file <a class="el" href="IpIpoptNLP_8hpp_source.html">IpIpoptNLP.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptNLP_8hpp_source.html#l00035">35</a> of file <a class="el" href="IpIpoptNLP_8hpp_source.html">IpIpoptNLP.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aaa7d01346731a53ee42caca4769b0792"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aaa7d01346731a53ee42caca4769b0792">&#9670;&nbsp;</a></span>IpoptNLP() <span class="overload">[1/2]</span></h2>
@@ -307,7 +311,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptNLP_8hpp_source.html#l00032">32</a> of file <a class="el" href="IpIpoptNLP_8hpp_source.html">IpIpoptNLP.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptNLP_8hpp_source.html#l00040">40</a> of file <a class="el" href="IpIpoptNLP_8hpp_source.html">IpIpoptNLP.hpp</a>.</p>
 
 </div>
 </div>
@@ -336,7 +340,7 @@ Private Attributes</h2></td></tr>
 
 <p>Destructor. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptNLP_8hpp_source.html#l00039">39</a> of file <a class="el" href="IpIpoptNLP_8hpp_source.html">IpIpoptNLP.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptNLP_8hpp_source.html#l00047">47</a> of file <a class="el" href="IpIpoptNLP_8hpp_source.html">IpIpoptNLP.hpp</a>.</p>
 
 </div>
 </div>
@@ -414,7 +418,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#aaf6274d1366054fe031d50dbb2b05322">Ipopt::OrigIpoptNLP</a>, and <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#a7e4586f55986411e2367b3999c4acfcc">Ipopt::RestoIpoptNLP</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptNLP_8hpp_source.html#l00047">47</a> of file <a class="el" href="IpIpoptNLP_8hpp_source.html">IpIpoptNLP.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptNLP_8hpp_source.html#l00055">55</a> of file <a class="el" href="IpIpoptNLP_8hpp_source.html">IpIpoptNLP.hpp</a>.</p>
 
 </div>
 </div>
@@ -562,7 +566,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Method accessing the GetWarmStartIterate of the <a class="el" href="classIpopt_1_1NLP.html">NLP</a>. </p>
+<p>Method accessing the GetWarmStartIterate of the <a class="el" href="classIpopt_1_1NLP.html" title="Traditional NLP.">NLP</a>. </p>
 
 <p>Implemented in <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#a1f4677be13ceeed6c984212b8b374dfd">Ipopt::OrigIpoptNLP</a>, and <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#a275a63cf6979308ea28875c365eaa914">Ipopt::RestoIpoptNLP</a>.</p>
 
@@ -578,7 +582,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> Ipopt::IpoptNLP::f </td>
+          <td class="memname">virtual <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> Ipopt::IpoptNLP::f </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;&#160;</td>
           <td class="paramname"><em>x</em></td><td>)</td>
@@ -655,7 +659,7 @@ Private Attributes</h2></td></tr>
 
 <p>Equality constraint residual. </p>
 
-<p>Implemented in <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#a43475df141b511d8f09de43e8cd6ce9f">Ipopt::RestoIpoptNLP</a>, and <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#add2b30815d41a07c0c1e5d9c761f6b3d">Ipopt::OrigIpoptNLP</a>.</p>
+<p>Implemented in <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#add2b30815d41a07c0c1e5d9c761f6b3d">Ipopt::OrigIpoptNLP</a>, and <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#a43475df141b511d8f09de43e8cd6ce9f">Ipopt::RestoIpoptNLP</a>.</p>
 
 </div>
 </div>
@@ -685,7 +689,7 @@ Private Attributes</h2></td></tr>
 
 <p>Jacobian <a class="el" href="classIpopt_1_1Matrix.html" title="Matrix Base Class.">Matrix</a> for equality constraints. </p>
 
-<p>Implemented in <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#aa26507884599c23dd482e94f07ecfe84">Ipopt::RestoIpoptNLP</a>, and <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#a2502d6a5f24c48794274ce724dfbd22a">Ipopt::OrigIpoptNLP</a>.</p>
+<p>Implemented in <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#a2502d6a5f24c48794274ce724dfbd22a">Ipopt::OrigIpoptNLP</a>, and <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#aa26507884599c23dd482e94f07ecfe84">Ipopt::RestoIpoptNLP</a>.</p>
 
 </div>
 </div>
@@ -715,7 +719,7 @@ Private Attributes</h2></td></tr>
 
 <p>Inequality constraint residual (reformulated as equalities with slacks. </p>
 
-<p>Implemented in <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#acf68a30e72f361d9dbe78184d779da98">Ipopt::RestoIpoptNLP</a>, and <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#aaf1cf105af94a567c1640096e5ebbd54">Ipopt::OrigIpoptNLP</a>.</p>
+<p>Implemented in <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#aaf1cf105af94a567c1640096e5ebbd54">Ipopt::OrigIpoptNLP</a>, and <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#acf68a30e72f361d9dbe78184d779da98">Ipopt::RestoIpoptNLP</a>.</p>
 
 </div>
 </div>
@@ -745,7 +749,7 @@ Private Attributes</h2></td></tr>
 
 <p>Jacobian <a class="el" href="classIpopt_1_1Matrix.html" title="Matrix Base Class.">Matrix</a> for inequality constraints. </p>
 
-<p>Implemented in <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#a2231c02a499f9389dd42952363a40501">Ipopt::RestoIpoptNLP</a>, and <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#abe784a26cb3ec89443c79cb6f9d345cf">Ipopt::OrigIpoptNLP</a>.</p>
+<p>Implemented in <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#abe784a26cb3ec89443c79cb6f9d345cf">Ipopt::OrigIpoptNLP</a>, and <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#a2231c02a499f9389dd42952363a40501">Ipopt::RestoIpoptNLP</a>.</p>
 
 </div>
 </div>
@@ -767,7 +771,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>obj_factor</em>, </td>
         </tr>
         <tr>
@@ -797,7 +801,7 @@ Private Attributes</h2></td></tr>
 
 <p>Hessian of the Lagrangian. </p>
 
-<p>Implemented in <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#a9a8b4155dcc711addd494d1d36b29de8">Ipopt::RestoIpoptNLP</a>, and <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#a851b247718ce6a30090e83613e1395fe">Ipopt::OrigIpoptNLP</a>.</p>
+<p>Implemented in <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#a851b247718ce6a30090e83613e1395fe">Ipopt::OrigIpoptNLP</a>, and <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#a9a8b4155dcc711addd494d1d36b29de8">Ipopt::RestoIpoptNLP</a>.</p>
 
 </div>
 </div>
@@ -826,7 +830,7 @@ Private Attributes</h2></td></tr>
 
 <p>Lower bounds on x. </p>
 
-<p>Implemented in <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#a5e810b1c02b676fe211aafce39c13462">Ipopt::RestoIpoptNLP</a>, and <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#a058c365d72ccff8862c1712f7748637e">Ipopt::OrigIpoptNLP</a>.</p>
+<p>Implemented in <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#a058c365d72ccff8862c1712f7748637e">Ipopt::OrigIpoptNLP</a>, and <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#a5e810b1c02b676fe211aafce39c13462">Ipopt::RestoIpoptNLP</a>.</p>
 
 </div>
 </div>
@@ -855,7 +859,7 @@ Private Attributes</h2></td></tr>
 
 <p>Permutation matrix (x_L_ -&gt; x) </p>
 
-<p>Implemented in <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#a79d530793ef1c6a858beaeae7fae3a76">Ipopt::RestoIpoptNLP</a>, and <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#a73760bd50e4d02e485f579efd4368579">Ipopt::OrigIpoptNLP</a>.</p>
+<p>Implemented in <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#a73760bd50e4d02e485f579efd4368579">Ipopt::OrigIpoptNLP</a>, and <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#a79d530793ef1c6a858beaeae7fae3a76">Ipopt::RestoIpoptNLP</a>.</p>
 
 </div>
 </div>
@@ -884,7 +888,7 @@ Private Attributes</h2></td></tr>
 
 <p>Upper bounds on x. </p>
 
-<p>Implemented in <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#af8ce923bf9d62135188e31f620376c38">Ipopt::RestoIpoptNLP</a>, and <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#acccdbaa115b9e6c705c162f80d8e0c04">Ipopt::OrigIpoptNLP</a>.</p>
+<p>Implemented in <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#acccdbaa115b9e6c705c162f80d8e0c04">Ipopt::OrigIpoptNLP</a>, and <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#af8ce923bf9d62135188e31f620376c38">Ipopt::RestoIpoptNLP</a>.</p>
 
 </div>
 </div>
@@ -913,7 +917,7 @@ Private Attributes</h2></td></tr>
 
 <p>Permutation matrix (x_U_ -&gt; x. </p>
 
-<p>Implemented in <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#a3f9263c39054b6732c2d88d192c496a7">Ipopt::RestoIpoptNLP</a>, and <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#ad70a791a0bf5941ab225537a9f37a446">Ipopt::OrigIpoptNLP</a>.</p>
+<p>Implemented in <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#ad70a791a0bf5941ab225537a9f37a446">Ipopt::OrigIpoptNLP</a>, and <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#a3f9263c39054b6732c2d88d192c496a7">Ipopt::RestoIpoptNLP</a>.</p>
 
 </div>
 </div>
@@ -942,7 +946,7 @@ Private Attributes</h2></td></tr>
 
 <p>Lower bounds on d. </p>
 
-<p>Implemented in <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#abd96f542698a9a2d6acb296e397be13e">Ipopt::RestoIpoptNLP</a>, and <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#aa474bb7dbab2d7ccb1f2d028d2a80243">Ipopt::OrigIpoptNLP</a>.</p>
+<p>Implemented in <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#aa474bb7dbab2d7ccb1f2d028d2a80243">Ipopt::OrigIpoptNLP</a>, and <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#abd96f542698a9a2d6acb296e397be13e">Ipopt::RestoIpoptNLP</a>.</p>
 
 </div>
 </div>
@@ -971,7 +975,7 @@ Private Attributes</h2></td></tr>
 
 <p>Permutation matrix (d_L_ -&gt; d) </p>
 
-<p>Implemented in <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#aae4c38749b80afbdd7ce9b71cb3a530c">Ipopt::RestoIpoptNLP</a>, and <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#af641fa37708d7182efd52a9bc50e8092">Ipopt::OrigIpoptNLP</a>.</p>
+<p>Implemented in <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#af641fa37708d7182efd52a9bc50e8092">Ipopt::OrigIpoptNLP</a>, and <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#aae4c38749b80afbdd7ce9b71cb3a530c">Ipopt::RestoIpoptNLP</a>.</p>
 
 </div>
 </div>
@@ -1000,7 +1004,7 @@ Private Attributes</h2></td></tr>
 
 <p>Upper bounds on d. </p>
 
-<p>Implemented in <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#a6a06beb15958995ecbcb9995c498ac8e">Ipopt::RestoIpoptNLP</a>, and <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#a46e50417ae25161c49e3f1de62f73384">Ipopt::OrigIpoptNLP</a>.</p>
+<p>Implemented in <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#a46e50417ae25161c49e3f1de62f73384">Ipopt::OrigIpoptNLP</a>, and <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#a6a06beb15958995ecbcb9995c498ac8e">Ipopt::RestoIpoptNLP</a>.</p>
 
 </div>
 </div>
@@ -1029,7 +1033,7 @@ Private Attributes</h2></td></tr>
 
 <p>Permutation matrix (d_U_ -&gt; d. </p>
 
-<p>Implemented in <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#ad747dbaf1fea48eb575f068ff596da5d">Ipopt::RestoIpoptNLP</a>, and <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#ab8fa043ce63db2e6663227917180e520">Ipopt::OrigIpoptNLP</a>.</p>
+<p>Implemented in <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#ab8fa043ce63db2e6663227917180e520">Ipopt::OrigIpoptNLP</a>, and <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#ad747dbaf1fea48eb575f068ff596da5d">Ipopt::RestoIpoptNLP</a>.</p>
 
 </div>
 </div>
@@ -1058,7 +1062,7 @@ Private Attributes</h2></td></tr>
 
 <p>x_space </p>
 
-<p>Implemented in <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#a1778ed5eec2873c2ed166dc3d54413f7">Ipopt::RestoIpoptNLP</a>, and <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#aaab260265852ed80766861ce9420f2ae">Ipopt::OrigIpoptNLP</a>.</p>
+<p>Implemented in <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#aaab260265852ed80766861ce9420f2ae">Ipopt::OrigIpoptNLP</a>, and <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#a1778ed5eec2873c2ed166dc3d54413f7">Ipopt::RestoIpoptNLP</a>.</p>
 
 </div>
 </div>
@@ -1087,7 +1091,7 @@ Private Attributes</h2></td></tr>
 
 <p>Accessor method to obtain the <a class="el" href="classIpopt_1_1MatrixSpace.html" title="MatrixSpace base class, corresponding to the Matrix base class.">MatrixSpace</a> for the Hessian matrix (or it's approximation) </p>
 
-<p>Implemented in <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#a3998a2cbd891e8f1eab37e0d6adabd03">Ipopt::RestoIpoptNLP</a>, and <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#a672b88580aa879ddaf24081fd76af09d">Ipopt::OrigIpoptNLP</a>.</p>
+<p>Implemented in <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#a672b88580aa879ddaf24081fd76af09d">Ipopt::OrigIpoptNLP</a>, and <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#a3998a2cbd891e8f1eab37e0d6adabd03">Ipopt::RestoIpoptNLP</a>.</p>
 
 </div>
 </div>
@@ -1199,7 +1203,7 @@ Private Attributes</h2></td></tr>
 
 <p>Accessor method for vector/matrix spaces pointers. </p>
 
-<p>Implemented in <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#ad1284098768b6a6bbf8525bb508c0b2d">Ipopt::RestoIpoptNLP</a>, and <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#a579f0399b8a1dec9a5bd25e4c9cd9adc">Ipopt::OrigIpoptNLP</a>.</p>
+<p>Implemented in <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#a579f0399b8a1dec9a5bd25e4c9cd9adc">Ipopt::OrigIpoptNLP</a>, and <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#ad1284098768b6a6bbf8525bb508c0b2d">Ipopt::RestoIpoptNLP</a>.</p>
 
 </div>
 </div>
@@ -1252,7 +1256,7 @@ Private Attributes</h2></td></tr>
 <p>Method for adapting the variable bounds. </p>
 <p>This is called if slacks are becoming too small </p>
 
-<p>Implemented in <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#a71faeafbfc478eb59d3fa3dad91bb338">Ipopt::RestoIpoptNLP</a>, and <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#a69a5274b61994b0200f5b35b7256dbb8">Ipopt::OrigIpoptNLP</a>.</p>
+<p>Implemented in <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#a69a5274b61994b0200f5b35b7256dbb8">Ipopt::OrigIpoptNLP</a>, and <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#a71faeafbfc478eb59d3fa3dad91bb338">Ipopt::RestoIpoptNLP</a>.</p>
 
 </div>
 </div>
@@ -1266,7 +1270,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::IpoptNLP::f_evals </td>
+          <td class="memname">virtual <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::IpoptNLP::f_evals </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1293,7 +1297,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::IpoptNLP::grad_f_evals </td>
+          <td class="memname">virtual <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::IpoptNLP::grad_f_evals </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1320,7 +1324,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::IpoptNLP::c_evals </td>
+          <td class="memname">virtual <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::IpoptNLP::c_evals </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1347,7 +1351,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::IpoptNLP::jac_c_evals </td>
+          <td class="memname">virtual <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::IpoptNLP::jac_c_evals </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1374,7 +1378,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::IpoptNLP::d_evals </td>
+          <td class="memname">virtual <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::IpoptNLP::d_evals </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1401,7 +1405,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::IpoptNLP::jac_d_evals </td>
+          <td class="memname">virtual <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::IpoptNLP::jac_d_evals </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1428,7 +1432,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::IpoptNLP::h_evals </td>
+          <td class="memname">virtual <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::IpoptNLP::h_evals </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -1469,11 +1473,11 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Method for telling the <a class="el" href="classIpopt_1_1IpoptCalculatedQuantities.html" title="Class for all IPOPT specific calculated quantities.">IpoptCalculatedQuantities</a> class whether the objective function depends on the barrier function. </p>
-<p>This is only used for the restoration phase <a class="el" href="classIpopt_1_1NLP.html">NLP</a> formulation. Probably only <a class="el" href="classIpopt_1_1RestoIpoptNLP.html" title="This class maps the traditional NLP into something that is more useful by Ipopt.">RestoIpoptNLP</a> should overwrite this. </p>
+<p>This is only used for the restoration phase <a class="el" href="classIpopt_1_1NLP.html" title="Traditional NLP.">NLP</a> formulation. Probably only <a class="el" href="classIpopt_1_1RestoIpoptNLP.html" title="This class maps a IpoptNLP into one that is used for the restoration phase of Ipopt.">RestoIpoptNLP</a> should overwrite this. </p>
 
 <p>Reimplemented in <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#aa3be9691d10f730a20d5cbbe56af8095">Ipopt::RestoIpoptNLP</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptNLP_8hpp_source.html#l00212">212</a> of file <a class="el" href="IpIpoptNLP_8hpp_source.html">IpIpoptNLP.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptNLP_8hpp_source.html#l00220">220</a> of file <a class="el" href="IpIpoptNLP_8hpp_source.html">IpIpoptNLP.hpp</a>.</p>
 
 </div>
 </div>
@@ -1487,7 +1491,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> Ipopt::IpoptNLP::f </td>
+          <td class="memname">virtual <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> Ipopt::IpoptNLP::f </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;&#160;</td>
           <td class="paramname"><em>x</em>, </td>
@@ -1495,7 +1499,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>mu</em>&#160;</td>
         </tr>
         <tr>
@@ -1535,7 +1539,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>mu</em>&#160;</td>
         </tr>
         <tr>
@@ -1553,7 +1557,7 @@ Private Attributes</h2></td></tr>
 
 <p>Replacement for the default objective gradient method which knows about the barrier parameter. </p>
 
-<p>Implemented in <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#adcc9b48e0c95591f5044b7e3cb3ba858">Ipopt::RestoIpoptNLP</a>, and <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#a47ae5522ee95c36840bdf594b08cb4ce">Ipopt::OrigIpoptNLP</a>.</p>
+<p>Implemented in <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#a47ae5522ee95c36840bdf594b08cb4ce">Ipopt::OrigIpoptNLP</a>, and <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#adcc9b48e0c95591f5044b7e3cb3ba858">Ipopt::RestoIpoptNLP</a>.</p>
 
 </div>
 </div>
@@ -1575,7 +1579,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>obj_factor</em>, </td>
         </tr>
         <tr>
@@ -1593,7 +1597,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>mu</em>&#160;</td>
         </tr>
         <tr>
@@ -1611,7 +1615,7 @@ Private Attributes</h2></td></tr>
 
 <p>Replacement for the default Lagrangian Hessian method which knows about the barrier parameter. </p>
 
-<p>Implemented in <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#ad59270ce1fb09aa472a75dbef273e511">Ipopt::RestoIpoptNLP</a>, and <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#a894ef24326584a8dd59623295f82ac4d">Ipopt::OrigIpoptNLP</a>.</p>
+<p>Implemented in <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#a894ef24326584a8dd59623295f82ac4d">Ipopt::OrigIpoptNLP</a>, and <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#ad59270ce1fb09aa472a75dbef273e511">Ipopt::RestoIpoptNLP</a>.</p>
 
 </div>
 </div>
@@ -1641,7 +1645,7 @@ Private Attributes</h2></td></tr>
 <p>Provides a Hessian matrix from the correct matrix space with uninitialized values. </p>
 <p>This can be used in LeastSquareMults to obtain a "zero Hessian". </p>
 
-<p>Implemented in <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#a4f467922289cec6d42b8d8ba4da4ad3a">Ipopt::RestoIpoptNLP</a>, and <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#a0ebe96316e391d53370a08198ebe3bfa">Ipopt::OrigIpoptNLP</a>.</p>
+<p>Implemented in <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#a0ebe96316e391d53370a08198ebe3bfa">Ipopt::OrigIpoptNLP</a>, and <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#a4f467922289cec6d42b8d8ba4da4ad3a">Ipopt::RestoIpoptNLP</a>.</p>
 
 </div>
 </div>
@@ -1705,7 +1709,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>obj_value</em>, </td>
         </tr>
         <tr>
@@ -1755,61 +1759,61 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>iter</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>obj_value</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>inf_pr</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>inf_du</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>mu</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>d_norm</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>regularization_size</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>alpha_du</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>alpha_pr</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>ls_trials</em>, </td>
         </tr>
         <tr>
@@ -1866,7 +1870,7 @@ Private Attributes</h2></td></tr>
 
 <p>Returns the scaling strategy object. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptNLP_8hpp_source.html#l00286">286</a> of file <a class="el" href="IpIpoptNLP_8hpp_source.html">IpIpoptNLP.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptNLP_8hpp_source.html#l00294">294</a> of file <a class="el" href="IpIpoptNLP_8hpp_source.html">IpIpoptNLP.hpp</a>.</p>
 
 </div>
 </div>
@@ -1919,7 +1923,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptNLP_8hpp_source.html#l00315">315</a> of file <a class="el" href="IpIpoptNLP_8hpp_source.html">IpIpoptNLP.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptNLP_8hpp_source.html#l00323">323</a> of file <a class="el" href="IpIpoptNLP_8hpp_source.html">IpIpoptNLP.hpp</a>.</p>
 
 </div>
 </div>

@@ -16,6 +16,8 @@ var classIpopt_1_1MinC__1NrmRestorationPhase =
     [ "bound_mult_reset_threshold_", "classIpopt_1_1MinC__1NrmRestorationPhase.html#a4f84ba8c3fa5b2c8c2c953cd2b15149f", null ],
     [ "expect_infeasible_problem_", "classIpopt_1_1MinC__1NrmRestorationPhase.html#a53dbc67f4f455f6a8616e398d15efafd", null ],
     [ "constr_viol_tol_", "classIpopt_1_1MinC__1NrmRestorationPhase.html#a85723ff97452a0a835c93fddc3204e77", null ],
+    [ "max_wall_time_", "classIpopt_1_1MinC__1NrmRestorationPhase.html#a3a3f9c3284140c1278ae5bab11b7a442", null ],
+    [ "max_cpu_time_", "classIpopt_1_1MinC__1NrmRestorationPhase.html#a6c3972380b7960b22a64ac0521767558", null ],
     [ "resto_failure_feasibility_threshold_", "classIpopt_1_1MinC__1NrmRestorationPhase.html#a3907c6e88721be5f0a4bd84048e9b2a2", null ],
     [ "count_restorations_", "classIpopt_1_1MinC__1NrmRestorationPhase.html#afcbd1a157eba7a802699cd7d89876131", null ]
 ];

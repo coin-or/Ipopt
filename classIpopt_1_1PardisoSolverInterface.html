@@ -1,5 +1,5 @@
-<!-- HTML header for doxygen 1.8.13-->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- HTML header for doxygen 1.8.18-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.13.4</span-->
+   &#160;<!--span id="projectnumber">3.14.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -102,13 +102,14 @@ $(document).ready(function(){initNavTree('classIpopt_1_1PardisoSolverInterface.h
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="classIpopt_1_1PardisoSolverInterface-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">Ipopt::PardisoSolverInterface Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Interface to the linear solver Pardiso, derived from <a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html" title="Base class for interfaces to symmetric indefinite linear solvers for sparse matrices.">SparseSymLinearSolverInterface</a>.  
+<p>Interface to the linear solver Pardiso as distributed by pardiso-project.org, derived from <a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html" title="Base class for interfaces to symmetric indefinite linear solvers for sparse matrices.">SparseSymLinearSolverInterface</a>.  
  <a href="classIpopt_1_1PardisoSolverInterface.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>&gt;</code></p>
@@ -119,7 +120,7 @@ $(document).ready(function(){initNavTree('classIpopt_1_1PardisoSolverInterface.h
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="classIpopt_1_1PardisoSolverInterface__inherit__graph.png" border="0" usemap="#Ipopt_1_1PardisoSolverInterface_inherit__map" alt="Inheritance graph"/></div>
 <map name="Ipopt_1_1PardisoSolverInterface_inherit__map" id="Ipopt_1_1PardisoSolverInterface_inherit__map">
-<area shape="rect" title="Interface to the linear solver Pardiso, derived from SparseSymLinearSolverInterface." alt="" coords="9,259,219,285"/>
+<area shape="rect" title="Interface to the linear solver Pardiso as distributed by pardiso&#45;project.org, derived from SparseSymL..." alt="" coords="9,259,219,285"/>
 <area shape="rect" href="classIpopt_1_1SparseSymLinearSolverInterface.html" title="Base class for interfaces to symmetric indefinite linear solvers for sparse matrices." alt="" coords="5,169,223,211"/>
 <area shape="rect" href="classIpopt_1_1AlgorithmStrategyObject.html" title="This is the base class for all algorithm strategy objects." alt="" coords="23,80,205,121"/>
 <area shape="rect" href="classIpopt_1_1ReferencedObject.html" title="Storing the reference count of all the smart pointers that currently reference it." alt="" coords="25,5,203,32"/>
@@ -132,23 +133,23 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:ac22739903dfdad5c2627eff5c925f49b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implementation of the initialization method that has to be overloaded by for each derived class.  <a href="classIpopt_1_1PardisoSolverInterface.html#ac22739903dfdad5c2627eff5c925f49b">More...</a><br /></td></tr>
 <tr class="separator:ac22739903dfdad5c2627eff5c925f49b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Constructor/Destructor</div></td></tr>
-<tr class="memitem:a6c1ab6d75067c597e942d5e2410a31dd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a6c1ab6d75067c597e942d5e2410a31dd">PardisoSolverInterface</a> ()</td></tr>
-<tr class="memdesc:a6c1ab6d75067c597e942d5e2410a31dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="classIpopt_1_1PardisoSolverInterface.html#a6c1ab6d75067c597e942d5e2410a31dd">More...</a><br /></td></tr>
-<tr class="separator:a6c1ab6d75067c597e942d5e2410a31dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2df370be8d08d88010393adbbe6ed389"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a2df370be8d08d88010393adbbe6ed389">PardisoSolverInterface</a> (<a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1LibraryLoader.html">LibraryLoader</a> &gt; pardisoloader_)</td></tr>
+<tr class="memdesc:a2df370be8d08d88010393adbbe6ed389"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="classIpopt_1_1PardisoSolverInterface.html#a2df370be8d08d88010393adbbe6ed389">More...</a><br /></td></tr>
+<tr class="separator:a2df370be8d08d88010393adbbe6ed389"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abcac5ab137e9a4db14774f649545315f"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#abcac5ab137e9a4db14774f649545315f">~PardisoSolverInterface</a> ()</td></tr>
 <tr class="memdesc:abcac5ab137e9a4db14774f649545315f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="classIpopt_1_1PardisoSolverInterface.html#abcac5ab137e9a4db14774f649545315f">More...</a><br /></td></tr>
 <tr class="separator:abcac5ab137e9a4db14774f649545315f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Methods for requesting solution of the linear system.</div></td></tr>
-<tr class="memitem:a3ae9b7c0f2d8c3206076e70adb7a1ea8"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a3ae9b7c0f2d8c3206076e70adb7a1ea8">InitializeStructure</a> (<a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> dim, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> nonzeros, const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *ia, const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *ja)</td></tr>
+<tr class="memitem:a3ae9b7c0f2d8c3206076e70adb7a1ea8"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a3ae9b7c0f2d8c3206076e70adb7a1ea8">InitializeStructure</a> (<a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> dim, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> nonzeros, const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *ia, const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *ja)</td></tr>
 <tr class="memdesc:a3ae9b7c0f2d8c3206076e70adb7a1ea8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method for initializing internal structures.  <a href="classIpopt_1_1PardisoSolverInterface.html#a3ae9b7c0f2d8c3206076e70adb7a1ea8">More...</a><br /></td></tr>
 <tr class="separator:a3ae9b7c0f2d8c3206076e70adb7a1ea8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0c3fadb7eec12b6b2ca1150375b1c1de"><td class="memItemLeft" align="right" valign="top">virtual double *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a0c3fadb7eec12b6b2ca1150375b1c1de">GetValuesArrayPtr</a> ()</td></tr>
-<tr class="memdesc:a0c3fadb7eec12b6b2ca1150375b1c1de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method returning an internal array into which the nonzero elements (in the same order as ja) will be stored by the calling routine before a call to MultiSolve with a new_matrix=true (or after a return of MultiSolve with SYMSOLV_CALL_AGAIN).  <a href="classIpopt_1_1PardisoSolverInterface.html#a0c3fadb7eec12b6b2ca1150375b1c1de">More...</a><br /></td></tr>
-<tr class="separator:a0c3fadb7eec12b6b2ca1150375b1c1de"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af7921817cfb884154ef57412cc05388b"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#af7921817cfb884154ef57412cc05388b">MultiSolve</a> (bool new_matrix, const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *ia, const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *ja, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> nrhs, double *rhs_vals, bool check_NegEVals, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> numberOfNegEVals)</td></tr>
-<tr class="memdesc:af7921817cfb884154ef57412cc05388b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Solve operation for multiple right hand sides.  <a href="classIpopt_1_1PardisoSolverInterface.html#af7921817cfb884154ef57412cc05388b">More...</a><br /></td></tr>
-<tr class="separator:af7921817cfb884154ef57412cc05388b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad60d9f92faa1453a94b3d33e98f2acb9"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#ad60d9f92faa1453a94b3d33e98f2acb9">NumberOfNegEVals</a> () const</td></tr>
+<tr class="memitem:a56b31b435ff2b597e93af74144167da2"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a56b31b435ff2b597e93af74144167da2">GetValuesArrayPtr</a> ()</td></tr>
+<tr class="memdesc:a56b31b435ff2b597e93af74144167da2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method returning an internal array into which the nonzero elements (in the same order as ja) will be stored by the calling routine before a call to MultiSolve with a new_matrix=true (or after a return of MultiSolve with SYMSOLV_CALL_AGAIN).  <a href="classIpopt_1_1PardisoSolverInterface.html#a56b31b435ff2b597e93af74144167da2">More...</a><br /></td></tr>
+<tr class="separator:a56b31b435ff2b597e93af74144167da2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55446846857b98237c5e3e407d6154e4"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a55446846857b98237c5e3e407d6154e4">MultiSolve</a> (bool new_matrix, const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *ia, const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *ja, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> nrhs, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *rhs_vals, bool check_NegEVals, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> numberOfNegEVals)</td></tr>
+<tr class="memdesc:a55446846857b98237c5e3e407d6154e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Solve operation for multiple right hand sides.  <a href="classIpopt_1_1PardisoSolverInterface.html#a55446846857b98237c5e3e407d6154e4">More...</a><br /></td></tr>
+<tr class="separator:a55446846857b98237c5e3e407d6154e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad60d9f92faa1453a94b3d33e98f2acb9"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#ad60d9f92faa1453a94b3d33e98f2acb9">NumberOfNegEVals</a> () const</td></tr>
 <tr class="memdesc:ad60d9f92faa1453a94b3d33e98f2acb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of negative eigenvalues detected during last factorization.  <a href="classIpopt_1_1PardisoSolverInterface.html#ad60d9f92faa1453a94b3d33e98f2acb9">More...</a><br /></td></tr>
 <tr class="separator:ad60d9f92faa1453a94b3d33e98f2acb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader"></div></td></tr>
@@ -169,7 +170,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a437afeb947fb9c081a69ddebb3bd70fd inherit pub_methods_classIpopt_1_1SparseSymLinearSolverInterface"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html#a437afeb947fb9c081a69ddebb3bd70fd">ProvidesDegeneracyDetection</a> () const</td></tr>
 <tr class="memdesc:a437afeb947fb9c081a69ddebb3bd70fd inherit pub_methods_classIpopt_1_1SparseSymLinearSolverInterface"><td class="mdescLeft">&#160;</td><td class="mdescRight">Query whether the indices of linearly dependent rows/columns can be determined by this linear solver.  <a href="classIpopt_1_1SparseSymLinearSolverInterface.html#a437afeb947fb9c081a69ddebb3bd70fd">More...</a><br /></td></tr>
 <tr class="separator:a437afeb947fb9c081a69ddebb3bd70fd inherit pub_methods_classIpopt_1_1SparseSymLinearSolverInterface"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac0acf21743d7d571959bd5b432d2d58f inherit pub_methods_classIpopt_1_1SparseSymLinearSolverInterface"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html#ac0acf21743d7d571959bd5b432d2d58f">DetermineDependentRows</a> (const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *, const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *, std::list&lt; <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> &gt; &amp;)</td></tr>
+<tr class="memitem:ac0acf21743d7d571959bd5b432d2d58f inherit pub_methods_classIpopt_1_1SparseSymLinearSolverInterface"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html#ac0acf21743d7d571959bd5b432d2d58f">DetermineDependentRows</a> (const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *, const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *, std::list&lt; <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> &gt; &amp;)</td></tr>
 <tr class="memdesc:ac0acf21743d7d571959bd5b432d2d58f inherit pub_methods_classIpopt_1_1SparseSymLinearSolverInterface"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method determines the list of row indices of the linearly dependent rows.  <a href="classIpopt_1_1SparseSymLinearSolverInterface.html#ac0acf21743d7d571959bd5b432d2d58f">More...</a><br /></td></tr>
 <tr class="separator:ac0acf21743d7d571959bd5b432d2d58f inherit pub_methods_classIpopt_1_1SparseSymLinearSolverInterface"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classIpopt_1_1AlgorithmStrategyObject"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classIpopt_1_1AlgorithmStrategyObject')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classIpopt_1_1AlgorithmStrategyObject.html">Ipopt::AlgorithmStrategyObject</a></td></tr>
@@ -190,7 +191,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5c0f2208e3ead22bf7c5179381ed8203 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adbbf3aa5307da62ab8224ba599d4bd7a inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#adbbf3aa5307da62ab8224ba599d4bd7a">~ReferencedObject</a> ()</td></tr>
 <tr class="separator:adbbf3aa5307da62ab8224ba599d4bd7a inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac517534e10e36c946aeefc6fe337777 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#aac517534e10e36c946aeefc6fe337777">ReferenceCount</a> () const</td></tr>
+<tr class="memitem:aac517534e10e36c946aeefc6fe337777 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#aac517534e10e36c946aeefc6fe337777">ReferenceCount</a> () const</td></tr>
 <tr class="separator:aac517534e10e36c946aeefc6fe337777 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa69ecb0f026bd741e2fa84c31d4ec332 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#aa69ecb0f026bd741e2fa84c31d4ec332">AddRef</a> (const <a class="el" href="classIpopt_1_1Referencer.html">Referencer</a> *referencer) const</td></tr>
 <tr class="separator:aa69ecb0f026bd741e2fa84c31d4ec332 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -199,6 +200,9 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a362f4ab18839ae383ca200623d627661"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a362f4ab18839ae383ca200623d627661">SetFunctions</a> (<a class="el" href="IpPardisoSolverInterface_8hpp.html#a7c232a8f2dea188eb23655695d0be950">IPOPT_DECL_PARDISOINIT</a>(*<a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a3c7b3553bacf220736cb2fb7f28357bc">pardisoinit</a>), <a class="el" href="IpPardisoSolverInterface_8hpp.html#a51db38aa19fe7bd16897a84b125a7695">IPOPT_DECL_PARDISO</a>(*<a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a8b6b806428a160e0e02d5cb2d64415d8">pardiso</a>), bool isparallel,=NULL)</td></tr>
+<tr class="memdesc:a362f4ab18839ae383ca200623d627661"><td class="mdescLeft">&#160;</td><td class="mdescRight">set Pardiso functions to use for every instantiation of this class  <a href="classIpopt_1_1PardisoSolverInterface.html#a362f4ab18839ae383ca200623d627661">More...</a><br /></td></tr>
+<tr class="separator:a362f4ab18839ae383ca200623d627661"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader"></div></td></tr>
 <tr class="memitem:a2714301e798b4c1ae6e87dd41c7000a2"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a2714301e798b4c1ae6e87dd41c7000a2">RegisterOptions</a> (<a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1RegisteredOptions.html">RegisteredOptions</a> &gt; roptions)</td></tr>
 <tr class="separator:a2714301e798b4c1ae6e87dd41c7000a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -216,30 +220,30 @@ Private Member Functions</h2></td></tr>
 <tr class="memdesc:a982e73930aeba7924d4839dc657c063d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default Assignment Operator.  <a href="classIpopt_1_1PardisoSolverInterface.html#a982e73930aeba7924d4839dc657c063d">More...</a><br /></td></tr>
 <tr class="separator:a982e73930aeba7924d4839dc657c063d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Internal functions</div></td></tr>
-<tr class="memitem:a9dd112153516a8dadab695ac9caf089a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a9dd112153516a8dadab695ac9caf089a">SymbolicFactorization</a> (const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *ia, const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *ja)</td></tr>
+<tr class="memitem:a9dd112153516a8dadab695ac9caf089a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a9dd112153516a8dadab695ac9caf089a">SymbolicFactorization</a> (const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *ia, const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *ja)</td></tr>
 <tr class="memdesc:a9dd112153516a8dadab695ac9caf089a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call Pardiso to do the analysis phase.  <a href="classIpopt_1_1PardisoSolverInterface.html#a9dd112153516a8dadab695ac9caf089a">More...</a><br /></td></tr>
 <tr class="separator:a9dd112153516a8dadab695ac9caf089a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8f588bb5ef384020b09ec3fa2b9665c6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a8f588bb5ef384020b09ec3fa2b9665c6">Factorization</a> (const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *ia, const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *ja, bool check_NegEVals, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> numberOfNegEVals)</td></tr>
+<tr class="memitem:a8f588bb5ef384020b09ec3fa2b9665c6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a8f588bb5ef384020b09ec3fa2b9665c6">Factorization</a> (const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *ia, const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *ja, bool check_NegEVals, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> numberOfNegEVals)</td></tr>
 <tr class="memdesc:a8f588bb5ef384020b09ec3fa2b9665c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call Pardiso to factorize the <a class="el" href="classIpopt_1_1Matrix.html" title="Matrix Base Class.">Matrix</a>.  <a href="classIpopt_1_1PardisoSolverInterface.html#a8f588bb5ef384020b09ec3fa2b9665c6">More...</a><br /></td></tr>
 <tr class="separator:a8f588bb5ef384020b09ec3fa2b9665c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af63fee41afc3d2d7e93365390b078ac8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#af63fee41afc3d2d7e93365390b078ac8">Solve</a> (const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *ia, const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *ja, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> nrhs, double *rhs_vals)</td></tr>
-<tr class="memdesc:af63fee41afc3d2d7e93365390b078ac8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call Pardiso to do the Solve.  <a href="classIpopt_1_1PardisoSolverInterface.html#af63fee41afc3d2d7e93365390b078ac8">More...</a><br /></td></tr>
-<tr class="separator:af63fee41afc3d2d7e93365390b078ac8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91321e62b284a53e5b20413634075106"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a91321e62b284a53e5b20413634075106">Solve</a> (const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *ia, const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *ja, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> nrhs, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *rhs_vals)</td></tr>
+<tr class="memdesc:a91321e62b284a53e5b20413634075106"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call Pardiso to do the Solve.  <a href="classIpopt_1_1PardisoSolverInterface.html#a91321e62b284a53e5b20413634075106">More...</a><br /></td></tr>
+<tr class="separator:a91321e62b284a53e5b20413634075106"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr><td colspan="2"><div class="groupHeader">Information about the matrix</div></td></tr>
-<tr class="memitem:aa9b6942333ed19267d50325a6db63382"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#aa9b6942333ed19267d50325a6db63382">dim_</a></td></tr>
+<tr class="memitem:aa9b6942333ed19267d50325a6db63382"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#aa9b6942333ed19267d50325a6db63382">dim_</a></td></tr>
 <tr class="memdesc:aa9b6942333ed19267d50325a6db63382"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of rows and columns of the matrix.  <a href="classIpopt_1_1PardisoSolverInterface.html#aa9b6942333ed19267d50325a6db63382">More...</a><br /></td></tr>
 <tr class="separator:aa9b6942333ed19267d50325a6db63382"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a550f41bb001f05d9bbf0ec40b89d86d9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a550f41bb001f05d9bbf0ec40b89d86d9">nonzeros_</a></td></tr>
+<tr class="memitem:a550f41bb001f05d9bbf0ec40b89d86d9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a550f41bb001f05d9bbf0ec40b89d86d9">nonzeros_</a></td></tr>
 <tr class="memdesc:a550f41bb001f05d9bbf0ec40b89d86d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of nonzeros of the matrix in triplet representation.  <a href="classIpopt_1_1PardisoSolverInterface.html#a550f41bb001f05d9bbf0ec40b89d86d9">More...</a><br /></td></tr>
 <tr class="separator:a550f41bb001f05d9bbf0ec40b89d86d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab803d964721834b803a6e3d576819c46"><td class="memItemLeft" align="right" valign="top">double *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#ab803d964721834b803a6e3d576819c46">a_</a></td></tr>
-<tr class="memdesc:ab803d964721834b803a6e3d576819c46"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array for storing the values of the matrix.  <a href="classIpopt_1_1PardisoSolverInterface.html#ab803d964721834b803a6e3d576819c46">More...</a><br /></td></tr>
-<tr class="separator:ab803d964721834b803a6e3d576819c46"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e67393ce4b21d9f88e8f497158cce5e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a0e67393ce4b21d9f88e8f497158cce5e">a_</a></td></tr>
+<tr class="memdesc:a0e67393ce4b21d9f88e8f497158cce5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array for storing the values of the matrix.  <a href="classIpopt_1_1PardisoSolverInterface.html#a0e67393ce4b21d9f88e8f497158cce5e">More...</a><br /></td></tr>
+<tr class="separator:a0e67393ce4b21d9f88e8f497158cce5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Information about most recent factorization/solve</div></td></tr>
-<tr class="memitem:a6cbd7f49c84f94b8fef16cc293234a0b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a6cbd7f49c84f94b8fef16cc293234a0b">negevals_</a></td></tr>
+<tr class="memitem:a6cbd7f49c84f94b8fef16cc293234a0b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a6cbd7f49c84f94b8fef16cc293234a0b">negevals_</a></td></tr>
 <tr class="memdesc:a6cbd7f49c84f94b8fef16cc293234a0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of negative eigenvalues.  <a href="classIpopt_1_1PardisoSolverInterface.html#a6cbd7f49c84f94b8fef16cc293234a0b">More...</a><br /></td></tr>
 <tr class="separator:a6cbd7f49c84f94b8fef16cc293234a0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Initialization flags</div></td></tr>
@@ -250,29 +254,38 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:ad1e712bfdb9f9610aa905f818dd50d96"><td class="memItemLeft" align="right" valign="top">void **&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#ad1e712bfdb9f9610aa905f818dd50d96">PT_</a></td></tr>
 <tr class="memdesc:ad1e712bfdb9f9610aa905f818dd50d96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Internal data address pointers.  <a href="classIpopt_1_1PardisoSolverInterface.html#ad1e712bfdb9f9610aa905f818dd50d96">More...</a><br /></td></tr>
 <tr class="separator:ad1e712bfdb9f9610aa905f818dd50d96"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d9efc956c797272d12fb5d75e304b9c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="IpTypes_8hpp.html#ab1366b159c9a5e7f01e86923f6b2dd65">ipfint</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a5d9efc956c797272d12fb5d75e304b9c">MAXFCT_</a></td></tr>
-<tr class="memdesc:a5d9efc956c797272d12fb5d75e304b9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximal number of factors with identical nonzero structure.  <a href="classIpopt_1_1PardisoSolverInterface.html#a5d9efc956c797272d12fb5d75e304b9c">More...</a><br /></td></tr>
-<tr class="separator:a5d9efc956c797272d12fb5d75e304b9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ae7dcd47e495f38ee744008a9489e84"><td class="memItemLeft" align="right" valign="top"><a class="el" href="IpTypes_8hpp.html#ab1366b159c9a5e7f01e86923f6b2dd65">ipfint</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a7ae7dcd47e495f38ee744008a9489e84">MNUM_</a></td></tr>
-<tr class="memdesc:a7ae7dcd47e495f38ee744008a9489e84"><td class="mdescLeft">&#160;</td><td class="mdescRight">Actual matrix for the solution phase.  <a href="classIpopt_1_1PardisoSolverInterface.html#a7ae7dcd47e495f38ee744008a9489e84">More...</a><br /></td></tr>
-<tr class="separator:a7ae7dcd47e495f38ee744008a9489e84"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9e98c3659a60bf803c39490645f68d8b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="IpTypes_8hpp.html#ab1366b159c9a5e7f01e86923f6b2dd65">ipfint</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a9e98c3659a60bf803c39490645f68d8b">MTYPE_</a></td></tr>
-<tr class="memdesc:a9e98c3659a60bf803c39490645f68d8b"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classIpopt_1_1Matrix.html" title="Matrix Base Class.">Matrix</a> type; real and symmetric indefinite.  <a href="classIpopt_1_1PardisoSolverInterface.html#a9e98c3659a60bf803c39490645f68d8b">More...</a><br /></td></tr>
-<tr class="separator:a9e98c3659a60bf803c39490645f68d8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8e444a92a8355e78ee76a63602e01d60"><td class="memItemLeft" align="right" valign="top"><a class="el" href="IpTypes_8hpp.html#ab1366b159c9a5e7f01e86923f6b2dd65">ipfint</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a8e444a92a8355e78ee76a63602e01d60">IPARM_</a></td></tr>
-<tr class="memdesc:a8e444a92a8355e78ee76a63602e01d60"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parameter and info array for Pardiso.  <a href="classIpopt_1_1PardisoSolverInterface.html#a8e444a92a8355e78ee76a63602e01d60">More...</a><br /></td></tr>
-<tr class="separator:a8e444a92a8355e78ee76a63602e01d60"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a48a8c7bed5a50c8bfa094a361b42d013"><td class="memItemLeft" align="right" valign="top">double *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a48a8c7bed5a50c8bfa094a361b42d013">DPARM_</a></td></tr>
-<tr class="memdesc:a48a8c7bed5a50c8bfa094a361b42d013"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parameter and info array for Pardiso.  <a href="classIpopt_1_1PardisoSolverInterface.html#a48a8c7bed5a50c8bfa094a361b42d013">More...</a><br /></td></tr>
-<tr class="separator:a48a8c7bed5a50c8bfa094a361b42d013"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae312ddfc96ae3e224145d9a28241109d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="IpTypes_8hpp.html#ab1366b159c9a5e7f01e86923f6b2dd65">ipfint</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#ae312ddfc96ae3e224145d9a28241109d">MSGLVL_</a></td></tr>
-<tr class="memdesc:ae312ddfc96ae3e224145d9a28241109d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Message level.  <a href="classIpopt_1_1PardisoSolverInterface.html#ae312ddfc96ae3e224145d9a28241109d">More...</a><br /></td></tr>
-<tr class="separator:ae312ddfc96ae3e224145d9a28241109d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa662727ad6c54a658febc3c0adb925f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#afa662727ad6c54a658febc3c0adb925f">MAXFCT_</a></td></tr>
+<tr class="memdesc:afa662727ad6c54a658febc3c0adb925f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximal number of factors with identical nonzero structure.  <a href="classIpopt_1_1PardisoSolverInterface.html#afa662727ad6c54a658febc3c0adb925f">More...</a><br /></td></tr>
+<tr class="separator:afa662727ad6c54a658febc3c0adb925f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae038840e9d77dd1d82a90cea93d1b15a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#ae038840e9d77dd1d82a90cea93d1b15a">MNUM_</a></td></tr>
+<tr class="memdesc:ae038840e9d77dd1d82a90cea93d1b15a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Actual matrix for the solution phase.  <a href="classIpopt_1_1PardisoSolverInterface.html#ae038840e9d77dd1d82a90cea93d1b15a">More...</a><br /></td></tr>
+<tr class="separator:ae038840e9d77dd1d82a90cea93d1b15a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa859e319d264b7cb1237e38b229e83cb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#aa859e319d264b7cb1237e38b229e83cb">MTYPE_</a></td></tr>
+<tr class="memdesc:aa859e319d264b7cb1237e38b229e83cb"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classIpopt_1_1Matrix.html" title="Matrix Base Class.">Matrix</a> type; real and symmetric indefinite.  <a href="classIpopt_1_1PardisoSolverInterface.html#aa859e319d264b7cb1237e38b229e83cb">More...</a><br /></td></tr>
+<tr class="separator:aa859e319d264b7cb1237e38b229e83cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8b16eabbef77f7bfbab8d5fc22e80f4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#ad8b16eabbef77f7bfbab8d5fc22e80f4">IPARM_</a></td></tr>
+<tr class="memdesc:ad8b16eabbef77f7bfbab8d5fc22e80f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parameter and info array for Pardiso.  <a href="classIpopt_1_1PardisoSolverInterface.html#ad8b16eabbef77f7bfbab8d5fc22e80f4">More...</a><br /></td></tr>
+<tr class="separator:ad8b16eabbef77f7bfbab8d5fc22e80f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a00ceca66db4ec8b4ad8e375b3660e4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a6a00ceca66db4ec8b4ad8e375b3660e4">DPARM_</a></td></tr>
+<tr class="memdesc:a6a00ceca66db4ec8b4ad8e375b3660e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parameter and info array for Pardiso.  <a href="classIpopt_1_1PardisoSolverInterface.html#a6a00ceca66db4ec8b4ad8e375b3660e4">More...</a><br /></td></tr>
+<tr class="separator:a6a00ceca66db4ec8b4ad8e375b3660e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0eac32a92d26cb1d3c3cbb74310b6b88"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a0eac32a92d26cb1d3c3cbb74310b6b88">MSGLVL_</a></td></tr>
+<tr class="memdesc:a0eac32a92d26cb1d3c3cbb74310b6b88"><td class="mdescLeft">&#160;</td><td class="mdescRight">Message level.  <a href="classIpopt_1_1PardisoSolverInterface.html#a0eac32a92d26cb1d3c3cbb74310b6b88">More...</a><br /></td></tr>
+<tr class="separator:a0eac32a92d26cb1d3c3cbb74310b6b88"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Some counters for debugging</div></td></tr>
-<tr class="memitem:a9c270a59b535e1c97b873ae63e82983e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a9c270a59b535e1c97b873ae63e82983e">debug_last_iter_</a></td></tr>
+<tr class="memitem:a9c270a59b535e1c97b873ae63e82983e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a9c270a59b535e1c97b873ae63e82983e">debug_last_iter_</a></td></tr>
 <tr class="separator:a9c270a59b535e1c97b873ae63e82983e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e867aededeafbfc5ed9364e42cc9efa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a0e867aededeafbfc5ed9364e42cc9efa">debug_cnt_</a></td></tr>
+<tr class="memitem:a0e867aededeafbfc5ed9364e42cc9efa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a0e867aededeafbfc5ed9364e42cc9efa">debug_cnt_</a></td></tr>
 <tr class="separator:a0e867aededeafbfc5ed9364e42cc9efa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">PARDISO function pointers</div></td></tr>
+<tr class="memitem:aeaaf2c927d174e7950b2ef26d18297aa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1LibraryLoader.html">LibraryLoader</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#aeaaf2c927d174e7950b2ef26d18297aa">pardisoloader</a></td></tr>
+<tr class="separator:aeaaf2c927d174e7950b2ef26d18297aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c7b3553bacf220736cb2fb7f28357bc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="IpPardisoSolverInterface_8hpp.html#a7c232a8f2dea188eb23655695d0be950">IPOPT_DECL_PARDISOINIT</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a3c7b3553bacf220736cb2fb7f28357bc">pardisoinit</a></td></tr>
+<tr class="separator:a3c7b3553bacf220736cb2fb7f28357bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b6b806428a160e0e02d5cb2d64415d8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="IpPardisoSolverInterface_8hpp.html#a51db38aa19fe7bd16897a84b125a7695">IPOPT_DECL_PARDISO</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a8b6b806428a160e0e02d5cb2d64415d8">pardiso</a></td></tr>
+<tr class="separator:a8b6b806428a160e0e02d5cb2d64415d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4729c97f7294f82432d4dbe69142695"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#aa4729c97f7294f82432d4dbe69142695">pardiso_exist_parallel</a></td></tr>
+<tr class="separator:aa4729c97f7294f82432d4dbe69142695"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="member-group"></a>
 Solver specific options</h2></td></tr>
@@ -300,7 +313,7 @@ Solver specific options</h2></td></tr>
 <tr class="memitem:a6b53f5c1e17edea39663a05708756448"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a6b53f5c1e17edea39663a05708756448">pardiso_iterative_</a></td></tr>
 <tr class="memdesc:a6b53f5c1e17edea39663a05708756448"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag indicating whether we are using the iterative solver in Pardiso.  <a href="classIpopt_1_1PardisoSolverInterface.html#a6b53f5c1e17edea39663a05708756448">More...</a><br /></td></tr>
 <tr class="separator:a6b53f5c1e17edea39663a05708756448"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5a45b6e6850df14e14aca2c6652b44f8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a5a45b6e6850df14e14aca2c6652b44f8">pardiso_max_droptol_corrections_</a></td></tr>
+<tr class="memitem:a5a45b6e6850df14e14aca2c6652b44f8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a5a45b6e6850df14e14aca2c6652b44f8">pardiso_max_droptol_corrections_</a></td></tr>
 <tr class="memdesc:a5a45b6e6850df14e14aca2c6652b44f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximal number of decreases of drop tolerance during one solve.  <a href="classIpopt_1_1PardisoSolverInterface.html#a5a45b6e6850df14e14aca2c6652b44f8">More...</a><br /></td></tr>
 <tr class="separator:a5a45b6e6850df14e14aca2c6652b44f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -331,9 +344,9 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:a5f6310084b90871ee4eec3d89bb407ee inherit pro_methods_classIpopt_1_1AlgorithmStrategyObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Interface to the linear solver Pardiso, derived from <a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html" title="Base class for interfaces to symmetric indefinite linear solvers for sparse matrices.">SparseSymLinearSolverInterface</a>. </p>
+<div class="textblock"><p>Interface to the linear solver Pardiso as distributed by pardiso-project.org, derived from <a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html" title="Base class for interfaces to symmetric indefinite linear solvers for sparse matrices.">SparseSymLinearSolverInterface</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00020">20</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00070">70</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
 </div><h2 class="groupheader">Member Enumeration Documentation</h2>
 <a id="ac8001cd1faad8199ecfad60c0cd25daa"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac8001cd1faad8199ecfad60c0cd25daa">&#9670;&nbsp;</a></span>PardisoMatchingStrategy</h2>
@@ -362,13 +375,13 @@ Additional Inherited Members</h2></td></tr>
 <tr><td class="fieldname"><a id="ac8001cd1faad8199ecfad60c0cd25daaa8ed485bff1b2c2e1ab97ca6ea51d8f95"></a>CONSTRAINT&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00129">129</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00195">195</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a6c1ab6d75067c597e942d5e2410a31dd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6c1ab6d75067c597e942d5e2410a31dd">&#9670;&nbsp;</a></span>PardisoSolverInterface() <span class="overload">[1/2]</span></h2>
+<a id="a2df370be8d08d88010393adbbe6ed389"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2df370be8d08d88010393adbbe6ed389">&#9670;&nbsp;</a></span>PardisoSolverInterface() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -376,13 +389,21 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">Ipopt::PardisoSolverInterface::PardisoSolverInterface </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype"><a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1LibraryLoader.html">LibraryLoader</a> &gt;&#160;</td>
+          <td class="paramname"><em>pardisoloader_</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pardisoloader_</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
 </div>
 </div>
@@ -494,25 +515,25 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">virtual <a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a> Ipopt::PardisoSolverInterface::InitializeStructure </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>dim</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>nonzeros</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>ia</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>ja</em>&#160;</td>
         </tr>
         <tr>
@@ -535,8 +556,8 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a0c3fadb7eec12b6b2ca1150375b1c1de"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0c3fadb7eec12b6b2ca1150375b1c1de">&#9670;&nbsp;</a></span>GetValuesArrayPtr()</h2>
+<a id="a56b31b435ff2b597e93af74144167da2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56b31b435ff2b597e93af74144167da2">&#9670;&nbsp;</a></span>GetValuesArrayPtr()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -545,7 +566,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual double* Ipopt::PardisoSolverInterface::GetValuesArrayPtr </td>
+          <td class="memname">virtual <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>* Ipopt::PardisoSolverInterface::GetValuesArrayPtr </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -561,12 +582,12 @@ Additional Inherited Members</h2></td></tr>
 <p>Method returning an internal array into which the nonzero elements (in the same order as ja) will be stored by the calling routine before a call to MultiSolve with a new_matrix=true (or after a return of MultiSolve with SYMSOLV_CALL_AGAIN). </p>
 <p>The returned array must have space for at least nonzero elements. </p>
 
-<p>Implements <a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html#a63e20915d52fe30d5340472e79d19f5b">Ipopt::SparseSymLinearSolverInterface</a>.</p>
+<p>Implements <a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html#a04d12ba6e29e4b945e112b574cab8e09">Ipopt::SparseSymLinearSolverInterface</a>.</p>
 
 </div>
 </div>
-<a id="af7921817cfb884154ef57412cc05388b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af7921817cfb884154ef57412cc05388b">&#9670;&nbsp;</a></span>MultiSolve()</h2>
+<a id="a55446846857b98237c5e3e407d6154e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a55446846857b98237c5e3e407d6154e4">&#9670;&nbsp;</a></span>MultiSolve()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -583,25 +604,25 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>ia</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>ja</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>nrhs</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double *&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>rhs_vals</em>, </td>
         </tr>
         <tr>
@@ -613,7 +634,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>numberOfNegEVals</em>&#160;</td>
         </tr>
         <tr>
@@ -635,7 +656,7 @@ Additional Inherited Members</h2></td></tr>
 <p>The number of right-hand sides is given by nrhs, the values of the right-hand sides are given in rhs_vals (one full right-hand side stored immediately after the other), and solutions are to be returned in the same array.</p>
 <p>check_NegEVals will not be chosen true, if <a class="el" href="classIpopt_1_1PardisoSolverInterface.html#aae1ae7aa6b771c4b61a1d1f289473b0d" title="Query whether inertia is computed by linear solver.">ProvidesInertia()</a> returns false. </p>
 
-<p>Implements <a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html#aaa533d84b06d8bf76a0a4bc6b0b8dba3">Ipopt::SparseSymLinearSolverInterface</a>.</p>
+<p>Implements <a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html#abb894fd70f83310a1c39ab7242efdf2a">Ipopt::SparseSymLinearSolverInterface</a>.</p>
 
 </div>
 </div>
@@ -649,7 +670,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::PardisoSolverInterface::NumberOfNegEVals </td>
+          <td class="memname">virtual <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::PardisoSolverInterface::NumberOfNegEVals </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -729,7 +750,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html#a19b3c3b0daec34ff3c44e9d79f3b3b5d">Ipopt::SparseSymLinearSolverInterface</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00064">64</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00116">116</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -760,7 +781,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html#acdaeb282c301a02371ec206cb0c8277a">Ipopt::SparseSymLinearSolverInterface</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00069">69</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00121">121</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -787,6 +808,54 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="a362f4ab18839ae383ca200623d627661"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a362f4ab18839ae383ca200623d627661">&#9670;&nbsp;</a></span>SetFunctions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void Ipopt::PardisoSolverInterface::SetFunctions </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="IpPardisoSolverInterface_8hpp.html#a7c232a8f2dea188eb23655695d0be950">IPOPT_DECL_PARDISOINIT</a> *&#160;</td>
+          <td class="paramname"><em>pardisoinit</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="IpPardisoSolverInterface_8hpp.html#a51db38aa19fe7bd16897a84b125a7695">IPOPT_DECL_PARDISO</a> *&#160;</td>
+          <td class="paramname"><em>pardiso</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>isparallel</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>set Pardiso functions to use for every instantiation of this class </p>
+<p>unless PARDISO_MATCHING_PREPROCESS has been defined, </p><ul>
+<li>smat_reordering_pardiso_wsmp is ignored <dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+</li>
+</ul>
 
 </div>
 </div>
@@ -830,13 +899,13 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a> Ipopt::PardisoSolverInterface::SymbolicFactorization </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>ia</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>ja</em>&#160;</td>
         </tr>
         <tr>
@@ -868,13 +937,13 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a> Ipopt::PardisoSolverInterface::Factorization </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>ia</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>ja</em>, </td>
         </tr>
         <tr>
@@ -886,7 +955,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>numberOfNegEVals</em>&#160;</td>
         </tr>
         <tr>
@@ -906,8 +975,8 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="af63fee41afc3d2d7e93365390b078ac8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af63fee41afc3d2d7e93365390b078ac8">&#9670;&nbsp;</a></span>Solve()</h2>
+<a id="a91321e62b284a53e5b20413634075106"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a91321e62b284a53e5b20413634075106">&#9670;&nbsp;</a></span>Solve()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -918,25 +987,25 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a> Ipopt::PardisoSolverInterface::Solve </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>ia</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>ja</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>nrhs</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">double *&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>rhs_vals</em>&#160;</td>
         </tr>
         <tr>
@@ -967,7 +1036,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::PardisoSolverInterface::dim_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::PardisoSolverInterface::dim_</td>
         </tr>
       </table>
   </td>
@@ -979,7 +1048,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Number of rows and columns of the matrix. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00102">102</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00168">168</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -993,7 +1062,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::PardisoSolverInterface::nonzeros_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::PardisoSolverInterface::nonzeros_</td>
         </tr>
       </table>
   </td>
@@ -1005,12 +1074,12 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Number of nonzeros of the matrix in triplet representation. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00105">105</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00171">171</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
-<a id="ab803d964721834b803a6e3d576819c46"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab803d964721834b803a6e3d576819c46">&#9670;&nbsp;</a></span>a_</h2>
+<a id="a0e67393ce4b21d9f88e8f497158cce5e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e67393ce4b21d9f88e8f497158cce5e">&#9670;&nbsp;</a></span>a_</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1019,7 +1088,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">double* Ipopt::PardisoSolverInterface::a_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>* Ipopt::PardisoSolverInterface::a_</td>
         </tr>
       </table>
   </td>
@@ -1031,7 +1100,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Array for storing the values of the matrix. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00108">108</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00174">174</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1045,7 +1114,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::PardisoSolverInterface::negevals_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::PardisoSolverInterface::negevals_</td>
         </tr>
       </table>
   </td>
@@ -1057,7 +1126,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Number of negative eigenvalues. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00123">123</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00189">189</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1083,7 +1152,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Option that controls the matching strategy. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00136">136</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00202">202</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1109,7 +1178,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Flag indicating if symbolic factorization has already been performed. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00138">138</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00204">204</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1135,7 +1204,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Flag indicating whether the symbolic factorization should only be done after perturbed elements, if the inertia was wrong. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00142">142</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00208">208</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1161,7 +1230,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Flag indicating whether repeated perturbed elements even after a new symbolic factorization should be interpreted as a singular matrix. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00147">147</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00213">213</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1187,7 +1256,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Flag indicating if the inertia is always assumed to be correct. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00151">151</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00217">217</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1213,7 +1282,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Flag indicating whether we are using the iterative solver in Pardiso. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00153">153</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00219">219</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1227,7 +1296,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::PardisoSolverInterface::pardiso_max_droptol_corrections_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::PardisoSolverInterface::pardiso_max_droptol_corrections_</td>
         </tr>
       </table>
   </td>
@@ -1239,7 +1308,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Maximal number of decreases of drop tolerance during one solve. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00155">155</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00221">221</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1266,7 +1335,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Flag indicating if internal data is initialized. </p>
 <p>For initialization, this object needs to have seen a matrix. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00163">163</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00229">229</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1292,12 +1361,12 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Internal data address pointers. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00169">169</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00235">235</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a5d9efc956c797272d12fb5d75e304b9c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5d9efc956c797272d12fb5d75e304b9c">&#9670;&nbsp;</a></span>MAXFCT_</h2>
+<a id="afa662727ad6c54a658febc3c0adb925f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa662727ad6c54a658febc3c0adb925f">&#9670;&nbsp;</a></span>MAXFCT_</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1306,7 +1375,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="IpTypes_8hpp.html#ab1366b159c9a5e7f01e86923f6b2dd65">ipfint</a> Ipopt::PardisoSolverInterface::MAXFCT_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::PardisoSolverInterface::MAXFCT_</td>
         </tr>
       </table>
   </td>
@@ -1319,12 +1388,12 @@ Additional Inherited Members</h2></td></tr>
 <p>Maximal number of factors with identical nonzero structure. </p>
 <p>Here, we only store one factorization. Is always 1. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00173">173</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00239">239</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a7ae7dcd47e495f38ee744008a9489e84"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7ae7dcd47e495f38ee744008a9489e84">&#9670;&nbsp;</a></span>MNUM_</h2>
+<a id="ae038840e9d77dd1d82a90cea93d1b15a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae038840e9d77dd1d82a90cea93d1b15a">&#9670;&nbsp;</a></span>MNUM_</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1333,7 +1402,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="IpTypes_8hpp.html#ab1366b159c9a5e7f01e86923f6b2dd65">ipfint</a> Ipopt::PardisoSolverInterface::MNUM_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::PardisoSolverInterface::MNUM_</td>
         </tr>
       </table>
   </td>
@@ -1346,12 +1415,12 @@ Additional Inherited Members</h2></td></tr>
 <p>Actual matrix for the solution phase. </p>
 <p>Is always 1. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00175">175</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00241">241</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a9e98c3659a60bf803c39490645f68d8b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9e98c3659a60bf803c39490645f68d8b">&#9670;&nbsp;</a></span>MTYPE_</h2>
+<a id="aa859e319d264b7cb1237e38b229e83cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa859e319d264b7cb1237e38b229e83cb">&#9670;&nbsp;</a></span>MTYPE_</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1360,7 +1429,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="IpTypes_8hpp.html#ab1366b159c9a5e7f01e86923f6b2dd65">ipfint</a> Ipopt::PardisoSolverInterface::MTYPE_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::PardisoSolverInterface::MTYPE_</td>
         </tr>
       </table>
   </td>
@@ -1373,12 +1442,12 @@ Additional Inherited Members</h2></td></tr>
 <p><a class="el" href="classIpopt_1_1Matrix.html" title="Matrix Base Class.">Matrix</a> type; real and symmetric indefinite. </p>
 <p>Is always -2. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00177">177</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00243">243</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a8e444a92a8355e78ee76a63602e01d60"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8e444a92a8355e78ee76a63602e01d60">&#9670;&nbsp;</a></span>IPARM_</h2>
+<a id="ad8b16eabbef77f7bfbab8d5fc22e80f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8b16eabbef77f7bfbab8d5fc22e80f4">&#9670;&nbsp;</a></span>IPARM_</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1387,7 +1456,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="IpTypes_8hpp.html#ab1366b159c9a5e7f01e86923f6b2dd65">ipfint</a>* Ipopt::PardisoSolverInterface::IPARM_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>* Ipopt::PardisoSolverInterface::IPARM_</td>
         </tr>
       </table>
   </td>
@@ -1399,12 +1468,12 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Parameter and info array for Pardiso. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00179">179</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00245">245</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a48a8c7bed5a50c8bfa094a361b42d013"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a48a8c7bed5a50c8bfa094a361b42d013">&#9670;&nbsp;</a></span>DPARM_</h2>
+<a id="a6a00ceca66db4ec8b4ad8e375b3660e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a00ceca66db4ec8b4ad8e375b3660e4">&#9670;&nbsp;</a></span>DPARM_</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1413,7 +1482,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">double* Ipopt::PardisoSolverInterface::DPARM_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>* Ipopt::PardisoSolverInterface::DPARM_</td>
         </tr>
       </table>
   </td>
@@ -1425,12 +1494,12 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Parameter and info array for Pardiso. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00181">181</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00247">247</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
-<a id="ae312ddfc96ae3e224145d9a28241109d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae312ddfc96ae3e224145d9a28241109d">&#9670;&nbsp;</a></span>MSGLVL_</h2>
+<a id="a0eac32a92d26cb1d3c3cbb74310b6b88"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0eac32a92d26cb1d3c3cbb74310b6b88">&#9670;&nbsp;</a></span>MSGLVL_</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1439,7 +1508,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="IpTypes_8hpp.html#ab1366b159c9a5e7f01e86923f6b2dd65">ipfint</a> Ipopt::PardisoSolverInterface::MSGLVL_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::PardisoSolverInterface::MSGLVL_</td>
         </tr>
       </table>
   </td>
@@ -1451,7 +1520,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Message level. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00183">183</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00249">249</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1465,7 +1534,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::PardisoSolverInterface::debug_last_iter_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::PardisoSolverInterface::debug_last_iter_</td>
         </tr>
       </table>
   </td>
@@ -1475,7 +1544,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00188">188</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00254">254</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1489,7 +1558,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::PardisoSolverInterface::debug_cnt_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::PardisoSolverInterface::debug_cnt_</td>
         </tr>
       </table>
   </td>
@@ -1499,7 +1568,103 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00189">189</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00255">255</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aeaaf2c927d174e7950b2ef26d18297aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeaaf2c927d174e7950b2ef26d18297aa">&#9670;&nbsp;</a></span>pardisoloader</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt;<a class="el" href="classIpopt_1_1LibraryLoader.html">LibraryLoader</a>&gt; Ipopt::PardisoSolverInterface::pardisoloader</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00261">261</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a3c7b3553bacf220736cb2fb7f28357bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c7b3553bacf220736cb2fb7f28357bc">&#9670;&nbsp;</a></span>pardisoinit</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="IpPardisoSolverInterface_8hpp.html#a7c232a8f2dea188eb23655695d0be950">IPOPT_DECL_PARDISOINIT</a>* Ipopt::PardisoSolverInterface::pardisoinit</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00263">263</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a8b6b806428a160e0e02d5cb2d64415d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b6b806428a160e0e02d5cb2d64415d8">&#9670;&nbsp;</a></span>pardiso</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="IpPardisoSolverInterface_8hpp.html#a51db38aa19fe7bd16897a84b125a7695">IPOPT_DECL_PARDISO</a>* Ipopt::PardisoSolverInterface::pardiso</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00264">264</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aa4729c97f7294f82432d4dbe69142695"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4729c97f7294f82432d4dbe69142695">&#9670;&nbsp;</a></span>pardiso_exist_parallel</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ipopt::PardisoSolverInterface::pardiso_exist_parallel</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="IpPardisoSolverInterface_8hpp_source.html#l00269">269</a> of file <a class="el" href="IpPardisoSolverInterface_8hpp_source.html">IpPardisoSolverInterface.hpp</a>.</p>
 
 </div>
 </div>

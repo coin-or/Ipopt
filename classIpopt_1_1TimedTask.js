@@ -3,6 +3,8 @@ var classIpopt_1_1TimedTask =
     [ "TimedTask", "classIpopt_1_1TimedTask.html#a999e294c9c8a69629d9665a4bee2f44d", null ],
     [ "~TimedTask", "classIpopt_1_1TimedTask.html#a1705ebc5c717de0b13880073d7f676b6", null ],
     [ "TimedTask", "classIpopt_1_1TimedTask.html#a73b4ad4c3bfe07846b168edb950107a6", null ],
+    [ "Enable", "classIpopt_1_1TimedTask.html#a33216dc7f2b7fd71577db4dcf327d3b4", null ],
+    [ "Disable", "classIpopt_1_1TimedTask.html#abfbd7f35ac9e33ebbcfef4c258f6ba89", null ],
     [ "Reset", "classIpopt_1_1TimedTask.html#a7f249501c707ba9c0bec5cecee93cc65", null ],
     [ "Start", "classIpopt_1_1TimedTask.html#afb6b9e7754f57ded5c93b58123eed42c", null ],
     [ "End", "classIpopt_1_1TimedTask.html#a6827517c3cce99921a870411c1d36b1d", null ],
@@ -10,6 +12,11 @@ var classIpopt_1_1TimedTask =
     [ "TotalCpuTime", "classIpopt_1_1TimedTask.html#a391a116c58ae1fa1db2986c5184ce3e9", null ],
     [ "TotalSysTime", "classIpopt_1_1TimedTask.html#a92bfd0475a4ba9c2af6385a886575dc8", null ],
     [ "TotalWallclockTime", "classIpopt_1_1TimedTask.html#abbc5fb1ac963469890e711b55532db67", null ],
+    [ "StartCpuTime", "classIpopt_1_1TimedTask.html#a49eaf8adf68554459b5cac40927eed87", null ],
+    [ "StartSysTime", "classIpopt_1_1TimedTask.html#a617053eeb03fa0b3bc4fb3bcddd90de3", null ],
+    [ "StartWallclockTime", "classIpopt_1_1TimedTask.html#ac27e94e6905104b919e784bd8bddb8fe", null ],
+    [ "IsEnabled", "classIpopt_1_1TimedTask.html#a84cce17e7c8f3842ee1e8ad960e13651", null ],
+    [ "IsStarted", "classIpopt_1_1TimedTask.html#a930bdafa309b6a9860dc87b312c888a9", null ],
     [ "operator=", "classIpopt_1_1TimedTask.html#aa88a834696bcca0ecd007680960d0a39", null ],
     [ "start_cputime_", "classIpopt_1_1TimedTask.html#abdf4fa034d8f40b7707de8811cbed079", null ],
     [ "total_cputime_", "classIpopt_1_1TimedTask.html#a49560936b22d1252497a8eb479b5d230", null ],
@@ -17,6 +24,7 @@ var classIpopt_1_1TimedTask =
     [ "total_systime_", "classIpopt_1_1TimedTask.html#a1d34065de6656ac9e282e37231caee8a", null ],
     [ "start_walltime_", "classIpopt_1_1TimedTask.html#a09719c604b547eeed2eadaf77f145c53", null ],
     [ "total_walltime_", "classIpopt_1_1TimedTask.html#adf8ea0f4ee22c8ce7b6c24aa69fa827a", null ],
+    [ "enabled_", "classIpopt_1_1TimedTask.html#aaf775d52e88e22b1a510841b7a4789d8", null ],
     [ "start_called_", "classIpopt_1_1TimedTask.html#abd5082a743c96246fd1e70c5ca65f4d9", null ],
     [ "end_called_", "classIpopt_1_1TimedTask.html#a81d1c4643ce4facd62b5a2019759fc35", null ]
 ];

@@ -1,5 +1,5 @@
-<!-- HTML header for doxygen 1.8.13-->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- HTML header for doxygen 1.8.18-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.13.4</span-->
+   &#160;<!--span id="projectnumber">3.14.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -134,7 +134,7 @@ $(document).ready(function(){initNavTree('IpObserver_8hpp_source.html',''); init
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;{</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="preprocessor">#ifdef IP_DEBUG_OBSERVER</span></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;   <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> dbg_verbosity;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;   <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> dbg_verbosity;</div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
@@ -194,7 +194,7 @@ $(document).ready(function(){initNavTree('IpObserver_8hpp_source.html',''); init
 <div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;{</div>
 <div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;<span class="preprocessor">#ifdef IP_DEBUG_OBSERVER</span></div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;   <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> dbg_verbosity;</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;   <span class="keyword">static</span> <span class="keyword">const</span> <a class="code" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> dbg_verbosity;</div>
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160; </div>
 <div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160; </div>
@@ -244,20 +244,20 @@ $(document).ready(function(){initNavTree('IpObserver_8hpp_source.html',''); init
 <div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;   <a class="code" href="IpDebug_8hpp.html#abac44fd4713c03644cf925f4a1bcb22a">DBG_START_METH</a>(<span class="stringliteral">&quot;Observer::~Observer&quot;</span>, dbg_verbosity);</div>
 <div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;   <span class="keywordflow">if</span> (<a class="code" href="IpDebug_8hpp.html#aae2cacf79fab2061fdbe26c9165ad36b">DBG_VERBOSITY</a>() &gt;= 1)</div>
 <div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;   {</div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;      <span class="keywordflow">for</span> (<a class="code" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> i = 0; i &lt; (<a class="code" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>)<a class="code" href="classIpopt_1_1Observer.html#a9910eb64060c426e2b9695fec3f98cae">subjects_</a>.size(); i++)</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;      <span class="keywordflow">for</span>( <span class="keywordtype">size_t</span> i = 0; i &lt; <a class="code" href="classIpopt_1_1Observer.html#a9910eb64060c426e2b9695fec3f98cae">subjects_</a>.size(); ++i )</div>
 <div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;      {</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;         <a class="code" href="IpDebug_8hpp.html#a40fdb0e5238b05a8134decce9cedad0f">DBG_PRINT</a>((1, <span class="stringliteral">&quot;subjects_[%d] = 0x%x\n&quot;</span>, i, <a class="code" href="classIpopt_1_1Observer.html#a9910eb64060c426e2b9695fec3f98cae">subjects_</a>[i]));</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;         <a class="code" href="IpDebug_8hpp.html#a40fdb0e5238b05a8134decce9cedad0f">DBG_PRINT</a>((1, <span class="stringliteral">&quot;subjects_[%zd] = %p\n&quot;</span>, i, <a class="code" href="classIpopt_1_1Observer.html#a9910eb64060c426e2b9695fec3f98cae">subjects_</a>[i]));</div>
 <div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;      }</div>
 <div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;   }</div>
 <div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;   <span class="comment">// Detach all subjects</span></div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;   <span class="keywordflow">for</span>( <a class="code" href="namespaceIpopt.html#a0dae86ecbedd018c15054019f260811e">Int</a> i = (<a class="code" href="namespaceIpopt.html#a0dae86ecbedd018c15054019f260811e">Int</a>) (<a class="code" href="classIpopt_1_1Observer.html#a9910eb64060c426e2b9695fec3f98cae">subjects_</a>.size() - 1); i &gt;= 0; i-- )</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;   <span class="keywordflow">for</span>( <span class="keywordtype">size_t</span> i = <a class="code" href="classIpopt_1_1Observer.html#a9910eb64060c426e2b9695fec3f98cae">subjects_</a>.size(); i &gt; 0; --i )</div>
 <div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;   {</div>
 <div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;<span class="preprocessor">#ifdef IP_DEBUG_OBSERVER</span></div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;      <a class="code" href="IpDebug_8hpp.html#a40fdb0e5238b05a8134decce9cedad0f">DBG_PRINT</a>((1, <span class="stringliteral">&quot;About to detach subjects_[%d] = 0x%x\n&quot;</span>, i, <a class="code" href="classIpopt_1_1Observer.html#a9910eb64060c426e2b9695fec3f98cae">subjects_</a>[i]));</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;      <a class="code" href="IpDebug_8hpp.html#a40fdb0e5238b05a8134decce9cedad0f">DBG_PRINT</a>((1, <span class="stringliteral">&quot;About to detach subjects_[%zd] = %p\n&quot;</span>, i, <a class="code" href="classIpopt_1_1Observer.html#a9910eb64060c426e2b9695fec3f98cae">subjects_</a>[i - 1]));</div>
 <div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160; </div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;      <a class="code" href="classIpopt_1_1Observer.html#a7006c91bc2893aa7aaa03799820f76dd">RequestDetach</a>(<a class="code" href="classIpopt_1_1Observer.html#a828a9e0833e87e84bef75d05bf0a99b8aa99f42cc1404f26f7261dd53de56ff74">NT_All</a>, <a class="code" href="classIpopt_1_1Observer.html#a9910eb64060c426e2b9695fec3f98cae">subjects_</a>[i]);</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;      <a class="code" href="classIpopt_1_1Observer.html#a7006c91bc2893aa7aaa03799820f76dd">RequestDetach</a>(<a class="code" href="classIpopt_1_1Observer.html#a828a9e0833e87e84bef75d05bf0a99b8aa99f42cc1404f26f7261dd53de56ff74">NT_All</a>, <a class="code" href="classIpopt_1_1Observer.html#a9910eb64060c426e2b9695fec3f98cae">subjects_</a>[i - 1]);</div>
 <div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;   }</div>
 <div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;}</div>
 <div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160; </div>
@@ -291,7 +291,7 @@ $(document).ready(function(){initNavTree('IpObserver_8hpp_source.html',''); init
 <div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;{</div>
 <div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;<span class="preprocessor">#ifdef IP_DEBUG_OBSERVER</span></div>
 <div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;   <a class="code" href="IpDebug_8hpp.html#abac44fd4713c03644cf925f4a1bcb22a">DBG_START_METH</a>(<span class="stringliteral">&quot;Observer::RequestDetach&quot;</span>, dbg_verbosity);</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;   <a class="code" href="IpDebug_8hpp.html#a40fdb0e5238b05a8134decce9cedad0f">DBG_PRINT</a>((1, <span class="stringliteral">&quot;Requesting detach of subject: 0x%x\n&quot;</span>, subject));</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;   <a class="code" href="IpDebug_8hpp.html#a40fdb0e5238b05a8134decce9cedad0f">DBG_PRINT</a>((1, <span class="stringliteral">&quot;Requesting detach of subject: %p\n&quot;</span>, subject));</div>
 <div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;   <a class="code" href="IpDebug_8hpp.html#a346733cd6806024295f8c3564071d021">DBG_ASSERT</a>(subject);</div>
 <div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160; </div>
@@ -307,7 +307,7 @@ $(document).ready(function(){initNavTree('IpObserver_8hpp_source.html',''); init
 <div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;      <span class="keywordflow">if</span>( attached_subject != <a class="code" href="classIpopt_1_1Observer.html#a9910eb64060c426e2b9695fec3f98cae">subjects_</a>.end() )</div>
 <div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;      {</div>
 <div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;<span class="preprocessor">#ifdef IP_DEBUG_OBSERVER</span></div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;         <a class="code" href="IpDebug_8hpp.html#a40fdb0e5238b05a8134decce9cedad0f">DBG_PRINT</a>((1, <span class="stringliteral">&quot;Removing subject: 0x%x from the list\n&quot;</span>, subject));</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;         <a class="code" href="IpDebug_8hpp.html#a40fdb0e5238b05a8134decce9cedad0f">DBG_PRINT</a>((1, <span class="stringliteral">&quot;Removing subject: %p from the list\n&quot;</span>, subject));</div>
 <div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160; </div>
 <div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;         <a class="code" href="classIpopt_1_1Observer.html#a9910eb64060c426e2b9695fec3f98cae">subjects_</a>.erase(attached_subject);</div>
@@ -357,82 +357,80 @@ $(document).ready(function(){initNavTree('IpObserver_8hpp_source.html',''); init
 <div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;   <a class="code" href="IpDebug_8hpp.html#abac44fd4713c03644cf925f4a1bcb22a">DBG_START_METH</a>(<span class="stringliteral">&quot;Subject::~Subject&quot;</span>, dbg_verbosity);</div>
 <div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160; </div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;   std::vector&lt;Observer*&gt;::iterator iter;</div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;   <span class="keywordflow">for</span>( iter = <a class="code" href="classIpopt_1_1Subject.html#acc183912291569c2198d3b8109a79d6f">observers_</a>.begin(); iter != <a class="code" href="classIpopt_1_1Subject.html#acc183912291569c2198d3b8109a79d6f">observers_</a>.end(); iter++ )</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;   {</div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;      (*iter)-&gt;ProcessNotification(<a class="code" href="classIpopt_1_1Observer.html#a828a9e0833e87e84bef75d05bf0a99b8a8ad0ad9fd7b8b6ac8d26ba3f4a9b5cae">Observer::NT_BeingDestroyed</a>, <span class="keyword">this</span>);</div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;   }</div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;}</div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160; </div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00357"></a><span class="lineno"><a class="line" href="classIpopt_1_1Subject.html#a7a5d0d8fa91fa9cea12e53682ad82042">  357</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classIpopt_1_1Subject.html#a7a5d0d8fa91fa9cea12e53682ad82042">Subject::AttachObserver</a>(</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;   <a class="code" href="classIpopt_1_1Observer.html#a828a9e0833e87e84bef75d05bf0a99b8">Observer::NotifyType</a> <span class="comment">/*notify_type*/</span>,</div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;   <a class="code" href="classIpopt_1_1Observer.html">Observer</a>*            observer</div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;<span class="keyword"></span>{</div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;<span class="preprocessor">#ifdef IP_DEBUG_OBSERVER</span></div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;   <a class="code" href="IpDebug_8hpp.html#abac44fd4713c03644cf925f4a1bcb22a">DBG_START_METH</a>(<span class="stringliteral">&quot;Subject::AttachObserver&quot;</span>, dbg_verbosity);</div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;   <span class="comment">// current implementation notifies all observers of everything</span></div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;   <span class="comment">// they must filter the notifications that they are not interested</span></div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;   <span class="comment">// in (i.e. a hub, not a router)</span></div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;   <a class="code" href="IpDebug_8hpp.html#a346733cd6806024295f8c3564071d021">DBG_ASSERT</a>(observer);</div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160; </div>
-<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;   std::vector&lt;Observer*&gt;::iterator attached_observer;</div>
-<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;   attached_observer = std::find(<a class="code" href="classIpopt_1_1Subject.html#acc183912291569c2198d3b8109a79d6f">observers_</a>.begin(), <a class="code" href="classIpopt_1_1Subject.html#acc183912291569c2198d3b8109a79d6f">observers_</a>.end(), observer);</div>
-<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;   <a class="code" href="IpDebug_8hpp.html#a346733cd6806024295f8c3564071d021">DBG_ASSERT</a>(attached_observer == <a class="code" href="classIpopt_1_1Subject.html#acc183912291569c2198d3b8109a79d6f">observers_</a>.end());</div>
-<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160; </div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;   <a class="code" href="IpDebug_8hpp.html#a346733cd6806024295f8c3564071d021">DBG_ASSERT</a>(observer);</div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160; </div>
-<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;   <a class="code" href="classIpopt_1_1Subject.html#acc183912291569c2198d3b8109a79d6f">observers_</a>.push_back(observer);</div>
-<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;}</div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160; </div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00380"></a><span class="lineno"><a class="line" href="classIpopt_1_1Subject.html#a907d18f260ed26a5549538f3c09e5f56">  380</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classIpopt_1_1Subject.html#a907d18f260ed26a5549538f3c09e5f56">Subject::DetachObserver</a>(</div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;   <a class="code" href="classIpopt_1_1Observer.html#a828a9e0833e87e84bef75d05bf0a99b8">Observer::NotifyType</a> <span class="comment">/*notify_type*/</span>,</div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;   <a class="code" href="classIpopt_1_1Observer.html">Observer</a>*            observer</div>
-<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;<span class="keyword"></span>{</div>
-<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;<span class="preprocessor">#ifdef IP_DEBUG_OBSERVER</span></div>
-<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;   <a class="code" href="IpDebug_8hpp.html#abac44fd4713c03644cf925f4a1bcb22a">DBG_START_METH</a>(<span class="stringliteral">&quot;Subject::DetachObserver&quot;</span>, dbg_verbosity);</div>
-<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;   <a class="code" href="IpDebug_8hpp.html#a346733cd6806024295f8c3564071d021">DBG_ASSERT</a>(observer);</div>
-<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160; </div>
-<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;   <span class="keywordflow">if</span>( observer )</div>
-<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;   {</div>
-<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;      std::vector&lt;Observer*&gt;::iterator attached_observer;</div>
-<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;      attached_observer = std::find(<a class="code" href="classIpopt_1_1Subject.html#acc183912291569c2198d3b8109a79d6f">observers_</a>.begin(), <a class="code" href="classIpopt_1_1Subject.html#acc183912291569c2198d3b8109a79d6f">observers_</a>.end(), observer);</div>
-<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;<span class="preprocessor">#ifdef IP_DEBUG_OBSERVER</span></div>
-<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160; </div>
-<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;      <a class="code" href="IpDebug_8hpp.html#a346733cd6806024295f8c3564071d021">DBG_ASSERT</a>(attached_observer != <a class="code" href="classIpopt_1_1Subject.html#acc183912291569c2198d3b8109a79d6f">observers_</a>.end());</div>
-<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160; </div>
-<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;      <span class="keywordflow">if</span>( attached_observer != <a class="code" href="classIpopt_1_1Subject.html#acc183912291569c2198d3b8109a79d6f">observers_</a>.end() )</div>
-<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;      {</div>
-<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;         <a class="code" href="classIpopt_1_1Subject.html#acc183912291569c2198d3b8109a79d6f">observers_</a>.erase(attached_observer);</div>
-<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;      }</div>
-<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;   }</div>
-<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;}</div>
-<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160; </div>
-<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00407"></a><span class="lineno"><a class="line" href="classIpopt_1_1Subject.html#a001f4269d74149f9d45930ef7102c0a4">  407</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classIpopt_1_1Subject.html#a001f4269d74149f9d45930ef7102c0a4">Subject::Notify</a>(</div>
-<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;   <a class="code" href="classIpopt_1_1Observer.html#a828a9e0833e87e84bef75d05bf0a99b8">Observer::NotifyType</a> notify_type</div>
-<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;<span class="keyword"></span>{</div>
-<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;<span class="preprocessor">#ifdef IP_DEBUG_OBSERVER</span></div>
-<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;   <a class="code" href="IpDebug_8hpp.html#abac44fd4713c03644cf925f4a1bcb22a">DBG_START_METH</a>(<span class="stringliteral">&quot;Subject::Notify&quot;</span>, dbg_verbosity);</div>
-<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160; </div>
-<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;   std::vector&lt;Observer*&gt;::iterator iter;</div>
-<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;   <span class="keywordflow">for</span>( iter = <a class="code" href="classIpopt_1_1Subject.html#acc183912291569c2198d3b8109a79d6f">observers_</a>.begin(); iter != <a class="code" href="classIpopt_1_1Subject.html#acc183912291569c2198d3b8109a79d6f">observers_</a>.end(); iter++ )</div>
-<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;   {</div>
-<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;      (*iter)-&gt;ProcessNotification(notify_type, <span class="keyword">this</span>);</div>
-<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;   }</div>
-<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;}</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;   <span class="keywordflow">for</span>( std::vector&lt;Observer*&gt;::iterator iter = <a class="code" href="classIpopt_1_1Subject.html#acc183912291569c2198d3b8109a79d6f">observers_</a>.begin(); iter != <a class="code" href="classIpopt_1_1Subject.html#acc183912291569c2198d3b8109a79d6f">observers_</a>.end(); ++iter )</div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;   {</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;      (*iter)-&gt;ProcessNotification(<a class="code" href="classIpopt_1_1Observer.html#a828a9e0833e87e84bef75d05bf0a99b8a8ad0ad9fd7b8b6ac8d26ba3f4a9b5cae">Observer::NT_BeingDestroyed</a>, <span class="keyword">this</span>);</div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;   }</div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;}</div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160; </div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;<span class="keyword">inline</span></div>
+<div class="line"><a name="l00356"></a><span class="lineno"><a class="line" href="classIpopt_1_1Subject.html#a7a5d0d8fa91fa9cea12e53682ad82042">  356</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classIpopt_1_1Subject.html#a7a5d0d8fa91fa9cea12e53682ad82042">Subject::AttachObserver</a>(</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;   <a class="code" href="classIpopt_1_1Observer.html#a828a9e0833e87e84bef75d05bf0a99b8">Observer::NotifyType</a> <span class="comment">/*notify_type*/</span>,</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;   <a class="code" href="classIpopt_1_1Observer.html">Observer</a>*            observer</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;<span class="keyword"></span>{</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;<span class="preprocessor">#ifdef IP_DEBUG_OBSERVER</span></div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;   <a class="code" href="IpDebug_8hpp.html#abac44fd4713c03644cf925f4a1bcb22a">DBG_START_METH</a>(<span class="stringliteral">&quot;Subject::AttachObserver&quot;</span>, dbg_verbosity);</div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;   <span class="comment">// current implementation notifies all observers of everything</span></div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;   <span class="comment">// they must filter the notifications that they are not interested</span></div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;   <span class="comment">// in (i.e. a hub, not a router)</span></div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;   <a class="code" href="IpDebug_8hpp.html#a346733cd6806024295f8c3564071d021">DBG_ASSERT</a>(observer);</div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160; </div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;   std::vector&lt;Observer*&gt;::iterator attached_observer;</div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;   attached_observer = std::find(<a class="code" href="classIpopt_1_1Subject.html#acc183912291569c2198d3b8109a79d6f">observers_</a>.begin(), <a class="code" href="classIpopt_1_1Subject.html#acc183912291569c2198d3b8109a79d6f">observers_</a>.end(), observer);</div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;   <a class="code" href="IpDebug_8hpp.html#a346733cd6806024295f8c3564071d021">DBG_ASSERT</a>(attached_observer == <a class="code" href="classIpopt_1_1Subject.html#acc183912291569c2198d3b8109a79d6f">observers_</a>.end());</div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160; </div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;   <a class="code" href="IpDebug_8hpp.html#a346733cd6806024295f8c3564071d021">DBG_ASSERT</a>(observer);</div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160; </div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;   <a class="code" href="classIpopt_1_1Subject.html#acc183912291569c2198d3b8109a79d6f">observers_</a>.push_back(observer);</div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;}</div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160; </div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;<span class="keyword">inline</span></div>
+<div class="line"><a name="l00379"></a><span class="lineno"><a class="line" href="classIpopt_1_1Subject.html#a907d18f260ed26a5549538f3c09e5f56">  379</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classIpopt_1_1Subject.html#a907d18f260ed26a5549538f3c09e5f56">Subject::DetachObserver</a>(</div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;   <a class="code" href="classIpopt_1_1Observer.html#a828a9e0833e87e84bef75d05bf0a99b8">Observer::NotifyType</a> <span class="comment">/*notify_type*/</span>,</div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;   <a class="code" href="classIpopt_1_1Observer.html">Observer</a>*            observer</div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;<span class="keyword"></span>{</div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;<span class="preprocessor">#ifdef IP_DEBUG_OBSERVER</span></div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;   <a class="code" href="IpDebug_8hpp.html#abac44fd4713c03644cf925f4a1bcb22a">DBG_START_METH</a>(<span class="stringliteral">&quot;Subject::DetachObserver&quot;</span>, dbg_verbosity);</div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;   <a class="code" href="IpDebug_8hpp.html#a346733cd6806024295f8c3564071d021">DBG_ASSERT</a>(observer);</div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160; </div>
+<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;   <span class="keywordflow">if</span>( observer )</div>
+<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;   {</div>
+<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;      std::vector&lt;Observer*&gt;::iterator attached_observer;</div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;      attached_observer = std::find(<a class="code" href="classIpopt_1_1Subject.html#acc183912291569c2198d3b8109a79d6f">observers_</a>.begin(), <a class="code" href="classIpopt_1_1Subject.html#acc183912291569c2198d3b8109a79d6f">observers_</a>.end(), observer);</div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;<span class="preprocessor">#ifdef IP_DEBUG_OBSERVER</span></div>
+<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160; </div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;      <a class="code" href="IpDebug_8hpp.html#a346733cd6806024295f8c3564071d021">DBG_ASSERT</a>(attached_observer != <a class="code" href="classIpopt_1_1Subject.html#acc183912291569c2198d3b8109a79d6f">observers_</a>.end());</div>
+<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160; </div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;      <span class="keywordflow">if</span>( attached_observer != <a class="code" href="classIpopt_1_1Subject.html#acc183912291569c2198d3b8109a79d6f">observers_</a>.end() )</div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;      {</div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;         <a class="code" href="classIpopt_1_1Subject.html#acc183912291569c2198d3b8109a79d6f">observers_</a>.erase(attached_observer);</div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;      }</div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;   }</div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;}</div>
+<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160; </div>
+<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;<span class="keyword">inline</span></div>
+<div class="line"><a name="l00406"></a><span class="lineno"><a class="line" href="classIpopt_1_1Subject.html#a001f4269d74149f9d45930ef7102c0a4">  406</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classIpopt_1_1Subject.html#a001f4269d74149f9d45930ef7102c0a4">Subject::Notify</a>(</div>
+<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;   <a class="code" href="classIpopt_1_1Observer.html#a828a9e0833e87e84bef75d05bf0a99b8">Observer::NotifyType</a> notify_type</div>
+<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;<span class="keyword"></span>{</div>
+<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;<span class="preprocessor">#ifdef IP_DEBUG_OBSERVER</span></div>
+<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;   <a class="code" href="IpDebug_8hpp.html#abac44fd4713c03644cf925f4a1bcb22a">DBG_START_METH</a>(<span class="stringliteral">&quot;Subject::Notify&quot;</span>, dbg_verbosity);</div>
+<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160; </div>
+<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;   <span class="keywordflow">for</span>( std::vector&lt;Observer*&gt;::iterator iter = <a class="code" href="classIpopt_1_1Subject.html#acc183912291569c2198d3b8109a79d6f">observers_</a>.begin(); iter != <a class="code" href="classIpopt_1_1Subject.html#acc183912291569c2198d3b8109a79d6f">observers_</a>.end(); ++iter )</div>
+<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;   {</div>
+<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;      (*iter)-&gt;ProcessNotification(notify_type, <span class="keyword">this</span>);</div>
+<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;   }</div>
+<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;}</div>
+<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160; </div>
+<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;} <span class="comment">// namespace Ipopt</span></div>
 <div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160; </div>
-<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;} <span class="comment">// namespace Ipopt</span></div>
-<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160; </div>
-<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aIpUtils_8hpp_html"><div class="ttname"><a href="IpUtils_8hpp.html">IpUtils.hpp</a></div></div>
@@ -440,30 +438,29 @@ $(document).ready(function(){initNavTree('IpObserver_8hpp_source.html',''); init
 <div class="ttc" id="aclassIpopt_1_1Observer_html_a7006c91bc2893aa7aaa03799820f76dd"><div class="ttname"><a href="classIpopt_1_1Observer.html#a7006c91bc2893aa7aaa03799820f76dd">Ipopt::Observer::RequestDetach</a></div><div class="ttdeci">void RequestDetach(NotifyType notify_type, const Subject *subject)</div><div class="ttdoc">Derived classes should call this method to request a &quot;Detach&quot; to a Subject.</div><div class="ttdef"><b>Definition:</b> <a href="IpObserver_8hpp_source.html#l00276">IpObserver.hpp:276</a></div></div>
 <div class="ttc" id="aclassIpopt_1_1Observer_html_a9910eb64060c426e2b9695fec3f98cae"><div class="ttname"><a href="classIpopt_1_1Observer.html#a9910eb64060c426e2b9695fec3f98cae">Ipopt::Observer::subjects_</a></div><div class="ttdeci">std::vector&lt; const Subject * &gt; subjects_</div><div class="ttdoc">A list of the subjects currently being observed.</div><div class="ttdef"><b>Definition:</b> <a href="IpObserver_8hpp_source.html#l00121">IpObserver.hpp:121</a></div></div>
 <div class="ttc" id="anamespaceIpopt_html"><div class="ttname"><a href="namespaceIpopt.html">Ipopt</a></div><div class="ttdoc">This file contains a base class for all exceptions and a set of macros to help with exceptions.</div><div class="ttdef"><b>Definition:</b> <a href="IpInexactAlgBuilder_8hpp_source.html#l00013">IpInexactAlgBuilder.hpp:14</a></div></div>
-<div class="ttc" id="aclassIpopt_1_1Subject_html_a907d18f260ed26a5549538f3c09e5f56"><div class="ttname"><a href="classIpopt_1_1Subject.html#a907d18f260ed26a5549538f3c09e5f56">Ipopt::Subject::DetachObserver</a></div><div class="ttdeci">void DetachObserver(Observer::NotifyType notify_type, Observer *observer) const</div><div class="ttdoc">Detach the specified observer (i.e., no longer receive notifications).</div><div class="ttdef"><b>Definition:</b> <a href="IpObserver_8hpp_source.html#l00380">IpObserver.hpp:380</a></div></div>
+<div class="ttc" id="aclassIpopt_1_1Subject_html_a907d18f260ed26a5549538f3c09e5f56"><div class="ttname"><a href="classIpopt_1_1Subject.html#a907d18f260ed26a5549538f3c09e5f56">Ipopt::Subject::DetachObserver</a></div><div class="ttdeci">void DetachObserver(Observer::NotifyType notify_type, Observer *observer) const</div><div class="ttdoc">Detach the specified observer (i.e., no longer receive notifications).</div><div class="ttdef"><b>Definition:</b> <a href="IpObserver_8hpp_source.html#l00379">IpObserver.hpp:379</a></div></div>
 <div class="ttc" id="aclassIpopt_1_1Observer_html"><div class="ttname"><a href="classIpopt_1_1Observer.html">Ipopt::Observer</a></div><div class="ttdoc">Slight Variation of the Observer Design Pattern.</div><div class="ttdef"><b>Definition:</b> <a href="IpObserver_8hpp_source.html#l00038">IpObserver.hpp:39</a></div></div>
 <div class="ttc" id="aconfig__default_8h_html_a58bb5c104ee5ff44b7175fc992d89b0b"><div class="ttname"><a href="config__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a></div><div class="ttdeci">#define IPOPTLIB_EXPORT</div><div class="ttdef"><b>Definition:</b> <a href="config__default_8h_source.html#l00011">config_default.h:10</a></div></div>
 <div class="ttc" id="aclassIpopt_1_1Observer_html_ad8a27925a917ba926d713ceaac3efd7d"><div class="ttname"><a href="classIpopt_1_1Observer.html#ad8a27925a917ba926d713ceaac3efd7d">Ipopt::Observer::RequestAttach</a></div><div class="ttdeci">void RequestAttach(NotifyType notify_type, const Subject *subject)</div><div class="ttdoc">Derived classes should call this method to request an &quot;Attach&quot; to a Subject.</div><div class="ttdef"><b>Definition:</b> <a href="IpObserver_8hpp_source.html#l00254">IpObserver.hpp:254</a></div></div>
 <div class="ttc" id="aclassIpopt_1_1Observer_html_a6f33850447e2d64a0b1521d10924fb40"><div class="ttname"><a href="classIpopt_1_1Observer.html#a6f33850447e2d64a0b1521d10924fb40">Ipopt::Observer::~Observer</a></div><div class="ttdeci">virtual ~Observer()</div><div class="ttdoc">Destructor.</div><div class="ttdef"><b>Definition:</b> <a href="IpObserver_8hpp_source.html#l00230">IpObserver.hpp:230</a></div></div>
-<div class="ttc" id="anamespaceIpopt_html_a8728e67558138991e8ee3fea451dca94"><div class="ttname"><a href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Ipopt::Index</a></div><div class="ttdeci">int Index</div><div class="ttdoc">Type of all indices of vectors, matrices etc.</div><div class="ttdef"><b>Definition:</b> <a href="IpTypes_8hpp_source.html#l00017">IpTypes.hpp:17</a></div></div>
 <div class="ttc" id="aIpDebug_8hpp_html_abac44fd4713c03644cf925f4a1bcb22a"><div class="ttname"><a href="IpDebug_8hpp.html#abac44fd4713c03644cf925f4a1bcb22a">DBG_START_METH</a></div><div class="ttdeci">#define DBG_START_METH(__func_name, __verbose_level)</div><div class="ttdef"><b>Definition:</b> <a href="IpDebug_8hpp_source.html#l00039">IpDebug.hpp:38</a></div></div>
 <div class="ttc" id="aclassIpopt_1_1Observer_html_a168ea0b39ad7121383e357456a02b31e"><div class="ttname"><a href="classIpopt_1_1Observer.html#a168ea0b39ad7121383e357456a02b31e">Ipopt::Observer::ReceiveNotification</a></div><div class="ttdeci">virtual void ReceiveNotification(NotifyType notify_type, const Subject *subject)=0</div><div class="ttdoc">Derived classes should overload this method to receive the requested notification from attached Subje...</div></div>
 <div class="ttc" id="aclassIpopt_1_1Subject_html_a513b28f73029820053d572fcb5c91099"><div class="ttname"><a href="classIpopt_1_1Subject.html#a513b28f73029820053d572fcb5c91099">Ipopt::Subject::Subject</a></div><div class="ttdeci">Subject(const Subject &amp;)</div><div class="ttdoc">Copy Constructor.</div></div>
 <div class="ttc" id="aclassIpopt_1_1Subject_html_abdb4a5e05cc2afd41064985d55d96f6d"><div class="ttname"><a href="classIpopt_1_1Subject.html#abdb4a5e05cc2afd41064985d55d96f6d">Ipopt::Subject::~Subject</a></div><div class="ttdeci">virtual ~Subject()</div><div class="ttdoc">Destructor.</div><div class="ttdef"><b>Definition:</b> <a href="IpObserver_8hpp_source.html#l00343">IpObserver.hpp:343</a></div></div>
+<div class="ttc" id="anamespaceIpopt_html_a5a4a27f325033a0e5d85a4ebc4038b57"><div class="ttname"><a href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Ipopt::Index</a></div><div class="ttdeci">ipindex Index</div><div class="ttdoc">Type of all indices of vectors, matrices etc.</div><div class="ttdef"><b>Definition:</b> <a href="IpTypes_8hpp_source.html#l00020">IpTypes.hpp:20</a></div></div>
 <div class="ttc" id="aIpDebug_8hpp_html_aae2cacf79fab2061fdbe26c9165ad36b"><div class="ttname"><a href="IpDebug_8hpp.html#aae2cacf79fab2061fdbe26c9165ad36b">DBG_VERBOSITY</a></div><div class="ttdeci">#define DBG_VERBOSITY()</div><div class="ttdef"><b>Definition:</b> <a href="IpDebug_8hpp_source.html#l00044">IpDebug.hpp:43</a></div></div>
-<div class="ttc" id="aclassIpopt_1_1Subject_html_a001f4269d74149f9d45930ef7102c0a4"><div class="ttname"><a href="classIpopt_1_1Subject.html#a001f4269d74149f9d45930ef7102c0a4">Ipopt::Subject::Notify</a></div><div class="ttdeci">void Notify(Observer::NotifyType notify_type) const</div><div class="ttdef"><b>Definition:</b> <a href="IpObserver_8hpp_source.html#l00407">IpObserver.hpp:407</a></div></div>
+<div class="ttc" id="aclassIpopt_1_1Subject_html_a001f4269d74149f9d45930ef7102c0a4"><div class="ttname"><a href="classIpopt_1_1Subject.html#a001f4269d74149f9d45930ef7102c0a4">Ipopt::Subject::Notify</a></div><div class="ttdeci">void Notify(Observer::NotifyType notify_type) const</div><div class="ttdef"><b>Definition:</b> <a href="IpObserver_8hpp_source.html#l00406">IpObserver.hpp:406</a></div></div>
 <div class="ttc" id="aclassIpopt_1_1Subject_html_acd49cfba8bc02fd276614ec45112aa04"><div class="ttname"><a href="classIpopt_1_1Subject.html#acd49cfba8bc02fd276614ec45112aa04">Ipopt::Subject::operator=</a></div><div class="ttdeci">void operator=(const Subject &amp;)</div><div class="ttdoc">Default Assignment Operator.</div></div>
 <div class="ttc" id="aclassIpopt_1_1Subject_html"><div class="ttname"><a href="classIpopt_1_1Subject.html">Ipopt::Subject</a></div><div class="ttdoc">Slight Variation of the Observer Design Pattern (Subject part).</div><div class="ttdef"><b>Definition:</b> <a href="IpObserver_8hpp_source.html#l00149">IpObserver.hpp:150</a></div></div>
 <div class="ttc" id="aclassIpopt_1_1Subject_html_acc183912291569c2198d3b8109a79d6f"><div class="ttname"><a href="classIpopt_1_1Subject.html#acc183912291569c2198d3b8109a79d6f">Ipopt::Subject::observers_</a></div><div class="ttdeci">std::vector&lt; Observer * &gt; observers_</div><div class="ttdef"><b>Definition:</b> <a href="IpObserver_8hpp_source.html#l00226">IpObserver.hpp:226</a></div></div>
 <div class="ttc" id="aclassIpopt_1_1Observer_html_a828a9e0833e87e84bef75d05bf0a99b8a8ad0ad9fd7b8b6ac8d26ba3f4a9b5cae"><div class="ttname"><a href="classIpopt_1_1Observer.html#a828a9e0833e87e84bef75d05bf0a99b8a8ad0ad9fd7b8b6ac8d26ba3f4a9b5cae">Ipopt::Observer::NT_BeingDestroyed</a></div><div class="ttdeci">@ NT_BeingDestroyed</div><div class="ttdef"><b>Definition:</b> <a href="IpObserver_8hpp_source.html#l00060">IpObserver.hpp:60</a></div></div>
 <div class="ttc" id="aclassIpopt_1_1Observer_html_a828a9e0833e87e84bef75d05bf0a99b8"><div class="ttname"><a href="classIpopt_1_1Observer.html#a828a9e0833e87e84bef75d05bf0a99b8">Ipopt::Observer::NotifyType</a></div><div class="ttdeci">NotifyType</div><div class="ttdoc">Enumeration specifying the type of notification.</div><div class="ttdef"><b>Definition:</b> <a href="IpObserver_8hpp_source.html#l00057">IpObserver.hpp:58</a></div></div>
 <div class="ttc" id="aclassIpopt_1_1Observer_html_acdd5593467a6a60be9ca42516766b3d9"><div class="ttname"><a href="classIpopt_1_1Observer.html#acdd5593467a6a60be9ca42516766b3d9">Ipopt::Observer::Observer</a></div><div class="ttdeci">Observer()</div><div class="ttdoc">Default Constructor.</div><div class="ttdef"><b>Definition:</b> <a href="IpObserver_8hpp_source.html#l00048">IpObserver.hpp:48</a></div></div>
-<div class="ttc" id="aclassIpopt_1_1Subject_html_a7a5d0d8fa91fa9cea12e53682ad82042"><div class="ttname"><a href="classIpopt_1_1Subject.html#a7a5d0d8fa91fa9cea12e53682ad82042">Ipopt::Subject::AttachObserver</a></div><div class="ttdeci">void AttachObserver(Observer::NotifyType notify_type, Observer *observer) const</div><div class="ttdoc">Attach the specified observer (i.e., begin receiving notifications).</div><div class="ttdef"><b>Definition:</b> <a href="IpObserver_8hpp_source.html#l00357">IpObserver.hpp:357</a></div></div>
+<div class="ttc" id="aclassIpopt_1_1Subject_html_a7a5d0d8fa91fa9cea12e53682ad82042"><div class="ttname"><a href="classIpopt_1_1Subject.html#a7a5d0d8fa91fa9cea12e53682ad82042">Ipopt::Subject::AttachObserver</a></div><div class="ttdeci">void AttachObserver(Observer::NotifyType notify_type, Observer *observer) const</div><div class="ttdoc">Attach the specified observer (i.e., begin receiving notifications).</div><div class="ttdef"><b>Definition:</b> <a href="IpObserver_8hpp_source.html#l00356">IpObserver.hpp:356</a></div></div>
 <div class="ttc" id="aclassIpopt_1_1Observer_html_a0623f7b9a2dad45c18d7d67b1b43830e"><div class="ttname"><a href="classIpopt_1_1Observer.html#a0623f7b9a2dad45c18d7d67b1b43830e">Ipopt::Observer::ProcessNotification</a></div><div class="ttdeci">void ProcessNotification(NotifyType notify_type, const Subject *subject)</div><div class="ttdoc">Private Method for Receiving Notification should only be called by the friend class Subject.</div><div class="ttdef"><b>Definition:</b> <a href="IpObserver_8hpp_source.html#l00311">IpObserver.hpp:311</a></div></div>
 <div class="ttc" id="aclassIpopt_1_1Subject_html_a547af0012802082f3d7b869041bfabaf"><div class="ttname"><a href="classIpopt_1_1Subject.html#a547af0012802082f3d7b869041bfabaf">Ipopt::Subject::Subject</a></div><div class="ttdeci">Subject()</div><div class="ttdoc">Default Constructor.</div><div class="ttdef"><b>Definition:</b> <a href="IpObserver_8hpp_source.html#l00159">IpObserver.hpp:159</a></div></div>
 <div class="ttc" id="aIpDebug_8hpp_html_a346733cd6806024295f8c3564071d021"><div class="ttname"><a href="IpDebug_8hpp.html#a346733cd6806024295f8c3564071d021">DBG_ASSERT</a></div><div class="ttdeci">#define DBG_ASSERT(test)</div><div class="ttdef"><b>Definition:</b> <a href="IpDebug_8hpp_source.html#l00028">IpDebug.hpp:27</a></div></div>
 <div class="ttc" id="aclassIpopt_1_1Observer_html_a75cd6bfea59b6b4c054e65106d422e8c"><div class="ttname"><a href="classIpopt_1_1Observer.html#a75cd6bfea59b6b4c054e65106d422e8c">Ipopt::Observer::operator=</a></div><div class="ttdeci">void operator=(const Observer &amp;)</div><div class="ttdoc">Default Assignment Operator.</div></div>
-<div class="ttc" id="anamespaceIpopt_html_a0dae86ecbedd018c15054019f260811e"><div class="ttname"><a href="namespaceIpopt.html#a0dae86ecbedd018c15054019f260811e">Ipopt::Int</a></div><div class="ttdeci">int Int</div><div class="ttdoc">Type of default integer.</div><div class="ttdef"><b>Definition:</b> <a href="IpTypes_8hpp_source.html#l00019">IpTypes.hpp:19</a></div></div>
 <div class="ttc" id="aIpDebug_8hpp_html"><div class="ttname"><a href="IpDebug_8hpp.html">IpDebug.hpp</a></div></div>
 <div class="ttc" id="aclassIpopt_1_1Observer_html_ad9738aa3cbd95c3079a47858c7ef6473"><div class="ttname"><a href="classIpopt_1_1Observer.html#ad9738aa3cbd95c3079a47858c7ef6473">Ipopt::Observer::Observer</a></div><div class="ttdeci">Observer(const Observer &amp;)</div><div class="ttdoc">Copy Constructor.</div></div>
 <div class="ttc" id="aclassIpopt_1_1Observer_html_a828a9e0833e87e84bef75d05bf0a99b8aa99f42cc1404f26f7261dd53de56ff74"><div class="ttname"><a href="classIpopt_1_1Observer.html#a828a9e0833e87e84bef75d05bf0a99b8aa99f42cc1404f26f7261dd53de56ff74">Ipopt::Observer::NT_All</a></div><div class="ttdeci">@ NT_All</div><div class="ttdef"><b>Definition:</b> <a href="IpObserver_8hpp_source.html#l00059">IpObserver.hpp:59</a></div></div>

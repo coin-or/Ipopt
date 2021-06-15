@@ -1,5 +1,5 @@
-<!-- HTML header for doxygen 1.8.13-->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- HTML header for doxygen 1.8.18-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.13.4</span-->
+   &#160;<!--span id="projectnumber">3.14.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -137,27 +137,27 @@ $(document).ready(function(){initNavTree('IpGenKKTSolverInterface_8hpp_source.ht
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
 <div class="line"><a name="l00073"></a><span class="lineno"><a class="line" href="classIpopt_1_1GenKKTSolverInterface.html#a11e8b46a72275fc25f870e924db3ff3a">   73</a></span>&#160;   <span class="keyword">virtual</span> <a class="code" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a> <a class="code" href="classIpopt_1_1GenKKTSolverInterface.html#a11e8b46a72275fc25f870e924db3ff3a">MultiSolve</a>(</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;      <span class="keywordtype">bool</span>                      new_matrix, </div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;      <a class="code" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>                     n_x,        </div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;      <a class="code" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>                     n_c,        </div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;      <a class="code" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>                     n_d,        </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;      <a class="code" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>                     n_x,        </div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;      <a class="code" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>                     n_c,        </div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;      <a class="code" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>                     n_d,        </div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;      <a class="code" href="classIpopt_1_1SmartPtr.html">SmartPtr&lt;const SymMatrix&gt;</a> W,          </div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;      <a class="code" href="classIpopt_1_1SmartPtr.html">SmartPtr&lt;const Matrix&gt;</a>    Jac_c,      </div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;      <a class="code" href="classIpopt_1_1SmartPtr.html">SmartPtr&lt;const Matrix&gt;</a>    Jac_d,      </div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;      <span class="keyword">const</span> <a class="code" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>*             D_x,        </div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;      <span class="keyword">const</span> <a class="code" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>*             D_s,        </div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;      <span class="keyword">const</span> <a class="code" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>*             D_c,        </div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;      <span class="keyword">const</span> <a class="code" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>*             D_d,        </div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;      <a class="code" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>                    delta_x,    </div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;      <a class="code" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>                    delta_s,    </div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;      <a class="code" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>                    delta_c,    </div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;      <a class="code" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>                    delta_d,    </div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;      <a class="code" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>                     n_rhs,      </div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;      <a class="code" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>*                   rhssol,     </div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;      <span class="keyword">const</span> <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>*             D_x,        </div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;      <span class="keyword">const</span> <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>*             D_s,        </div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;      <span class="keyword">const</span> <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>*             D_c,        </div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;      <span class="keyword">const</span> <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>*             D_d,        </div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>                    delta_x,    </div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>                    delta_s,    </div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>                    delta_c,    </div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>                    delta_d,    </div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;      <a class="code" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>                     n_rhs,      </div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>*                   rhssol,     </div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;      <span class="keywordtype">bool</span>                      check_NegEVals,  </div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;      <a class="code" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>                     numberOfNegEVals </div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;      <a class="code" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>                     numberOfNegEVals </div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;   ) = 0;</div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
-<div class="line"><a name="l00102"></a><span class="lineno"><a class="line" href="classIpopt_1_1GenKKTSolverInterface.html#a3f9c2a063357bb95a66fbee6607e7640">  102</a></span>&#160;   <span class="keyword">virtual</span> <a class="code" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> <a class="code" href="classIpopt_1_1GenKKTSolverInterface.html#a3f9c2a063357bb95a66fbee6607e7640">NumberOfNegEVals</a>() <span class="keyword">const</span> = 0;</div>
+<div class="line"><a name="l00102"></a><span class="lineno"><a class="line" href="classIpopt_1_1GenKKTSolverInterface.html#a3f9c2a063357bb95a66fbee6607e7640">  102</a></span>&#160;   <span class="keyword">virtual</span> <a class="code" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> <a class="code" href="classIpopt_1_1GenKKTSolverInterface.html#a3f9c2a063357bb95a66fbee6607e7640">NumberOfNegEVals</a>() <span class="keyword">const</span> = 0;</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;   <span class="comment">//* @name Options of Linear solver */</span></div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="comment"></span> </div>
@@ -177,10 +177,10 @@ $(document).ready(function(){initNavTree('IpGenKKTSolverInterface_8hpp_source.ht
 <div class="ttc" id="aclassIpopt_1_1GenKKTSolverInterface_html_a3f9c2a063357bb95a66fbee6607e7640"><div class="ttname"><a href="classIpopt_1_1GenKKTSolverInterface.html#a3f9c2a063357bb95a66fbee6607e7640">Ipopt::GenKKTSolverInterface::NumberOfNegEVals</a></div><div class="ttdeci">virtual Index NumberOfNegEVals() const =0</div><div class="ttdoc">Number of negative eigenvalues detected during last factorization.</div></div>
 <div class="ttc" id="aclassIpopt_1_1GenKKTSolverInterface_html_a84938b57266632f66530b67b86b9015f"><div class="ttname"><a href="classIpopt_1_1GenKKTSolverInterface.html#a84938b57266632f66530b67b86b9015f">Ipopt::GenKKTSolverInterface::IncreaseQuality</a></div><div class="ttdeci">virtual bool IncreaseQuality()=0</div><div class="ttdoc">Request to increase quality of solution for next solve.</div></div>
 <div class="ttc" id="anamespaceIpopt_html"><div class="ttname"><a href="namespaceIpopt.html">Ipopt</a></div><div class="ttdoc">This file contains a base class for all exceptions and a set of macros to help with exceptions.</div><div class="ttdef"><b>Definition:</b> <a href="IpInexactAlgBuilder_8hpp_source.html#l00013">IpInexactAlgBuilder.hpp:14</a></div></div>
-<div class="ttc" id="anamespaceIpopt_html_ad77ec4132352c5093febf9c488a72a4c"><div class="ttname"><a href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Ipopt::Number</a></div><div class="ttdeci">double Number</div><div class="ttdoc">Type of all numbers.</div><div class="ttdef"><b>Definition:</b> <a href="IpTypes_8hpp_source.html#l00015">IpTypes.hpp:15</a></div></div>
 <div class="ttc" id="aIpSymLinearSolver_8hpp_html"><div class="ttname"><a href="IpSymLinearSolver_8hpp.html">IpSymLinearSolver.hpp</a></div></div>
-<div class="ttc" id="anamespaceIpopt_html_a8728e67558138991e8ee3fea451dca94"><div class="ttname"><a href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Ipopt::Index</a></div><div class="ttdeci">int Index</div><div class="ttdoc">Type of all indices of vectors, matrices etc.</div><div class="ttdef"><b>Definition:</b> <a href="IpTypes_8hpp_source.html#l00017">IpTypes.hpp:17</a></div></div>
-<div class="ttc" id="aclassIpopt_1_1SmartPtr_html"><div class="ttname"><a href="classIpopt_1_1SmartPtr.html">Ipopt::SmartPtr</a></div><div class="ttdoc">Template class for Smart Pointers.</div><div class="ttdef"><b>Definition:</b> <a href="IpSmartPtr_8hpp_source.html#l00171">IpSmartPtr.hpp:172</a></div></div>
+<div class="ttc" id="aclassIpopt_1_1SmartPtr_html"><div class="ttname"><a href="classIpopt_1_1SmartPtr.html">Ipopt::SmartPtr</a></div><div class="ttdoc">Template class for Smart Pointers.</div><div class="ttdef"><b>Definition:</b> <a href="IpSmartPtr_8hpp_source.html#l00164">IpSmartPtr.hpp:165</a></div></div>
+<div class="ttc" id="anamespaceIpopt_html_a5a4a27f325033a0e5d85a4ebc4038b57"><div class="ttname"><a href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Ipopt::Index</a></div><div class="ttdeci">ipindex Index</div><div class="ttdoc">Type of all indices of vectors, matrices etc.</div><div class="ttdef"><b>Definition:</b> <a href="IpTypes_8hpp_source.html#l00020">IpTypes.hpp:20</a></div></div>
+<div class="ttc" id="anamespaceIpopt_html_ab75ce5f2ad60aa86e4dff723998e653f"><div class="ttname"><a href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Ipopt::Number</a></div><div class="ttdeci">ipnumber Number</div><div class="ttdoc">Type of all numbers.</div><div class="ttdef"><b>Definition:</b> <a href="IpTypes_8hpp_source.html#l00017">IpTypes.hpp:17</a></div></div>
 <div class="ttc" id="aclassIpopt_1_1AlgorithmStrategyObject_html"><div class="ttname"><a href="classIpopt_1_1AlgorithmStrategyObject.html">Ipopt::AlgorithmStrategyObject</a></div><div class="ttdoc">This is the base class for all algorithm strategy objects.</div><div class="ttdef"><b>Definition:</b> <a href="IpAlgStrategy_8hpp_source.html#l00034">IpAlgStrategy.hpp:35</a></div></div>
 <div class="ttc" id="aclassIpopt_1_1GenKKTSolverInterface_html_aa96d7e87f2b0eb54015a8a5ef44ed002"><div class="ttname"><a href="classIpopt_1_1GenKKTSolverInterface.html#aa96d7e87f2b0eb54015a8a5ef44ed002">Ipopt::GenKKTSolverInterface::ProvidesInertia</a></div><div class="ttdeci">virtual bool ProvidesInertia() const =0</div><div class="ttdoc">Query whether inertia is computed by linear solver.</div></div>
 <div class="ttc" id="aIpAlgStrategy_8hpp_html"><div class="ttname"><a href="IpAlgStrategy_8hpp.html">IpAlgStrategy.hpp</a></div></div>

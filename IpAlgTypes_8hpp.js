@@ -4,6 +4,7 @@ var IpAlgTypes_8hpp =
       [ "SUCCESS", "IpAlgTypes_8hpp.html#a53a5dc5f64f568252ba7bb7385e7f834a71ebd3156d46510952b410d416d72d0c", null ],
       [ "MAXITER_EXCEEDED", "IpAlgTypes_8hpp.html#a53a5dc5f64f568252ba7bb7385e7f834ad09f6b17c69691bbc46e74f7a1e71cc1", null ],
       [ "CPUTIME_EXCEEDED", "IpAlgTypes_8hpp.html#a53a5dc5f64f568252ba7bb7385e7f834ab0b9a4a82b16aef98a54dba735c627c5", null ],
+      [ "WALLTIME_EXCEEDED", "IpAlgTypes_8hpp.html#a53a5dc5f64f568252ba7bb7385e7f834adabe3ce026bf0d44cca0bde2dd2e13b4", null ],
       [ "STOP_AT_TINY_STEP", "IpAlgTypes_8hpp.html#a53a5dc5f64f568252ba7bb7385e7f834aaf74418f14d4be42e1a80c76da667320", null ],
       [ "STOP_AT_ACCEPTABLE_POINT", "IpAlgTypes_8hpp.html#a53a5dc5f64f568252ba7bb7385e7f834aca433d567f2dacd82b0321a102a673c7", null ],
       [ "LOCAL_INFEASIBILITY", "IpAlgTypes_8hpp.html#a53a5dc5f64f568252ba7bb7385e7f834a2881b4bd950138a39389b46c113ce3c3", null ],
@@ -22,12 +23,11 @@ var IpAlgTypes_8hpp =
     [ "DECLARE_STD_EXCEPTION", "IpAlgTypes_8hpp.html#a3fb1652959d59f8c615c3eaebbb3eb34", null ],
     [ "DECLARE_STD_EXCEPTION", "IpAlgTypes_8hpp.html#a26757ba20648ab2fd6f22016bc89dd3c", null ],
     [ "DECLARE_STD_EXCEPTION", "IpAlgTypes_8hpp.html#a56d54ce928608a790cf8b79cf48f9c3e", null ],
+    [ "DECLARE_STD_EXCEPTION", "IpAlgTypes_8hpp.html#acd2ae09a3894297449bc0f1f2a531bd2", null ],
     [ "DECLARE_STD_EXCEPTION", "IpAlgTypes_8hpp.html#ac2e704692042d4234f15257a29cb3862", null ],
     [ "DECLARE_STD_EXCEPTION", "IpAlgTypes_8hpp.html#a767ad0d7b426b4d826421f963caf0a5f", null ],
     [ "DECLARE_STD_EXCEPTION", "IpAlgTypes_8hpp.html#a825e0855ebd5e479d727dd03b59a4f4e", null ],
     [ "DECLARE_STD_EXCEPTION", "IpAlgTypes_8hpp.html#a99ec977163f0f8e13d30f8067cae7a4b", null ],
-    [ "DECLARE_STD_EXCEPTION", "IpAlgTypes_8hpp.html#a98a3c5aa201e41b5ce35152d59975c4f", null ],
-    [ "DECLARE_STD_EXCEPTION", "IpAlgTypes_8hpp.html#a5fbe9d371cffd63cb98debd59d093eed", null ],
     [ "DECLARE_STD_EXCEPTION", "IpAlgTypes_8hpp.html#a38ab30685a3159e049651d39e689b28b", null ],
     [ "DECLARE_STD_EXCEPTION", "IpAlgTypes_8hpp.html#a0bf0f20cf8dc5e85b9d8498af1ea57ae", null ]
 ];

@@ -1,5 +1,5 @@
-<!-- HTML header for doxygen 1.8.13-->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- HTML header for doxygen 1.8.18-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.13.4</span-->
+   &#160;<!--span id="projectnumber">3.14.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -141,16 +141,16 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a0df8bbee059a39480cf40927e69cdd8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="classIpopt_1_1IterativeWsmpSolverInterface.html#a0df8bbee059a39480cf40927e69cdd8c">More...</a><br /></td></tr>
 <tr class="separator:a0df8bbee059a39480cf40927e69cdd8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Methods for requesting solution of the linear system.</div></td></tr>
-<tr class="memitem:a9e59075b79474c75597548bd7588c852"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#a9e59075b79474c75597548bd7588c852">InitializeStructure</a> (<a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> dim, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> nonzeros, const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *ia, const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *ja)</td></tr>
+<tr class="memitem:a9e59075b79474c75597548bd7588c852"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#a9e59075b79474c75597548bd7588c852">InitializeStructure</a> (<a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> dim, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> nonzeros, const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *ia, const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *ja)</td></tr>
 <tr class="memdesc:a9e59075b79474c75597548bd7588c852"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method for initializing internal structures.  <a href="classIpopt_1_1IterativeWsmpSolverInterface.html#a9e59075b79474c75597548bd7588c852">More...</a><br /></td></tr>
 <tr class="separator:a9e59075b79474c75597548bd7588c852"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0f3e4a268e6b2880f459255a31220a57"><td class="memItemLeft" align="right" valign="top">virtual double *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#a0f3e4a268e6b2880f459255a31220a57">GetValuesArrayPtr</a> ()</td></tr>
 <tr class="memdesc:a0f3e4a268e6b2880f459255a31220a57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method returning an internal array into which the nonzero elements (in the same order as ja) will be stored by the calling routine before a call to MultiSolve with a new_matrix=true (or after a return of MultiSolve with SYMSOLV_CALL_AGAIN).  <a href="classIpopt_1_1IterativeWsmpSolverInterface.html#a0f3e4a268e6b2880f459255a31220a57">More...</a><br /></td></tr>
 <tr class="separator:a0f3e4a268e6b2880f459255a31220a57"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a99215d7b62f2a2887d98d4a0d72286fb"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#a99215d7b62f2a2887d98d4a0d72286fb">MultiSolve</a> (bool new_matrix, const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *ia, const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *ja, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> nrhs, double *rhs_vals, bool check_NegEVals, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> numberOfNegEVals)</td></tr>
+<tr class="memitem:a99215d7b62f2a2887d98d4a0d72286fb"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#a99215d7b62f2a2887d98d4a0d72286fb">MultiSolve</a> (bool new_matrix, const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *ia, const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *ja, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> nrhs, double *rhs_vals, bool check_NegEVals, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> numberOfNegEVals)</td></tr>
 <tr class="memdesc:a99215d7b62f2a2887d98d4a0d72286fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Solve operation for multiple right hand sides.  <a href="classIpopt_1_1IterativeWsmpSolverInterface.html#a99215d7b62f2a2887d98d4a0d72286fb">More...</a><br /></td></tr>
 <tr class="separator:a99215d7b62f2a2887d98d4a0d72286fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac0b9a4a6fc29cc2f5e43d943433a5aee"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#ac0b9a4a6fc29cc2f5e43d943433a5aee">NumberOfNegEVals</a> () const</td></tr>
+<tr class="memitem:ac0b9a4a6fc29cc2f5e43d943433a5aee"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#ac0b9a4a6fc29cc2f5e43d943433a5aee">NumberOfNegEVals</a> () const</td></tr>
 <tr class="memdesc:ac0b9a4a6fc29cc2f5e43d943433a5aee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of negative eigenvalues detected during last factorization.  <a href="classIpopt_1_1IterativeWsmpSolverInterface.html#ac0b9a4a6fc29cc2f5e43d943433a5aee">More...</a><br /></td></tr>
 <tr class="separator:ac0b9a4a6fc29cc2f5e43d943433a5aee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader"></div></td></tr>
@@ -171,7 +171,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a437afeb947fb9c081a69ddebb3bd70fd inherit pub_methods_classIpopt_1_1SparseSymLinearSolverInterface"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html#a437afeb947fb9c081a69ddebb3bd70fd">ProvidesDegeneracyDetection</a> () const</td></tr>
 <tr class="memdesc:a437afeb947fb9c081a69ddebb3bd70fd inherit pub_methods_classIpopt_1_1SparseSymLinearSolverInterface"><td class="mdescLeft">&#160;</td><td class="mdescRight">Query whether the indices of linearly dependent rows/columns can be determined by this linear solver.  <a href="classIpopt_1_1SparseSymLinearSolverInterface.html#a437afeb947fb9c081a69ddebb3bd70fd">More...</a><br /></td></tr>
 <tr class="separator:a437afeb947fb9c081a69ddebb3bd70fd inherit pub_methods_classIpopt_1_1SparseSymLinearSolverInterface"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac0acf21743d7d571959bd5b432d2d58f inherit pub_methods_classIpopt_1_1SparseSymLinearSolverInterface"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html#ac0acf21743d7d571959bd5b432d2d58f">DetermineDependentRows</a> (const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *, const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *, std::list&lt; <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> &gt; &amp;)</td></tr>
+<tr class="memitem:ac0acf21743d7d571959bd5b432d2d58f inherit pub_methods_classIpopt_1_1SparseSymLinearSolverInterface"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html#ac0acf21743d7d571959bd5b432d2d58f">DetermineDependentRows</a> (const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *, const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *, std::list&lt; <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> &gt; &amp;)</td></tr>
 <tr class="memdesc:ac0acf21743d7d571959bd5b432d2d58f inherit pub_methods_classIpopt_1_1SparseSymLinearSolverInterface"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method determines the list of row indices of the linearly dependent rows.  <a href="classIpopt_1_1SparseSymLinearSolverInterface.html#ac0acf21743d7d571959bd5b432d2d58f">More...</a><br /></td></tr>
 <tr class="separator:ac0acf21743d7d571959bd5b432d2d58f inherit pub_methods_classIpopt_1_1SparseSymLinearSolverInterface"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classIpopt_1_1AlgorithmStrategyObject"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classIpopt_1_1AlgorithmStrategyObject')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classIpopt_1_1AlgorithmStrategyObject.html">Ipopt::AlgorithmStrategyObject</a></td></tr>
@@ -192,7 +192,7 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5c0f2208e3ead22bf7c5179381ed8203 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adbbf3aa5307da62ab8224ba599d4bd7a inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#adbbf3aa5307da62ab8224ba599d4bd7a">~ReferencedObject</a> ()</td></tr>
 <tr class="separator:adbbf3aa5307da62ab8224ba599d4bd7a inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac517534e10e36c946aeefc6fe337777 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#aac517534e10e36c946aeefc6fe337777">ReferenceCount</a> () const</td></tr>
+<tr class="memitem:aac517534e10e36c946aeefc6fe337777 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#aac517534e10e36c946aeefc6fe337777">ReferenceCount</a> () const</td></tr>
 <tr class="separator:aac517534e10e36c946aeefc6fe337777 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa69ecb0f026bd741e2fa84c31d4ec332 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#aa69ecb0f026bd741e2fa84c31d4ec332">AddRef</a> (const <a class="el" href="classIpopt_1_1Referencer.html">Referencer</a> *referencer) const</td></tr>
 <tr class="separator:aa69ecb0f026bd741e2fa84c31d4ec332 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -217,50 +217,50 @@ Private Member Functions</h2></td></tr>
 <tr class="memdesc:afccea9cf557bcf75fdd7fa972d21522e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default Assignment Operator.  <a href="classIpopt_1_1IterativeWsmpSolverInterface.html#afccea9cf557bcf75fdd7fa972d21522e">More...</a><br /></td></tr>
 <tr class="separator:afccea9cf557bcf75fdd7fa972d21522e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Internal functions</div></td></tr>
-<tr class="memitem:a0635d0fbc555e412445f2484a4cad0c4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#a0635d0fbc555e412445f2484a4cad0c4">SymbolicFactorization</a> (const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *ia, const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *ja)</td></tr>
+<tr class="memitem:a0635d0fbc555e412445f2484a4cad0c4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#a0635d0fbc555e412445f2484a4cad0c4">SymbolicFactorization</a> (const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *ia, const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *ja)</td></tr>
 <tr class="memdesc:a0635d0fbc555e412445f2484a4cad0c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call Wsmp to do the analysis phase.  <a href="classIpopt_1_1IterativeWsmpSolverInterface.html#a0635d0fbc555e412445f2484a4cad0c4">More...</a><br /></td></tr>
 <tr class="separator:a0635d0fbc555e412445f2484a4cad0c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0784ae4efa57632ffcb40c6ac2c4a720"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#a0784ae4efa57632ffcb40c6ac2c4a720">InternalSymFact</a> (const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *ia, const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *ja)</td></tr>
+<tr class="memitem:a0784ae4efa57632ffcb40c6ac2c4a720"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#a0784ae4efa57632ffcb40c6ac2c4a720">InternalSymFact</a> (const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *ia, const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *ja)</td></tr>
 <tr class="memdesc:a0784ae4efa57632ffcb40c6ac2c4a720"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call Wsmp to really do the analysis phase.  <a href="classIpopt_1_1IterativeWsmpSolverInterface.html#a0784ae4efa57632ffcb40c6ac2c4a720">More...</a><br /></td></tr>
 <tr class="separator:a0784ae4efa57632ffcb40c6ac2c4a720"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aacfab835b4f71cfe456ca79ad4ffe248"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#aacfab835b4f71cfe456ca79ad4ffe248">Factorization</a> (const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *ia, const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *ja, bool check_NegEVals, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> numberOfNegEVals)</td></tr>
+<tr class="memitem:aacfab835b4f71cfe456ca79ad4ffe248"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#aacfab835b4f71cfe456ca79ad4ffe248">Factorization</a> (const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *ia, const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *ja, bool check_NegEVals, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> numberOfNegEVals)</td></tr>
 <tr class="memdesc:aacfab835b4f71cfe456ca79ad4ffe248"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call Wsmp to factorize the <a class="el" href="classIpopt_1_1Matrix.html" title="Matrix Base Class.">Matrix</a>.  <a href="classIpopt_1_1IterativeWsmpSolverInterface.html#aacfab835b4f71cfe456ca79ad4ffe248">More...</a><br /></td></tr>
 <tr class="separator:aacfab835b4f71cfe456ca79ad4ffe248"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3c2743b093fb96b4c017c2db3fe7fb8b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#a3c2743b093fb96b4c017c2db3fe7fb8b">Solve</a> (const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *ia, const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *ja, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> nrhs, double *rhs_vals)</td></tr>
+<tr class="memitem:a3c2743b093fb96b4c017c2db3fe7fb8b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#a3c2743b093fb96b4c017c2db3fe7fb8b">Solve</a> (const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *ia, const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *ja, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> nrhs, double *rhs_vals)</td></tr>
 <tr class="memdesc:a3c2743b093fb96b4c017c2db3fe7fb8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call Wsmpx to do the Solve.  <a href="classIpopt_1_1IterativeWsmpSolverInterface.html#a3c2743b093fb96b4c017c2db3fe7fb8b">More...</a><br /></td></tr>
 <tr class="separator:a3c2743b093fb96b4c017c2db3fe7fb8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a3452b4742a4ec9f6db7b72e74d166ca2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#a3452b4742a4ec9f6db7b72e74d166ca2">matrix_file_number_</a></td></tr>
+<tr class="memitem:a3452b4742a4ec9f6db7b72e74d166ca2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#a3452b4742a4ec9f6db7b72e74d166ca2">matrix_file_number_</a></td></tr>
 <tr class="memdesc:a3452b4742a4ec9f6db7b72e74d166ca2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Counter for matrix file numbers.  <a href="classIpopt_1_1IterativeWsmpSolverInterface.html#a3452b4742a4ec9f6db7b72e74d166ca2">More...</a><br /></td></tr>
 <tr class="separator:a3452b4742a4ec9f6db7b72e74d166ca2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Information about the matrix</div></td></tr>
-<tr class="memitem:aff897ba2f2600b219673dd5223d77457"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#aff897ba2f2600b219673dd5223d77457">dim_</a></td></tr>
+<tr class="memitem:aff897ba2f2600b219673dd5223d77457"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#aff897ba2f2600b219673dd5223d77457">dim_</a></td></tr>
 <tr class="memdesc:aff897ba2f2600b219673dd5223d77457"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of rows and columns of the matrix.  <a href="classIpopt_1_1IterativeWsmpSolverInterface.html#aff897ba2f2600b219673dd5223d77457">More...</a><br /></td></tr>
 <tr class="separator:aff897ba2f2600b219673dd5223d77457"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a002a8eb8e7587ad6a4cd96256a10573d"><td class="memItemLeft" align="right" valign="top">double *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#a002a8eb8e7587ad6a4cd96256a10573d">a_</a></td></tr>
 <tr class="memdesc:a002a8eb8e7587ad6a4cd96256a10573d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array for storing the values of the matrix.  <a href="classIpopt_1_1IterativeWsmpSolverInterface.html#a002a8eb8e7587ad6a4cd96256a10573d">More...</a><br /></td></tr>
 <tr class="separator:a002a8eb8e7587ad6a4cd96256a10573d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Solver specific options</div></td></tr>
-<tr class="memitem:a68898430f902aa3aa82ecc636101d72c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#a68898430f902aa3aa82ecc636101d72c">wsmp_num_threads_</a></td></tr>
+<tr class="memitem:a68898430f902aa3aa82ecc636101d72c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#a68898430f902aa3aa82ecc636101d72c">wsmp_num_threads_</a></td></tr>
 <tr class="memdesc:a68898430f902aa3aa82ecc636101d72c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Option that controls the matching strategy.  <a href="classIpopt_1_1IterativeWsmpSolverInterface.html#a68898430f902aa3aa82ecc636101d72c">More...</a><br /></td></tr>
 <tr class="separator:a68898430f902aa3aa82ecc636101d72c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aea4948d9029928448c4967f5a85e834c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#aea4948d9029928448c4967f5a85e834c">wsmp_pivtol_</a></td></tr>
+<tr class="memitem:aea4948d9029928448c4967f5a85e834c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#aea4948d9029928448c4967f5a85e834c">wsmp_pivtol_</a></td></tr>
 <tr class="memdesc:aea4948d9029928448c4967f5a85e834c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pivot tolerance.  <a href="classIpopt_1_1IterativeWsmpSolverInterface.html#aea4948d9029928448c4967f5a85e834c">More...</a><br /></td></tr>
 <tr class="separator:aea4948d9029928448c4967f5a85e834c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1654bd92e766374c02bd4c2673f0ea69"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#a1654bd92e766374c02bd4c2673f0ea69">wsmp_pivtolmax_</a></td></tr>
+<tr class="memitem:a1654bd92e766374c02bd4c2673f0ea69"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#a1654bd92e766374c02bd4c2673f0ea69">wsmp_pivtolmax_</a></td></tr>
 <tr class="memdesc:a1654bd92e766374c02bd4c2673f0ea69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximal pivot tolerance.  <a href="classIpopt_1_1IterativeWsmpSolverInterface.html#a1654bd92e766374c02bd4c2673f0ea69">More...</a><br /></td></tr>
 <tr class="separator:a1654bd92e766374c02bd4c2673f0ea69"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a762b49ff8ce140055b31368be15b53da"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#a762b49ff8ce140055b31368be15b53da">wsmp_scaling_</a></td></tr>
+<tr class="memitem:a762b49ff8ce140055b31368be15b53da"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#a762b49ff8ce140055b31368be15b53da">wsmp_scaling_</a></td></tr>
 <tr class="memdesc:a762b49ff8ce140055b31368be15b53da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicating which of WSMP's scaling methods should be used.  <a href="classIpopt_1_1IterativeWsmpSolverInterface.html#a762b49ff8ce140055b31368be15b53da">More...</a><br /></td></tr>
 <tr class="separator:a762b49ff8ce140055b31368be15b53da"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5ab563210a2f4a0e727c099d60ebdc34"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#a5ab563210a2f4a0e727c099d60ebdc34">wsmp_write_matrix_iteration_</a></td></tr>
+<tr class="memitem:a5ab563210a2f4a0e727c099d60ebdc34"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#a5ab563210a2f4a0e727c099d60ebdc34">wsmp_write_matrix_iteration_</a></td></tr>
 <tr class="memdesc:a5ab563210a2f4a0e727c099d60ebdc34"><td class="mdescLeft">&#160;</td><td class="mdescRight">iteration number in which matrices are to be written out  <a href="classIpopt_1_1IterativeWsmpSolverInterface.html#a5ab563210a2f4a0e727c099d60ebdc34">More...</a><br /></td></tr>
 <tr class="separator:a5ab563210a2f4a0e727c099d60ebdc34"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac52b8d79c6f82a7d4c5cc5e448fd11a7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#ac52b8d79c6f82a7d4c5cc5e448fd11a7">wsmp_inexact_droptol_</a></td></tr>
+<tr class="memitem:ac52b8d79c6f82a7d4c5cc5e448fd11a7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#ac52b8d79c6f82a7d4c5cc5e448fd11a7">wsmp_inexact_droptol_</a></td></tr>
 <tr class="separator:ac52b8d79c6f82a7d4c5cc5e448fd11a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad823f33cc2faeba3e7b95ba923252f13"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#ad823f33cc2faeba3e7b95ba923252f13">wsmp_inexact_fillin_limit_</a></td></tr>
+<tr class="memitem:ad823f33cc2faeba3e7b95ba923252f13"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#ad823f33cc2faeba3e7b95ba923252f13">wsmp_inexact_fillin_limit_</a></td></tr>
 <tr class="separator:ad823f33cc2faeba3e7b95ba923252f13"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Initialization flags</div></td></tr>
 <tr class="memitem:a170ce8487655c2185a0debec27d171ba"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#a170ce8487655c2185a0debec27d171ba">initialized_</a></td></tr>
@@ -273,9 +273,9 @@ Private Attributes</h2></td></tr>
 <tr class="memdesc:a6111c75e4141771944a6317d8e65e711"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag indicating whether symbolic factorization and order has already been performed.  <a href="classIpopt_1_1IterativeWsmpSolverInterface.html#a6111c75e4141771944a6317d8e65e711">More...</a><br /></td></tr>
 <tr class="separator:a6111c75e4141771944a6317d8e65e711"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Solver specific information</div></td></tr>
-<tr class="memitem:a789c2c280300fa611214685c1347980b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="IpTypes_8hpp.html#ab1366b159c9a5e7f01e86923f6b2dd65">ipfint</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#a789c2c280300fa611214685c1347980b">IPARM_</a></td></tr>
-<tr class="memdesc:a789c2c280300fa611214685c1347980b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Integer parameter array for WISMP.  <a href="classIpopt_1_1IterativeWsmpSolverInterface.html#a789c2c280300fa611214685c1347980b">More...</a><br /></td></tr>
-<tr class="separator:a789c2c280300fa611214685c1347980b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a444879d68e90f950c07b662108bb8ea7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#a444879d68e90f950c07b662108bb8ea7">IPARM_</a></td></tr>
+<tr class="memdesc:a444879d68e90f950c07b662108bb8ea7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Integer parameter array for WISMP.  <a href="classIpopt_1_1IterativeWsmpSolverInterface.html#a444879d68e90f950c07b662108bb8ea7">More...</a><br /></td></tr>
+<tr class="separator:a444879d68e90f950c07b662108bb8ea7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7fc4811f0a45111b2aec13f3afc61cd0"><td class="memItemLeft" align="right" valign="top">double *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#a7fc4811f0a45111b2aec13f3afc61cd0">DPARM_</a></td></tr>
 <tr class="memdesc:a7fc4811f0a45111b2aec13f3afc61cd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Double precision parameter array for WISMP.  <a href="classIpopt_1_1IterativeWsmpSolverInterface.html#a7fc4811f0a45111b2aec13f3afc61cd0">More...</a><br /></td></tr>
 <tr class="separator:a7fc4811f0a45111b2aec13f3afc61cd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -309,7 +309,7 @@ Additional Inherited Members</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Interface to the linear solver WISMP, derived from <a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html" title="Base class for interfaces to symmetric indefinite linear solvers for sparse matrices.">SparseSymLinearSolverInterface</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html#l00019">19</a> of file <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html">IpIterativeWsmpSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html#l00020">20</a> of file <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html">IpIterativeWsmpSolverInterface.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a7ee14060f26f5f956bee57f1d5cef6c9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7ee14060f26f5f956bee57f1d5cef6c9">&#9670;&nbsp;</a></span>IterativeWsmpSolverInterface() <span class="overload">[1/2]</span></h2>
@@ -438,25 +438,25 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">virtual <a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a> Ipopt::IterativeWsmpSolverInterface::InitializeStructure </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>dim</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>nonzeros</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>ia</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>ja</em>&#160;</td>
         </tr>
         <tr>
@@ -505,7 +505,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Method returning an internal array into which the nonzero elements (in the same order as ja) will be stored by the calling routine before a call to MultiSolve with a new_matrix=true (or after a return of MultiSolve with SYMSOLV_CALL_AGAIN). </p>
 <p>The returned array must have space for at least nonzero elements. </p>
 
-<p>Implements <a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html#a63e20915d52fe30d5340472e79d19f5b">Ipopt::SparseSymLinearSolverInterface</a>.</p>
+<p>Implements <a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html#a04d12ba6e29e4b945e112b574cab8e09">Ipopt::SparseSymLinearSolverInterface</a>.</p>
 
 </div>
 </div>
@@ -527,19 +527,19 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>ia</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>ja</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>nrhs</em>, </td>
         </tr>
         <tr>
@@ -557,7 +557,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>numberOfNegEVals</em>&#160;</td>
         </tr>
         <tr>
@@ -579,7 +579,7 @@ Additional Inherited Members</h2></td></tr>
 <p>The number of right-hand sides is given by nrhs, the values of the right-hand sides are given in rhs_vals (one full right-hand side stored immediately after the other), and solutions are to be returned in the same array.</p>
 <p>check_NegEVals will not be chosen true, if <a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#a69a4546449e25a31cc6d877d78114889" title="Query whether inertia is computed by linear solver.">ProvidesInertia()</a> returns false. </p>
 
-<p>Implements <a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html#aaa533d84b06d8bf76a0a4bc6b0b8dba3">Ipopt::SparseSymLinearSolverInterface</a>.</p>
+<p>Implements <a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html#abb894fd70f83310a1c39ab7242efdf2a">Ipopt::SparseSymLinearSolverInterface</a>.</p>
 
 </div>
 </div>
@@ -593,7 +593,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::IterativeWsmpSolverInterface::NumberOfNegEVals </td>
+          <td class="memname">virtual <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::IterativeWsmpSolverInterface::NumberOfNegEVals </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -673,7 +673,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html#a19b3c3b0daec34ff3c44e9d79f3b3b5d">Ipopt::SparseSymLinearSolverInterface</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html#l00064">64</a> of file <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html">IpIterativeWsmpSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html#l00065">65</a> of file <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html">IpIterativeWsmpSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -704,7 +704,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classIpopt_1_1SparseSymLinearSolverInterface.html#acdaeb282c301a02371ec206cb0c8277a">Ipopt::SparseSymLinearSolverInterface</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html#l00069">69</a> of file <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html">IpIterativeWsmpSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html#l00070">70</a> of file <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html">IpIterativeWsmpSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -774,13 +774,13 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a> Ipopt::IterativeWsmpSolverInterface::SymbolicFactorization </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>ia</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>ja</em>&#160;</td>
         </tr>
         <tr>
@@ -812,13 +812,13 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a> Ipopt::IterativeWsmpSolverInterface::InternalSymFact </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>ia</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>ja</em>&#160;</td>
         </tr>
         <tr>
@@ -850,13 +850,13 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a> Ipopt::IterativeWsmpSolverInterface::Factorization </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>ia</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>ja</em>, </td>
         </tr>
         <tr>
@@ -868,7 +868,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>numberOfNegEVals</em>&#160;</td>
         </tr>
         <tr>
@@ -900,19 +900,19 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="namespaceIpopt.html#a4cd69d3019b82e511236cb759033224b">ESymSolverStatus</a> Ipopt::IterativeWsmpSolverInterface::Solve </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>ia</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>ja</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>nrhs</em>, </td>
         </tr>
         <tr>
@@ -949,7 +949,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::IterativeWsmpSolverInterface::dim_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::IterativeWsmpSolverInterface::dim_</td>
         </tr>
       </table>
   </td>
@@ -961,7 +961,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Number of rows and columns of the matrix. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html#l00103">103</a> of file <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html">IpIterativeWsmpSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html#l00104">104</a> of file <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html">IpIterativeWsmpSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -987,7 +987,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Array for storing the values of the matrix. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html#l00106">106</a> of file <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html">IpIterativeWsmpSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html#l00107">107</a> of file <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html">IpIterativeWsmpSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1001,7 +1001,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::IterativeWsmpSolverInterface::wsmp_num_threads_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::IterativeWsmpSolverInterface::wsmp_num_threads_</td>
         </tr>
       </table>
   </td>
@@ -1013,7 +1013,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Option that controls the matching strategy. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html#l00112">112</a> of file <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html">IpIterativeWsmpSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html#l00113">113</a> of file <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html">IpIterativeWsmpSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1027,7 +1027,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> Ipopt::IterativeWsmpSolverInterface::wsmp_pivtol_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> Ipopt::IterativeWsmpSolverInterface::wsmp_pivtol_</td>
         </tr>
       </table>
   </td>
@@ -1039,7 +1039,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Pivot tolerance. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html#l00114">114</a> of file <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html">IpIterativeWsmpSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html#l00115">115</a> of file <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html">IpIterativeWsmpSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1053,7 +1053,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> Ipopt::IterativeWsmpSolverInterface::wsmp_pivtolmax_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> Ipopt::IterativeWsmpSolverInterface::wsmp_pivtolmax_</td>
         </tr>
       </table>
   </td>
@@ -1065,7 +1065,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Maximal pivot tolerance. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html#l00116">116</a> of file <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html">IpIterativeWsmpSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html#l00117">117</a> of file <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html">IpIterativeWsmpSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1079,7 +1079,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::IterativeWsmpSolverInterface::wsmp_scaling_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::IterativeWsmpSolverInterface::wsmp_scaling_</td>
         </tr>
       </table>
   </td>
@@ -1091,7 +1091,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Indicating which of WSMP's scaling methods should be used. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html#l00118">118</a> of file <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html">IpIterativeWsmpSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html#l00119">119</a> of file <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html">IpIterativeWsmpSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1105,7 +1105,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::IterativeWsmpSolverInterface::wsmp_write_matrix_iteration_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::IterativeWsmpSolverInterface::wsmp_write_matrix_iteration_</td>
         </tr>
       </table>
   </td>
@@ -1117,7 +1117,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>iteration number in which matrices are to be written out </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html#l00120">120</a> of file <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html">IpIterativeWsmpSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html#l00121">121</a> of file <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html">IpIterativeWsmpSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1131,31 +1131,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> Ipopt::IterativeWsmpSolverInterface::wsmp_inexact_droptol_</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html#l00121">121</a> of file <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html">IpIterativeWsmpSolverInterface.hpp</a>.</p>
-
-</div>
-</div>
-<a id="ad823f33cc2faeba3e7b95ba923252f13"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad823f33cc2faeba3e7b95ba923252f13">&#9670;&nbsp;</a></span>wsmp_inexact_fillin_limit_</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> Ipopt::IterativeWsmpSolverInterface::wsmp_inexact_fillin_limit_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> Ipopt::IterativeWsmpSolverInterface::wsmp_inexact_droptol_</td>
         </tr>
       </table>
   </td>
@@ -1169,6 +1145,30 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="ad823f33cc2faeba3e7b95ba923252f13"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad823f33cc2faeba3e7b95ba923252f13">&#9670;&nbsp;</a></span>wsmp_inexact_fillin_limit_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> Ipopt::IterativeWsmpSolverInterface::wsmp_inexact_fillin_limit_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html#l00123">123</a> of file <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html">IpIterativeWsmpSolverInterface.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a3452b4742a4ec9f6db7b72e74d166ca2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3452b4742a4ec9f6db7b72e74d166ca2">&#9670;&nbsp;</a></span>matrix_file_number_</h2>
 
@@ -1179,7 +1179,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::IterativeWsmpSolverInterface::matrix_file_number_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::IterativeWsmpSolverInterface::matrix_file_number_</td>
         </tr>
       </table>
   </td>
@@ -1191,7 +1191,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Counter for matrix file numbers. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html#l00126">126</a> of file <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html">IpIterativeWsmpSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html#l00127">127</a> of file <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html">IpIterativeWsmpSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1218,7 +1218,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Flag indicating if internal data is initialized. </p>
 <p>For initialization, this object needs to have seen a matrix </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html#l00141">141</a> of file <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html">IpIterativeWsmpSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html#l00142">142</a> of file <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html">IpIterativeWsmpSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1244,7 +1244,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Flag indicating if the matrix has to be refactorized because the pivot tolerance has been changed. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html#l00145">145</a> of file <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html">IpIterativeWsmpSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html#l00146">146</a> of file <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html">IpIterativeWsmpSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1270,12 +1270,12 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Flag indicating whether symbolic factorization and order has already been performed. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html#l00149">149</a> of file <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html">IpIterativeWsmpSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html#l00150">150</a> of file <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html">IpIterativeWsmpSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a789c2c280300fa611214685c1347980b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a789c2c280300fa611214685c1347980b">&#9670;&nbsp;</a></span>IPARM_</h2>
+<a id="a444879d68e90f950c07b662108bb8ea7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a444879d68e90f950c07b662108bb8ea7">&#9670;&nbsp;</a></span>IPARM_</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1284,7 +1284,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="IpTypes_8hpp.html#ab1366b159c9a5e7f01e86923f6b2dd65">ipfint</a>* Ipopt::IterativeWsmpSolverInterface::IPARM_</td>
+          <td class="memname"><a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a>* Ipopt::IterativeWsmpSolverInterface::IPARM_</td>
         </tr>
       </table>
   </td>
@@ -1296,7 +1296,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Integer parameter array for WISMP. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html#l00155">155</a> of file <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html">IpIterativeWsmpSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html#l00156">156</a> of file <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html">IpIterativeWsmpSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1322,7 +1322,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Double precision parameter array for WISMP. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html#l00157">157</a> of file <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html">IpIterativeWsmpSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html#l00158">158</a> of file <a class="el" href="IpIterativeWsmpSolverInterface_8hpp_source.html">IpIterativeWsmpSolverInterface.hpp</a>.</p>
 
 </div>
 </div>

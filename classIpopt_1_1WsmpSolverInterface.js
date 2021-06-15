@@ -12,6 +12,7 @@ var classIpopt_1_1WsmpSolverInterface =
     [ "ProvidesInertia", "classIpopt_1_1WsmpSolverInterface.html#a3e0f9252645b3e65ff13d43b05f1d9fd", null ],
     [ "MatrixFormat", "classIpopt_1_1WsmpSolverInterface.html#a8f91b207d34ce04e7faf89213b656dc2", null ],
     [ "RegisterOptions", "classIpopt_1_1WsmpSolverInterface.html#aeeb760e84110b8415d9c2bc7940efd2c", null ],
+    [ "GetVersion", "classIpopt_1_1WsmpSolverInterface.html#a2302b27831fa215146df733968e5eeb0", null ],
     [ "ProvidesDegeneracyDetection", "classIpopt_1_1WsmpSolverInterface.html#a2a62abd2a635650fcbc0ce24f9780616", null ],
     [ "DetermineDependentRows", "classIpopt_1_1WsmpSolverInterface.html#a3f653e02fb93fcdd74145e5cdf045d25", null ],
     [ "operator=", "classIpopt_1_1WsmpSolverInterface.html#a07d8cab1d7f75dfffb493d0a3e19be2e", null ],
@@ -37,9 +38,9 @@ var classIpopt_1_1WsmpSolverInterface =
     [ "pivtol_changed_", "classIpopt_1_1WsmpSolverInterface.html#a8bbda048aad2c351fc8f6f208a845795", null ],
     [ "have_symbolic_factorization_", "classIpopt_1_1WsmpSolverInterface.html#a09f563e09ab698eab39890245b307a35", null ],
     [ "factorizations_since_recomputed_ordering_", "classIpopt_1_1WsmpSolverInterface.html#a7261a55c500b8a25d8cd233623412add", null ],
-    [ "IPARM_", "classIpopt_1_1WsmpSolverInterface.html#a0b425285831aaffea9881424c9ec97ad", null ],
+    [ "IPARM_", "classIpopt_1_1WsmpSolverInterface.html#ab1f06ae436a167e11fdfac0c0dc58f7d", null ],
     [ "DPARM_", "classIpopt_1_1WsmpSolverInterface.html#acb52b758540cc39196ed2ba9ad276e6e", null ],
-    [ "PERM_", "classIpopt_1_1WsmpSolverInterface.html#a52a59f6bf583532865691640e7f0048c", null ],
-    [ "INVP_", "classIpopt_1_1WsmpSolverInterface.html#a37bf49682c637da10a6a75295b960dd3", null ],
-    [ "MRP_", "classIpopt_1_1WsmpSolverInterface.html#a31deeb7d0052023c71213bcc5316629f", null ]
+    [ "PERM_", "classIpopt_1_1WsmpSolverInterface.html#afb20310412d6deff582b62ecfb84e120", null ],
+    [ "INVP_", "classIpopt_1_1WsmpSolverInterface.html#a4b23f58fd68a0199c085433781f8ee0d", null ],
+    [ "MRP_", "classIpopt_1_1WsmpSolverInterface.html#a77184cb4c5e3c8c627fa35982090f0ea", null ]
 ];

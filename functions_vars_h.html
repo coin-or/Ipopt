@@ -1,5 +1,5 @@
-<!-- HTML header for doxygen 1.8.13-->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- HTML header for doxygen 1.8.18-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.13.4</span-->
+   &#160;<!--span id="projectnumber">3.14.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -107,7 +107,7 @@ $(document).ready(function(){initNavTree('functions_vars_h.html',''); initResiza
 : <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#a10014c79cc57e3cf7dcb3d244e4f8a1f">Ipopt::OrigIpoptNLP</a>
 </li>
 <li>h_eval_time_
-: <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#a0604aa19567682c3b2dd03e3d324ba73">Ipopt::OrigIpoptNLP</a>
+: <a class="el" href="classIpopt_1_1TimingStatistics.html#a0c5c08102a1fb10ff00e4d6250220291">Ipopt::TimingStatistics</a>
 </li>
 <li>h_evals_
 : <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#a0189e15f03d117c18eecf8fe91bd7a5b">Ipopt::OrigIpoptNLP</a>
@@ -152,6 +152,7 @@ $(document).ready(function(){initNavTree('functions_vars_h.html',''); initResiza
 : <a class="el" href="classIpopt_1_1IterativePardisoSolverInterface.html#a2a9055b3fbb97b1700399f5df75b09f7">Ipopt::IterativePardisoSolverInterface</a>
 , <a class="el" href="classIpopt_1_1IterativeWsmpSolverInterface.html#a6111c75e4141771944a6317d8e65e711">Ipopt::IterativeWsmpSolverInterface</a>
 , <a class="el" href="classIpopt_1_1MumpsSolverInterface.html#a5b9e29dd179f938698b232d91f078f86">Ipopt::MumpsSolverInterface</a>
+, <a class="el" href="classIpopt_1_1PardisoMKLSolverInterface.html#a675740c64210daba0fedcf59188009cf">Ipopt::PardisoMKLSolverInterface</a>
 , <a class="el" href="classIpopt_1_1PardisoSolverInterface.html#a3d3d716e1a8d4dc00f2d0fbc9e2dc9b1">Ipopt::PardisoSolverInterface</a>
 , <a class="el" href="classIpopt_1_1WsmpSolverInterface.html#a09f563e09ab698eab39890245b307a35">Ipopt::WsmpSolverInterface</a>
 </li>
@@ -159,8 +160,7 @@ $(document).ready(function(){initNavTree('functions_vars_h.html',''); initResiza
 : <a class="el" href="classIpopt_1_1ReducedHessianCalculator.html#aa41611a6b209d281a7463ee739a7f10a">Ipopt::ReducedHessianCalculator</a>
 </li>
 <li>hess_degenerate_
-: <a class="el" href="classIpopt_1_1CGPerturbationHandler.html#a76e037a830bdc14ae79f23bb84bcf747">Ipopt::CGPerturbationHandler</a>
-, <a class="el" href="classIpopt_1_1PDPerturbationHandler.html#a21db9ef78f1ba2e41fce07875f6b8576">Ipopt::PDPerturbationHandler</a>
+: <a class="el" href="classIpopt_1_1PDPerturbationHandler.html#a21db9ef78f1ba2e41fce07875f6b8576">Ipopt::PDPerturbationHandler</a>
 </li>
 <li>Hess_lagrangian_space_
 : <a class="el" href="classIpopt_1_1TNLPAdapter.html#ab8a576b0db9a2f3debd13ea99416e3ec">Ipopt::TNLPAdapter</a>
@@ -193,6 +193,16 @@ $(document).ready(function(){initNavTree('functions_vars_h.html',''); initResiza
 </li>
 <li>honor_original_bounds_
 : <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#a2c48581038f40ed93abd64342fd21837">Ipopt::OrigIpoptNLP</a>
+</li>
+<li>hslloader
+: <a class="el" href="classIpopt_1_1AlgorithmBuilder.html#a85319d417ac6fd8e8ced7bf1a7f32425">Ipopt::AlgorithmBuilder</a>
+, <a class="el" href="classIpopt_1_1EquilibrationScaling.html#aec8811f64b0ca4b93b0b696c2f7d80f6">Ipopt::EquilibrationScaling</a>
+, <a class="el" href="classIpopt_1_1Ma27TSolverInterface.html#a02a2d1643a7695b045946048dbf3f4ef">Ipopt::Ma27TSolverInterface</a>
+, <a class="el" href="classIpopt_1_1Ma57TSolverInterface.html#ac19a85ea25be26f389a9997884feaa84">Ipopt::Ma57TSolverInterface</a>
+, <a class="el" href="classIpopt_1_1Ma77SolverInterface.html#ab99ff2dfcf7747be141970dd7792a820">Ipopt::Ma77SolverInterface</a>
+, <a class="el" href="classIpopt_1_1Ma86SolverInterface.html#af43d073757b206c19af0e317199d07c1">Ipopt::Ma86SolverInterface</a>
+, <a class="el" href="classIpopt_1_1Ma97SolverInterface.html#aebfda7134e02148e7809ca24912131cf">Ipopt::Ma97SolverInterface</a>
+, <a class="el" href="classIpopt_1_1Mc19TSymScalingMethod.html#a695a5a82423ff6930c1d8d8402626add">Ipopt::Mc19TSymScalingMethod</a>
 </li>
 </ul>
 </div><!-- contents -->

@@ -1,5 +1,5 @@
-<!-- HTML header for doxygen 1.8.13-->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- HTML header for doxygen 1.8.18-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.13.4</span-->
+   &#160;<!--span id="projectnumber">3.14.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -109,7 +109,7 @@ $(document).ready(function(){initNavTree('classIpopt_1_1TNLP.html',''); initResi
 </div><!--header-->
 <div class="contents">
 
-<p>Base class for all <a class="el" href="classIpopt_1_1NLP.html">NLP</a>'s that use standard triplet matrix form and dense vectors.  
+<p>Base class for all <a class="el" href="classIpopt_1_1NLP.html" title="Traditional NLP.">NLP</a>'s that use standard triplet matrix form and dense vectors.  
  <a href="classIpopt_1_1TNLP.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="IpTNLP_8hpp_source.html">IpTNLP.hpp</a>&gt;</code></p>
@@ -136,6 +136,16 @@ Public Types</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:ab443d2d4fbc045d7c542d32258aee507"><td class="mdescLeft">&#160;</td><td class="mdescRight">Linearity-types of variables and constraints.  <a href="classIpopt_1_1TNLP.html#ab443d2d4fbc045d7c542d32258aee507">More...</a><br /></td></tr>
 <tr class="separator:ab443d2d4fbc045d7c542d32258aee507"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af81cb3ab5772b440360cfcb48b620514"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#af81cb3ab5772b440360cfcb48b620514">IndexStyleEnum</a> { <a class="el" href="classIpopt_1_1TNLP.html#af81cb3ab5772b440360cfcb48b620514aa5f6a49547714db71eca0a1321f5f720">C_STYLE</a> = 0, 
+<a class="el" href="classIpopt_1_1TNLP.html#af81cb3ab5772b440360cfcb48b620514a238056a72c143c97ec2b9f20eb09b42b">FORTRAN_STYLE</a> = 1
+ }</td></tr>
+<tr class="separator:af81cb3ab5772b440360cfcb48b620514"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac30bc524e7fb8ff836bd6657c8fce004"><td class="memItemLeft" align="right" valign="top">typedef std::map&lt; std::string, std::vector&lt; std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#ac30bc524e7fb8ff836bd6657c8fce004">StringMetaDataMapType</a></td></tr>
+<tr class="separator:ac30bc524e7fb8ff836bd6657c8fce004"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a959b19a2cc071bd127c40aea5f1a7ae7"><td class="memItemLeft" align="right" valign="top">typedef std::map&lt; std::string, std::vector&lt; <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#a959b19a2cc071bd127c40aea5f1a7ae7">IntegerMetaDataMapType</a></td></tr>
+<tr class="separator:a959b19a2cc071bd127c40aea5f1a7ae7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3361681015593a2f7433036d761ae75"><td class="memItemLeft" align="right" valign="top">typedef std::map&lt; std::string, std::vector&lt; <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#aa3361681015593a2f7433036d761ae75">NumericMetaDataMapType</a></td></tr>
+<tr class="separator:aa3361681015593a2f7433036d761ae75"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -147,32 +157,78 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a060802897b4bb591bfb688cbadee4749"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#a060802897b4bb591bfb688cbadee4749">~TNLP</a> ()</td></tr>
 <tr class="memdesc:a060802897b4bb591bfb688cbadee4749"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default destructor.  <a href="classIpopt_1_1TNLP.html#a060802897b4bb591bfb688cbadee4749">More...</a><br /></td></tr>
 <tr class="separator:a060802897b4bb591bfb688cbadee4749"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr><td colspan="2"><div class="groupHeader">Solution Methods</div></td></tr>
-<tr class="memitem:a3debb40a1dc203d3d53a93ccc7ea928d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#a3debb40a1dc203d3d53a93ccc7ea928d">finalize_solution</a> (<a class="el" href="namespaceIpopt.html#a53a5dc5f64f568252ba7bb7385e7f834">SolverReturn</a> status, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> n, const <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *x, const <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *z_L, const <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *z_U, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> m, const <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *g, const <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *lambda, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> obj_value, const <a class="el" href="classIpopt_1_1IpoptData.html">IpoptData</a> *ip_data, <a class="el" href="classIpopt_1_1IpoptCalculatedQuantities.html">IpoptCalculatedQuantities</a> *ip_cq)=0</td></tr>
-<tr class="memdesc:a3debb40a1dc203d3d53a93ccc7ea928d"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method is called when the algorithm has finished (successfully or not) so the <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> can digest the outcome, e.g., store/write the solution, if any.  <a href="classIpopt_1_1TNLP.html#a3debb40a1dc203d3d53a93ccc7ea928d">More...</a><br /></td></tr>
-<tr class="separator:a3debb40a1dc203d3d53a93ccc7ea928d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a729711b5af6b46e409a3bc34c832a9c5"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#a729711b5af6b46e409a3bc34c832a9c5">finalize_metadata</a> (<a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> n, const <a class="el" href="classIpopt_1_1TNLP.html#ac30bc524e7fb8ff836bd6657c8fce004">StringMetaDataMapType</a> &amp;var_string_md, const <a class="el" href="classIpopt_1_1TNLP.html#a959b19a2cc071bd127c40aea5f1a7ae7">IntegerMetaDataMapType</a> &amp;var_integer_md, const <a class="el" href="classIpopt_1_1TNLP.html#aa3361681015593a2f7433036d761ae75">NumericMetaDataMapType</a> &amp;var_numeric_md, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> m, const <a class="el" href="classIpopt_1_1TNLP.html#ac30bc524e7fb8ff836bd6657c8fce004">StringMetaDataMapType</a> &amp;con_string_md, const <a class="el" href="classIpopt_1_1TNLP.html#a959b19a2cc071bd127c40aea5f1a7ae7">IntegerMetaDataMapType</a> &amp;con_integer_md, const <a class="el" href="classIpopt_1_1TNLP.html#aa3361681015593a2f7433036d761ae75">NumericMetaDataMapType</a> &amp;con_numeric_md)</td></tr>
-<tr class="memdesc:a729711b5af6b46e409a3bc34c832a9c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method returns any metadata collected during the run of the algorithm.  <a href="classIpopt_1_1TNLP.html#a729711b5af6b46e409a3bc34c832a9c5">More...</a><br /></td></tr>
-<tr class="separator:a729711b5af6b46e409a3bc34c832a9c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2f962a4c43464adb7928771af84503d6"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#a2f962a4c43464adb7928771af84503d6">intermediate_callback</a> (<a class="el" href="IpReturnCodes__inc_8h.html#a5daff61568f9909c518fb61116260387">AlgorithmMode</a> mode, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> iter, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> obj_value, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> inf_pr, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> inf_du, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> mu, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> d_norm, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> regularization_size, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> alpha_du, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> alpha_pr, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> ls_trials, const <a class="el" href="classIpopt_1_1IpoptData.html">IpoptData</a> *ip_data, <a class="el" href="classIpopt_1_1IpoptCalculatedQuantities.html">IpoptCalculatedQuantities</a> *ip_cq)</td></tr>
-<tr class="memdesc:a2f962a4c43464adb7928771af84503d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Intermediate Callback method for the user.  <a href="classIpopt_1_1TNLP.html#a2f962a4c43464adb7928771af84503d6">More...</a><br /></td></tr>
-<tr class="separator:a2f962a4c43464adb7928771af84503d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Methods to gather information about the NLP</div></td></tr>
+<tr class="memitem:a5da5791365764706aeda02b78f7719b6"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#a5da5791365764706aeda02b78f7719b6">get_nlp_info</a> (<a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> &amp;n, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> &amp;m, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> &amp;nnz_jac_g, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> &amp;nnz_h_lag, <a class="el" href="classIpopt_1_1TNLP.html#af81cb3ab5772b440360cfcb48b620514">IndexStyleEnum</a> &amp;index_style)=0</td></tr>
+<tr class="memdesc:a5da5791365764706aeda02b78f7719b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method to request the initial information about the problem.  <a href="classIpopt_1_1TNLP.html#a5da5791365764706aeda02b78f7719b6">More...</a><br /></td></tr>
+<tr class="separator:a5da5791365764706aeda02b78f7719b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb231e0be2a935a9a683349429f6890e"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#adb231e0be2a935a9a683349429f6890e">get_var_con_metadata</a> (<a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> n, <a class="el" href="classIpopt_1_1TNLP.html#ac30bc524e7fb8ff836bd6657c8fce004">StringMetaDataMapType</a> &amp;var_string_md, <a class="el" href="classIpopt_1_1TNLP.html#a959b19a2cc071bd127c40aea5f1a7ae7">IntegerMetaDataMapType</a> &amp;var_integer_md, <a class="el" href="classIpopt_1_1TNLP.html#aa3361681015593a2f7433036d761ae75">NumericMetaDataMapType</a> &amp;var_numeric_md, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> m, <a class="el" href="classIpopt_1_1TNLP.html#ac30bc524e7fb8ff836bd6657c8fce004">StringMetaDataMapType</a> &amp;con_string_md, <a class="el" href="classIpopt_1_1TNLP.html#a959b19a2cc071bd127c40aea5f1a7ae7">IntegerMetaDataMapType</a> &amp;con_integer_md, <a class="el" href="classIpopt_1_1TNLP.html#aa3361681015593a2f7433036d761ae75">NumericMetaDataMapType</a> &amp;con_numeric_md)</td></tr>
+<tr class="memdesc:adb231e0be2a935a9a683349429f6890e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method to request meta data for the variables and the constraints.  <a href="classIpopt_1_1TNLP.html#adb231e0be2a935a9a683349429f6890e">More...</a><br /></td></tr>
+<tr class="separator:adb231e0be2a935a9a683349429f6890e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aafb65734cce3659c6fb496e136636e9e"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#aafb65734cce3659c6fb496e136636e9e">get_bounds_info</a> (<a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> n, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *x_l, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *x_u, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> m, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *g_l, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *g_u)=0</td></tr>
+<tr class="memdesc:aafb65734cce3659c6fb496e136636e9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method to request bounds on the variables and constraints.  <a href="classIpopt_1_1TNLP.html#aafb65734cce3659c6fb496e136636e9e">More...</a><br /></td></tr>
+<tr class="separator:aafb65734cce3659c6fb496e136636e9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e840dddefbe48a048d213bd02b39854"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#a3e840dddefbe48a048d213bd02b39854">get_scaling_parameters</a> (<a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> &amp;obj_scaling, bool &amp;use_x_scaling, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> n, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *x_scaling, bool &amp;use_g_scaling, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> m, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *g_scaling)</td></tr>
+<tr class="memdesc:a3e840dddefbe48a048d213bd02b39854"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method to request scaling parameters.  <a href="classIpopt_1_1TNLP.html#a3e840dddefbe48a048d213bd02b39854">More...</a><br /></td></tr>
+<tr class="separator:a3e840dddefbe48a048d213bd02b39854"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8edc60e43bf77aba5e8fd221ea94bf14"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#a8edc60e43bf77aba5e8fd221ea94bf14">get_variables_linearity</a> (<a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> n, <a class="el" href="classIpopt_1_1TNLP.html#ab443d2d4fbc045d7c542d32258aee507">LinearityType</a> *var_types)</td></tr>
+<tr class="memdesc:a8edc60e43bf77aba5e8fd221ea94bf14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method to request the variables linearity.  <a href="classIpopt_1_1TNLP.html#a8edc60e43bf77aba5e8fd221ea94bf14">More...</a><br /></td></tr>
+<tr class="separator:a8edc60e43bf77aba5e8fd221ea94bf14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46f061f2dbf1c1692b7822144b7c5536"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#a46f061f2dbf1c1692b7822144b7c5536">get_constraints_linearity</a> (<a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> m, <a class="el" href="classIpopt_1_1TNLP.html#ab443d2d4fbc045d7c542d32258aee507">LinearityType</a> *const_types)</td></tr>
+<tr class="memdesc:a46f061f2dbf1c1692b7822144b7c5536"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method to request the constraints linearity.  <a href="classIpopt_1_1TNLP.html#a46f061f2dbf1c1692b7822144b7c5536">More...</a><br /></td></tr>
+<tr class="separator:a46f061f2dbf1c1692b7822144b7c5536"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ae4075da9928e518780bba865698545"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#a0ae4075da9928e518780bba865698545">get_starting_point</a> (<a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> n, bool init_x, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *x, bool init_z, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *z_L, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *z_U, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> m, bool init_lambda, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *lambda)=0</td></tr>
+<tr class="memdesc:a0ae4075da9928e518780bba865698545"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method to request the starting point before iterating.  <a href="classIpopt_1_1TNLP.html#a0ae4075da9928e518780bba865698545">More...</a><br /></td></tr>
+<tr class="separator:a0ae4075da9928e518780bba865698545"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a273b8be28d2a0a805489cd8903aac1c6"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#a273b8be28d2a0a805489cd8903aac1c6">get_warm_start_iterate</a> (<a class="el" href="classIpopt_1_1IteratesVector.html">IteratesVector</a> &amp;warm_start_iterate)</td></tr>
+<tr class="memdesc:a273b8be28d2a0a805489cd8903aac1c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method to provide an Ipopt warm start iterate which is already in the form Ipopt requires it internally for warm starts.  <a href="classIpopt_1_1TNLP.html#a273b8be28d2a0a805489cd8903aac1c6">More...</a><br /></td></tr>
+<tr class="separator:a273b8be28d2a0a805489cd8903aac1c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a709c03900227bc573b046ce0705e6c84"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#a709c03900227bc573b046ce0705e6c84">eval_f</a> (<a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> n, const <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *x, bool new_x, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> &amp;obj_value)=0</td></tr>
+<tr class="memdesc:a709c03900227bc573b046ce0705e6c84"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method to request the value of the objective function.  <a href="classIpopt_1_1TNLP.html#a709c03900227bc573b046ce0705e6c84">More...</a><br /></td></tr>
+<tr class="separator:a709c03900227bc573b046ce0705e6c84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a52698f1861ffef271d5e317c0e168652"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#a52698f1861ffef271d5e317c0e168652">eval_grad_f</a> (<a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> n, const <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *x, bool new_x, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *grad_f)=0</td></tr>
+<tr class="memdesc:a52698f1861ffef271d5e317c0e168652"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method to request the gradient of the objective function.  <a href="classIpopt_1_1TNLP.html#a52698f1861ffef271d5e317c0e168652">More...</a><br /></td></tr>
+<tr class="separator:a52698f1861ffef271d5e317c0e168652"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afcfd8404b772dc4960f2d2db4e8bb382"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#afcfd8404b772dc4960f2d2db4e8bb382">eval_g</a> (<a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> n, const <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *x, bool new_x, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> m, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *g)=0</td></tr>
+<tr class="memdesc:afcfd8404b772dc4960f2d2db4e8bb382"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method to request the constraint values.  <a href="classIpopt_1_1TNLP.html#afcfd8404b772dc4960f2d2db4e8bb382">More...</a><br /></td></tr>
+<tr class="separator:afcfd8404b772dc4960f2d2db4e8bb382"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4162d052f69d4f9946a42feec012853"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#aa4162d052f69d4f9946a42feec012853">eval_jac_g</a> (<a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> n, const <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *x, bool new_x, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> m, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> nele_jac, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *iRow, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *jCol, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *values)=0</td></tr>
+<tr class="memdesc:aa4162d052f69d4f9946a42feec012853"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method to request either the sparsity structure or the values of the Jacobian of the constraints.  <a href="classIpopt_1_1TNLP.html#aa4162d052f69d4f9946a42feec012853">More...</a><br /></td></tr>
+<tr class="separator:aa4162d052f69d4f9946a42feec012853"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26b9145267e2574c53acc284fef1c354"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#a26b9145267e2574c53acc284fef1c354">eval_h</a> (<a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> n, const <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *x, bool new_x, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> obj_factor, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> m, const <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *lambda, bool new_lambda, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> nele_hess, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *iRow, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *jCol, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *values)</td></tr>
+<tr class="memdesc:a26b9145267e2574c53acc284fef1c354"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method to request either the sparsity structure or the values of the Hessian of the Lagrangian.  <a href="classIpopt_1_1TNLP.html#a26b9145267e2574c53acc284fef1c354">More...</a><br /></td></tr>
+<tr class="separator:a26b9145267e2574c53acc284fef1c354"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Methods for quasi-Newton approximation.</div></td></tr>
-<tr><td colspan="2"><div class="groupText"><p>If the second derivatives are approximated by <code>Ipopt</code>, it is better to do this only in the space of nonlinear variables.</p>
-<p>The following methods are call by <code>Ipopt</code> if the <a class="el" href="SPECIALS.html#QUASI_NEWTON">quasi-Newton approximation</a> is selected. </p>
+<tr><td colspan="2"><div class="groupText"><p>If the second derivatives are approximated by Ipopt, it is better to do this only in the space of nonlinear variables.</p>
+<p>The following methods are call by Ipopt if the <a class="el" href="SPECIALS.html#QUASI_NEWTON">quasi-Newton approximation</a> is selected. </p>
 </div></td></tr>
-<tr class="memitem:a015506564afc611060f4416dbb08aa4d"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#a015506564afc611060f4416dbb08aa4d">get_number_of_nonlinear_variables</a> ()</td></tr>
+<tr class="memitem:a015506564afc611060f4416dbb08aa4d"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#a015506564afc611060f4416dbb08aa4d">get_number_of_nonlinear_variables</a> ()</td></tr>
 <tr class="memdesc:a015506564afc611060f4416dbb08aa4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the number of variables that appear nonlinearly in the objective function or in at least one constraint function.  <a href="classIpopt_1_1TNLP.html#a015506564afc611060f4416dbb08aa4d">More...</a><br /></td></tr>
 <tr class="separator:a015506564afc611060f4416dbb08aa4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9bb5f16cdc2754d1667749268fb1308c"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#a9bb5f16cdc2754d1667749268fb1308c">get_list_of_nonlinear_variables</a> (<a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> num_nonlin_vars, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *pos_nonlin_vars)</td></tr>
+<tr class="memitem:a9bb5f16cdc2754d1667749268fb1308c"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#a9bb5f16cdc2754d1667749268fb1308c">get_list_of_nonlinear_variables</a> (<a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> num_nonlin_vars, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *pos_nonlin_vars)</td></tr>
 <tr class="memdesc:a9bb5f16cdc2754d1667749268fb1308c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the indices of all nonlinear variables.  <a href="classIpopt_1_1TNLP.html#a9bb5f16cdc2754d1667749268fb1308c">More...</a><br /></td></tr>
 <tr class="separator:a9bb5f16cdc2754d1667749268fb1308c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Solution Methods</div></td></tr>
+<tr class="memitem:a3debb40a1dc203d3d53a93ccc7ea928d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#a3debb40a1dc203d3d53a93ccc7ea928d">finalize_solution</a> (<a class="el" href="namespaceIpopt.html#a53a5dc5f64f568252ba7bb7385e7f834">SolverReturn</a> status, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> n, const <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *x, const <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *z_L, const <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *z_U, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> m, const <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *g, const <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *lambda, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> obj_value, const <a class="el" href="classIpopt_1_1IpoptData.html">IpoptData</a> *ip_data, <a class="el" href="classIpopt_1_1IpoptCalculatedQuantities.html">IpoptCalculatedQuantities</a> *ip_cq)=0</td></tr>
+<tr class="memdesc:a3debb40a1dc203d3d53a93ccc7ea928d"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method is called when the algorithm has finished (successfully or not) so the <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> can digest the outcome, e.g., store/write the solution, if any.  <a href="classIpopt_1_1TNLP.html#a3debb40a1dc203d3d53a93ccc7ea928d">More...</a><br /></td></tr>
+<tr class="separator:a3debb40a1dc203d3d53a93ccc7ea928d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a729711b5af6b46e409a3bc34c832a9c5"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#a729711b5af6b46e409a3bc34c832a9c5">finalize_metadata</a> (<a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> n, const <a class="el" href="classIpopt_1_1TNLP.html#ac30bc524e7fb8ff836bd6657c8fce004">StringMetaDataMapType</a> &amp;var_string_md, const <a class="el" href="classIpopt_1_1TNLP.html#a959b19a2cc071bd127c40aea5f1a7ae7">IntegerMetaDataMapType</a> &amp;var_integer_md, const <a class="el" href="classIpopt_1_1TNLP.html#aa3361681015593a2f7433036d761ae75">NumericMetaDataMapType</a> &amp;var_numeric_md, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> m, const <a class="el" href="classIpopt_1_1TNLP.html#ac30bc524e7fb8ff836bd6657c8fce004">StringMetaDataMapType</a> &amp;con_string_md, const <a class="el" href="classIpopt_1_1TNLP.html#a959b19a2cc071bd127c40aea5f1a7ae7">IntegerMetaDataMapType</a> &amp;con_integer_md, const <a class="el" href="classIpopt_1_1TNLP.html#aa3361681015593a2f7433036d761ae75">NumericMetaDataMapType</a> &amp;con_numeric_md)</td></tr>
+<tr class="memdesc:a729711b5af6b46e409a3bc34c832a9c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method returns any metadata collected during the run of the algorithm.  <a href="classIpopt_1_1TNLP.html#a729711b5af6b46e409a3bc34c832a9c5">More...</a><br /></td></tr>
+<tr class="separator:a729711b5af6b46e409a3bc34c832a9c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f962a4c43464adb7928771af84503d6"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#a2f962a4c43464adb7928771af84503d6">intermediate_callback</a> (<a class="el" href="IpReturnCodes__inc_8h.html#a5daff61568f9909c518fb61116260387">AlgorithmMode</a> mode, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> iter, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> obj_value, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> inf_pr, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> inf_du, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> mu, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> d_norm, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> regularization_size, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> alpha_du, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> alpha_pr, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> ls_trials, const <a class="el" href="classIpopt_1_1IpoptData.html">IpoptData</a> *ip_data, <a class="el" href="classIpopt_1_1IpoptCalculatedQuantities.html">IpoptCalculatedQuantities</a> *ip_cq)</td></tr>
+<tr class="memdesc:a2f962a4c43464adb7928771af84503d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Intermediate Callback method for the user.  <a href="classIpopt_1_1TNLP.html#a2f962a4c43464adb7928771af84503d6">More...</a><br /></td></tr>
+<tr class="separator:a2f962a4c43464adb7928771af84503d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b8a5be340562ea82358a7b6d2bb0969"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#a8b8a5be340562ea82358a7b6d2bb0969">get_curr_iterate</a> (const <a class="el" href="classIpopt_1_1IpoptData.html">IpoptData</a> *ip_data, <a class="el" href="classIpopt_1_1IpoptCalculatedQuantities.html">IpoptCalculatedQuantities</a> *ip_cq, bool scaled, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> n, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *x, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *z_L, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *z_U, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> m, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *g, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *lambda) const</td></tr>
+<tr class="memdesc:a8b8a5be340562ea82358a7b6d2bb0969"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get primal and dual variable values of the current iterate.  <a href="classIpopt_1_1TNLP.html#a8b8a5be340562ea82358a7b6d2bb0969">More...</a><br /></td></tr>
+<tr class="separator:a8b8a5be340562ea82358a7b6d2bb0969"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a723401f01da3ee61d4f51a2e05d9b2f9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#a723401f01da3ee61d4f51a2e05d9b2f9">get_curr_violations</a> (const <a class="el" href="classIpopt_1_1IpoptData.html">IpoptData</a> *ip_data, <a class="el" href="classIpopt_1_1IpoptCalculatedQuantities.html">IpoptCalculatedQuantities</a> *ip_cq, bool scaled, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> n, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *x_L_violation, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *x_U_violation, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *compl_x_L, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *compl_x_U, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *grad_lag_x, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> m, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *nlp_constraint_violation, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *compl_g) const</td></tr>
+<tr class="memdesc:a723401f01da3ee61d4f51a2e05d9b2f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get primal and dual infeasibility of the current iterate.  <a href="classIpopt_1_1TNLP.html#a723401f01da3ee61d4f51a2e05d9b2f9">More...</a><br /></td></tr>
+<tr class="separator:a723401f01da3ee61d4f51a2e05d9b2f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classIpopt_1_1ReferencedObject"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classIpopt_1_1ReferencedObject')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classIpopt_1_1ReferencedObject.html">Ipopt::ReferencedObject</a></td></tr>
 <tr class="memitem:a5c0f2208e3ead22bf7c5179381ed8203 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#a5c0f2208e3ead22bf7c5179381ed8203">ReferencedObject</a> ()</td></tr>
 <tr class="separator:a5c0f2208e3ead22bf7c5179381ed8203 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adbbf3aa5307da62ab8224ba599d4bd7a inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#adbbf3aa5307da62ab8224ba599d4bd7a">~ReferencedObject</a> ()</td></tr>
 <tr class="separator:adbbf3aa5307da62ab8224ba599d4bd7a inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac517534e10e36c946aeefc6fe337777 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#aac517534e10e36c946aeefc6fe337777">ReferenceCount</a> () const</td></tr>
+<tr class="memitem:aac517534e10e36c946aeefc6fe337777 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#aac517534e10e36c946aeefc6fe337777">ReferenceCount</a> () const</td></tr>
 <tr class="separator:aac517534e10e36c946aeefc6fe337777 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa69ecb0f026bd741e2fa84c31d4ec332 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#aa69ecb0f026bd741e2fa84c31d4ec332">AddRef</a> (const <a class="el" href="classIpopt_1_1Referencer.html">Referencer</a> *referencer) const</td></tr>
 <tr class="separator:aa69ecb0f026bd741e2fa84c31d4ec332 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -191,66 +247,14 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:aa6851ab40f3fa6b806ded1c092fc0831"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#aa6851ab40f3fa6b806ded1c092fc0831">operator=</a> (const <a class="el" href="classIpopt_1_1TNLP.html">TNLP</a> &amp;)</td></tr>
 <tr class="memdesc:aa6851ab40f3fa6b806ded1c092fc0831"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default Assignment Operator.  <a href="classIpopt_1_1TNLP.html#aa6851ab40f3fa6b806ded1c092fc0831">More...</a><br /></td></tr>
 <tr class="separator:aa6851ab40f3fa6b806ded1c092fc0831"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="member-group"></a>
-methods to gather information about the NLP</h2></td></tr>
-<tr class="memitem:af81cb3ab5772b440360cfcb48b620514"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#af81cb3ab5772b440360cfcb48b620514">IndexStyleEnum</a> { <a class="el" href="classIpopt_1_1TNLP.html#af81cb3ab5772b440360cfcb48b620514aa5f6a49547714db71eca0a1321f5f720">C_STYLE</a> = 0, 
-<a class="el" href="classIpopt_1_1TNLP.html#af81cb3ab5772b440360cfcb48b620514a238056a72c143c97ec2b9f20eb09b42b">FORTRAN_STYLE</a> = 1
- }</td></tr>
-<tr class="separator:af81cb3ab5772b440360cfcb48b620514"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac30bc524e7fb8ff836bd6657c8fce004"><td class="memItemLeft" align="right" valign="top">typedef std::map&lt; std::string, std::vector&lt; std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#ac30bc524e7fb8ff836bd6657c8fce004">StringMetaDataMapType</a></td></tr>
-<tr class="separator:ac30bc524e7fb8ff836bd6657c8fce004"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a959b19a2cc071bd127c40aea5f1a7ae7"><td class="memItemLeft" align="right" valign="top">typedef std::map&lt; std::string, std::vector&lt; <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#a959b19a2cc071bd127c40aea5f1a7ae7">IntegerMetaDataMapType</a></td></tr>
-<tr class="separator:a959b19a2cc071bd127c40aea5f1a7ae7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa3361681015593a2f7433036d761ae75"><td class="memItemLeft" align="right" valign="top">typedef std::map&lt; std::string, std::vector&lt; <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#aa3361681015593a2f7433036d761ae75">NumericMetaDataMapType</a></td></tr>
-<tr class="separator:aa3361681015593a2f7433036d761ae75"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5da5791365764706aeda02b78f7719b6"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#a5da5791365764706aeda02b78f7719b6">get_nlp_info</a> (<a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> &amp;n, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> &amp;m, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> &amp;nnz_jac_g, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> &amp;nnz_h_lag, <a class="el" href="classIpopt_1_1TNLP.html#af81cb3ab5772b440360cfcb48b620514">IndexStyleEnum</a> &amp;index_style)=0</td></tr>
-<tr class="memdesc:a5da5791365764706aeda02b78f7719b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method to request the initial information about the problem.  <a href="classIpopt_1_1TNLP.html#a5da5791365764706aeda02b78f7719b6">More...</a><br /></td></tr>
-<tr class="separator:a5da5791365764706aeda02b78f7719b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb231e0be2a935a9a683349429f6890e"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#adb231e0be2a935a9a683349429f6890e">get_var_con_metadata</a> (<a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> n, <a class="el" href="classIpopt_1_1TNLP.html#ac30bc524e7fb8ff836bd6657c8fce004">StringMetaDataMapType</a> &amp;var_string_md, <a class="el" href="classIpopt_1_1TNLP.html#a959b19a2cc071bd127c40aea5f1a7ae7">IntegerMetaDataMapType</a> &amp;var_integer_md, <a class="el" href="classIpopt_1_1TNLP.html#aa3361681015593a2f7433036d761ae75">NumericMetaDataMapType</a> &amp;var_numeric_md, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> m, <a class="el" href="classIpopt_1_1TNLP.html#ac30bc524e7fb8ff836bd6657c8fce004">StringMetaDataMapType</a> &amp;con_string_md, <a class="el" href="classIpopt_1_1TNLP.html#a959b19a2cc071bd127c40aea5f1a7ae7">IntegerMetaDataMapType</a> &amp;con_integer_md, <a class="el" href="classIpopt_1_1TNLP.html#aa3361681015593a2f7433036d761ae75">NumericMetaDataMapType</a> &amp;con_numeric_md)</td></tr>
-<tr class="memdesc:adb231e0be2a935a9a683349429f6890e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method to request meta data for the variables and the constraints.  <a href="classIpopt_1_1TNLP.html#adb231e0be2a935a9a683349429f6890e">More...</a><br /></td></tr>
-<tr class="separator:adb231e0be2a935a9a683349429f6890e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aafb65734cce3659c6fb496e136636e9e"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#aafb65734cce3659c6fb496e136636e9e">get_bounds_info</a> (<a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> n, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *x_l, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *x_u, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> m, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *g_l, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *g_u)=0</td></tr>
-<tr class="memdesc:aafb65734cce3659c6fb496e136636e9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method to request bounds on the variables and constraints.  <a href="classIpopt_1_1TNLP.html#aafb65734cce3659c6fb496e136636e9e">More...</a><br /></td></tr>
-<tr class="separator:aafb65734cce3659c6fb496e136636e9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3e840dddefbe48a048d213bd02b39854"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#a3e840dddefbe48a048d213bd02b39854">get_scaling_parameters</a> (<a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> &amp;obj_scaling, bool &amp;use_x_scaling, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> n, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *x_scaling, bool &amp;use_g_scaling, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> m, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *g_scaling)</td></tr>
-<tr class="memdesc:a3e840dddefbe48a048d213bd02b39854"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method to request scaling parameters.  <a href="classIpopt_1_1TNLP.html#a3e840dddefbe48a048d213bd02b39854">More...</a><br /></td></tr>
-<tr class="separator:a3e840dddefbe48a048d213bd02b39854"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8edc60e43bf77aba5e8fd221ea94bf14"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#a8edc60e43bf77aba5e8fd221ea94bf14">get_variables_linearity</a> (<a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> n, <a class="el" href="classIpopt_1_1TNLP.html#ab443d2d4fbc045d7c542d32258aee507">LinearityType</a> *var_types)</td></tr>
-<tr class="memdesc:a8edc60e43bf77aba5e8fd221ea94bf14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method to request the variables linearity.  <a href="classIpopt_1_1TNLP.html#a8edc60e43bf77aba5e8fd221ea94bf14">More...</a><br /></td></tr>
-<tr class="separator:a8edc60e43bf77aba5e8fd221ea94bf14"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a46f061f2dbf1c1692b7822144b7c5536"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#a46f061f2dbf1c1692b7822144b7c5536">get_constraints_linearity</a> (<a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> m, <a class="el" href="classIpopt_1_1TNLP.html#ab443d2d4fbc045d7c542d32258aee507">LinearityType</a> *const_types)</td></tr>
-<tr class="memdesc:a46f061f2dbf1c1692b7822144b7c5536"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method to request the constraints linearity.  <a href="classIpopt_1_1TNLP.html#a46f061f2dbf1c1692b7822144b7c5536">More...</a><br /></td></tr>
-<tr class="separator:a46f061f2dbf1c1692b7822144b7c5536"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0ae4075da9928e518780bba865698545"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#a0ae4075da9928e518780bba865698545">get_starting_point</a> (<a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> n, bool init_x, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *x, bool init_z, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *z_L, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *z_U, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> m, bool init_lambda, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *lambda)=0</td></tr>
-<tr class="memdesc:a0ae4075da9928e518780bba865698545"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method to request the starting point before iterating.  <a href="classIpopt_1_1TNLP.html#a0ae4075da9928e518780bba865698545">More...</a><br /></td></tr>
-<tr class="separator:a0ae4075da9928e518780bba865698545"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a273b8be28d2a0a805489cd8903aac1c6"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#a273b8be28d2a0a805489cd8903aac1c6">get_warm_start_iterate</a> (<a class="el" href="classIpopt_1_1IteratesVector.html">IteratesVector</a> &amp;warm_start_iterate)</td></tr>
-<tr class="memdesc:a273b8be28d2a0a805489cd8903aac1c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method to provide an <code>Ipopt</code> warm start iterate which is already in the form <code>Ipopt</code> requires it internally for warm starts.  <a href="classIpopt_1_1TNLP.html#a273b8be28d2a0a805489cd8903aac1c6">More...</a><br /></td></tr>
-<tr class="separator:a273b8be28d2a0a805489cd8903aac1c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a709c03900227bc573b046ce0705e6c84"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#a709c03900227bc573b046ce0705e6c84">eval_f</a> (<a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> n, const <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *x, bool new_x, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> &amp;obj_value)=0</td></tr>
-<tr class="memdesc:a709c03900227bc573b046ce0705e6c84"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method to request the value of the objective function.  <a href="classIpopt_1_1TNLP.html#a709c03900227bc573b046ce0705e6c84">More...</a><br /></td></tr>
-<tr class="separator:a709c03900227bc573b046ce0705e6c84"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a52698f1861ffef271d5e317c0e168652"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#a52698f1861ffef271d5e317c0e168652">eval_grad_f</a> (<a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> n, const <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *x, bool new_x, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *grad_f)=0</td></tr>
-<tr class="memdesc:a52698f1861ffef271d5e317c0e168652"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method to request the gradient of the objective function.  <a href="classIpopt_1_1TNLP.html#a52698f1861ffef271d5e317c0e168652">More...</a><br /></td></tr>
-<tr class="separator:a52698f1861ffef271d5e317c0e168652"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afcfd8404b772dc4960f2d2db4e8bb382"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#afcfd8404b772dc4960f2d2db4e8bb382">eval_g</a> (<a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> n, const <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *x, bool new_x, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> m, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *g)=0</td></tr>
-<tr class="memdesc:afcfd8404b772dc4960f2d2db4e8bb382"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method to request the constraint values.  <a href="classIpopt_1_1TNLP.html#afcfd8404b772dc4960f2d2db4e8bb382">More...</a><br /></td></tr>
-<tr class="separator:afcfd8404b772dc4960f2d2db4e8bb382"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa4162d052f69d4f9946a42feec012853"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#aa4162d052f69d4f9946a42feec012853">eval_jac_g</a> (<a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> n, const <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *x, bool new_x, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> m, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> nele_jac, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *iRow, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *jCol, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *values)=0</td></tr>
-<tr class="memdesc:aa4162d052f69d4f9946a42feec012853"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method to request either the sparsity structure or the values of the Jacobian of the constraints.  <a href="classIpopt_1_1TNLP.html#aa4162d052f69d4f9946a42feec012853">More...</a><br /></td></tr>
-<tr class="separator:aa4162d052f69d4f9946a42feec012853"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a26b9145267e2574c53acc284fef1c354"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLP.html#a26b9145267e2574c53acc284fef1c354">eval_h</a> (<a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> n, const <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *x, bool new_x, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> obj_factor, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> m, const <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *lambda, bool new_lambda, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> nele_hess, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *iRow, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *jCol, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *values)</td></tr>
-<tr class="memdesc:a26b9145267e2574c53acc284fef1c354"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method to request either the sparsity structure or the values of the Hessian of the Lagrangian.  <a href="classIpopt_1_1TNLP.html#a26b9145267e2574c53acc284fef1c354">More...</a><br /></td></tr>
-<tr class="separator:a26b9145267e2574c53acc284fef1c354"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Base class for all <a class="el" href="classIpopt_1_1NLP.html">NLP</a>'s that use standard triplet matrix form and dense vectors. </p>
-<p>This is the standard base class for all <a class="el" href="classIpopt_1_1NLP.html">NLP</a>'s that use the standard triplet matrix form and dense vectors. The class <a class="el" href="classIpopt_1_1TNLPAdapter.html" title="This class adapts the TNLP interface so it looks like an NLP interface.">TNLPAdapter</a> then converts this interface to an interface that can be used directly by <code>Ipopt</code>.</p>
-<p>This interface presents the problem form:</p>
-<p>min f(x)</p>
-<p>s.t. gL &lt;= g(x) &lt;= gU </p><pre class="fragment"> xL &lt;=  x   &lt;= xU
-</pre><p>In order to specify an equality constraint, set gL_i = gU_i = rhs. The value that indicates "infinity" for the bounds (i.e. the variable or constraint has no lower bound (-infinity) or upper bound (+infinity)) is set through the option nlp_lower_bound_inf and nlp_upper_bound_inf, respectively. To indicate that a variable has no upper or lower bound, set the bound to -ipopt_inf or +ipopt_inf, respectively. </p>
+<div class="textblock"><p>Base class for all <a class="el" href="classIpopt_1_1NLP.html" title="Traditional NLP.">NLP</a>'s that use standard triplet matrix form and dense vectors. </p>
+<p>This is the standard base class for all <a class="el" href="classIpopt_1_1NLP.html" title="Traditional NLP.">NLP</a>'s that use the standard triplet matrix form and dense vectors. The class <a class="el" href="classIpopt_1_1TNLPAdapter.html" title="This class adapts the TNLP interface so it looks like an NLP interface.">TNLPAdapter</a> then converts this interface to an interface that can be used directly by Ipopt.</p>
+<p>This interface presents the problem form: </p><p class="formulaDsp">
+\begin{eqnarray*} \mathrm{min} &amp;&amp; f(x) \\ \mathrm{s.t.} &amp;&amp; g_L \leq g(x) \leq g_U \\ &amp;&amp; x_L \leq x \leq x_U \end{eqnarray*}
+</p>
+<p> In order to specify an equality constraint, set \(g_{L,i} = g_{U,i}\). The value that indicates "infinity" for the bounds (i.e. the variable or constraint has no lower bound (-infinity) or upper bound (+infinity)) is set through the option <a class="el" href="OPTIONS.html#OPT_nlp_lower_bound_inf">nlp_lower_bound_inf</a> and <a class="el" href="OPTIONS.html#OPT_nlp_upper_bound_inf">nlp_upper_bound_inf</a>, respectively. To indicate that a variable has no upper or lower bound, set the bound to -ipopt_inf or +ipopt_inf, respectively. </p>
 
 <p class="definition">Definition at line <a class="el" href="IpTNLP_8hpp_source.html#l00047">47</a> of file <a class="el" href="IpTNLP_8hpp_source.html">IpTNLP.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
@@ -266,7 +270,7 @@ methods to gather information about the NLP</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLP_8hpp_source.html#l00104">104</a> of file <a class="el" href="IpTNLP_8hpp_source.html">IpTNLP.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLP_8hpp_source.html#l00070">70</a> of file <a class="el" href="IpTNLP_8hpp_source.html">IpTNLP.hpp</a>.</p>
 
 </div>
 </div>
@@ -277,12 +281,12 @@ methods to gather information about the NLP</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef std::map&lt;std::string, std::vector&lt;<a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&gt; &gt; <a class="el" href="classIpopt_1_1TNLP.html#a959b19a2cc071bd127c40aea5f1a7ae7">Ipopt::TNLP::IntegerMetaDataMapType</a></td>
+          <td class="memname">typedef std::map&lt;std::string, std::vector&lt;<a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&gt; &gt; <a class="el" href="classIpopt_1_1TNLP.html#a959b19a2cc071bd127c40aea5f1a7ae7">Ipopt::TNLP::IntegerMetaDataMapType</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLP_8hpp_source.html#l00105">105</a> of file <a class="el" href="IpTNLP_8hpp_source.html">IpTNLP.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLP_8hpp_source.html#l00071">71</a> of file <a class="el" href="IpTNLP_8hpp_source.html">IpTNLP.hpp</a>.</p>
 
 </div>
 </div>
@@ -293,12 +297,12 @@ methods to gather information about the NLP</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef std::map&lt;std::string, std::vector&lt;<a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&gt; &gt; <a class="el" href="classIpopt_1_1TNLP.html#aa3361681015593a2f7433036d761ae75">Ipopt::TNLP::NumericMetaDataMapType</a></td>
+          <td class="memname">typedef std::map&lt;std::string, std::vector&lt;<a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&gt; &gt; <a class="el" href="classIpopt_1_1TNLP.html#aa3361681015593a2f7433036d761ae75">Ipopt::TNLP::NumericMetaDataMapType</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpTNLP_8hpp_source.html#l00106">106</a> of file <a class="el" href="IpTNLP_8hpp_source.html">IpTNLP.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLP_8hpp_source.html#l00072">72</a> of file <a class="el" href="IpTNLP_8hpp_source.html">IpTNLP.hpp</a>.</p>
 
 </div>
 </div>
@@ -343,7 +347,7 @@ methods to gather information about the NLP</h2></td></tr>
 <tr><td class="fieldname"><a id="af81cb3ab5772b440360cfcb48b620514a238056a72c143c97ec2b9f20eb09b42b"></a>FORTRAN_STYLE&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLP_8hpp_source.html#l00073">73</a> of file <a class="el" href="IpTNLP_8hpp_source.html">IpTNLP.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLP_8hpp_source.html#l00074">74</a> of file <a class="el" href="IpTNLP_8hpp_source.html">IpTNLP.hpp</a>.</p>
 
 </div>
 </div>
@@ -463,25 +467,25 @@ methods to gather information about the NLP</h2></td></tr>
         <tr>
           <td class="memname">virtual bool Ipopt::TNLP::get_nlp_info </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> &amp;&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> &amp;&#160;</td>
           <td class="paramname"><em>m</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> &amp;&#160;</td>
           <td class="paramname"><em>nnz_jac_g</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> &amp;&#160;</td>
           <td class="paramname"><em>nnz_h_lag</em>, </td>
         </tr>
         <tr>
@@ -504,7 +508,7 @@ methods to gather information about the NLP</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Method to request the initial information about the problem. </p>
-<p><code>Ipopt</code> uses this information when allocating the arrays that it will later ask you to fill with values. Be careful in this method since incorrect values will cause memory bugs which may be very difficult to find.</p>
+<p>Ipopt uses this information when allocating the arrays that it will later ask you to fill with values. Be careful in this method since incorrect values will cause memory bugs which may be very difficult to find.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">n</td><td>(out) Storage for the number of variables \(x\) </td></tr>
@@ -516,7 +520,7 @@ methods to gather information about the NLP</h2></td></tr>
   </dd>
 </dl>
 
-<p>Implemented in <a class="el" href="classIpopt_1_1AmplTNLP.html#a2cf9fdea2872f6f9bbdf5043ebdf7e6c">Ipopt::AmplTNLP</a>, <a class="el" href="classIpopt_1_1StdInterfaceTNLP.html#a1bde0c984797ba6be26e88c3cba6fa73">Ipopt::StdInterfaceTNLP</a>, and <a class="el" href="classIpopt_1_1TNLPReducer.html#af3d35ae9763c40d50549643a483d73fc">Ipopt::TNLPReducer</a>.</p>
+<p>Implemented in <a class="el" href="classIpopt_1_1AmplTNLP.html#a2cf9fdea2872f6f9bbdf5043ebdf7e6c">Ipopt::AmplTNLP</a>, and <a class="el" href="classIpopt_1_1StdInterfaceTNLP.html#a1bde0c984797ba6be26e88c3cba6fa73">Ipopt::StdInterfaceTNLP</a>.</p>
 
 </div>
 </div>
@@ -532,7 +536,7 @@ methods to gather information about the NLP</h2></td></tr>
         <tr>
           <td class="memname">virtual bool Ipopt::TNLP::get_var_con_metadata </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
@@ -556,7 +560,7 @@ methods to gather information about the NLP</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>m</em>, </td>
         </tr>
         <tr>
@@ -591,7 +595,7 @@ methods to gather information about the NLP</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Method to request meta data for the variables and the constraints. </p>
-<p>This method is used to pass meta data about variables or constraints to <code>Ipopt</code>. The data can be either of integer, numeric, or string type. <code>Ipopt</code> passes this data on to its internal problem representation. The meta data type is a std::map with std::string as key type and a std::vector as value type. So far, <code>Ipopt</code> itself makes only use of string meta data under the key idx_names. With this key, variable and constraint names can be passed to <code>Ipopt</code>, which are shown when printing internal vector or matrix data structures if <code>Ipopt</code> is run with a high value for the option. This allows a user to identify the original variables and constraints corresponding to <code>Ipopt</code>'s internal problem representation.</p>
+<p>This method is used to pass meta data about variables or constraints to Ipopt. The data can be either of integer, numeric, or string type. Ipopt passes this data on to its internal problem representation. The meta data type is a std::map with std::string as key type and a std::vector as value type. So far, Ipopt itself makes only use of string meta data under the key idx_names. With this key, variable and constraint names can be passed to Ipopt, which are shown when printing internal vector or matrix data structures if Ipopt is run with a high value for the option. This allows a user to identify the original variables and constraints corresponding to Ipopt's internal problem representation.</p>
 <p>If this method is not overloaded, the default implementation does not set any meta data and returns false. </p>
 
 <p>Reimplemented in <a class="el" href="classIpopt_1_1AmplTNLP.html#ad407145cdc1b323926c584aeb909e501">Ipopt::AmplTNLP</a>, and <a class="el" href="classIpopt_1_1SensAmplTNLP.html#aa5dbe3ddaf5035d6a28ec8cc7106db7d">Ipopt::SensAmplTNLP</a>.</p>
@@ -612,37 +616,37 @@ methods to gather information about the NLP</h2></td></tr>
         <tr>
           <td class="memname">virtual bool Ipopt::TNLP::get_bounds_info </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>x_l</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>x_u</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>m</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>g_l</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>g_u</em>&#160;</td>
         </tr>
         <tr>
@@ -671,7 +675,7 @@ methods to gather information about the NLP</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if success, false otherwise.</dd></dl>
-<p>The values of <code>n</code> and <code>m</code> that were specified in <a class="el" href="classIpopt_1_1TNLP.html#a5da5791365764706aeda02b78f7719b6" title="Method to request the initial information about the problem.">TNLP::get_nlp_info</a> are passed here for debug checking. Setting a lower bound to a value less than or equal to the value of the option <a class="el" href="OPTIONS.html#OPT_nlp_lower_bound_inf">nlp_lower_bound_inf</a> will cause <code>Ipopt</code> to assume no lower bound. Likewise, specifying the upper bound above or equal to the value of the option <a class="el" href="OPTIONS.html#OPT_nlp_upper_bound_inf">nlp_upper_bound_inf</a> will cause <code>Ipopt</code> to assume no upper bound. These options are set to -10<sup>19</sup> and 10<sup>19</sup>, respectively, by default, but may be modified by changing these options. </p>
+<p>The values of <code>n</code> and <code>m</code> that were specified in <a class="el" href="classIpopt_1_1TNLP.html#a5da5791365764706aeda02b78f7719b6" title="Method to request the initial information about the problem.">TNLP::get_nlp_info</a> are passed here for debug checking. Setting a lower bound to a value less than or equal to the value of the option <a class="el" href="OPTIONS.html#OPT_nlp_lower_bound_inf">nlp_lower_bound_inf</a> will cause Ipopt to assume no lower bound. Likewise, specifying the upper bound above or equal to the value of the option <a class="el" href="OPTIONS.html#OPT_nlp_upper_bound_inf">nlp_upper_bound_inf</a> will cause Ipopt to assume no upper bound. These options are set to -10<sup>19</sup> and 10<sup>19</sup>, respectively, by default, but may be modified by changing these options. </p>
 
 <p>Implemented in <a class="el" href="classIpopt_1_1AmplTNLP.html#aa5ff22cac95b61708a49324974305d7e">Ipopt::AmplTNLP</a>, <a class="el" href="classIpopt_1_1StdInterfaceTNLP.html#ad6a01af9d88aa7fe0dde6305239a78e2">Ipopt::StdInterfaceTNLP</a>, <a class="el" href="classIpopt_1_1SensAmplTNLP.html#ac573807167e7eb657920e842461b8003">Ipopt::SensAmplTNLP</a>, and <a class="el" href="classIpopt_1_1TNLPReducer.html#addf6072b0b7bf5be35c651ddf0dac0d4">Ipopt::TNLPReducer</a>.</p>
 
@@ -689,7 +693,7 @@ methods to gather information about the NLP</h2></td></tr>
         <tr>
           <td class="memname">virtual bool Ipopt::TNLP::get_scaling_parameters </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> &amp;&#160;</td>
           <td class="paramname"><em>obj_scaling</em>, </td>
         </tr>
         <tr>
@@ -701,13 +705,13 @@ methods to gather information about the NLP</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>x_scaling</em>, </td>
         </tr>
         <tr>
@@ -719,13 +723,13 @@ methods to gather information about the NLP</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>m</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>g_scaling</em>&#160;</td>
         </tr>
         <tr>
@@ -743,8 +747,8 @@ methods to gather information about the NLP</h2></td></tr>
 
 <p>Method to request scaling parameters. </p>
 <p>This is only called if the options are set to retrieve user scaling, that is, if nlp_scaling_method is chosen as "user-scaling". The method should provide scaling factors for the objective function as well as for the optimization variables and/or constraints. The return value should be true, unless an error occurred, and the program is to be aborted.</p>
-<p>The value returned in obj_scaling determines, how <code>Ipopt</code> should internally scale the objective function. For example, if this number is chosen to be 10, then <code>Ipopt</code> solves internally an optimization problem that has 10 times the value of the original objective function provided by the <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a>. In particular, if this value is negative, then <code>Ipopt</code> will maximize the objective function instead of minimizing it.</p>
-<p>The scaling factors for the variables can be returned in x_scaling, which has the same length as x in the other <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> methods, and the factors are ordered like x. use_x_scaling needs to be set to true, if <code>Ipopt</code> should scale the variables. If it is false, no internal scaling of the variables is done. Similarly, the scaling factors for the constraints can be returned in g_scaling, and this scaling is activated by setting use_g_scaling to true.</p>
+<p>The value returned in obj_scaling determines, how Ipopt should internally scale the objective function. For example, if this number is chosen to be 10, then Ipopt solves internally an optimization problem that has 10 times the value of the original objective function provided by the <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a>. In particular, if this value is negative, then Ipopt will maximize the objective function instead of minimizing it.</p>
+<p>The scaling factors for the variables can be returned in x_scaling, which has the same length as x in the other <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> methods, and the factors are ordered like x. use_x_scaling needs to be set to true, if Ipopt should scale the variables. If it is false, no internal scaling of the variables is done. Similarly, the scaling factors for the constraints can be returned in g_scaling, and this scaling is activated by setting use_g_scaling to true.</p>
 <p>As a guideline, we suggest to scale the optimization problem (either directly in the original formulation, or after using scaling factors) so that all sensitivities, i.e., all non-zero first partial derivatives, are typically of the order 0.1-10. </p>
 
 <p>Reimplemented in <a class="el" href="classIpopt_1_1AmplTNLP.html#a60b0eb2bb08619261e4d0e292ad0e854">Ipopt::AmplTNLP</a>, <a class="el" href="classIpopt_1_1StdInterfaceTNLP.html#a1b0da8ded16d79530e8fb03ece4ebaed">Ipopt::StdInterfaceTNLP</a>, and <a class="el" href="classIpopt_1_1TNLPReducer.html#aad4b7600feb15444387498358915ad9b">Ipopt::TNLPReducer</a>.</p>
@@ -765,7 +769,7 @@ methods to gather information about the NLP</h2></td></tr>
         <tr>
           <td class="memname">virtual bool Ipopt::TNLP::get_variables_linearity </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
@@ -788,7 +792,7 @@ methods to gather information about the NLP</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Method to request the variables linearity. </p>
-<p>This method is never called by <code>Ipopt</code>, but is used by Bonmin to get information about which variables occur only in linear terms. <code>Ipopt</code> passes the array var_types of length at least n, which should be filled with the appropriate linearity type of the variables (<a class="el" href="classIpopt_1_1TNLP.html#ab443d2d4fbc045d7c542d32258aee507aff709d419fb394619f35559b03ee72bd" title="Constraint/Variable is linear.">TNLP::LINEAR</a> or <a class="el" href="classIpopt_1_1TNLP.html#ab443d2d4fbc045d7c542d32258aee507aed2fc797419d4b71cf1c3efac1532a55" title="Constraint/Variable is non-linear.">TNLP::NON_LINEAR</a>).</p>
+<p>This method is never called by Ipopt, but is used by Bonmin to get information about which variables occur only in linear terms. Ipopt passes the array var_types of length at least n, which should be filled with the appropriate linearity type of the variables (<a class="el" href="classIpopt_1_1TNLP.html#ab443d2d4fbc045d7c542d32258aee507aff709d419fb394619f35559b03ee72bd" title="Constraint/Variable is linear.">TNLP::LINEAR</a> or <a class="el" href="classIpopt_1_1TNLP.html#ab443d2d4fbc045d7c542d32258aee507aed2fc797419d4b71cf1c3efac1532a55" title="Constraint/Variable is non-linear.">TNLP::NON_LINEAR</a>).</p>
 <p>The default implementation just returns false and does not fill the array. </p>
 
 <p>Reimplemented in <a class="el" href="classIpopt_1_1TNLPReducer.html#acffda57d333a176b3f7df3d3de8be025">Ipopt::TNLPReducer</a>.</p>
@@ -809,7 +813,7 @@ methods to gather information about the NLP</h2></td></tr>
         <tr>
           <td class="memname">virtual bool Ipopt::TNLP::get_constraints_linearity </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>m</em>, </td>
         </tr>
         <tr>
@@ -832,7 +836,7 @@ methods to gather information about the NLP</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Method to request the constraints linearity. </p>
-<p>This method is never called by <code>Ipopt</code>, but is used by Bonmin to get information about which constraints are linear. <code>Ipopt</code> passes the array const_types of size m, which should be filled with the appropriate linearity type of the constraints (<a class="el" href="classIpopt_1_1TNLP.html#ab443d2d4fbc045d7c542d32258aee507aff709d419fb394619f35559b03ee72bd" title="Constraint/Variable is linear.">TNLP::LINEAR</a> or <a class="el" href="classIpopt_1_1TNLP.html#ab443d2d4fbc045d7c542d32258aee507aed2fc797419d4b71cf1c3efac1532a55" title="Constraint/Variable is non-linear.">TNLP::NON_LINEAR</a>).</p>
+<p>This method is never called by Ipopt, but is used by Bonmin to get information about which constraints are linear. Ipopt passes the array const_types of size m, which should be filled with the appropriate linearity type of the constraints (<a class="el" href="classIpopt_1_1TNLP.html#ab443d2d4fbc045d7c542d32258aee507aff709d419fb394619f35559b03ee72bd" title="Constraint/Variable is linear.">TNLP::LINEAR</a> or <a class="el" href="classIpopt_1_1TNLP.html#ab443d2d4fbc045d7c542d32258aee507aed2fc797419d4b71cf1c3efac1532a55" title="Constraint/Variable is non-linear.">TNLP::NON_LINEAR</a>).</p>
 <p>The default implementation just returns false and does not fill the array. </p>
 
 <p>Reimplemented in <a class="el" href="classIpopt_1_1AmplTNLP.html#a88d2e944ecfb7593642f4fec0b936bc3">Ipopt::AmplTNLP</a>, and <a class="el" href="classIpopt_1_1TNLPReducer.html#a62d275eb6e1b690e8b26eda7635d9767">Ipopt::TNLPReducer</a>.</p>
@@ -853,7 +857,7 @@ methods to gather information about the NLP</h2></td></tr>
         <tr>
           <td class="memname">virtual bool Ipopt::TNLP::get_starting_point </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
@@ -865,7 +869,7 @@ methods to gather information about the NLP</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>x</em>, </td>
         </tr>
         <tr>
@@ -877,19 +881,19 @@ methods to gather information about the NLP</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>z_L</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>z_U</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>m</em>, </td>
         </tr>
         <tr>
@@ -901,7 +905,7 @@ methods to gather information about the NLP</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>lambda</em>&#160;</td>
         </tr>
         <tr>
@@ -933,7 +937,7 @@ methods to gather information about the NLP</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if success, false otherwise.</dd></dl>
-<p>The boolean variables indicate whether the algorithm requires to have x, z_L/z_u, and lambda initialized, respectively. If, for some reason, the algorithm requires initializations that cannot be provided, false should be returned and <code>Ipopt</code> will stop. The default options only require initial values for the primal variables \(x\).</p>
+<p>The boolean variables indicate whether the algorithm requires to have x, z_L/z_u, and lambda initialized, respectively. If, for some reason, the algorithm requires initializations that cannot be provided, false should be returned and Ipopt will stop. The default options only require initial values for the primal variables \(x\).</p>
 <p>Note, that the initial values for bound multiplier components for absent bounds ( \(x^L_i=-\infty\) or \(x^U_i=\infty\)) are ignored. </p>
 
 <p>Implemented in <a class="el" href="classIpopt_1_1AmplTNLP.html#a84f60eb40fe4e12b96cbb62c99e9001e">Ipopt::AmplTNLP</a>, <a class="el" href="classIpopt_1_1StdInterfaceTNLP.html#ad2dd0046625db75e54de7c00ab73fafb">Ipopt::StdInterfaceTNLP</a>, and <a class="el" href="classIpopt_1_1TNLPReducer.html#a2ffc8617243b8b8bd1d7fece69d88e76">Ipopt::TNLPReducer</a>.</p>
@@ -964,11 +968,11 @@ methods to gather information about the NLP</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Method to provide an <code>Ipopt</code> warm start iterate which is already in the form <code>Ipopt</code> requires it internally for warm starts. </p>
+<p>Method to provide an Ipopt warm start iterate which is already in the form Ipopt requires it internally for warm starts. </p>
 <p>This method is only for expert users. The default implementation does not provide a warm start iterate and returns false. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">warm_start_iterate</td><td>storage for warm start iterate in the form `Ipopt` requires it internally </td></tr>
+    <tr><td class="paramname">warm_start_iterate</td><td>storage for warm start iterate in the form Ipopt requires it internally </td></tr>
   </table>
   </dd>
 </dl>
@@ -991,13 +995,13 @@ methods to gather information about the NLP</h2></td></tr>
         <tr>
           <td class="memname">virtual bool Ipopt::TNLP::eval_f </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>x</em>, </td>
         </tr>
         <tr>
@@ -1009,7 +1013,7 @@ methods to gather information about the NLP</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> &amp;&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> &amp;&#160;</td>
           <td class="paramname"><em>obj_value</em>&#160;</td>
         </tr>
         <tr>
@@ -1030,7 +1034,7 @@ methods to gather information about the NLP</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">n</td><td>(in) the number of variables \(x\) in the problem; it will have the same value that was specified in <a class="el" href="classIpopt_1_1TNLP.html#a5da5791365764706aeda02b78f7719b6" title="Method to request the initial information about the problem.">TNLP::get_nlp_info</a> </td></tr>
     <tr><td class="paramname">x</td><td>(in) the values for the primal variables \(x\) at which the objective function \(f(x)\) is to be evaluated </td></tr>
-    <tr><td class="paramname">new_x</td><td>(in) false if any evaluation method (<code>eval_*</code>) was previously called with the same values in x, true otherwise. This can be helpful when users have efficient implementations that calculate multiple outputs at once. <code>Ipopt</code> internally caches results from the <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> and generally, this flag can be ignored. </td></tr>
+    <tr><td class="paramname">new_x</td><td>(in) false if any evaluation method (<code>eval_*</code>) was previously called with the same values in x, true otherwise. This can be helpful when users have efficient implementations that calculate multiple outputs at once. Ipopt internally caches results from the <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> and generally, this flag can be ignored. </td></tr>
     <tr><td class="paramname">obj_value</td><td>(out) storage for the value of the objective function \(f(x)\)</td></tr>
   </table>
   </dd>
@@ -1053,13 +1057,13 @@ methods to gather information about the NLP</h2></td></tr>
         <tr>
           <td class="memname">virtual bool Ipopt::TNLP::eval_grad_f </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>x</em>, </td>
         </tr>
         <tr>
@@ -1071,7 +1075,7 @@ methods to gather information about the NLP</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>grad_f</em>&#160;</td>
         </tr>
         <tr>
@@ -1115,13 +1119,13 @@ methods to gather information about the NLP</h2></td></tr>
         <tr>
           <td class="memname">virtual bool Ipopt::TNLP::eval_g </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>x</em>, </td>
         </tr>
         <tr>
@@ -1133,13 +1137,13 @@ methods to gather information about the NLP</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>m</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>g</em>&#160;</td>
         </tr>
         <tr>
@@ -1184,13 +1188,13 @@ methods to gather information about the NLP</h2></td></tr>
         <tr>
           <td class="memname">virtual bool Ipopt::TNLP::eval_jac_g </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>x</em>, </td>
         </tr>
         <tr>
@@ -1202,31 +1206,31 @@ methods to gather information about the NLP</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>m</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>nele_jac</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>iRow</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>jCol</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>values</em>&#160;</td>
         </tr>
         <tr>
@@ -1258,7 +1262,7 @@ methods to gather information about the NLP</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if success, false otherwise.</dd></dl>
-<dl class="section note"><dt>Note</dt><dd>The arrays iRow and jCol only need to be filled once. If the iRow and jCol arguments are not NULL (first call to this function), then <code>Ipopt</code> expects that the sparsity structure of the Jacobian (the row and column indices only) are written into iRow and jCol. At this call, the arguments <code>x</code> and <code>values</code> will be NULL. If the arguments <code>x</code> and <code>values</code> are not NULL, then <code>Ipopt</code> expects that the value of the Jacobian as calculated from array <code>x</code> is stored in array <code>values</code> (using the same order as used when specifying the sparsity structure). At this call, the arguments <code>iRow</code> and <code>jCol</code> will be NULL. </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>The arrays iRow and jCol only need to be filled once. If the iRow and jCol arguments are not NULL (first call to this function), then Ipopt expects that the sparsity structure of the Jacobian (the row and column indices only) are written into iRow and jCol. At this call, the arguments <code>x</code> and <code>values</code> will be NULL. If the arguments <code>x</code> and <code>values</code> are not NULL, then Ipopt expects that the value of the Jacobian as calculated from array <code>x</code> is stored in array <code>values</code> (using the same order as used when specifying the sparsity structure). At this call, the arguments <code>iRow</code> and <code>jCol</code> will be NULL. </dd></dl>
 
 <p>Implemented in <a class="el" href="classIpopt_1_1AmplTNLP.html#a05342a7a193a9451c09837b3de387fb8">Ipopt::AmplTNLP</a>, <a class="el" href="classIpopt_1_1StdInterfaceTNLP.html#ab11ddd0351414ba01b4773892944323c">Ipopt::StdInterfaceTNLP</a>, and <a class="el" href="classIpopt_1_1TNLPReducer.html#a83e123160f053650043cb6d3cc68a361">Ipopt::TNLPReducer</a>.</p>
 
@@ -1276,13 +1280,13 @@ methods to gather information about the NLP</h2></td></tr>
         <tr>
           <td class="memname">virtual bool Ipopt::TNLP::eval_h </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>x</em>, </td>
         </tr>
         <tr>
@@ -1294,19 +1298,19 @@ methods to gather information about the NLP</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>obj_factor</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>m</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>lambda</em>, </td>
         </tr>
         <tr>
@@ -1318,25 +1322,25 @@ methods to gather information about the NLP</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>nele_hess</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>iRow</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
           <td class="paramname"><em>jCol</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>values</em>&#160;</td>
         </tr>
         <tr>
@@ -1353,7 +1357,7 @@ methods to gather information about the NLP</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Method to request either the sparsity structure or the values of the Hessian of the Lagrangian. </p>
-<p>The Hessian matrix that <code>Ipopt</code> uses is </p><p class="formulaDsp">
+<p>The Hessian matrix that Ipopt uses is </p><p class="formulaDsp">
 \[ \sigma_f \nabla^2 f(x_k) + \sum_{i=1}^m\lambda_i\nabla^2 g_i(x_k) \]
 </p>
 <p> for the given values for \(x\), \(\sigma_f\), and \(\lambda\). See <a class="el" href="IMPL.html#TRIPLET">Triplet Format for Sparse Matrices</a> for a discussion of the sparse matrix format used in this method.</p>
@@ -1374,13 +1378,90 @@ methods to gather information about the NLP</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if success, false otherwise.</dd></dl>
-<dl class="section note"><dt>Note</dt><dd>The arrays iRow and jCol only need to be filled once. If the iRow and jCol arguments are not NULL (first call to this function), then <code>Ipopt</code> expects that the sparsity structure of the Hessian (the row and column indices only) are written into iRow and jCol. At this call, the arguments <code>x</code>, <code>lambda</code>, and <code>values</code> will be NULL. If the arguments <code>x</code>, <code>lambda</code>, and <code>values</code> are not NULL, then <code>Ipopt</code> expects that the value of the Hessian as calculated from arrays <code>x</code> and <code>lambda</code> are stored in array <code>values</code> (using the same order as used when specifying the sparsity structure). At this call, the arguments <code>iRow</code> and <code>jCol</code> will be NULL.</dd></dl>
-<dl class="section attention"><dt>Attention</dt><dd>As this matrix is symmetric, <code>Ipopt</code> expects that only the lower diagonal entries are specified.</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>The arrays iRow and jCol only need to be filled once. If the iRow and jCol arguments are not NULL (first call to this function), then Ipopt expects that the sparsity structure of the Hessian (the row and column indices only) are written into iRow and jCol. At this call, the arguments <code>x</code>, <code>lambda</code>, and <code>values</code> will be NULL. If the arguments <code>x</code>, <code>lambda</code>, and <code>values</code> are not NULL, then Ipopt expects that the value of the Hessian as calculated from arrays <code>x</code> and <code>lambda</code> are stored in array <code>values</code> (using the same order as used when specifying the sparsity structure). At this call, the arguments <code>iRow</code> and <code>jCol</code> will be NULL.</dd></dl>
+<dl class="section attention"><dt>Attention</dt><dd>As this matrix is symmetric, Ipopt expects that only the lower diagonal entries are specified.</dd></dl>
 <p>A default implementation is provided, in case the user wants to set quasi-Newton approximations to estimate the second derivatives and doesn't not need to implement this method. </p>
 
 <p>Reimplemented in <a class="el" href="classIpopt_1_1AmplTNLP.html#a944ad51b4e14545324e0e4513e0c89ae">Ipopt::AmplTNLP</a>, <a class="el" href="classIpopt_1_1StdInterfaceTNLP.html#a8f2d9b4988313f8caa6ac55cc67188dc">Ipopt::StdInterfaceTNLP</a>, and <a class="el" href="classIpopt_1_1TNLPReducer.html#ab7f4aa6db99429fb0b1f9c6c556ec0ed">Ipopt::TNLPReducer</a>.</p>
 
 <p class="definition">Definition at line <a class="el" href="IpTNLP_8hpp_source.html#l00472">472</a> of file <a class="el" href="IpTNLP_8hpp_source.html">IpTNLP.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a015506564afc611060f4416dbb08aa4d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a015506564afc611060f4416dbb08aa4d">&#9670;&nbsp;</a></span>get_number_of_nonlinear_variables()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::TNLP::get_number_of_nonlinear_variables </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the number of variables that appear nonlinearly in the objective function or in at least one constraint function. </p>
+<p>If -1 is returned as number of nonlinear variables, Ipopt assumes that all variables are nonlinear. Otherwise, it calls get_list_of_nonlinear_variables with an array into which the indices of the nonlinear variables should be written - the array has the length num_nonlin_vars, which is identical with the return value of <a class="el" href="classIpopt_1_1TNLP.html#a015506564afc611060f4416dbb08aa4d" title="Return the number of variables that appear nonlinearly in the objective function or in at least one c...">get_number_of_nonlinear_variables()</a>. It is assumed that the indices are counted starting with 1 in the FORTRAN_STYLE, and 0 for the C_STYLE.</p>
+<p>The default implementation returns -1, i.e., all variables are assumed to be nonlinear. </p>
+
+<p>Reimplemented in <a class="el" href="classIpopt_1_1AmplTNLP.html#a2535706fb770ebda7b50219b11352c92">Ipopt::AmplTNLP</a>, and <a class="el" href="classIpopt_1_1TNLPReducer.html#a410278c7a2c9be06f8cb864120784669">Ipopt::TNLPReducer</a>.</p>
+
+<p class="definition">Definition at line <a class="el" href="IpTNLP_8hpp_source.html#l00526">526</a> of file <a class="el" href="IpTNLP_8hpp_source.html">IpTNLP.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a9bb5f16cdc2754d1667749268fb1308c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9bb5f16cdc2754d1667749268fb1308c">&#9670;&nbsp;</a></span>get_list_of_nonlinear_variables()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool Ipopt::TNLP::get_list_of_nonlinear_variables </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
+          <td class="paramname"><em>num_nonlin_vars</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> *&#160;</td>
+          <td class="paramname"><em>pos_nonlin_vars</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the indices of all nonlinear variables. </p>
+<p>This method is called only if limited-memory quasi-Newton option is used and <a class="el" href="classIpopt_1_1TNLP.html#a015506564afc611060f4416dbb08aa4d" title="Return the number of variables that appear nonlinearly in the objective function or in at least one c...">get_number_of_nonlinear_variables()</a> returned a positive number. This number is provided in parameter num_nonlin_var.</p>
+<p>The method must store the indices of all nonlinear variables in pos_nonlin_vars, where the numbering starts with 0 order 1, depending on the numbering style determined in get_nlp_info. </p>
+
+<p>Reimplemented in <a class="el" href="classIpopt_1_1AmplTNLP.html#a725d09f0beca55ea55a06df68f38d72a">Ipopt::AmplTNLP</a>, and <a class="el" href="classIpopt_1_1TNLPReducer.html#a160eaefabaea23ca77d1efeca60a2ff1">Ipopt::TNLPReducer</a>.</p>
+
+<p class="definition">Definition at line <a class="el" href="IpTNLP_8hpp_source.html#l00543">543</a> of file <a class="el" href="IpTNLP_8hpp_source.html">IpTNLP.hpp</a>.</p>
 
 </div>
 </div>
@@ -1402,49 +1483,49 @@ methods to gather information about the NLP</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>x</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>z_L</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>z_U</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>m</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>g</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
           <td class="paramname"><em>lambda</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>obj_value</em>, </td>
         </tr>
         <tr>
@@ -1485,8 +1566,8 @@ methods to gather information about the NLP</h2></td></tr>
 <li>USER_REQUESTED_STOP: The user call-back function <a class="el" href="classIpopt_1_1TNLP.html#a2f962a4c43464adb7928771af84503d6" title="Intermediate Callback method for the user.">TNLP::intermediate_callback</a> returned false, i.e., the user code requested a premature termination of the optimization.</li>
 <li>DIVERGING_ITERATES: It seems that the iterates diverge.</li>
 <li>RESTORATION_FAILURE: Restoration phase failed, algorithm doesn't know how to proceed.</li>
-<li>ERROR_IN_STEP_COMPUTATION: An unrecoverable error occurred while <code>Ipopt</code> tried to compute the search direction.</li>
-<li>INVALID_NUMBER_DETECTED: Algorithm received an invalid number (such as NaN or Inf) from the <a class="el" href="classIpopt_1_1NLP.html">NLP</a>; see also option check_derivatives_for_nan_inf).</li>
+<li>ERROR_IN_STEP_COMPUTATION: An unrecoverable error occurred while Ipopt tried to compute the search direction.</li>
+<li>INVALID_NUMBER_DETECTED: Algorithm received an invalid number (such as NaN or Inf) from the <a class="el" href="classIpopt_1_1NLP.html" title="Traditional NLP.">NLP</a>; see also option check_derivatives_for_nan_inf).</li>
 <li>INTERNAL_ERROR: An unknown internal error occurred. </li>
 </ul>
 </td></tr>
@@ -1520,7 +1601,7 @@ methods to gather information about the NLP</h2></td></tr>
         <tr>
           <td class="memname">virtual void Ipopt::TNLP::finalize_metadata </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
@@ -1544,7 +1625,7 @@ methods to gather information about the NLP</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>m</em>, </td>
         </tr>
         <tr>
@@ -1584,7 +1665,7 @@ methods to gather information about the NLP</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classIpopt_1_1SensAmplTNLP.html#a42cd6db8a17499c23c38880b2f757ccc">Ipopt::SensAmplTNLP</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLP_8hpp_source.html#l00565">565</a> of file <a class="el" href="IpTNLP_8hpp_source.html">IpTNLP.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLP_8hpp_source.html#l00619">619</a> of file <a class="el" href="IpTNLP_8hpp_source.html">IpTNLP.hpp</a>.</p>
 
 </div>
 </div>
@@ -1606,61 +1687,61 @@ methods to gather information about the NLP</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>iter</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>obj_value</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>inf_pr</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>inf_du</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>mu</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>d_norm</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>regularization_size</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>alpha_du</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>alpha_pr</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>ls_trials</em>, </td>
         </tr>
         <tr>
@@ -1689,117 +1770,226 @@ methods to gather information about the NLP</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Intermediate Callback method for the user. </p>
-<p>This method is called once per iteration (during the convergence check), and can be used to obtain information about the optimization status while <code>Ipopt</code> solves the problem, and also to request a premature termination.</p>
-<p>The information provided by the entities in the argument list correspond to what <code>Ipopt</code> prints in the iteration summary (see also <a class="el" href="OUTPUT.html">Ipopt Output</a>). Further information can be obtained from the ip_data and ip_cq objects.</p>
-<dl class="section return"><dt>Returns</dt><dd>If this method returns false, <code>Ipopt</code> will terminate with the User_Requested_Stop status.</dd></dl>
-<p>It is not required to implement (overload) this method. The default implementation always returns true.</p>
-<p>A frequently asked question is how to access the values of the primal and dual variables in this callback. The values are stored in the <code>ip_cq</code> object for the <em>internal representation</em> of the problem. To access the values in a form that corresponds to those used in the evaluation routines, the user has to request <code>Ipopt</code>'s <a class="el" href="classIpopt_1_1TNLPAdapter.html" title="This class adapts the TNLP interface so it looks like an NLP interface.">TNLPAdapter</a> object to "resort" the data vectors and to fill in information about possibly filtered out fixed variables. The <a class="el" href="classIpopt_1_1TNLPAdapter.html" title="This class adapts the TNLP interface so it looks like an NLP interface.">TNLPAdapter</a> can be accessed as follows. First, add the following includes to your <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> implementation: </p><div class="fragment"><div class="line"><span class="preprocessor">#include &quot;<a class="code" href="IpIpoptCalculatedQuantities_8hpp.html">IpIpoptCalculatedQuantities.hpp</a>&quot;</span></div>
-<div class="line"><span class="preprocessor">#include &quot;<a class="code" href="IpIpoptData_8hpp.html">IpIpoptData.hpp</a>&quot;</span></div>
-<div class="line"><span class="preprocessor">#include &quot;<a class="code" href="IpTNLPAdapter_8hpp.html">IpTNLPAdapter.hpp</a>&quot;</span></div>
-<div class="line"><span class="preprocessor">#include &quot;<a class="code" href="IpOrigIpoptNLP_8hpp.html">IpOrigIpoptNLP.hpp</a>&quot;</span></div>
-</div><!-- fragment --><p> Next, add the following code to your implementation of this function: </p><div class="fragment"><div class="line"><a class="code" href="classIpopt_1_1TNLPAdapter.html">Ipopt::TNLPAdapter</a>* tnlp_adapter = NULL;</div>
-<div class="line"><span class="keywordflow">if</span>( ip_cq != NULL )</div>
-<div class="line">{</div>
-<div class="line">  <a class="code" href="classIpopt_1_1OrigIpoptNLP.html">Ipopt::OrigIpoptNLP</a>* orignlp;</div>
-<div class="line">  orignlp = <span class="keyword">dynamic_cast&lt;</span>OrigIpoptNLP*<span class="keyword">&gt;</span>(<a class="code" href="namespaceIpopt.html#a4ae001947e506b5b8f4f134b8a4ead23">GetRawPtr</a>(ip_cq-&gt;GetIpoptNLP()));</div>
-<div class="line">  <span class="keywordflow">if</span>( orignlp != NULL )</div>
-<div class="line">    tnlp_adapter = <span class="keyword">dynamic_cast&lt;</span>TNLPAdapter*<span class="keyword">&gt;</span>(<a class="code" href="namespaceIpopt.html#a4ae001947e506b5b8f4f134b8a4ead23">GetRawPtr</a>(orignlp-&gt;<a class="code" href="classIpopt_1_1OrigIpoptNLP.html#ad4127e81006fe77771982181aa08453d">nlp</a>()));</div>
-<div class="line">}</div>
-</div><!-- fragment --><p> Note, that retrieving the <a class="el" href="classIpopt_1_1TNLPAdapter.html" title="This class adapts the TNLP interface so it looks like an NLP interface.">TNLPAdapter</a> will fail (i.e., <code>orignlp</code> will be NULL) if <code>Ipopt</code> is currently in restoration mode. If, however, <code>tnlp_adapter</code> is not NULL, then it can be used to obtain primal variable values \(x\) and the dual values for the constraints and the variable bounds as follows: </p><div class="fragment"><div class="line"><span class="keywordtype">double</span>* primals = <span class="keyword">new</span> <span class="keywordtype">double</span>[n];</div>
-<div class="line"><span class="keywordtype">double</span>* dualeqs = <span class="keyword">new</span> <span class="keywordtype">double</span>[m];</div>
-<div class="line"><span class="keywordtype">double</span>* duallbs = <span class="keyword">new</span> <span class="keywordtype">double</span>[n];</div>
-<div class="line"><span class="keywordtype">double</span>* dualubs = <span class="keyword">new</span> <span class="keywordtype">double</span>[n];</div>
-<div class="line">tnlp_adapter-&gt;<a class="code" href="classIpopt_1_1TNLPAdapter.html#a9d1679322cc963f1e58aed0d9416247c">ResortX</a>(*ip_data-&gt;curr()-&gt;x(), primals);</div>
-<div class="line">tnlp_adapter-&gt;<a class="code" href="classIpopt_1_1TNLPAdapter.html#a33e37afa89a562815460ccbe63d2e659">ResortG</a>(*ip_data-&gt;curr()-&gt;y_c(), *ip_data-&gt;curr()-&gt;y_d(), dualeqs);</div>
-<div class="line">tnlp_adapter-&gt;<a class="code" href="classIpopt_1_1TNLPAdapter.html#a36f2cffa17853a2dbf02d85705e57bac">ResortBnds</a>(*ip_data-&gt;curr()-&gt;z_L(), duallbs,</div>
-<div class="line">                         *ip_data-&gt;curr()-&gt;z_U(), dualubs);</div>
-</div><!-- fragment --> <dl class="section note"><dt>Note</dt><dd>ResortBnds does not provide dual multipliers for fixed variables, even if the fixed-variable treatment has been set to handle them as constraints.</dd></dl>
-<p>Additionally, information about scaled violation of constraint and violation of complementarity constraints can be obtained via </p><div class="fragment"><div class="line">tnlp_adapter-&gt;<a class="code" href="classIpopt_1_1TNLPAdapter.html#a33e37afa89a562815460ccbe63d2e659">ResortG</a>(*ip_cq-&gt;curr_c(), *ip_cq-&gt;curr_d_minus_s(), ...)</div>
-<div class="line">tnlp_adapter-&gt;<a class="code" href="classIpopt_1_1TNLPAdapter.html#a36f2cffa17853a2dbf02d85705e57bac">ResortBnds</a>(*ip_cq-&gt;curr_compl_x_L(), ...,</div>
-<div class="line">                         *ip_cq-&gt;curr_compl_x_U(), ...)</div>
-<div class="line">tnlp_adapter-&gt;<a class="code" href="classIpopt_1_1TNLPAdapter.html#a33e37afa89a562815460ccbe63d2e659">ResortG</a>(*ip_cq-&gt;curr_compl_s_L(), ...)</div>
-<div class="line">tnlp_adapter-&gt;<a class="code" href="classIpopt_1_1TNLPAdapter.html#a33e37afa89a562815460ccbe63d2e659">ResortG</a>(*ip_cq-&gt;curr_compl_s_U(), ...)</div>
-</div><!-- fragment --> 
+<p>This method is called once per iteration (during the convergence check), and can be used to obtain information about the optimization status while Ipopt solves the problem, and also to request a premature termination.</p>
+<p>The information provided by the entities in the argument list correspond to what Ipopt prints in the iteration summary (see also <a class="el" href="OUTPUT.html">Ipopt Output</a>). Further information can be obtained from the ip_data and ip_cq objects. The current iterate and violations of feasibility and optimality can be accessed via the methods <a class="el" href="classIpopt_1_1TNLP.html#a8b8a5be340562ea82358a7b6d2bb0969" title="Get primal and dual variable values of the current iterate.">Ipopt::TNLP::get_curr_iterate()</a> and <a class="el" href="classIpopt_1_1TNLP.html#a723401f01da3ee61d4f51a2e05d9b2f9" title="Get primal and dual infeasibility of the current iterate.">Ipopt::TNLP::get_curr_violations()</a>. These methods translate values for the <em>internal representation</em> of the problem from <code>ip_data</code> and <code>ip_cq</code> objects into the <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> representation.</p>
+<dl class="section return"><dt>Returns</dt><dd>If this method returns false, Ipopt will terminate with the User_Requested_Stop status.</dd></dl>
+<p>It is not required to implement (overload) this method. The default implementation always returns true. </p>
+
 <p>Reimplemented in <a class="el" href="classIpopt_1_1StdInterfaceTNLP.html#ab4fcfcfb900e02cfa1f9a6c8f2498fcc">Ipopt::StdInterfaceTNLP</a>, and <a class="el" href="classIpopt_1_1TNLPReducer.html#acd2d3d379cd52fc7ce111b16f95713f3">Ipopt::TNLPReducer</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLP_8hpp_source.html#l00658">658</a> of file <a class="el" href="IpTNLP_8hpp_source.html">IpTNLP.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLP_8hpp_source.html#l00663">663</a> of file <a class="el" href="IpTNLP_8hpp_source.html">IpTNLP.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a015506564afc611060f4416dbb08aa4d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a015506564afc611060f4416dbb08aa4d">&#9670;&nbsp;</a></span>get_number_of_nonlinear_variables()</h2>
+<a id="a8b8a5be340562ea82358a7b6d2bb0969"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b8a5be340562ea82358a7b6d2bb0969">&#9670;&nbsp;</a></span>get_curr_iterate()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::TNLP::get_number_of_nonlinear_variables </td>
+          <td class="memname">bool Ipopt::TNLP::get_curr_iterate </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Return the number of variables that appear nonlinearly in the objective function or in at least one constraint function. </p>
-<p>If -1 is returned as number of nonlinear variables, <code>Ipopt</code> assumes that all variables are nonlinear. Otherwise, it calls get_list_of_nonlinear_variables with an array into which the indices of the nonlinear variables should be written - the array has the length num_nonlin_vars, which is identical with the return value of <a class="el" href="classIpopt_1_1TNLP.html#a015506564afc611060f4416dbb08aa4d" title="Return the number of variables that appear nonlinearly in the objective function or in at least one c...">get_number_of_nonlinear_variables()</a>. It is assumed that the indices are counted starting with 1 in the FORTRAN_STYLE, and 0 for the C_STYLE.</p>
-<p>The default implementation returns -1, i.e., all variables are assumed to be nonlinear. </p>
-
-<p>Reimplemented in <a class="el" href="classIpopt_1_1AmplTNLP.html#a2535706fb770ebda7b50219b11352c92">Ipopt::AmplTNLP</a>, and <a class="el" href="classIpopt_1_1TNLPReducer.html#a410278c7a2c9be06f8cb864120784669">Ipopt::TNLPReducer</a>.</p>
-
-<p class="definition">Definition at line <a class="el" href="IpTNLP_8hpp_source.html#l00717">717</a> of file <a class="el" href="IpTNLP_8hpp_source.html">IpTNLP.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a9bb5f16cdc2754d1667749268fb1308c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9bb5f16cdc2754d1667749268fb1308c">&#9670;&nbsp;</a></span>get_list_of_nonlinear_variables()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual bool Ipopt::TNLP::get_list_of_nonlinear_variables </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
-          <td class="paramname"><em>num_nonlin_vars</em>, </td>
+          <td class="paramtype">const <a class="el" href="classIpopt_1_1IpoptData.html">IpoptData</a> *&#160;</td>
+          <td class="paramname"><em>ip_data</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> *&#160;</td>
-          <td class="paramname"><em>pos_nonlin_vars</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="classIpopt_1_1IpoptCalculatedQuantities.html">IpoptCalculatedQuantities</a> *&#160;</td>
+          <td class="paramname"><em>ip_cq</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>scaled</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
+          <td class="paramname"><em>z_L</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
+          <td class="paramname"><em>z_U</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
+          <td class="paramname"><em>g</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
+          <td class="paramname"><em>lambda</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td>
+          <td></td><td> const</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p>Return the indices of all nonlinear variables. </p>
-<p>This method is called only if limited-memory quasi-Newton option is used and <a class="el" href="classIpopt_1_1TNLP.html#a015506564afc611060f4416dbb08aa4d" title="Return the number of variables that appear nonlinearly in the objective function or in at least one c...">get_number_of_nonlinear_variables()</a> returned a positive number. This number is provided in parameter num_nonlin_var.</p>
-<p>The method must store the indices of all nonlinear variables in pos_nonlin_vars, where the numbering starts with 0 order 1, depending on the numbering style determined in get_nlp_info. </p>
+<p>Get primal and dual variable values of the current iterate. </p>
+<p>This method can be used to get the values of the current iterate, e.g., during <a class="el" href="classIpopt_1_1TNLP.html#a2f962a4c43464adb7928771af84503d6" title="Intermediate Callback method for the user.">intermediate_callback()</a>. The method expects the number of variables (dimension of x), number of constraints (dimension of g(x)), and allocated arrays of appropriate lengths as input.</p>
+<p>The method translates the x(), c(), d(), y_c(), y_d(), z_L(), and z_U() vectors from <a class="el" href="classIpopt_1_1IpoptData.html#a7ea3aeb9b62b340f7671d61b88a9b056" title="Current point.">IpoptData::curr()</a> of the internal NLP representation into the form used by the <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a>. For the correspondence between scaled and unscaled solutions, see the detailed description of <a class="el" href="classIpopt_1_1OrigIpoptNLP.html" title="This class maps the traditional NLP into something that is more useful for Ipopt.">OrigIpoptNLP</a>. If Ipopt is in restoration mode, it maps the current iterate of restoration NLP (see <a class="el" href="classIpopt_1_1RestoIpoptNLP.html" title="This class maps a IpoptNLP into one that is used for the restoration phase of Ipopt.">RestoIpoptNLP</a>) back to the original <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a>.</p>
+<p>If there are fixed variables and fixed_variable_treatment=make_parameter, then requesting z_L and z_U can trigger a reevaluation of the Gradient of the objective function and the Jacobian of the constraint functions.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ip_data</td><td>(in) <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> Data </td></tr>
+    <tr><td class="paramname">ip_cq</td><td>(in) <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> Calculated Quantities </td></tr>
+    <tr><td class="paramname">scaled</td><td>(in) whether to retrieve scaled or unscaled iterate </td></tr>
+    <tr><td class="paramname">n</td><td>(in) the number of variables \(x\) in the problem; can be arbitrary if skipping x, z_L, and z_U </td></tr>
+    <tr><td class="paramname">x</td><td>(out) buffer to store value of primal variables \(x\), must have length at least n; pass NULL to skip retrieving x </td></tr>
+    <tr><td class="paramname">z_L</td><td>(out) buffer to store the lower bound multipliers \(z_L\), must have length at least n; pass NULL to skip retrieving z_L and z_U </td></tr>
+    <tr><td class="paramname">z_U</td><td>(out) buffer to store the upper bound multipliers \(z_U\), must have length at least n; pass NULL to skip retrieving z_U and z_U </td></tr>
+    <tr><td class="paramname">m</td><td>(in) the number of constraints \(g(x)\); can be arbitrary if skipping g and lambda </td></tr>
+    <tr><td class="paramname">g</td><td>(out) buffer to store the constraint values \(g(x)\), must have length at least m; pass NULL to skip retrieving g </td></tr>
+    <tr><td class="paramname">lambda</td><td>(out) buffer to store the constraint multipliers \(\lambda\), must have length at least m; pass NULL to skip retrieving lambda</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> has successfully filled the given arrays </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
-<p>Reimplemented in <a class="el" href="classIpopt_1_1AmplTNLP.html#a725d09f0beca55ea55a06df68f38d72a">Ipopt::AmplTNLP</a>, and <a class="el" href="classIpopt_1_1TNLPReducer.html#a160eaefabaea23ca77d1efeca60a2ff1">Ipopt::TNLPReducer</a>.</p>
+</div>
+</div>
+<a id="a723401f01da3ee61d4f51a2e05d9b2f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a723401f01da3ee61d4f51a2e05d9b2f9">&#9670;&nbsp;</a></span>get_curr_violations()</h2>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLP_8hpp_source.html#l00734">734</a> of file <a class="el" href="IpTNLP_8hpp_source.html">IpTNLP.hpp</a>.</p>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Ipopt::TNLP::get_curr_violations </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classIpopt_1_1IpoptData.html">IpoptData</a> *&#160;</td>
+          <td class="paramname"><em>ip_data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classIpopt_1_1IpoptCalculatedQuantities.html">IpoptCalculatedQuantities</a> *&#160;</td>
+          <td class="paramname"><em>ip_cq</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>scaled</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
+          <td class="paramname"><em>x_L_violation</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
+          <td class="paramname"><em>x_U_violation</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
+          <td class="paramname"><em>compl_x_L</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
+          <td class="paramname"><em>compl_x_U</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
+          <td class="paramname"><em>grad_lag_x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
+          <td class="paramname"><em>nlp_constraint_violation</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td>
+          <td class="paramname"><em>compl_g</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get primal and dual infeasibility of the current iterate. </p>
+<p>This method can be used to get the violations of constraints and optimality conditions at the current iterate, e.g., during <a class="el" href="classIpopt_1_1TNLP.html#a2f962a4c43464adb7928771af84503d6" title="Intermediate Callback method for the user.">intermediate_callback()</a>. The method expects the number of variables (dimension of x), number of constraints (dimension of g(x)), and allocated arrays of appropriate lengths as input.</p>
+<p>The method makes the vectors behind (unscaled_)curr_orig_bounds_violation(), (unscaled_)curr_nlp_constraint_violation(), (unscaled_)curr_dual_infeasibility(), (unscaled_)curr_complementarity() from <a class="el" href="classIpopt_1_1IpoptCalculatedQuantities.html" title="Class for all IPOPT specific calculated quantities.">IpoptCalculatedQuantities</a> of the internal NLP representation available into the form used by the <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a>. If Ipopt is in restoration mode, it maps the current iterate of restoration NLP (see <a class="el" href="classIpopt_1_1RestoIpoptNLP.html" title="This class maps a IpoptNLP into one that is used for the restoration phase of Ipopt.">RestoIpoptNLP</a>) back to the original <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a>.</p>
+<dl class="section note"><dt>Note</dt><dd>If in restoration phase, then requesting grad_lag_x can trigger a call to <a class="el" href="classIpopt_1_1TNLP.html#a52698f1861ffef271d5e317c0e168652" title="Method to request the gradient of the objective function.">eval_grad_f()</a>.</dd>
+<dd>
+<a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> by default relaxes variable bounds (option bound_relax_factor &gt; 0.0). x_L_violation and x_U_violation report the violation of a solution w.r.t. the original unrelaxed bounds. However, compl_x_L and compl_x_U use the relaxed variable bounds to calculate the complementarity.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ip_data</td><td>(in) <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> Data </td></tr>
+    <tr><td class="paramname">ip_cq</td><td>(in) <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> Calculated Quantities </td></tr>
+    <tr><td class="paramname">scaled</td><td>(in) whether to retrieve scaled or unscaled violations </td></tr>
+    <tr><td class="paramname">n</td><td>(in) the number of variables \(x\) in the problem; can be arbitrary if skipping compl_x_L, compl_x_U, and grad_lag_x </td></tr>
+    <tr><td class="paramname">x_L_violation</td><td>(out) buffer to store violation of original lower bounds on variables (max(orig_x_L-x,0)), must have length at least n; pass NULL to skip retrieving orig_x_L </td></tr>
+    <tr><td class="paramname">x_U_violation</td><td>(out) buffer to store violation of original upper bounds on variables (max(x-orig_x_U,0)), must have length at least n; pass NULL to skip retrieving orig_x_U </td></tr>
+    <tr><td class="paramname">compl_x_L</td><td>(out) buffer to store violation of complementarity for lower bounds on variables ( \((x-x_L)z_L\)), must have length at least n; pass NULL to skip retrieving compl_x_L </td></tr>
+    <tr><td class="paramname">compl_x_U</td><td>(out) buffer to store violation of complementarity for upper bounds on variables ( \((x_U-x)z_U\)), must have length at least n; pass NULL to skip retrieving compl_x_U </td></tr>
+    <tr><td class="paramname">grad_lag_x</td><td>(out) buffer to store gradient of Lagrangian w.r.t. variables \(x\), must have length at least n; pass NULL to skip retrieving grad_lag_x </td></tr>
+    <tr><td class="paramname">m</td><td>(in) the number of constraints \(g(x)\); can be arbitrary if skipping lambda </td></tr>
+    <tr><td class="paramname">nlp_constraint_violation</td><td>(out) buffer to store violation of constraints \(max(g_l-g(x),g(x)-g_u,0)\), must have length at least m; pass NULL to skip retrieving constraint_violation </td></tr>
+    <tr><td class="paramname">compl_g</td><td>(out) buffer to store violation of complementarity of constraint ( \((g(x)-g_l)*\lambda^+ + (g_l-g(x))*\lambda^-\), where \(\lambda^+=max(0,\lambda)\) and \(\lambda^-=max(0,-\lambda)\) (componentwise)), must have length at least m; pass NULL to skip retrieving compl_g</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> has successfully filled the given arrays </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
 </div>
 </div>
@@ -1836,16 +2026,5 @@ methods to gather information about the NLP</h2></td></tr>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="aIpTNLPAdapter_8hpp_html"><div class="ttname"><a href="IpTNLPAdapter_8hpp.html">IpTNLPAdapter.hpp</a></div></div>
-<div class="ttc" id="aclassIpopt_1_1OrigIpoptNLP_html_ad4127e81006fe77771982181aa08453d"><div class="ttname"><a href="classIpopt_1_1OrigIpoptNLP.html#ad4127e81006fe77771982181aa08453d">Ipopt::OrigIpoptNLP::nlp</a></div><div class="ttdeci">SmartPtr&lt; NLP &gt; nlp()</div><div class="ttdoc">Accessor method to the underlying NLP.</div><div class="ttdef"><b>Definition:</b> <a href="IpOrigIpoptNLP_8hpp_source.html#l00317">IpOrigIpoptNLP.hpp:317</a></div></div>
-<div class="ttc" id="aclassIpopt_1_1TNLPAdapter_html_a9d1679322cc963f1e58aed0d9416247c"><div class="ttname"><a href="classIpopt_1_1TNLPAdapter.html#a9d1679322cc963f1e58aed0d9416247c">Ipopt::TNLPAdapter::ResortX</a></div><div class="ttdeci">void ResortX(const Vector &amp;x, Number *x_orig)</div><div class="ttdoc">Sort the primal variables, and add the fixed values in x.</div></div>
-<div class="ttc" id="aIpIpoptCalculatedQuantities_8hpp_html"><div class="ttname"><a href="IpIpoptCalculatedQuantities_8hpp.html">IpIpoptCalculatedQuantities.hpp</a></div></div>
-<div class="ttc" id="anamespaceIpopt_html_a4ae001947e506b5b8f4f134b8a4ead23"><div class="ttname"><a href="namespaceIpopt.html#a4ae001947e506b5b8f4f134b8a4ead23">Ipopt::GetRawPtr</a></div><div class="ttdeci">U * GetRawPtr(const SmartPtr&lt; U &gt; &amp;smart_ptr)</div><div class="ttdef"><b>Definition:</b> <a href="IpSmartPtr_8hpp_source.html#l00651">IpSmartPtr.hpp:651</a></div></div>
-<div class="ttc" id="aclassIpopt_1_1TNLPAdapter_html"><div class="ttname"><a href="classIpopt_1_1TNLPAdapter.html">Ipopt::TNLPAdapter</a></div><div class="ttdoc">This class adapts the TNLP interface so it looks like an NLP interface.</div><div class="ttdef"><b>Definition:</b> <a href="IpTNLPAdapter_8hpp_source.html#l00029">IpTNLPAdapter.hpp:30</a></div></div>
-<div class="ttc" id="aIpIpoptData_8hpp_html"><div class="ttname"><a href="IpIpoptData_8hpp.html">IpIpoptData.hpp</a></div></div>
-<div class="ttc" id="aclassIpopt_1_1OrigIpoptNLP_html"><div class="ttname"><a href="classIpopt_1_1OrigIpoptNLP.html">Ipopt::OrigIpoptNLP</a></div><div class="ttdoc">This class maps the traditional NLP into something that is more useful by Ipopt.</div><div class="ttdef"><b>Definition:</b> <a href="IpOrigIpoptNLP_8hpp_source.html#l00038">IpOrigIpoptNLP.hpp:39</a></div></div>
-<div class="ttc" id="aclassIpopt_1_1TNLPAdapter_html_a36f2cffa17853a2dbf02d85705e57bac"><div class="ttname"><a href="classIpopt_1_1TNLPAdapter.html#a36f2cffa17853a2dbf02d85705e57bac">Ipopt::TNLPAdapter::ResortBnds</a></div><div class="ttdeci">void ResortBnds(const Vector &amp;x_L, Number *x_L_orig, const Vector &amp;x_U, Number *x_U_orig, bool clearorig=true)</div><div class="ttdoc">Provides values for lower and upper bounds on variables for given Ipopt-internal vectors.</div></div>
-<div class="ttc" id="aclassIpopt_1_1TNLPAdapter_html_a33e37afa89a562815460ccbe63d2e659"><div class="ttname"><a href="classIpopt_1_1TNLPAdapter.html#a33e37afa89a562815460ccbe63d2e659">Ipopt::TNLPAdapter::ResortG</a></div><div class="ttdeci">void ResortG(const Vector &amp;c, const Vector &amp;d, Number *g_orig)</div></div>
-<div class="ttc" id="aIpOrigIpoptNLP_8hpp_html"><div class="ttname"><a href="IpOrigIpoptNLP_8hpp.html">IpOrigIpoptNLP.hpp</a></div></div>
 </body>
 </html>

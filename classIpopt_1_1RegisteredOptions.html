@@ -1,5 +1,5 @@
-<!-- HTML header for doxygen 1.8.13-->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- HTML header for doxygen 1.8.18-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.13.4</span-->
+   &#160;<!--span id="projectnumber">3.14.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -103,6 +103,8 @@ $(document).ready(function(){initNavTree('classIpopt_1_1RegisteredOptions.html',
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classIpopt_1_1RegisteredOptions-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -128,14 +130,107 @@ $(document).ready(function(){initNavTree('classIpopt_1_1RegisteredOptions.html',
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
+<tr class="memitem:a492dff9972c12a43e66368942fd6fd5b"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a492dff9972c12a43e66368942fd6fd5b">OutputMode</a> { <a class="el" href="classIpopt_1_1RegisteredOptions.html#a492dff9972c12a43e66368942fd6fd5baad8d02b2bf25a19c0efb4f6c7d432d46">OUTPUTTEXT</a> = 0, 
+<a class="el" href="classIpopt_1_1RegisteredOptions.html#a492dff9972c12a43e66368942fd6fd5ba5b130b304e6963b885d6d11d66d07fcf">OUTPUTLATEX</a>, 
+<a class="el" href="classIpopt_1_1RegisteredOptions.html#a492dff9972c12a43e66368942fd6fd5bab1234468e75759acc2380e9fe8cb6f6a">OUTPUTDOXYGEN</a>
+ }</td></tr>
+<tr class="memdesc:a492dff9972c12a43e66368942fd6fd5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">output modes  <a href="classIpopt_1_1RegisteredOptions.html#a492dff9972c12a43e66368942fd6fd5b">More...</a><br /></td></tr>
+<tr class="separator:a492dff9972c12a43e66368942fd6fd5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae13f9ef9aeba8fb5eb4aa4fae754094d"><td class="memItemLeft" align="right" valign="top">typedef std::map&lt; std::string, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1RegisteredOption.html">RegisteredOption</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#ae13f9ef9aeba8fb5eb4aa4fae754094d">RegOptionsList</a></td></tr>
 <tr class="separator:ae13f9ef9aeba8fb5eb4aa4fae754094d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9063fef9e9c49b050e94d131343cbca5"><td class="memItemLeft" align="right" valign="top">typedef std::map&lt; std::string, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1RegisteredCategory.html">RegisteredCategory</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a9063fef9e9c49b050e94d131343cbca5">RegCategoriesList</a></td></tr>
+<tr class="separator:a9063fef9e9c49b050e94d131343cbca5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0d537262cb2369bcc231d2c30cd4a31"><td class="memItemLeft" align="right" valign="top">typedef std::set&lt; <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1RegisteredCategory.html">RegisteredCategory</a> &gt;, <a class="el" href="classIpopt_1_1RegisteredCategory_1_1ComparePriority.html">RegisteredCategory::ComparePriority</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#af0d537262cb2369bcc231d2c30cd4a31">RegCategoriesByPriority</a></td></tr>
+<tr class="separator:af0d537262cb2369bcc231d2c30cd4a31"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ad7c5c3a1c48abd213ebd282f2e00f939"><td class="memItemLeft" align="right" valign="top">virtual const <a class="el" href="classIpopt_1_1RegisteredOptions.html#ae13f9ef9aeba8fb5eb4aa4fae754094d">RegOptionsList</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#ad7c5c3a1c48abd213ebd282f2e00f939">RegisteredOptionsList</a> () const</td></tr>
-<tr class="memdesc:ad7c5c3a1c48abd213ebd282f2e00f939"><td class="mdescLeft">&#160;</td><td class="mdescRight">Giving access to iteratable representation of the registered options.  <a href="classIpopt_1_1RegisteredOptions.html#ad7c5c3a1c48abd213ebd282f2e00f939">More...</a><br /></td></tr>
-<tr class="separator:ad7c5c3a1c48abd213ebd282f2e00f939"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4aee999e1deb765fe0de3f8e64d460e3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a4aee999e1deb765fe0de3f8e64d460e3">DECLARE_STD_EXCEPTION</a> (OPTION_ALREADY_REGISTERED)</td></tr>
+<tr class="separator:a4aee999e1deb765fe0de3f8e64d460e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a252598a960dbb2e6432000ac43b40502"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a252598a960dbb2e6432000ac43b40502">SetRegisteringCategory</a> (const std::string &amp;registering_category, int priority=0)</td></tr>
+<tr class="memdesc:a252598a960dbb2e6432000ac43b40502"><td class="mdescLeft">&#160;</td><td class="mdescRight">set the registering class  <a href="classIpopt_1_1RegisteredOptions.html#a252598a960dbb2e6432000ac43b40502">More...</a><br /></td></tr>
+<tr class="separator:a252598a960dbb2e6432000ac43b40502"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ef5ead96cbc09fbaf093da61fa7194e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a2ef5ead96cbc09fbaf093da61fa7194e">SetRegisteringCategory</a> (<a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1RegisteredCategory.html">RegisteredCategory</a> &gt; registering_category)</td></tr>
+<tr class="memdesc:a2ef5ead96cbc09fbaf093da61fa7194e"><td class="mdescLeft">&#160;</td><td class="mdescRight">set the registering class  <a href="classIpopt_1_1RegisteredOptions.html#a2ef5ead96cbc09fbaf093da61fa7194e">More...</a><br /></td></tr>
+<tr class="separator:a2ef5ead96cbc09fbaf093da61fa7194e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2174e2637546b3aed9335eeb2e9a22da"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1RegisteredCategory.html">RegisteredCategory</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a2174e2637546b3aed9335eeb2e9a22da">RegisteringCategory</a> ()</td></tr>
+<tr class="memdesc:a2174e2637546b3aed9335eeb2e9a22da"><td class="mdescLeft">&#160;</td><td class="mdescRight">retrieve the value of the current registering category  <a href="classIpopt_1_1RegisteredOptions.html#a2174e2637546b3aed9335eeb2e9a22da">More...</a><br /></td></tr>
+<tr class="separator:a2174e2637546b3aed9335eeb2e9a22da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d5149204adb24726aa5593ed77dc6bc"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a7d5149204adb24726aa5593ed77dc6bc">AddNumberOption</a> (const std::string &amp;name, const std::string &amp;short_description, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> default_value, const std::string &amp;long_description=&quot;&quot;, bool advanced=false)</td></tr>
+<tr class="memdesc:a7d5149204adb24726aa5593ed77dc6bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a Number option (with no restrictions)  <a href="classIpopt_1_1RegisteredOptions.html#a7d5149204adb24726aa5593ed77dc6bc">More...</a><br /></td></tr>
+<tr class="separator:a7d5149204adb24726aa5593ed77dc6bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84f8cd65cae3928bfce39709664b504a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a84f8cd65cae3928bfce39709664b504a">AddLowerBoundedNumberOption</a> (const std::string &amp;name, const std::string &amp;short_description, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> lower, bool strict, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> default_value, const std::string &amp;long_description=&quot;&quot;, bool advanced=false)</td></tr>
+<tr class="memdesc:a84f8cd65cae3928bfce39709664b504a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a Number option (with a lower bound)  <a href="classIpopt_1_1RegisteredOptions.html#a84f8cd65cae3928bfce39709664b504a">More...</a><br /></td></tr>
+<tr class="separator:a84f8cd65cae3928bfce39709664b504a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6736224a454ecf41f8e01202e937067a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a6736224a454ecf41f8e01202e937067a">AddUpperBoundedNumberOption</a> (const std::string &amp;name, const std::string &amp;short_description, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> upper, bool strict, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> default_value, const std::string &amp;long_description=&quot;&quot;, bool advanced=false)</td></tr>
+<tr class="memdesc:a6736224a454ecf41f8e01202e937067a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a Number option (with a upper bound)  <a href="classIpopt_1_1RegisteredOptions.html#a6736224a454ecf41f8e01202e937067a">More...</a><br /></td></tr>
+<tr class="separator:a6736224a454ecf41f8e01202e937067a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac6bf8af095bb2dc7b1bb764ab636564"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#aac6bf8af095bb2dc7b1bb764ab636564">AddBoundedNumberOption</a> (const std::string &amp;name, const std::string &amp;short_description, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> lower, bool lower_strict, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> upper, bool upper_strict, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> default_value, const std::string &amp;long_description=&quot;&quot;, bool advanced=false)</td></tr>
+<tr class="memdesc:aac6bf8af095bb2dc7b1bb764ab636564"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a Number option (with a both bounds)  <a href="classIpopt_1_1RegisteredOptions.html#aac6bf8af095bb2dc7b1bb764ab636564">More...</a><br /></td></tr>
+<tr class="separator:aac6bf8af095bb2dc7b1bb764ab636564"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2cd96b0c9cef4c8cf2a9a8c7146f2f74"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a2cd96b0c9cef4c8cf2a9a8c7146f2f74">AddIntegerOption</a> (const std::string &amp;name, const std::string &amp;short_description, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> default_value, const std::string &amp;long_description=&quot;&quot;, bool advanced=false)</td></tr>
+<tr class="memdesc:a2cd96b0c9cef4c8cf2a9a8c7146f2f74"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a Integer option (with no restrictions)  <a href="classIpopt_1_1RegisteredOptions.html#a2cd96b0c9cef4c8cf2a9a8c7146f2f74">More...</a><br /></td></tr>
+<tr class="separator:a2cd96b0c9cef4c8cf2a9a8c7146f2f74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a471297abdcf5b814afaa7d75cd1c1634"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a471297abdcf5b814afaa7d75cd1c1634">AddLowerBoundedIntegerOption</a> (const std::string &amp;name, const std::string &amp;short_description, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> lower, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> default_value, const std::string &amp;long_description=&quot;&quot;, bool advanced=false)</td></tr>
+<tr class="memdesc:a471297abdcf5b814afaa7d75cd1c1634"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a Integer option (with a lower bound)  <a href="classIpopt_1_1RegisteredOptions.html#a471297abdcf5b814afaa7d75cd1c1634">More...</a><br /></td></tr>
+<tr class="separator:a471297abdcf5b814afaa7d75cd1c1634"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21a03c9d160c1ede6f0071d0f2afaa48"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a21a03c9d160c1ede6f0071d0f2afaa48">AddUpperBoundedIntegerOption</a> (const std::string &amp;name, const std::string &amp;short_description, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> upper, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> default_value, const std::string &amp;long_description=&quot;&quot;, bool advanced=false)</td></tr>
+<tr class="memdesc:a21a03c9d160c1ede6f0071d0f2afaa48"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a Integer option (with a upper bound)  <a href="classIpopt_1_1RegisteredOptions.html#a21a03c9d160c1ede6f0071d0f2afaa48">More...</a><br /></td></tr>
+<tr class="separator:a21a03c9d160c1ede6f0071d0f2afaa48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a64f56be3631819cb8ccb91a03fbd1f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a0a64f56be3631819cb8ccb91a03fbd1f">AddBoundedIntegerOption</a> (const std::string &amp;name, const std::string &amp;short_description, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> lower, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> upper, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> default_value, const std::string &amp;long_description=&quot;&quot;, bool advanced=false)</td></tr>
+<tr class="memdesc:a0a64f56be3631819cb8ccb91a03fbd1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a Integer option (with a both bounds)  <a href="classIpopt_1_1RegisteredOptions.html#a0a64f56be3631819cb8ccb91a03fbd1f">More...</a><br /></td></tr>
+<tr class="separator:a0a64f56be3631819cb8ccb91a03fbd1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae48a012dccbed27bf2219b0112d7178c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#ae48a012dccbed27bf2219b0112d7178c">AddStringOption</a> (const std::string &amp;name, const std::string &amp;short_description, const std::string &amp;default_value, const std::vector&lt; std::string &gt; &amp;settings, const std::vector&lt; std::string &gt; &amp;descriptions, const std::string &amp;long_description=&quot;&quot;, bool advanced=false)</td></tr>
+<tr class="memdesc:ae48a012dccbed27bf2219b0112d7178c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a String option (with no restrictions)  <a href="classIpopt_1_1RegisteredOptions.html#ae48a012dccbed27bf2219b0112d7178c">More...</a><br /></td></tr>
+<tr class="separator:ae48a012dccbed27bf2219b0112d7178c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1fe2b332bb9f276824ceed47d61d1b82"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a1fe2b332bb9f276824ceed47d61d1b82">AddStringOption1</a> (const std::string &amp;name, const std::string &amp;short_description, const std::string &amp;default_value, const std::string &amp;setting1, const std::string &amp;description1, const std::string &amp;long_description=&quot;&quot;, bool advanced=false)</td></tr>
+<tr class="memdesc:a1fe2b332bb9f276824ceed47d61d1b82"><td class="mdescLeft">&#160;</td><td class="mdescRight">Methods that make adding string options with only a few entries easier.  <a href="classIpopt_1_1RegisteredOptions.html#a1fe2b332bb9f276824ceed47d61d1b82">More...</a><br /></td></tr>
+<tr class="separator:a1fe2b332bb9f276824ceed47d61d1b82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab81886c9988104e5702bd678c9f732b6"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#ab81886c9988104e5702bd678c9f732b6">AddStringOption2</a> (const std::string &amp;name, const std::string &amp;short_description, const std::string &amp;default_value, const std::string &amp;setting1, const std::string &amp;description1, const std::string &amp;setting2, const std::string &amp;description2, const std::string &amp;long_description=&quot;&quot;, bool advanced=false)</td></tr>
+<tr class="separator:ab81886c9988104e5702bd678c9f732b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab85c95e9c0fcba8702bd881b386f368c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#ab85c95e9c0fcba8702bd881b386f368c">AddStringOption3</a> (const std::string &amp;name, const std::string &amp;short_description, const std::string &amp;default_value, const std::string &amp;setting1, const std::string &amp;description1, const std::string &amp;setting2, const std::string &amp;description2, const std::string &amp;setting3, const std::string &amp;description3, const std::string &amp;long_description=&quot;&quot;, bool advanced=false)</td></tr>
+<tr class="separator:ab85c95e9c0fcba8702bd881b386f368c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9daa1360379a7267b652e99dfac3f345"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a9daa1360379a7267b652e99dfac3f345">AddStringOption4</a> (const std::string &amp;name, const std::string &amp;short_description, const std::string &amp;default_value, const std::string &amp;setting1, const std::string &amp;description1, const std::string &amp;setting2, const std::string &amp;description2, const std::string &amp;setting3, const std::string &amp;description3, const std::string &amp;setting4, const std::string &amp;description4, const std::string &amp;long_description=&quot;&quot;, bool advanced=false)</td></tr>
+<tr class="separator:a9daa1360379a7267b652e99dfac3f345"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38a8c3f0378862479eb33f261c751019"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a38a8c3f0378862479eb33f261c751019">AddStringOption5</a> (const std::string &amp;name, const std::string &amp;short_description, const std::string &amp;default_value, const std::string &amp;setting1, const std::string &amp;description1, const std::string &amp;setting2, const std::string &amp;description2, const std::string &amp;setting3, const std::string &amp;description3, const std::string &amp;setting4, const std::string &amp;description4, const std::string &amp;setting5, const std::string &amp;description5, const std::string &amp;long_description=&quot;&quot;, bool advanced=false)</td></tr>
+<tr class="separator:a38a8c3f0378862479eb33f261c751019"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b5c68fa608d90dfd72f3866b814acd8"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a0b5c68fa608d90dfd72f3866b814acd8">AddStringOption6</a> (const std::string &amp;name, const std::string &amp;short_description, const std::string &amp;default_value, const std::string &amp;setting1, const std::string &amp;description1, const std::string &amp;setting2, const std::string &amp;description2, const std::string &amp;setting3, const std::string &amp;description3, const std::string &amp;setting4, const std::string &amp;description4, const std::string &amp;setting5, const std::string &amp;description5, const std::string &amp;setting6, const std::string &amp;description6, const std::string &amp;long_description=&quot;&quot;, bool advanced=false)</td></tr>
+<tr class="separator:a0b5c68fa608d90dfd72f3866b814acd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf36470c3ff46960588c51d2a430e816"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#adf36470c3ff46960588c51d2a430e816">AddStringOption7</a> (const std::string &amp;name, const std::string &amp;short_description, const std::string &amp;default_value, const std::string &amp;setting1, const std::string &amp;description1, const std::string &amp;setting2, const std::string &amp;description2, const std::string &amp;setting3, const std::string &amp;description3, const std::string &amp;setting4, const std::string &amp;description4, const std::string &amp;setting5, const std::string &amp;description5, const std::string &amp;setting6, const std::string &amp;description6, const std::string &amp;setting7, const std::string &amp;description7, const std::string &amp;long_description=&quot;&quot;, bool advanced=false)</td></tr>
+<tr class="separator:adf36470c3ff46960588c51d2a430e816"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a82b87630af54ba88bd5a4d094887104a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a82b87630af54ba88bd5a4d094887104a">AddStringOption8</a> (const std::string &amp;name, const std::string &amp;short_description, const std::string &amp;default_value, const std::string &amp;setting1, const std::string &amp;description1, const std::string &amp;setting2, const std::string &amp;description2, const std::string &amp;setting3, const std::string &amp;description3, const std::string &amp;setting4, const std::string &amp;description4, const std::string &amp;setting5, const std::string &amp;description5, const std::string &amp;setting6, const std::string &amp;description6, const std::string &amp;setting7, const std::string &amp;description7, const std::string &amp;setting8, const std::string &amp;description8, const std::string &amp;long_description=&quot;&quot;, bool advanced=false)</td></tr>
+<tr class="separator:a82b87630af54ba88bd5a4d094887104a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f07e4826bfa640df33653f15d7c7a6f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a9f07e4826bfa640df33653f15d7c7a6f">AddStringOption9</a> (const std::string &amp;name, const std::string &amp;short_description, const std::string &amp;default_value, const std::string &amp;setting1, const std::string &amp;description1, const std::string &amp;setting2, const std::string &amp;description2, const std::string &amp;setting3, const std::string &amp;description3, const std::string &amp;setting4, const std::string &amp;description4, const std::string &amp;setting5, const std::string &amp;description5, const std::string &amp;setting6, const std::string &amp;description6, const std::string &amp;setting7, const std::string &amp;description7, const std::string &amp;setting8, const std::string &amp;description8, const std::string &amp;setting9, const std::string &amp;description9, const std::string &amp;long_description=&quot;&quot;, bool advanced=false)</td></tr>
+<tr class="separator:a9f07e4826bfa640df33653f15d7c7a6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43f42ea1ecb4edb7e6ae7f491a261a0b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a43f42ea1ecb4edb7e6ae7f491a261a0b">AddStringOption10</a> (const std::string &amp;name, const std::string &amp;short_description, const std::string &amp;default_value, const std::string &amp;setting1, const std::string &amp;description1, const std::string &amp;setting2, const std::string &amp;description2, const std::string &amp;setting3, const std::string &amp;description3, const std::string &amp;setting4, const std::string &amp;description4, const std::string &amp;setting5, const std::string &amp;description5, const std::string &amp;setting6, const std::string &amp;description6, const std::string &amp;setting7, const std::string &amp;description7, const std::string &amp;setting8, const std::string &amp;description8, const std::string &amp;setting9, const std::string &amp;description9, const std::string &amp;setting10, const std::string &amp;description10, const std::string &amp;long_description=&quot;&quot;, bool advanced=false)</td></tr>
+<tr class="separator:a43f42ea1ecb4edb7e6ae7f491a261a0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ef42df853c9b8ae515cc539f6ac4642"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a2ef42df853c9b8ae515cc539f6ac4642">AddBoolOption</a> (const std::string &amp;name, const std::string &amp;short_description, bool default_value, const std::string &amp;long_description=&quot;&quot;, bool advanced=false)</td></tr>
+<tr class="memdesc:a2ef42df853c9b8ae515cc539f6ac4642"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a string value with two possible settings: yes and no.  <a href="classIpopt_1_1RegisteredOptions.html#a2ef42df853c9b8ae515cc539f6ac4642">More...</a><br /></td></tr>
+<tr class="separator:a2ef42df853c9b8ae515cc539f6ac4642"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b6136d868a7d4b3be9e148f4d9146a9"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1RegisteredOption.html">RegisteredOption</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a0b6136d868a7d4b3be9e148f4d9146a9">GetOption</a> (const std::string &amp;name)</td></tr>
+<tr class="memdesc:a0b6136d868a7d4b3be9e148f4d9146a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a registered option.  <a href="classIpopt_1_1RegisteredOptions.html#a0b6136d868a7d4b3be9e148f4d9146a9">More...</a><br /></td></tr>
+<tr class="separator:a0b6136d868a7d4b3be9e148f4d9146a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f166b27d890a0ea6a9b127b6e903efe"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classIpopt_1_1RegisteredOptions.html#ae13f9ef9aeba8fb5eb4aa4fae754094d">RegOptionsList</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a7f166b27d890a0ea6a9b127b6e903efe">RegisteredOptionsList</a> () const</td></tr>
+<tr class="memdesc:a7f166b27d890a0ea6a9b127b6e903efe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Giving access to iteratable representation of the registered options.  <a href="classIpopt_1_1RegisteredOptions.html#a7f166b27d890a0ea6a9b127b6e903efe">More...</a><br /></td></tr>
+<tr class="separator:a7f166b27d890a0ea6a9b127b6e903efe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37b4d1c4bc1114955bd57daa7c8cfd8f"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classIpopt_1_1RegisteredOptions.html#a9063fef9e9c49b050e94d131343cbca5">RegCategoriesList</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a37b4d1c4bc1114955bd57daa7c8cfd8f">RegisteredCategories</a> () const</td></tr>
+<tr class="memdesc:a37b4d1c4bc1114955bd57daa7c8cfd8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Giving access to registered categories.  <a href="classIpopt_1_1RegisteredOptions.html#a37b4d1c4bc1114955bd57daa7c8cfd8f">More...</a><br /></td></tr>
+<tr class="separator:a37b4d1c4bc1114955bd57daa7c8cfd8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad75709e4cd2e5eee6622a0c703bfc05f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#ad75709e4cd2e5eee6622a0c703bfc05f">RegisteredCategoriesByPriority</a> (<a class="el" href="classIpopt_1_1RegisteredOptions.html#af0d537262cb2369bcc231d2c30cd4a31">RegCategoriesByPriority</a> &amp;categories) const</td></tr>
+<tr class="memdesc:ad75709e4cd2e5eee6622a0c703bfc05f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Giving access to registered categories ordered by (decreasing) priority.  <a href="classIpopt_1_1RegisteredOptions.html#ad75709e4cd2e5eee6622a0c703bfc05f">More...</a><br /></td></tr>
+<tr class="separator:ad75709e4cd2e5eee6622a0c703bfc05f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93c2740eed93b81678102c9b5db9a9b0"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a93c2740eed93b81678102c9b5db9a9b0">OutputOptionDocumentation</a> (const <a class="el" href="classIpopt_1_1Journalist.html">Journalist</a> &amp;jnlst, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1OptionsList.html">OptionsList</a> &gt; options, int minpriority=0) const</td></tr>
+<tr class="memdesc:a93c2740eed93b81678102c9b5db9a9b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output documentation.  <a href="classIpopt_1_1RegisteredOptions.html#a93c2740eed93b81678102c9b5db9a9b0">More...</a><br /></td></tr>
+<tr class="separator:a93c2740eed93b81678102c9b5db9a9b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a553dd6d164c75149af0da1254e144eef"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="IpTypes_8h.html#a24c578b20e2cd4eeb0060056ea13cbe5">IPOPT_DEPRECATED</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a553dd6d164c75149af0da1254e144eef">OutputOptionDocumentation</a> (const <a class="el" href="classIpopt_1_1Journalist.html">Journalist</a> &amp;jnlst, const std::list&lt; std::string &gt; &amp;categories=std::list&lt; std::string &gt;()) const</td></tr>
+<tr class="memdesc:a553dd6d164c75149af0da1254e144eef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output documentation in text format.  <a href="classIpopt_1_1RegisteredOptions.html#a553dd6d164c75149af0da1254e144eef">More...</a><br /></td></tr>
+<tr class="separator:a553dd6d164c75149af0da1254e144eef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adacc0aff79418c0fce05421f2a232961"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="IpTypes_8h.html#a24c578b20e2cd4eeb0060056ea13cbe5">IPOPT_DEPRECATED</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#adacc0aff79418c0fce05421f2a232961">OutputLatexOptionDocumentation</a> (const <a class="el" href="classIpopt_1_1Journalist.html">Journalist</a> &amp;jnlst, const std::list&lt; std::string &gt; &amp;options_to_print=std::list&lt; std::string &gt;()) const</td></tr>
+<tr class="memdesc:adacc0aff79418c0fce05421f2a232961"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output documentation in Latex format to include in a latex file.  <a href="classIpopt_1_1RegisteredOptions.html#adacc0aff79418c0fce05421f2a232961">More...</a><br /></td></tr>
+<tr class="separator:adacc0aff79418c0fce05421f2a232961"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2068b523c885ae794007ee754b88d01"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="IpTypes_8h.html#a24c578b20e2cd4eeb0060056ea13cbe5">IPOPT_DEPRECATED</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#ab2068b523c885ae794007ee754b88d01">OutputDoxygenOptionDocumentation</a> (const <a class="el" href="classIpopt_1_1Journalist.html">Journalist</a> &amp;jnlst, const std::list&lt; std::string &gt; &amp;options_to_print=std::list&lt; std::string &gt;()) const</td></tr>
+<tr class="memdesc:ab2068b523c885ae794007ee754b88d01"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output documentation in Doxygen format to include in doxygen documentation.  <a href="classIpopt_1_1RegisteredOptions.html#ab2068b523c885ae794007ee754b88d01">More...</a><br /></td></tr>
+<tr class="separator:ab2068b523c885ae794007ee754b88d01"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader"></div></td></tr>
 <tr class="memitem:a323f6aabcc53c3735c4d5c2983af7652"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a323f6aabcc53c3735c4d5c2983af7652">RegisteredOptions</a> ()</td></tr>
 <tr class="memdesc:a323f6aabcc53c3735c4d5c2983af7652"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructors / Destructors.  <a href="classIpopt_1_1RegisteredOptions.html#a323f6aabcc53c3735c4d5c2983af7652">More...</a><br /></td></tr>
@@ -143,99 +238,45 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad96b29bd319e5dae811f0a6ff803555d"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#ad96b29bd319e5dae811f0a6ff803555d">~RegisteredOptions</a> ()</td></tr>
 <tr class="memdesc:ad96b29bd319e5dae811f0a6ff803555d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="classIpopt_1_1RegisteredOptions.html#ad96b29bd319e5dae811f0a6ff803555d">More...</a><br /></td></tr>
 <tr class="separator:ad96b29bd319e5dae811f0a6ff803555d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr><td colspan="2"><div class="groupHeader"></div></td></tr>
-<tr class="memitem:a69c97d254ff68ff061f8b342e133879b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a69c97d254ff68ff061f8b342e133879b">SetRegisteringCategory</a> (const std::string &amp;registering_category)</td></tr>
-<tr class="memdesc:a69c97d254ff68ff061f8b342e133879b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Methods to interact with registered options.  <a href="classIpopt_1_1RegisteredOptions.html#a69c97d254ff68ff061f8b342e133879b">More...</a><br /></td></tr>
-<tr class="separator:a69c97d254ff68ff061f8b342e133879b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d11135d59ecda5d634153a454df5c76"><td class="memItemLeft" align="right" valign="top">virtual std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a5d11135d59ecda5d634153a454df5c76">RegisteringCategory</a> ()</td></tr>
-<tr class="memdesc:a5d11135d59ecda5d634153a454df5c76"><td class="mdescLeft">&#160;</td><td class="mdescRight">retrieve the value of the current registering category  <a href="classIpopt_1_1RegisteredOptions.html#a5d11135d59ecda5d634153a454df5c76">More...</a><br /></td></tr>
-<tr class="separator:a5d11135d59ecda5d634153a454df5c76"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a201b64d2dcb97a0a3e1493ed37c4b70b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a201b64d2dcb97a0a3e1493ed37c4b70b">AddNumberOption</a> (const std::string &amp;name, const std::string &amp;short_description, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> default_value, const std::string &amp;long_description=&quot;&quot;)</td></tr>
-<tr class="memdesc:a201b64d2dcb97a0a3e1493ed37c4b70b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a Number option (with no restrictions)  <a href="classIpopt_1_1RegisteredOptions.html#a201b64d2dcb97a0a3e1493ed37c4b70b">More...</a><br /></td></tr>
-<tr class="separator:a201b64d2dcb97a0a3e1493ed37c4b70b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a66b3ab654b7f06ced3fc6394760743f7"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a66b3ab654b7f06ced3fc6394760743f7">AddLowerBoundedNumberOption</a> (const std::string &amp;name, const std::string &amp;short_description, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> lower, bool strict, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> default_value, const std::string &amp;long_description=&quot;&quot;)</td></tr>
-<tr class="memdesc:a66b3ab654b7f06ced3fc6394760743f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a Number option (with a lower bound)  <a href="classIpopt_1_1RegisteredOptions.html#a66b3ab654b7f06ced3fc6394760743f7">More...</a><br /></td></tr>
-<tr class="separator:a66b3ab654b7f06ced3fc6394760743f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe701b90df57664df30114d324f940fe"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#abe701b90df57664df30114d324f940fe">AddUpperBoundedNumberOption</a> (const std::string &amp;name, const std::string &amp;short_description, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> upper, bool strict, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> default_value, const std::string &amp;long_description=&quot;&quot;)</td></tr>
-<tr class="memdesc:abe701b90df57664df30114d324f940fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a Number option (with a upper bound)  <a href="classIpopt_1_1RegisteredOptions.html#abe701b90df57664df30114d324f940fe">More...</a><br /></td></tr>
-<tr class="separator:abe701b90df57664df30114d324f940fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7425d46fa986a0359794d142e54b5c4f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a7425d46fa986a0359794d142e54b5c4f">AddBoundedNumberOption</a> (const std::string &amp;name, const std::string &amp;short_description, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> lower, bool lower_strict, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> upper, bool upper_strict, <a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a> default_value, const std::string &amp;long_description=&quot;&quot;)</td></tr>
-<tr class="memdesc:a7425d46fa986a0359794d142e54b5c4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a Number option (with a both bounds)  <a href="classIpopt_1_1RegisteredOptions.html#a7425d46fa986a0359794d142e54b5c4f">More...</a><br /></td></tr>
-<tr class="separator:a7425d46fa986a0359794d142e54b5c4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1bf48a18c75ac9a3983d3ce14fa30ef3"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a1bf48a18c75ac9a3983d3ce14fa30ef3">AddIntegerOption</a> (const std::string &amp;name, const std::string &amp;short_description, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> default_value, const std::string &amp;long_description=&quot;&quot;)</td></tr>
-<tr class="memdesc:a1bf48a18c75ac9a3983d3ce14fa30ef3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a Integer option (with no restrictions)  <a href="classIpopt_1_1RegisteredOptions.html#a1bf48a18c75ac9a3983d3ce14fa30ef3">More...</a><br /></td></tr>
-<tr class="separator:a1bf48a18c75ac9a3983d3ce14fa30ef3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade535e7f64b256996adc211273eda22c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#ade535e7f64b256996adc211273eda22c">AddLowerBoundedIntegerOption</a> (const std::string &amp;name, const std::string &amp;short_description, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> lower, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> default_value, const std::string &amp;long_description=&quot;&quot;)</td></tr>
-<tr class="memdesc:ade535e7f64b256996adc211273eda22c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a Integer option (with a lower bound)  <a href="classIpopt_1_1RegisteredOptions.html#ade535e7f64b256996adc211273eda22c">More...</a><br /></td></tr>
-<tr class="separator:ade535e7f64b256996adc211273eda22c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d9f22b5c34b4b5b65caea5f51473ae3"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a8d9f22b5c34b4b5b65caea5f51473ae3">AddUpperBoundedIntegerOption</a> (const std::string &amp;name, const std::string &amp;short_description, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> upper, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> default_value, const std::string &amp;long_description=&quot;&quot;)</td></tr>
-<tr class="memdesc:a8d9f22b5c34b4b5b65caea5f51473ae3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a Integer option (with a upper bound)  <a href="classIpopt_1_1RegisteredOptions.html#a8d9f22b5c34b4b5b65caea5f51473ae3">More...</a><br /></td></tr>
-<tr class="separator:a8d9f22b5c34b4b5b65caea5f51473ae3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abc5396d91010db3957ea62876a5bac9c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#abc5396d91010db3957ea62876a5bac9c">AddBoundedIntegerOption</a> (const std::string &amp;name, const std::string &amp;short_description, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> lower, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> upper, <a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> default_value, const std::string &amp;long_description=&quot;&quot;)</td></tr>
-<tr class="memdesc:abc5396d91010db3957ea62876a5bac9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a Integer option (with a both bounds)  <a href="classIpopt_1_1RegisteredOptions.html#abc5396d91010db3957ea62876a5bac9c">More...</a><br /></td></tr>
-<tr class="separator:abc5396d91010db3957ea62876a5bac9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d8b50b37efee27e0e6218f77c20361b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a5d8b50b37efee27e0e6218f77c20361b">AddStringOption</a> (const std::string &amp;name, const std::string &amp;short_description, const std::string &amp;default_value, const std::vector&lt; std::string &gt; &amp;settings, const std::vector&lt; std::string &gt; &amp;descriptions, const std::string &amp;long_description=&quot;&quot;)</td></tr>
-<tr class="memdesc:a5d8b50b37efee27e0e6218f77c20361b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a String option (with no restrictions)  <a href="classIpopt_1_1RegisteredOptions.html#a5d8b50b37efee27e0e6218f77c20361b">More...</a><br /></td></tr>
-<tr class="separator:a5d8b50b37efee27e0e6218f77c20361b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaac15443acfaeb398bfde0e526d1f8f4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#aaac15443acfaeb398bfde0e526d1f8f4">AddStringOption1</a> (const std::string &amp;name, const std::string &amp;short_description, const std::string &amp;default_value, const std::string &amp;setting1, const std::string &amp;description1, const std::string &amp;long_description=&quot;&quot;)</td></tr>
-<tr class="memdesc:aaac15443acfaeb398bfde0e526d1f8f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Methods that make adding string options with only a few entries easier.  <a href="classIpopt_1_1RegisteredOptions.html#aaac15443acfaeb398bfde0e526d1f8f4">More...</a><br /></td></tr>
-<tr class="separator:aaac15443acfaeb398bfde0e526d1f8f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a185df93de92cc4236525992ae975fa68"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a185df93de92cc4236525992ae975fa68">AddStringOption2</a> (const std::string &amp;name, const std::string &amp;short_description, const std::string &amp;default_value, const std::string &amp;setting1, const std::string &amp;description1, const std::string &amp;setting2, const std::string &amp;description2, const std::string &amp;long_description=&quot;&quot;)</td></tr>
-<tr class="separator:a185df93de92cc4236525992ae975fa68"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a57153b7fd1dc69e82497ded33dc0d6c8"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a57153b7fd1dc69e82497ded33dc0d6c8">AddStringOption3</a> (const std::string &amp;name, const std::string &amp;short_description, const std::string &amp;default_value, const std::string &amp;setting1, const std::string &amp;description1, const std::string &amp;setting2, const std::string &amp;description2, const std::string &amp;setting3, const std::string &amp;description3, const std::string &amp;long_description=&quot;&quot;)</td></tr>
-<tr class="separator:a57153b7fd1dc69e82497ded33dc0d6c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac6e85b65a64902d7e07c57ad34df7bc"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#aac6e85b65a64902d7e07c57ad34df7bc">AddStringOption4</a> (const std::string &amp;name, const std::string &amp;short_description, const std::string &amp;default_value, const std::string &amp;setting1, const std::string &amp;description1, const std::string &amp;setting2, const std::string &amp;description2, const std::string &amp;setting3, const std::string &amp;description3, const std::string &amp;setting4, const std::string &amp;description4, const std::string &amp;long_description=&quot;&quot;)</td></tr>
-<tr class="separator:aac6e85b65a64902d7e07c57ad34df7bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4e7a477bb504ea788a9ec79c24fe4a58"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a4e7a477bb504ea788a9ec79c24fe4a58">AddStringOption5</a> (const std::string &amp;name, const std::string &amp;short_description, const std::string &amp;default_value, const std::string &amp;setting1, const std::string &amp;description1, const std::string &amp;setting2, const std::string &amp;description2, const std::string &amp;setting3, const std::string &amp;description3, const std::string &amp;setting4, const std::string &amp;description4, const std::string &amp;setting5, const std::string &amp;description5, const std::string &amp;long_description=&quot;&quot;)</td></tr>
-<tr class="separator:a4e7a477bb504ea788a9ec79c24fe4a58"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5c636cf80bae22f3bd950f5969032861"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a5c636cf80bae22f3bd950f5969032861">AddStringOption6</a> (const std::string &amp;name, const std::string &amp;short_description, const std::string &amp;default_value, const std::string &amp;setting1, const std::string &amp;description1, const std::string &amp;setting2, const std::string &amp;description2, const std::string &amp;setting3, const std::string &amp;description3, const std::string &amp;setting4, const std::string &amp;description4, const std::string &amp;setting5, const std::string &amp;description5, const std::string &amp;setting6, const std::string &amp;description6, const std::string &amp;long_description=&quot;&quot;)</td></tr>
-<tr class="separator:a5c636cf80bae22f3bd950f5969032861"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aea946cc14ad5585c78d5a28cb7d5ce22"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#aea946cc14ad5585c78d5a28cb7d5ce22">AddStringOption7</a> (const std::string &amp;name, const std::string &amp;short_description, const std::string &amp;default_value, const std::string &amp;setting1, const std::string &amp;description1, const std::string &amp;setting2, const std::string &amp;description2, const std::string &amp;setting3, const std::string &amp;description3, const std::string &amp;setting4, const std::string &amp;description4, const std::string &amp;setting5, const std::string &amp;description5, const std::string &amp;setting6, const std::string &amp;description6, const std::string &amp;setting7, const std::string &amp;description7, const std::string &amp;long_description=&quot;&quot;)</td></tr>
-<tr class="separator:aea946cc14ad5585c78d5a28cb7d5ce22"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad420116959b8fb31223cafd13d4a9d65"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#ad420116959b8fb31223cafd13d4a9d65">AddStringOption8</a> (const std::string &amp;name, const std::string &amp;short_description, const std::string &amp;default_value, const std::string &amp;setting1, const std::string &amp;description1, const std::string &amp;setting2, const std::string &amp;description2, const std::string &amp;setting3, const std::string &amp;description3, const std::string &amp;setting4, const std::string &amp;description4, const std::string &amp;setting5, const std::string &amp;description5, const std::string &amp;setting6, const std::string &amp;description6, const std::string &amp;setting7, const std::string &amp;description7, const std::string &amp;setting8, const std::string &amp;description8, const std::string &amp;long_description=&quot;&quot;)</td></tr>
-<tr class="separator:ad420116959b8fb31223cafd13d4a9d65"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3092794ffbc1b0d18017c2a4d19c009f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a3092794ffbc1b0d18017c2a4d19c009f">AddStringOption9</a> (const std::string &amp;name, const std::string &amp;short_description, const std::string &amp;default_value, const std::string &amp;setting1, const std::string &amp;description1, const std::string &amp;setting2, const std::string &amp;description2, const std::string &amp;setting3, const std::string &amp;description3, const std::string &amp;setting4, const std::string &amp;description4, const std::string &amp;setting5, const std::string &amp;description5, const std::string &amp;setting6, const std::string &amp;description6, const std::string &amp;setting7, const std::string &amp;description7, const std::string &amp;setting8, const std::string &amp;description8, const std::string &amp;setting9, const std::string &amp;description9, const std::string &amp;long_description=&quot;&quot;)</td></tr>
-<tr class="separator:a3092794ffbc1b0d18017c2a4d19c009f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3629e2e5e42800a4906f171c9bd029ab"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a3629e2e5e42800a4906f171c9bd029ab">AddStringOption10</a> (const std::string &amp;name, const std::string &amp;short_description, const std::string &amp;default_value, const std::string &amp;setting1, const std::string &amp;description1, const std::string &amp;setting2, const std::string &amp;description2, const std::string &amp;setting3, const std::string &amp;description3, const std::string &amp;setting4, const std::string &amp;description4, const std::string &amp;setting5, const std::string &amp;description5, const std::string &amp;setting6, const std::string &amp;description6, const std::string &amp;setting7, const std::string &amp;description7, const std::string &amp;setting8, const std::string &amp;description8, const std::string &amp;setting9, const std::string &amp;description9, const std::string &amp;setting10, const std::string &amp;description10, const std::string &amp;long_description=&quot;&quot;)</td></tr>
-<tr class="separator:a3629e2e5e42800a4906f171c9bd029ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0b6136d868a7d4b3be9e148f4d9146a9"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; const <a class="el" href="classIpopt_1_1RegisteredOption.html">RegisteredOption</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a0b6136d868a7d4b3be9e148f4d9146a9">GetOption</a> (const std::string &amp;name)</td></tr>
-<tr class="memdesc:a0b6136d868a7d4b3be9e148f4d9146a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a registered option.  <a href="classIpopt_1_1RegisteredOptions.html#a0b6136d868a7d4b3be9e148f4d9146a9">More...</a><br /></td></tr>
-<tr class="separator:a0b6136d868a7d4b3be9e148f4d9146a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a59f362b7ad20a327d94a38ad1b3d6823"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a59f362b7ad20a327d94a38ad1b3d6823">OutputOptionDocumentation</a> (const <a class="el" href="classIpopt_1_1Journalist.html">Journalist</a> &amp;jnlst, std::list&lt; std::string &gt; &amp;categories)</td></tr>
-<tr class="memdesc:a59f362b7ad20a327d94a38ad1b3d6823"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output documentation for the options - gives a description, etc.  <a href="classIpopt_1_1RegisteredOptions.html#a59f362b7ad20a327d94a38ad1b3d6823">More...</a><br /></td></tr>
-<tr class="separator:a59f362b7ad20a327d94a38ad1b3d6823"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a16f1efc89d1497a49aa3bc8955288f2a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a16f1efc89d1497a49aa3bc8955288f2a">OutputLatexOptionDocumentation</a> (const <a class="el" href="classIpopt_1_1Journalist.html">Journalist</a> &amp;jnlst, std::list&lt; std::string &gt; &amp;categories)</td></tr>
-<tr class="memdesc:a16f1efc89d1497a49aa3bc8955288f2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output documentation in Latex format to include in a latex file.  <a href="classIpopt_1_1RegisteredOptions.html#a16f1efc89d1497a49aa3bc8955288f2a">More...</a><br /></td></tr>
-<tr class="separator:a16f1efc89d1497a49aa3bc8955288f2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8a999211188e6f33290cded8f6f9aa36"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a8a999211188e6f33290cded8f6f9aa36">OutputDoxygenOptionDocumentation</a> (const <a class="el" href="classIpopt_1_1Journalist.html">Journalist</a> &amp;jnlst, std::list&lt; std::string &gt; &amp;categories)</td></tr>
-<tr class="memdesc:a8a999211188e6f33290cded8f6f9aa36"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output documentation in Doxygen format to include in doxygen documentation.  <a href="classIpopt_1_1RegisteredOptions.html#a8a999211188e6f33290cded8f6f9aa36">More...</a><br /></td></tr>
-<tr class="separator:a8a999211188e6f33290cded8f6f9aa36"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classIpopt_1_1ReferencedObject"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classIpopt_1_1ReferencedObject')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classIpopt_1_1ReferencedObject.html">Ipopt::ReferencedObject</a></td></tr>
 <tr class="memitem:a5c0f2208e3ead22bf7c5179381ed8203 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#a5c0f2208e3ead22bf7c5179381ed8203">ReferencedObject</a> ()</td></tr>
 <tr class="separator:a5c0f2208e3ead22bf7c5179381ed8203 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adbbf3aa5307da62ab8224ba599d4bd7a inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#adbbf3aa5307da62ab8224ba599d4bd7a">~ReferencedObject</a> ()</td></tr>
 <tr class="separator:adbbf3aa5307da62ab8224ba599d4bd7a inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac517534e10e36c946aeefc6fe337777 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#aac517534e10e36c946aeefc6fe337777">ReferenceCount</a> () const</td></tr>
+<tr class="memitem:aac517534e10e36c946aeefc6fe337777 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#aac517534e10e36c946aeefc6fe337777">ReferenceCount</a> () const</td></tr>
 <tr class="separator:aac517534e10e36c946aeefc6fe337777 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa69ecb0f026bd741e2fa84c31d4ec332 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#aa69ecb0f026bd741e2fa84c31d4ec332">AddRef</a> (const <a class="el" href="classIpopt_1_1Referencer.html">Referencer</a> *referencer) const</td></tr>
 <tr class="separator:aa69ecb0f026bd741e2fa84c31d4ec332 inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae6c952e7d1a63080dc8f121c008944fc inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1ReferencedObject.html#ae6c952e7d1a63080dc8f121c008944fc">ReleaseRef</a> (const <a class="el" href="classIpopt_1_1Referencer.html">Referencer</a> *referencer) const</td></tr>
 <tr class="separator:ae6c952e7d1a63080dc8f121c008944fc inherit pub_methods_classIpopt_1_1ReferencedObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a20f15c22268c9098ed751d32d1125683"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a20f15c22268c9098ed751d32d1125683">RegisterOptions</a> (<a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1RegisteredOptions.html">RegisteredOptions</a> &gt; roptions)</td></tr>
+<tr class="memdesc:a20f15c22268c9098ed751d32d1125683"><td class="mdescLeft">&#160;</td><td class="mdescRight">register options of <a class="el" href="classIpopt_1_1RegisteredOptions.html" title="Class for storing registered options.">RegisteredOptions</a> class  <a href="classIpopt_1_1RegisteredOptions.html#a20f15c22268c9098ed751d32d1125683">More...</a><br /></td></tr>
+<tr class="separator:a20f15c22268c9098ed751d32d1125683"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a4884b248a437bd948f48b7c0afda7840"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a4884b248a437bd948f48b7c0afda7840">AddOption</a> (const <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1RegisteredOption.html">RegisteredOption</a> &gt; &amp;option)</td></tr>
+<tr class="separator:a4884b248a437bd948f48b7c0afda7840"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a0ffde98fc6c9ba7d414e38bc3402c5b2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a0ffde98fc6c9ba7d414e38bc3402c5b2">next_counter_</a></td></tr>
+<tr class="memitem:aab1717233a1eefe49d553597650400c1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIpopt_1_1RegisteredOptions.html#ae13f9ef9aeba8fb5eb4aa4fae754094d">RegOptionsList</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#aab1717233a1eefe49d553597650400c1">registered_options_</a></td></tr>
+<tr class="separator:aab1717233a1eefe49d553597650400c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4b29032e205a1651f7580b24e9e06d7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a9063fef9e9c49b050e94d131343cbca5">RegCategoriesList</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#aa4b29032e205a1651f7580b24e9e06d7">registered_categories_</a></td></tr>
+<tr class="separator:aa4b29032e205a1651f7580b24e9e06d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ffde98fc6c9ba7d414e38bc3402c5b2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a0ffde98fc6c9ba7d414e38bc3402c5b2">next_counter_</a></td></tr>
 <tr class="separator:a0ffde98fc6c9ba7d414e38bc3402c5b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af8dca14633a9c787c6d7bbfe09a2ef8c"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#af8dca14633a9c787c6d7bbfe09a2ef8c">current_registering_category_</a></td></tr>
-<tr class="separator:af8dca14633a9c787c6d7bbfe09a2ef8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a44367e3c9f6be364d7ec53b6580a24c0"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::string, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1RegisteredOption.html">RegisteredOption</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a44367e3c9f6be364d7ec53b6580a24c0">registered_options_</a></td></tr>
-<tr class="separator:a44367e3c9f6be364d7ec53b6580a24c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24fbd66ce87e7aadb1bd9ddb868a1ec5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1RegisteredCategory.html">RegisteredCategory</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a24fbd66ce87e7aadb1bd9ddb868a1ec5">current_registering_category_</a></td></tr>
+<tr class="separator:a24fbd66ce87e7aadb1bd9ddb868a1ec5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class for storing registered options. </p>
 <p>Used for validation and documentation. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpRegOptions_8hpp_source.html#l00554">554</a> of file <a class="el" href="IpRegOptions_8hpp_source.html">IpRegOptions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpRegOptions_8hpp_source.html#l00683">683</a> of file <a class="el" href="IpRegOptions_8hpp_source.html">IpRegOptions.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="ae13f9ef9aeba8fb5eb4aa4fae754094d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae13f9ef9aeba8fb5eb4aa4fae754094d">&#9670;&nbsp;</a></span>RegOptionsList</h2>
@@ -248,8 +289,68 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="IpRegOptions_8hpp_source.html#l00886">886</a> of file <a class="el" href="IpRegOptions_8hpp_source.html">IpRegOptions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpRegOptions_8hpp_source.html#l00687">687</a> of file <a class="el" href="IpRegOptions_8hpp_source.html">IpRegOptions.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a9063fef9e9c49b050e94d131343cbca5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9063fef9e9c49b050e94d131343cbca5">&#9670;&nbsp;</a></span>RegCategoriesList</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef std::map&lt;std::string, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt;<a class="el" href="classIpopt_1_1RegisteredCategory.html">RegisteredCategory</a>&gt; &gt; <a class="el" href="classIpopt_1_1RegisteredOptions.html#a9063fef9e9c49b050e94d131343cbca5">Ipopt::RegisteredOptions::RegCategoriesList</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="IpRegOptions_8hpp_source.html#l00689">689</a> of file <a class="el" href="IpRegOptions_8hpp_source.html">IpRegOptions.hpp</a>.</p>
+
+</div>
+</div>
+<a id="af0d537262cb2369bcc231d2c30cd4a31"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af0d537262cb2369bcc231d2c30cd4a31">&#9670;&nbsp;</a></span>RegCategoriesByPriority</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef std::set&lt;<a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt;<a class="el" href="classIpopt_1_1RegisteredCategory.html">RegisteredCategory</a>&gt;, <a class="el" href="classIpopt_1_1RegisteredCategory_1_1ComparePriority.html">RegisteredCategory::ComparePriority</a>&gt; <a class="el" href="classIpopt_1_1RegisteredOptions.html#af0d537262cb2369bcc231d2c30cd4a31">Ipopt::RegisteredOptions::RegCategoriesByPriority</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="IpRegOptions_8hpp_source.html#l00691">691</a> of file <a class="el" href="IpRegOptions_8hpp_source.html">IpRegOptions.hpp</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Enumeration Documentation</h2>
+<a id="a492dff9972c12a43e66368942fd6fd5b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a492dff9972c12a43e66368942fd6fd5b">&#9670;&nbsp;</a></span>OutputMode</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classIpopt_1_1RegisteredOptions.html#a492dff9972c12a43e66368942fd6fd5b">Ipopt::RegisteredOptions::OutputMode</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>output modes </p>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a492dff9972c12a43e66368942fd6fd5baad8d02b2bf25a19c0efb4f6c7d432d46"></a>OUTPUTTEXT&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a492dff9972c12a43e66368942fd6fd5ba5b130b304e6963b885d6d11d66d07fcf"></a>OUTPUTLATEX&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a492dff9972c12a43e66368942fd6fd5bab1234468e75759acc2380e9fe8cb6f6a"></a>OUTPUTDOXYGEN&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="IpRegOptions_8hpp_source.html#l00696">696</a> of file <a class="el" href="IpRegOptions_8hpp_source.html">IpRegOptions.hpp</a>.</p>
 
 </div>
 </div>
@@ -280,7 +381,7 @@ Private Attributes</h2></td></tr>
 <p>Constructors / Destructors. </p>
 <p>Default Constructor </p>
 
-<p class="definition">Definition at line <a class="el" href="IpRegOptions_8hpp_source.html#l00560">560</a> of file <a class="el" href="IpRegOptions_8hpp_source.html">IpRegOptions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpRegOptions_8hpp_source.html#l00706">706</a> of file <a class="el" href="IpRegOptions_8hpp_source.html">IpRegOptions.hpp</a>.</p>
 
 </div>
 </div>
@@ -309,13 +410,31 @@ Private Attributes</h2></td></tr>
 
 <p>Destructor. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpRegOptions_8hpp_source.html#l00566">566</a> of file <a class="el" href="IpRegOptions_8hpp_source.html">IpRegOptions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpRegOptions_8hpp_source.html#l00711">711</a> of file <a class="el" href="IpRegOptions_8hpp_source.html">IpRegOptions.hpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a69c97d254ff68ff061f8b342e133879b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a69c97d254ff68ff061f8b342e133879b">&#9670;&nbsp;</a></span>SetRegisteringCategory()</h2>
+<a id="a4aee999e1deb765fe0de3f8e64d460e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4aee999e1deb765fe0de3f8e64d460e3">&#9670;&nbsp;</a></span>DECLARE_STD_EXCEPTION()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Ipopt::RegisteredOptions::DECLARE_STD_EXCEPTION </td>
+          <td>(</td>
+          <td class="paramtype">OPTION_ALREADY_REGISTERED&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a252598a960dbb2e6432000ac43b40502"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a252598a960dbb2e6432000ac43b40502">&#9670;&nbsp;</a></span>SetRegisteringCategory() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -327,27 +446,43 @@ Private Attributes</h2></td></tr>
           <td class="memname">virtual void Ipopt::RegisteredOptions::SetRegisteringCategory </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>registering_category</em></td><td>)</td>
+          <td class="paramname"><em>registering_category</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>priority</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Methods to interact with registered options. </p>
-<p>set the registering class</p>
-<p>All subsequent options will be added with the registered class </p>
-
-<p class="definition">Definition at line <a class="el" href="IpRegOptions_8hpp_source.html#l00579">579</a> of file <a class="el" href="IpRegOptions_8hpp_source.html">IpRegOptions.hpp</a>.</p>
+<p>set the registering class </p>
+<p>If nonempty name, then all subsequent options will be added with the registered category. If empty name, then all subsequent options will not be added to any registered category.</p>
+<p>If the category doesn't exist yet, it will be created with given data. If it exists already, given priority and undocumented flag are ignored. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">registering_category</td><td>category name </td></tr>
+    <tr><td class="paramname">priority</td><td>category priority </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
 </div>
 </div>
-<a id="a5d11135d59ecda5d634153a454df5c76"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5d11135d59ecda5d634153a454df5c76">&#9670;&nbsp;</a></span>RegisteringCategory()</h2>
+<a id="a2ef5ead96cbc09fbaf093da61fa7194e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ef5ead96cbc09fbaf093da61fa7194e">&#9670;&nbsp;</a></span>SetRegisteringCategory() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -356,7 +491,36 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual std::string Ipopt::RegisteredOptions::RegisteringCategory </td>
+          <td class="memname">virtual void Ipopt::RegisteredOptions::SetRegisteringCategory </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1RegisteredCategory.html">RegisteredCategory</a> &gt;&#160;</td>
+          <td class="paramname"><em>registering_category</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>set the registering class </p>
+<p>If not NULL, then all subsequent options will be added with the registered category. If NULL, then all subsequent options will not be added to any registered category. </p><dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+
+</div>
+</div>
+<a id="a2174e2637546b3aed9335eeb2e9a22da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2174e2637546b3aed9335eeb2e9a22da">&#9670;&nbsp;</a></span>RegisteringCategory()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt;<a class="el" href="classIpopt_1_1RegisteredCategory.html">RegisteredCategory</a>&gt; Ipopt::RegisteredOptions::RegisteringCategory </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -370,13 +534,14 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>retrieve the value of the current registering category </p>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="IpRegOptions_8hpp_source.html#l00587">587</a> of file <a class="el" href="IpRegOptions_8hpp_source.html">IpRegOptions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpRegOptions_8hpp_source.html#l00749">749</a> of file <a class="el" href="IpRegOptions_8hpp_source.html">IpRegOptions.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a201b64d2dcb97a0a3e1493ed37c4b70b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a201b64d2dcb97a0a3e1493ed37c4b70b">&#9670;&nbsp;</a></span>AddNumberOption()</h2>
+<a id="a7d5149204adb24726aa5593ed77dc6bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d5149204adb24726aa5593ed77dc6bc">&#9670;&nbsp;</a></span>AddNumberOption()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -399,14 +564,20 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>default_value</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>&#160;</td>
+          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>advanced</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -422,11 +593,22 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Add a Number option (with no restrictions) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>option name </td></tr>
+    <tr><td class="paramname">short_description</td><td>short description </td></tr>
+    <tr><td class="paramname">default_value</td><td>default value </td></tr>
+    <tr><td class="paramname">long_description</td><td>long description </td></tr>
+    <tr><td class="paramname">advanced</td><td>whether option is for advanced users </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
 </div>
 </div>
-<a id="a66b3ab654b7f06ced3fc6394760743f7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a66b3ab654b7f06ced3fc6394760743f7">&#9670;&nbsp;</a></span>AddLowerBoundedNumberOption()</h2>
+<a id="a84f8cd65cae3928bfce39709664b504a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a84f8cd65cae3928bfce39709664b504a">&#9670;&nbsp;</a></span>AddLowerBoundedNumberOption()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -449,7 +631,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>lower</em>, </td>
         </tr>
         <tr>
@@ -461,14 +643,20 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>default_value</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>&#160;</td>
+          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>advanced</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -484,11 +672,24 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Add a Number option (with a lower bound) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>option name </td></tr>
+    <tr><td class="paramname">short_description</td><td>short description </td></tr>
+    <tr><td class="paramname">lower</td><td>lower bound </td></tr>
+    <tr><td class="paramname">strict</td><td>whether lower bound is strict </td></tr>
+    <tr><td class="paramname">default_value</td><td>default value </td></tr>
+    <tr><td class="paramname">long_description</td><td>long description </td></tr>
+    <tr><td class="paramname">advanced</td><td>whether option is for advanced users </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
 </div>
 </div>
-<a id="abe701b90df57664df30114d324f940fe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abe701b90df57664df30114d324f940fe">&#9670;&nbsp;</a></span>AddUpperBoundedNumberOption()</h2>
+<a id="a6736224a454ecf41f8e01202e937067a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6736224a454ecf41f8e01202e937067a">&#9670;&nbsp;</a></span>AddUpperBoundedNumberOption()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -511,7 +712,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>upper</em>, </td>
         </tr>
         <tr>
@@ -523,14 +724,20 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>default_value</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>&#160;</td>
+          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>advanced</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -546,11 +753,24 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Add a Number option (with a upper bound) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>option name </td></tr>
+    <tr><td class="paramname">short_description</td><td>short description </td></tr>
+    <tr><td class="paramname">upper</td><td>upper bound </td></tr>
+    <tr><td class="paramname">strict</td><td>whether upper bound is strict </td></tr>
+    <tr><td class="paramname">default_value</td><td>default value </td></tr>
+    <tr><td class="paramname">long_description</td><td>long description </td></tr>
+    <tr><td class="paramname">advanced</td><td>whether option is for advanced users </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
 </div>
 </div>
-<a id="a7425d46fa986a0359794d142e54b5c4f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7425d46fa986a0359794d142e54b5c4f">&#9670;&nbsp;</a></span>AddBoundedNumberOption()</h2>
+<a id="aac6bf8af095bb2dc7b1bb764ab636564"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac6bf8af095bb2dc7b1bb764ab636564">&#9670;&nbsp;</a></span>AddBoundedNumberOption()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -573,7 +793,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>lower</em>, </td>
         </tr>
         <tr>
@@ -585,7 +805,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>upper</em>, </td>
         </tr>
         <tr>
@@ -597,14 +817,20 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ad77ec4132352c5093febf9c488a72a4c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td>
           <td class="paramname"><em>default_value</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>&#160;</td>
+          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>advanced</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -620,11 +846,26 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Add a Number option (with a both bounds) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>option name </td></tr>
+    <tr><td class="paramname">short_description</td><td>short description </td></tr>
+    <tr><td class="paramname">lower</td><td>lower bound </td></tr>
+    <tr><td class="paramname">lower_strict</td><td>whether lower bound is strict </td></tr>
+    <tr><td class="paramname">upper</td><td>upper bound </td></tr>
+    <tr><td class="paramname">upper_strict</td><td>whether upper bound is strict </td></tr>
+    <tr><td class="paramname">default_value</td><td>default value </td></tr>
+    <tr><td class="paramname">long_description</td><td>long description </td></tr>
+    <tr><td class="paramname">advanced</td><td>whether option is for advanced users </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
 </div>
 </div>
-<a id="a1bf48a18c75ac9a3983d3ce14fa30ef3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1bf48a18c75ac9a3983d3ce14fa30ef3">&#9670;&nbsp;</a></span>AddIntegerOption()</h2>
+<a id="a2cd96b0c9cef4c8cf2a9a8c7146f2f74"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2cd96b0c9cef4c8cf2a9a8c7146f2f74">&#9670;&nbsp;</a></span>AddIntegerOption()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -647,14 +888,20 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>default_value</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>&#160;</td>
+          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>advanced</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -670,11 +917,22 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Add a Integer option (with no restrictions) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>option name </td></tr>
+    <tr><td class="paramname">short_description</td><td>short description </td></tr>
+    <tr><td class="paramname">default_value</td><td>default value </td></tr>
+    <tr><td class="paramname">long_description</td><td>long description </td></tr>
+    <tr><td class="paramname">advanced</td><td>whether option is for advanced users </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
 </div>
 </div>
-<a id="ade535e7f64b256996adc211273eda22c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ade535e7f64b256996adc211273eda22c">&#9670;&nbsp;</a></span>AddLowerBoundedIntegerOption()</h2>
+<a id="a471297abdcf5b814afaa7d75cd1c1634"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a471297abdcf5b814afaa7d75cd1c1634">&#9670;&nbsp;</a></span>AddLowerBoundedIntegerOption()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -697,20 +955,26 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>lower</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>default_value</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>&#160;</td>
+          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>advanced</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -726,11 +990,23 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Add a Integer option (with a lower bound) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>option name </td></tr>
+    <tr><td class="paramname">short_description</td><td>short description </td></tr>
+    <tr><td class="paramname">lower</td><td>lower bound </td></tr>
+    <tr><td class="paramname">default_value</td><td>default value </td></tr>
+    <tr><td class="paramname">long_description</td><td>long description </td></tr>
+    <tr><td class="paramname">advanced</td><td>whether option is for advanced users </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
 </div>
 </div>
-<a id="a8d9f22b5c34b4b5b65caea5f51473ae3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8d9f22b5c34b4b5b65caea5f51473ae3">&#9670;&nbsp;</a></span>AddUpperBoundedIntegerOption()</h2>
+<a id="a21a03c9d160c1ede6f0071d0f2afaa48"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a21a03c9d160c1ede6f0071d0f2afaa48">&#9670;&nbsp;</a></span>AddUpperBoundedIntegerOption()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -753,20 +1029,26 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>upper</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>default_value</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>&#160;</td>
+          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>advanced</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -782,11 +1064,23 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Add a Integer option (with a upper bound) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>option name </td></tr>
+    <tr><td class="paramname">short_description</td><td>short description </td></tr>
+    <tr><td class="paramname">upper</td><td>upper bound </td></tr>
+    <tr><td class="paramname">default_value</td><td>default value </td></tr>
+    <tr><td class="paramname">long_description</td><td>long description </td></tr>
+    <tr><td class="paramname">advanced</td><td>whether option is for advanced users </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
 </div>
 </div>
-<a id="abc5396d91010db3957ea62876a5bac9c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abc5396d91010db3957ea62876a5bac9c">&#9670;&nbsp;</a></span>AddBoundedIntegerOption()</h2>
+<a id="a0a64f56be3631819cb8ccb91a03fbd1f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a64f56be3631819cb8ccb91a03fbd1f">&#9670;&nbsp;</a></span>AddBoundedIntegerOption()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -809,26 +1103,32 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>lower</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>upper</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td>
           <td class="paramname"><em>default_value</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>&#160;</td>
+          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>advanced</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -844,11 +1144,24 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Add a Integer option (with a both bounds) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>option name </td></tr>
+    <tr><td class="paramname">short_description</td><td>short description </td></tr>
+    <tr><td class="paramname">lower</td><td>lower bound </td></tr>
+    <tr><td class="paramname">upper</td><td>upper bound </td></tr>
+    <tr><td class="paramname">default_value</td><td>default value </td></tr>
+    <tr><td class="paramname">long_description</td><td>long description </td></tr>
+    <tr><td class="paramname">advanced</td><td>whether option is for advanced users </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
 </div>
 </div>
-<a id="a5d8b50b37efee27e0e6218f77c20361b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5d8b50b37efee27e0e6218f77c20361b">&#9670;&nbsp;</a></span>AddStringOption()</h2>
+<a id="ae48a012dccbed27bf2219b0112d7178c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae48a012dccbed27bf2219b0112d7178c">&#9670;&nbsp;</a></span>AddStringOption()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -890,7 +1203,13 @@ Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>&#160;</td>
+          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>advanced</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -906,11 +1225,24 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Add a String option (with no restrictions) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>option name </td></tr>
+    <tr><td class="paramname">short_description</td><td>short description </td></tr>
+    <tr><td class="paramname">default_value</td><td>default value </td></tr>
+    <tr><td class="paramname">settings</td><td>possible values </td></tr>
+    <tr><td class="paramname">descriptions</td><td>description of possible values </td></tr>
+    <tr><td class="paramname">long_description</td><td>long description </td></tr>
+    <tr><td class="paramname">advanced</td><td>whether option is for advanced users </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
 </div>
 </div>
-<a id="aaac15443acfaeb398bfde0e526d1f8f4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaac15443acfaeb398bfde0e526d1f8f4">&#9670;&nbsp;</a></span>AddStringOption1()</h2>
+<a id="a1fe2b332bb9f276824ceed47d61d1b82"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1fe2b332bb9f276824ceed47d61d1b82">&#9670;&nbsp;</a></span>AddStringOption1()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -952,7 +1284,13 @@ Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>&#160;</td>
+          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>advanced</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -968,11 +1306,24 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Methods that make adding string options with only a few entries easier. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>option name </td></tr>
+    <tr><td class="paramname">short_description</td><td>short description </td></tr>
+    <tr><td class="paramname">default_value</td><td>default value </td></tr>
+    <tr><td class="paramname">setting1</td><td>first possible value </td></tr>
+    <tr><td class="paramname">description1</td><td>description of first possible value </td></tr>
+    <tr><td class="paramname">long_description</td><td>long description </td></tr>
+    <tr><td class="paramname">advanced</td><td>whether option is for advanced users </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
 </div>
 </div>
-<a id="a185df93de92cc4236525992ae975fa68"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a185df93de92cc4236525992ae975fa68">&#9670;&nbsp;</a></span>AddStringOption2()</h2>
+<a id="ab81886c9988104e5702bd678c9f732b6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab81886c9988104e5702bd678c9f732b6">&#9670;&nbsp;</a></span>AddStringOption2()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1026,7 +1377,13 @@ Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>&#160;</td>
+          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>advanced</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1040,11 +1397,26 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>option name </td></tr>
+    <tr><td class="paramname">short_description</td><td>short description </td></tr>
+    <tr><td class="paramname">default_value</td><td>default value </td></tr>
+    <tr><td class="paramname">setting1</td><td>first possible value </td></tr>
+    <tr><td class="paramname">description1</td><td>description of first possible value </td></tr>
+    <tr><td class="paramname">setting2</td><td>second possible value </td></tr>
+    <tr><td class="paramname">description2</td><td>description of second possible value </td></tr>
+    <tr><td class="paramname">long_description</td><td>long description </td></tr>
+    <tr><td class="paramname">advanced</td><td>whether option is for advanced users </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
 </div>
 </div>
-<a id="a57153b7fd1dc69e82497ded33dc0d6c8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a57153b7fd1dc69e82497ded33dc0d6c8">&#9670;&nbsp;</a></span>AddStringOption3()</h2>
+<a id="ab85c95e9c0fcba8702bd881b386f368c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab85c95e9c0fcba8702bd881b386f368c">&#9670;&nbsp;</a></span>AddStringOption3()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1110,7 +1482,13 @@ Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>&#160;</td>
+          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>advanced</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1124,11 +1502,28 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>option name </td></tr>
+    <tr><td class="paramname">short_description</td><td>short description </td></tr>
+    <tr><td class="paramname">default_value</td><td>default value </td></tr>
+    <tr><td class="paramname">setting1</td><td>first possible value </td></tr>
+    <tr><td class="paramname">description1</td><td>description of first possible value </td></tr>
+    <tr><td class="paramname">setting2</td><td>second possible value </td></tr>
+    <tr><td class="paramname">description2</td><td>description of second possible value </td></tr>
+    <tr><td class="paramname">setting3</td><td>third possible value </td></tr>
+    <tr><td class="paramname">description3</td><td>description of third possible value </td></tr>
+    <tr><td class="paramname">long_description</td><td>long description </td></tr>
+    <tr><td class="paramname">advanced</td><td>whether option is for advanced users </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
 </div>
 </div>
-<a id="aac6e85b65a64902d7e07c57ad34df7bc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aac6e85b65a64902d7e07c57ad34df7bc">&#9670;&nbsp;</a></span>AddStringOption4()</h2>
+<a id="a9daa1360379a7267b652e99dfac3f345"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9daa1360379a7267b652e99dfac3f345">&#9670;&nbsp;</a></span>AddStringOption4()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1206,7 +1601,13 @@ Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>&#160;</td>
+          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>advanced</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1220,11 +1621,30 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>option name </td></tr>
+    <tr><td class="paramname">short_description</td><td>short description </td></tr>
+    <tr><td class="paramname">default_value</td><td>default value </td></tr>
+    <tr><td class="paramname">setting1</td><td>first possible value </td></tr>
+    <tr><td class="paramname">description1</td><td>description of first possible value </td></tr>
+    <tr><td class="paramname">setting2</td><td>second possible value </td></tr>
+    <tr><td class="paramname">description2</td><td>description of second possible value </td></tr>
+    <tr><td class="paramname">setting3</td><td>third possible value </td></tr>
+    <tr><td class="paramname">description3</td><td>description of third possible value </td></tr>
+    <tr><td class="paramname">setting4</td><td>fourth possible value </td></tr>
+    <tr><td class="paramname">description4</td><td>description of fourth possible value </td></tr>
+    <tr><td class="paramname">long_description</td><td>long description </td></tr>
+    <tr><td class="paramname">advanced</td><td>whether option is for advanced users </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
 </div>
 </div>
-<a id="a4e7a477bb504ea788a9ec79c24fe4a58"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4e7a477bb504ea788a9ec79c24fe4a58">&#9670;&nbsp;</a></span>AddStringOption5()</h2>
+<a id="a38a8c3f0378862479eb33f261c751019"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a38a8c3f0378862479eb33f261c751019">&#9670;&nbsp;</a></span>AddStringOption5()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1314,7 +1734,13 @@ Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>&#160;</td>
+          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>advanced</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1328,11 +1754,32 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>option name </td></tr>
+    <tr><td class="paramname">short_description</td><td>short description </td></tr>
+    <tr><td class="paramname">default_value</td><td>default value </td></tr>
+    <tr><td class="paramname">setting1</td><td>first possible value </td></tr>
+    <tr><td class="paramname">description1</td><td>description of first possible value </td></tr>
+    <tr><td class="paramname">setting2</td><td>second possible value </td></tr>
+    <tr><td class="paramname">description2</td><td>description of second possible value </td></tr>
+    <tr><td class="paramname">setting3</td><td>third possible value </td></tr>
+    <tr><td class="paramname">description3</td><td>description of third possible value </td></tr>
+    <tr><td class="paramname">setting4</td><td>fourth possible value </td></tr>
+    <tr><td class="paramname">description4</td><td>description of fourth possible value </td></tr>
+    <tr><td class="paramname">setting5</td><td>fifth possible value </td></tr>
+    <tr><td class="paramname">description5</td><td>description of fifth possible value </td></tr>
+    <tr><td class="paramname">long_description</td><td>long description </td></tr>
+    <tr><td class="paramname">advanced</td><td>whether option is for advanced users </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
 </div>
 </div>
-<a id="a5c636cf80bae22f3bd950f5969032861"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5c636cf80bae22f3bd950f5969032861">&#9670;&nbsp;</a></span>AddStringOption6()</h2>
+<a id="a0b5c68fa608d90dfd72f3866b814acd8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b5c68fa608d90dfd72f3866b814acd8">&#9670;&nbsp;</a></span>AddStringOption6()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1434,7 +1881,13 @@ Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>&#160;</td>
+          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>advanced</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1448,11 +1901,34 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>option name </td></tr>
+    <tr><td class="paramname">short_description</td><td>short description </td></tr>
+    <tr><td class="paramname">default_value</td><td>default value </td></tr>
+    <tr><td class="paramname">setting1</td><td>first possible value </td></tr>
+    <tr><td class="paramname">description1</td><td>description of first possible value </td></tr>
+    <tr><td class="paramname">setting2</td><td>second possible value </td></tr>
+    <tr><td class="paramname">description2</td><td>description of second possible value </td></tr>
+    <tr><td class="paramname">setting3</td><td>third possible value </td></tr>
+    <tr><td class="paramname">description3</td><td>description of third possible value </td></tr>
+    <tr><td class="paramname">setting4</td><td>fourth possible value </td></tr>
+    <tr><td class="paramname">description4</td><td>description of fourth possible value </td></tr>
+    <tr><td class="paramname">setting5</td><td>fifth possible value </td></tr>
+    <tr><td class="paramname">description5</td><td>description of fifth possible value </td></tr>
+    <tr><td class="paramname">setting6</td><td>sixth possible value </td></tr>
+    <tr><td class="paramname">description6</td><td>description of sixth possible value </td></tr>
+    <tr><td class="paramname">long_description</td><td>long description </td></tr>
+    <tr><td class="paramname">advanced</td><td>whether option is for advanced users </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
 </div>
 </div>
-<a id="aea946cc14ad5585c78d5a28cb7d5ce22"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aea946cc14ad5585c78d5a28cb7d5ce22">&#9670;&nbsp;</a></span>AddStringOption7()</h2>
+<a id="adf36470c3ff46960588c51d2a430e816"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf36470c3ff46960588c51d2a430e816">&#9670;&nbsp;</a></span>AddStringOption7()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1566,7 +2042,13 @@ Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>&#160;</td>
+          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>advanced</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1580,11 +2062,36 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>option name </td></tr>
+    <tr><td class="paramname">short_description</td><td>short description </td></tr>
+    <tr><td class="paramname">default_value</td><td>default value </td></tr>
+    <tr><td class="paramname">setting1</td><td>first possible value </td></tr>
+    <tr><td class="paramname">description1</td><td>description of first possible value </td></tr>
+    <tr><td class="paramname">setting2</td><td>second possible value </td></tr>
+    <tr><td class="paramname">description2</td><td>description of second possible value </td></tr>
+    <tr><td class="paramname">setting3</td><td>third possible value </td></tr>
+    <tr><td class="paramname">description3</td><td>description of third possible value </td></tr>
+    <tr><td class="paramname">setting4</td><td>fourth possible value </td></tr>
+    <tr><td class="paramname">description4</td><td>description of fourth possible value </td></tr>
+    <tr><td class="paramname">setting5</td><td>fifth possible value </td></tr>
+    <tr><td class="paramname">description5</td><td>description of fifth possible value </td></tr>
+    <tr><td class="paramname">setting6</td><td>sixth possible value </td></tr>
+    <tr><td class="paramname">description6</td><td>description of sixth possible value </td></tr>
+    <tr><td class="paramname">setting7</td><td>seventh possible value </td></tr>
+    <tr><td class="paramname">description7</td><td>description of seventh possible value </td></tr>
+    <tr><td class="paramname">long_description</td><td>long description </td></tr>
+    <tr><td class="paramname">advanced</td><td>whether option is for advanced users </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
 </div>
 </div>
-<a id="ad420116959b8fb31223cafd13d4a9d65"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad420116959b8fb31223cafd13d4a9d65">&#9670;&nbsp;</a></span>AddStringOption8()</h2>
+<a id="a82b87630af54ba88bd5a4d094887104a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a82b87630af54ba88bd5a4d094887104a">&#9670;&nbsp;</a></span>AddStringOption8()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1710,7 +2217,13 @@ Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>&#160;</td>
+          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>advanced</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1724,11 +2237,38 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>option name </td></tr>
+    <tr><td class="paramname">short_description</td><td>short description </td></tr>
+    <tr><td class="paramname">default_value</td><td>default value </td></tr>
+    <tr><td class="paramname">setting1</td><td>first possible value </td></tr>
+    <tr><td class="paramname">description1</td><td>description of first possible value </td></tr>
+    <tr><td class="paramname">setting2</td><td>second possible value </td></tr>
+    <tr><td class="paramname">description2</td><td>description of second possible value </td></tr>
+    <tr><td class="paramname">setting3</td><td>third possible value </td></tr>
+    <tr><td class="paramname">description3</td><td>description of third possible value </td></tr>
+    <tr><td class="paramname">setting4</td><td>fourth possible value </td></tr>
+    <tr><td class="paramname">description4</td><td>description of fourth possible value </td></tr>
+    <tr><td class="paramname">setting5</td><td>fifth possible value </td></tr>
+    <tr><td class="paramname">description5</td><td>description of fifth possible value </td></tr>
+    <tr><td class="paramname">setting6</td><td>sixth possible value </td></tr>
+    <tr><td class="paramname">description6</td><td>description of sixth possible value </td></tr>
+    <tr><td class="paramname">setting7</td><td>seventh possible value </td></tr>
+    <tr><td class="paramname">description7</td><td>description of seventh possible value </td></tr>
+    <tr><td class="paramname">setting8</td><td>eighth possible value </td></tr>
+    <tr><td class="paramname">description8</td><td>description of eighth possible value </td></tr>
+    <tr><td class="paramname">long_description</td><td>long description </td></tr>
+    <tr><td class="paramname">advanced</td><td>whether option is for advanced users </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
 </div>
 </div>
-<a id="a3092794ffbc1b0d18017c2a4d19c009f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3092794ffbc1b0d18017c2a4d19c009f">&#9670;&nbsp;</a></span>AddStringOption9()</h2>
+<a id="a9f07e4826bfa640df33653f15d7c7a6f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f07e4826bfa640df33653f15d7c7a6f">&#9670;&nbsp;</a></span>AddStringOption9()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1866,7 +2406,13 @@ Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>&#160;</td>
+          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>advanced</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1880,11 +2426,40 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>option name </td></tr>
+    <tr><td class="paramname">short_description</td><td>short description </td></tr>
+    <tr><td class="paramname">default_value</td><td>default value </td></tr>
+    <tr><td class="paramname">setting1</td><td>first possible value </td></tr>
+    <tr><td class="paramname">description1</td><td>description of first possible value </td></tr>
+    <tr><td class="paramname">setting2</td><td>second possible value </td></tr>
+    <tr><td class="paramname">description2</td><td>description of second possible value </td></tr>
+    <tr><td class="paramname">setting3</td><td>third possible value </td></tr>
+    <tr><td class="paramname">description3</td><td>description of third possible value </td></tr>
+    <tr><td class="paramname">setting4</td><td>fourth possible value </td></tr>
+    <tr><td class="paramname">description4</td><td>description of fourth possible value </td></tr>
+    <tr><td class="paramname">setting5</td><td>fifth possible value </td></tr>
+    <tr><td class="paramname">description5</td><td>description of fifth possible value </td></tr>
+    <tr><td class="paramname">setting6</td><td>sixth possible value </td></tr>
+    <tr><td class="paramname">description6</td><td>description of sixth possible value </td></tr>
+    <tr><td class="paramname">setting7</td><td>seventh possible value </td></tr>
+    <tr><td class="paramname">description7</td><td>description of seventh possible value </td></tr>
+    <tr><td class="paramname">setting8</td><td>eighth possible value </td></tr>
+    <tr><td class="paramname">description8</td><td>description of eighth possible value </td></tr>
+    <tr><td class="paramname">setting9</td><td>ninth possible value </td></tr>
+    <tr><td class="paramname">description9</td><td>description of ninth possible value </td></tr>
+    <tr><td class="paramname">long_description</td><td>long description </td></tr>
+    <tr><td class="paramname">advanced</td><td>whether option is for advanced users </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
 </div>
 </div>
-<a id="a3629e2e5e42800a4906f171c9bd029ab"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3629e2e5e42800a4906f171c9bd029ab">&#9670;&nbsp;</a></span>AddStringOption10()</h2>
+<a id="a43f42ea1ecb4edb7e6ae7f491a261a0b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a43f42ea1ecb4edb7e6ae7f491a261a0b">&#9670;&nbsp;</a></span>AddStringOption10()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2034,7 +2609,13 @@ Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>&#160;</td>
+          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>advanced</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -2048,6 +2629,105 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>option name </td></tr>
+    <tr><td class="paramname">short_description</td><td>short description </td></tr>
+    <tr><td class="paramname">default_value</td><td>default value </td></tr>
+    <tr><td class="paramname">setting1</td><td>first possible value </td></tr>
+    <tr><td class="paramname">description1</td><td>description of first possible value </td></tr>
+    <tr><td class="paramname">setting2</td><td>second possible value </td></tr>
+    <tr><td class="paramname">description2</td><td>description of second possible value </td></tr>
+    <tr><td class="paramname">setting3</td><td>third possible value </td></tr>
+    <tr><td class="paramname">description3</td><td>description of third possible value </td></tr>
+    <tr><td class="paramname">setting4</td><td>fourth possible value </td></tr>
+    <tr><td class="paramname">description4</td><td>description of fourth possible value </td></tr>
+    <tr><td class="paramname">setting5</td><td>fifth possible value </td></tr>
+    <tr><td class="paramname">description5</td><td>description of fifth possible value </td></tr>
+    <tr><td class="paramname">setting6</td><td>sixth possible value </td></tr>
+    <tr><td class="paramname">description6</td><td>description of sixth possible value </td></tr>
+    <tr><td class="paramname">setting7</td><td>seventh possible value </td></tr>
+    <tr><td class="paramname">description7</td><td>description of seventh possible value </td></tr>
+    <tr><td class="paramname">setting8</td><td>eighth possible value </td></tr>
+    <tr><td class="paramname">description8</td><td>description of eighth possible value </td></tr>
+    <tr><td class="paramname">setting9</td><td>ninth possible value </td></tr>
+    <tr><td class="paramname">description9</td><td>description of ninth possible value </td></tr>
+    <tr><td class="paramname">setting10</td><td>tenth possible value </td></tr>
+    <tr><td class="paramname">description10</td><td>description of tenth possible value </td></tr>
+    <tr><td class="paramname">long_description</td><td>long description </td></tr>
+    <tr><td class="paramname">advanced</td><td>whether option is for advanced users </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+
+</div>
+</div>
+<a id="a2ef42df853c9b8ae515cc539f6ac4642"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ef42df853c9b8ae515cc539f6ac4642">&#9670;&nbsp;</a></span>AddBoolOption()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Ipopt::RegisteredOptions::AddBoolOption </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>short_description</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>default_value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>long_description</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>advanced</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Create a string value with two possible settings: yes and no. </p>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>option name </td></tr>
+    <tr><td class="paramname">short_description</td><td>short description </td></tr>
+    <tr><td class="paramname">default_value</td><td>default value </td></tr>
+    <tr><td class="paramname">long_description</td><td>long description </td></tr>
+    <tr><td class="paramname">advanced</td><td>whether option is for advanced users </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
 </div>
 </div>
@@ -2080,8 +2760,88 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a59f362b7ad20a327d94a38ad1b3d6823"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a59f362b7ad20a327d94a38ad1b3d6823">&#9670;&nbsp;</a></span>OutputOptionDocumentation()</h2>
+<a id="a7f166b27d890a0ea6a9b127b6e903efe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f166b27d890a0ea6a9b127b6e903efe">&#9670;&nbsp;</a></span>RegisteredOptionsList()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classIpopt_1_1RegisteredOptions.html#ae13f9ef9aeba8fb5eb4aa4fae754094d">RegOptionsList</a>&amp; Ipopt::RegisteredOptions::RegisteredOptionsList </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Giving access to iteratable representation of the registered options. </p>
+
+<p class="definition">Definition at line <a class="el" href="IpRegOptions_8hpp_source.html#l01060">1060</a> of file <a class="el" href="IpRegOptions_8hpp_source.html">IpRegOptions.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a37b4d1c4bc1114955bd57daa7c8cfd8f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a37b4d1c4bc1114955bd57daa7c8cfd8f">&#9670;&nbsp;</a></span>RegisteredCategories()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="classIpopt_1_1RegisteredOptions.html#a9063fef9e9c49b050e94d131343cbca5">RegCategoriesList</a>&amp; Ipopt::RegisteredOptions::RegisteredCategories </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Giving access to registered categories. </p>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="IpRegOptions_8hpp_source.html#l01068">1068</a> of file <a class="el" href="IpRegOptions_8hpp_source.html">IpRegOptions.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ad75709e4cd2e5eee6622a0c703bfc05f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad75709e4cd2e5eee6622a0c703bfc05f">&#9670;&nbsp;</a></span>RegisteredCategoriesByPriority()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ipopt::RegisteredOptions::RegisteredCategoriesByPriority </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classIpopt_1_1RegisteredOptions.html#af0d537262cb2369bcc231d2c30cd4a31">RegCategoriesByPriority</a> &amp;&#160;</td>
+          <td class="paramname"><em>categories</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Giving access to registered categories ordered by (decreasing) priority. </p>
+<p>Result is stored in given set. </p><dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+
+</div>
+</div>
+<a id="a93c2740eed93b81678102c9b5db9a9b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a93c2740eed93b81678102c9b5db9a9b0">&#9670;&nbsp;</a></span>OutputOptionDocumentation() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2098,13 +2858,19 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::list&lt; std::string &gt; &amp;&#160;</td>
-          <td class="paramname"><em>categories</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1OptionsList.html">OptionsList</a> &gt;&#160;</td>
+          <td class="paramname"><em>options</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>minpriority</em> = <code>0</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td>
+          <td></td><td> const</td>
         </tr>
       </table>
   </td>
@@ -2114,12 +2880,13 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Output documentation for the options - gives a description, etc. </p>
+<p>Output documentation. </p>
+<p>Format is decided according to print_options_mode option. Whether to print advanced options is decided according to print_advanced_options option. All categories with priority equal or greater minpriority are printed. </p><dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
 </div>
 </div>
-<a id="a16f1efc89d1497a49aa3bc8955288f2a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a16f1efc89d1497a49aa3bc8955288f2a">&#9670;&nbsp;</a></span>OutputLatexOptionDocumentation()</h2>
+<a id="a553dd6d164c75149af0da1254e144eef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a553dd6d164c75149af0da1254e144eef">&#9670;&nbsp;</a></span>OutputOptionDocumentation() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2128,7 +2895,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Ipopt::RegisteredOptions::OutputLatexOptionDocumentation </td>
+          <td class="memname">virtual <a class="el" href="IpTypes_8h.html#a24c578b20e2cd4eeb0060056ea13cbe5">IPOPT_DEPRECATED</a> void Ipopt::RegisteredOptions::OutputOptionDocumentation </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classIpopt_1_1Journalist.html">Journalist</a> &amp;&#160;</td>
           <td class="paramname"><em>jnlst</em>, </td>
@@ -2136,13 +2903,53 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::list&lt; std::string &gt; &amp;&#160;</td>
-          <td class="paramname"><em>categories</em>&#160;</td>
+          <td class="paramtype">const std::list&lt; std::string &gt; &amp;&#160;</td>
+          <td class="paramname"><em>categories</em> = <code>std::list&lt;&#160;std::string&#160;&gt;()</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Output documentation in text format. </p>
+<p>If categories is empty, then all options are printed.</p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000007">Deprecated:</a></b></dt><dd>Use other <a class="el" href="classIpopt_1_1RegisteredOptions.html#a93c2740eed93b81678102c9b5db9a9b0" title="Output documentation.">OutputOptionDocumentation()</a> instead. </dd></dl>
+
+</div>
+</div>
+<a id="adacc0aff79418c0fce05421f2a232961"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adacc0aff79418c0fce05421f2a232961">&#9670;&nbsp;</a></span>OutputLatexOptionDocumentation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual <a class="el" href="IpTypes_8h.html#a24c578b20e2cd4eeb0060056ea13cbe5">IPOPT_DEPRECATED</a> void Ipopt::RegisteredOptions::OutputLatexOptionDocumentation </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classIpopt_1_1Journalist.html">Journalist</a> &amp;&#160;</td>
+          <td class="paramname"><em>jnlst</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::list&lt; std::string &gt; &amp;&#160;</td>
+          <td class="paramname"><em>options_to_print</em> = <code>std::list&lt;&#160;std::string&#160;&gt;()</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
         </tr>
       </table>
   </td>
@@ -2153,11 +2960,13 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Output documentation in Latex format to include in a latex file. </p>
+<p>If options_to_print is empty, then all options are printed.</p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000008">Deprecated:</a></b></dt><dd>Use <a class="el" href="classIpopt_1_1RegisteredOptions.html#a93c2740eed93b81678102c9b5db9a9b0" title="Output documentation.">OutputOptionDocumentation()</a> instead. </dd></dl>
 
 </div>
 </div>
-<a id="a8a999211188e6f33290cded8f6f9aa36"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8a999211188e6f33290cded8f6f9aa36">&#9670;&nbsp;</a></span>OutputDoxygenOptionDocumentation()</h2>
+<a id="ab2068b523c885ae794007ee754b88d01"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab2068b523c885ae794007ee754b88d01">&#9670;&nbsp;</a></span>OutputDoxygenOptionDocumentation()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2166,7 +2975,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Ipopt::RegisteredOptions::OutputDoxygenOptionDocumentation </td>
+          <td class="memname">virtual <a class="el" href="IpTypes_8h.html#a24c578b20e2cd4eeb0060056ea13cbe5">IPOPT_DEPRECATED</a> void Ipopt::RegisteredOptions::OutputDoxygenOptionDocumentation </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classIpopt_1_1Journalist.html">Journalist</a> &amp;&#160;</td>
           <td class="paramname"><em>jnlst</em>, </td>
@@ -2174,13 +2983,13 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::list&lt; std::string &gt; &amp;&#160;</td>
-          <td class="paramname"><em>categories</em>&#160;</td>
+          <td class="paramtype">const std::list&lt; std::string &gt; &amp;&#160;</td>
+          <td class="paramname"><em>options_to_print</em> = <code>std::list&lt;&#160;std::string&#160;&gt;()</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td></td>
+          <td></td><td> const</td>
         </tr>
       </table>
   </td>
@@ -2191,11 +3000,13 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Output documentation in Doxygen format to include in doxygen documentation. </p>
+<p>If options_to_print is empty, then all options are printed.</p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000009">Deprecated:</a></b></dt><dd>Use <a class="el" href="classIpopt_1_1RegisteredOptions.html#a93c2740eed93b81678102c9b5db9a9b0" title="Output documentation.">OutputOptionDocumentation()</a> instead. </dd></dl>
 
 </div>
 </div>
-<a id="ad7c5c3a1c48abd213ebd282f2e00f939"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad7c5c3a1c48abd213ebd282f2e00f939">&#9670;&nbsp;</a></span>RegisteredOptionsList()</h2>
+<a id="a20f15c22268c9098ed751d32d1125683"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20f15c22268c9098ed751d32d1125683">&#9670;&nbsp;</a></span>RegisterOptions()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2204,26 +3015,100 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual const <a class="el" href="classIpopt_1_1RegisteredOptions.html#ae13f9ef9aeba8fb5eb4aa4fae754094d">RegOptionsList</a>&amp; Ipopt::RegisteredOptions::RegisteredOptionsList </td>
+          <td class="memname">static void Ipopt::RegisteredOptions::RegisterOptions </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td class="paramtype"><a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1RegisteredOptions.html">RegisteredOptions</a> &gt;&#160;</td>
+          <td class="paramname"><em>roptions</em></td><td>)</td>
+          <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Giving access to iteratable representation of the registered options. </p>
+<p>register options of <a class="el" href="classIpopt_1_1RegisteredOptions.html" title="Class for storing registered options.">RegisteredOptions</a> class </p>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="IpRegOptions_8hpp_source.html#l00889">889</a> of file <a class="el" href="IpRegOptions_8hpp_source.html">IpRegOptions.hpp</a>.</p>
+</div>
+</div>
+<a id="a4884b248a437bd948f48b7c0afda7840"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4884b248a437bd948f48b7c0afda7840">&#9670;&nbsp;</a></span>AddOption()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ipopt::RegisteredOptions::AddOption </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1RegisteredOption.html">RegisteredOption</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>option</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="aab1717233a1eefe49d553597650400c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aab1717233a1eefe49d553597650400c1">&#9670;&nbsp;</a></span>registered_options_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classIpopt_1_1RegisteredOptions.html#ae13f9ef9aeba8fb5eb4aa4fae754094d">RegOptionsList</a> Ipopt::RegisteredOptions::registered_options_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="IpRegOptions_8hpp_source.html#l01143">1143</a> of file <a class="el" href="IpRegOptions_8hpp_source.html">IpRegOptions.hpp</a>.</p>
+
+</div>
+</div>
+<a id="aa4b29032e205a1651f7580b24e9e06d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4b29032e205a1651f7580b24e9e06d7">&#9670;&nbsp;</a></span>registered_categories_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classIpopt_1_1RegisteredOptions.html#a9063fef9e9c49b050e94d131343cbca5">RegCategoriesList</a> Ipopt::RegisteredOptions::registered_categories_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="IpRegOptions_8hpp_source.html#l01144">1144</a> of file <a class="el" href="IpRegOptions_8hpp_source.html">IpRegOptions.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a0ffde98fc6c9ba7d414e38bc3402c5b2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0ffde98fc6c9ba7d414e38bc3402c5b2">&#9670;&nbsp;</a></span>next_counter_</h2>
 
@@ -2234,7 +3119,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespaceIpopt.html#a8728e67558138991e8ee3fea451dca94">Index</a> Ipopt::RegisteredOptions::next_counter_</td>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> Ipopt::RegisteredOptions::next_counter_</td>
         </tr>
       </table>
   </td>
@@ -2244,12 +3129,12 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpRegOptions_8hpp_source.html#l00895">895</a> of file <a class="el" href="IpRegOptions_8hpp_source.html">IpRegOptions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpRegOptions_8hpp_source.html#l01146">1146</a> of file <a class="el" href="IpRegOptions_8hpp_source.html">IpRegOptions.hpp</a>.</p>
 
 </div>
 </div>
-<a id="af8dca14633a9c787c6d7bbfe09a2ef8c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af8dca14633a9c787c6d7bbfe09a2ef8c">&#9670;&nbsp;</a></span>current_registering_category_</h2>
+<a id="a24fbd66ce87e7aadb1bd9ddb868a1ec5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a24fbd66ce87e7aadb1bd9ddb868a1ec5">&#9670;&nbsp;</a></span>current_registering_category_</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2258,7 +3143,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::string Ipopt::RegisteredOptions::current_registering_category_</td>
+          <td class="memname"><a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt;<a class="el" href="classIpopt_1_1RegisteredCategory.html">RegisteredCategory</a>&gt; Ipopt::RegisteredOptions::current_registering_category_</td>
         </tr>
       </table>
   </td>
@@ -2268,31 +3153,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpRegOptions_8hpp_source.html#l00896">896</a> of file <a class="el" href="IpRegOptions_8hpp_source.html">IpRegOptions.hpp</a>.</p>
-
-</div>
-</div>
-<a id="a44367e3c9f6be364d7ec53b6580a24c0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a44367e3c9f6be364d7ec53b6580a24c0">&#9670;&nbsp;</a></span>registered_options_</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::map&lt;std::string, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt;<a class="el" href="classIpopt_1_1RegisteredOption.html">RegisteredOption</a>&gt; &gt; Ipopt::RegisteredOptions::registered_options_</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="IpRegOptions_8hpp_source.html#l00897">897</a> of file <a class="el" href="IpRegOptions_8hpp_source.html">IpRegOptions.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpRegOptions_8hpp_source.html#l01147">1147</a> of file <a class="el" href="IpRegOptions_8hpp_source.html">IpRegOptions.hpp</a>.</p>
 
 </div>
 </div>

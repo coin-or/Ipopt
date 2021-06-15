@@ -35,9 +35,7 @@ var dir_79dc9ec967a38f8ff6ee528339e64dcb =
     [ "IpInexactTSymScalingMethod.hpp", "IpInexactTSymScalingMethod_8hpp.html", [
       [ "InexactTSymScalingMethod", "classIpopt_1_1InexactTSymScalingMethod.html", "classIpopt_1_1InexactTSymScalingMethod" ]
     ] ],
-    [ "IpIterativePardisoSolverInterface.hpp", "IpIterativePardisoSolverInterface_8hpp.html", [
-      [ "IterativePardisoSolverInterface", "classIpopt_1_1IterativePardisoSolverInterface.html", "classIpopt_1_1IterativePardisoSolverInterface" ]
-    ] ],
+    [ "IpIterativePardisoSolverInterface.hpp", "IpIterativePardisoSolverInterface_8hpp.html", "IpIterativePardisoSolverInterface_8hpp" ],
     [ "IpIterativeSolverTerminationTester.hpp", "IpIterativeSolverTerminationTester_8hpp.html", [
       [ "IterativeSolverTerminationTester", "classIpopt_1_1IterativeSolverTerminationTester.html", "classIpopt_1_1IterativeSolverTerminationTester" ]
     ] ]

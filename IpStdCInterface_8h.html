@@ -1,5 +1,5 @@
-<!-- HTML header for doxygen 1.8.13-->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- HTML header for doxygen 1.8.18-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.13.4</span-->
+   &#160;<!--span id="projectnumber">3.14.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -103,12 +103,15 @@ $(document).ready(function(){initNavTree('IpStdCInterface_8h.html',''); initResi
   <div class="summary">
 <a href="#define-members">Macros</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">IpStdCInterface.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;<a class="el" href="IpoptConfig_8h_source.html">IpoptConfig.h</a>&quot;</code><br />
+<div class="textblock"><code>#include &lt;stdbool.h&gt;</code><br />
+<code>#include &quot;<a class="el" href="IpoptConfig_8h_source.html">IpoptConfig.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="IpTypes_8h_source.html">IpTypes.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="IpReturnCodes_8h_source.html">IpReturnCodes.h</a>&quot;</code><br />
 </div>
 <p><a href="IpStdCInterface_8h_source.html">Go to the source code of this file.</a></p>
@@ -122,72 +125,81 @@ Macros</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:a288a17d7858455cb06f6bce13912c92c"><td class="memItemLeft" align="right" valign="top">typedef double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a></td></tr>
-<tr class="memdesc:a288a17d7858455cb06f6bce13912c92c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type for all number.  <a href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">More...</a><br /></td></tr>
-<tr class="separator:a288a17d7858455cb06f6bce13912c92c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4a0e50e01fef3e431767a928c2631cab"><td class="memItemLeft" align="right" valign="top">typedef int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a></td></tr>
-<tr class="memdesc:a4a0e50e01fef3e431767a928c2631cab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type for all indices.  <a href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">More...</a><br /></td></tr>
-<tr class="separator:a4a0e50e01fef3e431767a928c2631cab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7cc214a236ad3bb6ad435bdcf5262a3f"><td class="memItemLeft" align="right" valign="top">typedef int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a7cc214a236ad3bb6ad435bdcf5262a3f">Int</a></td></tr>
-<tr class="memdesc:a7cc214a236ad3bb6ad435bdcf5262a3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type for all integers.  <a href="IpStdCInterface_8h.html#a7cc214a236ad3bb6ad435bdcf5262a3f">More...</a><br /></td></tr>
-<tr class="separator:a7cc214a236ad3bb6ad435bdcf5262a3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae32712b8d014ab2144fee84432e4a347"><td class="memItemLeft" align="right" valign="top">typedef struct IpoptProblemInfo *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a></td></tr>
 <tr class="memdesc:ae32712b8d014ab2144fee84432e4a347"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointer to an <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> Problem.  <a href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">More...</a><br /></td></tr>
 <tr class="separator:ae32712b8d014ab2144fee84432e4a347"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afdcfe6db5bea87bd493a3fe2c513d5ef"><td class="memItemLeft" align="right" valign="top">typedef int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a></td></tr>
-<tr class="memdesc:afdcfe6db5bea87bd493a3fe2c513d5ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">define a boolean type for C  <a href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">More...</a><br /></td></tr>
-<tr class="separator:afdcfe6db5bea87bd493a3fe2c513d5ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76a8b016e5ad61faf9062cc387df5016"><td class="memItemLeft" align="right" valign="top">typedef bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a76a8b016e5ad61faf9062cc387df5016">Bool</a></td></tr>
+<tr class="memdesc:a76a8b016e5ad61faf9062cc387df5016"><td class="mdescLeft">&#160;</td><td class="mdescRight">define a boolean type for C  <a href="IpStdCInterface_8h.html#a76a8b016e5ad61faf9062cc387df5016">More...</a><br /></td></tr>
+<tr class="separator:a76a8b016e5ad61faf9062cc387df5016"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a34729529d9e43f5954710164cafe4894"><td class="memItemLeft" align="right" valign="top">typedef void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a34729529d9e43f5954710164cafe4894">UserDataPtr</a></td></tr>
 <tr class="memdesc:a34729529d9e43f5954710164cafe4894"><td class="mdescLeft">&#160;</td><td class="mdescRight">A pointer for anything that is to be passed between the called and individual callback function.  <a href="IpStdCInterface_8h.html#a34729529d9e43f5954710164cafe4894">More...</a><br /></td></tr>
 <tr class="separator:a34729529d9e43f5954710164cafe4894"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a564024fb8a0c187f361a39ed07507f5c"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a>(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a564024fb8a0c187f361a39ed07507f5c">Eval_F_CB</a>) (<a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> n, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *x, <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a> new_x, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *obj_value, <a class="el" href="IpStdCInterface_8h.html#a34729529d9e43f5954710164cafe4894">UserDataPtr</a> user_data)</td></tr>
-<tr class="memdesc:a564024fb8a0c187f361a39ed07507f5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type defining the callback function for evaluating the value of the objective function.  <a href="IpStdCInterface_8h.html#a564024fb8a0c187f361a39ed07507f5c">More...</a><br /></td></tr>
-<tr class="separator:a564024fb8a0c187f361a39ed07507f5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9bafd261fce11ab0eb8ff430f88292c1"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a>(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a9bafd261fce11ab0eb8ff430f88292c1">Eval_Grad_F_CB</a>) (<a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> n, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *x, <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a> new_x, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *grad_f, <a class="el" href="IpStdCInterface_8h.html#a34729529d9e43f5954710164cafe4894">UserDataPtr</a> user_data)</td></tr>
-<tr class="memdesc:a9bafd261fce11ab0eb8ff430f88292c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type defining the callback function for evaluating the gradient of the objective function.  <a href="IpStdCInterface_8h.html#a9bafd261fce11ab0eb8ff430f88292c1">More...</a><br /></td></tr>
-<tr class="separator:a9bafd261fce11ab0eb8ff430f88292c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa1bb552e8de03d99d8bfcd3e57411e76"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a>(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#aa1bb552e8de03d99d8bfcd3e57411e76">Eval_G_CB</a>) (<a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> n, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *x, <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a> new_x, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> m, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *g, <a class="el" href="IpStdCInterface_8h.html#a34729529d9e43f5954710164cafe4894">UserDataPtr</a> user_data)</td></tr>
-<tr class="memdesc:aa1bb552e8de03d99d8bfcd3e57411e76"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type defining the callback function for evaluating the value of the constraint functions.  <a href="IpStdCInterface_8h.html#aa1bb552e8de03d99d8bfcd3e57411e76">More...</a><br /></td></tr>
-<tr class="separator:aa1bb552e8de03d99d8bfcd3e57411e76"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a07d8fad0da6cccf5ee7dcca52ab14d8f"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a>(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a07d8fad0da6cccf5ee7dcca52ab14d8f">Eval_Jac_G_CB</a>) (<a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> n, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *x, <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a> new_x, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> m, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> nele_jac, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> *iRow, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> *jCol, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *values, <a class="el" href="IpStdCInterface_8h.html#a34729529d9e43f5954710164cafe4894">UserDataPtr</a> user_data)</td></tr>
-<tr class="memdesc:a07d8fad0da6cccf5ee7dcca52ab14d8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type defining the callback function for evaluating the Jacobian of the constrant functions.  <a href="IpStdCInterface_8h.html#a07d8fad0da6cccf5ee7dcca52ab14d8f">More...</a><br /></td></tr>
-<tr class="separator:a07d8fad0da6cccf5ee7dcca52ab14d8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6688e104732f5309e11ddb79b2c3909d"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a>(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a6688e104732f5309e11ddb79b2c3909d">Eval_H_CB</a>) (<a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> n, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *x, <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a> new_x, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> obj_factor, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> m, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *lambda, <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a> new_lambda, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> nele_hess, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> *iRow, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> *jCol, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *values, <a class="el" href="IpStdCInterface_8h.html#a34729529d9e43f5954710164cafe4894">UserDataPtr</a> user_data)</td></tr>
-<tr class="memdesc:a6688e104732f5309e11ddb79b2c3909d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type defining the callback function for evaluating the Hessian of the Lagrangian function.  <a href="IpStdCInterface_8h.html#a6688e104732f5309e11ddb79b2c3909d">More...</a><br /></td></tr>
-<tr class="separator:a6688e104732f5309e11ddb79b2c3909d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab4979ff76a16c222dac808998013b345"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a>(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#ab4979ff76a16c222dac808998013b345">Intermediate_CB</a>) (<a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> alg_mod, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> iter_count, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> obj_value, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> inf_pr, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> inf_du, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> mu, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> d_norm, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> regularization_size, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> alpha_du, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> alpha_pr, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> ls_trials, <a class="el" href="IpStdCInterface_8h.html#a34729529d9e43f5954710164cafe4894">UserDataPtr</a> user_data)</td></tr>
-<tr class="memdesc:ab4979ff76a16c222dac808998013b345"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type defining the callback function for giving intermediate execution control to the user.  <a href="IpStdCInterface_8h.html#ab4979ff76a16c222dac808998013b345">More...</a><br /></td></tr>
-<tr class="separator:ab4979ff76a16c222dac808998013b345"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aab30234055c386ab38a7f50fffea65ed"><td class="memItemLeft" align="right" valign="top">typedef bool(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#aab30234055c386ab38a7f50fffea65ed">Eval_F_CB</a>) (<a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> n, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *x, bool new_x, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *obj_value, <a class="el" href="IpStdCInterface_8h.html#a34729529d9e43f5954710164cafe4894">UserDataPtr</a> user_data)</td></tr>
+<tr class="memdesc:aab30234055c386ab38a7f50fffea65ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type defining the callback function for evaluating the value of the objective function.  <a href="IpStdCInterface_8h.html#aab30234055c386ab38a7f50fffea65ed">More...</a><br /></td></tr>
+<tr class="separator:aab30234055c386ab38a7f50fffea65ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae26561e1d9045d17521cb5f1e9992abb"><td class="memItemLeft" align="right" valign="top">typedef bool(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#ae26561e1d9045d17521cb5f1e9992abb">Eval_Grad_F_CB</a>) (<a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> n, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *x, bool new_x, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *grad_f, <a class="el" href="IpStdCInterface_8h.html#a34729529d9e43f5954710164cafe4894">UserDataPtr</a> user_data)</td></tr>
+<tr class="memdesc:ae26561e1d9045d17521cb5f1e9992abb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type defining the callback function for evaluating the gradient of the objective function.  <a href="IpStdCInterface_8h.html#ae26561e1d9045d17521cb5f1e9992abb">More...</a><br /></td></tr>
+<tr class="separator:ae26561e1d9045d17521cb5f1e9992abb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5daaee1b7bfa5667670e788a91cae09f"><td class="memItemLeft" align="right" valign="top">typedef bool(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a5daaee1b7bfa5667670e788a91cae09f">Eval_G_CB</a>) (<a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> n, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *x, bool new_x, <a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> m, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *g, <a class="el" href="IpStdCInterface_8h.html#a34729529d9e43f5954710164cafe4894">UserDataPtr</a> user_data)</td></tr>
+<tr class="memdesc:a5daaee1b7bfa5667670e788a91cae09f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type defining the callback function for evaluating the value of the constraint functions.  <a href="IpStdCInterface_8h.html#a5daaee1b7bfa5667670e788a91cae09f">More...</a><br /></td></tr>
+<tr class="separator:a5daaee1b7bfa5667670e788a91cae09f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afdc0651b551e43ee347d208a4125d28c"><td class="memItemLeft" align="right" valign="top">typedef bool(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#afdc0651b551e43ee347d208a4125d28c">Eval_Jac_G_CB</a>) (<a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> n, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *x, bool new_x, <a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> m, <a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> nele_jac, <a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> *iRow, <a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> *jCol, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *values, <a class="el" href="IpStdCInterface_8h.html#a34729529d9e43f5954710164cafe4894">UserDataPtr</a> user_data)</td></tr>
+<tr class="memdesc:afdc0651b551e43ee347d208a4125d28c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type defining the callback function for evaluating the Jacobian of the constrant functions.  <a href="IpStdCInterface_8h.html#afdc0651b551e43ee347d208a4125d28c">More...</a><br /></td></tr>
+<tr class="separator:afdc0651b551e43ee347d208a4125d28c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a8d4d98e2ba3178a1a8772d8dd4d3c2"><td class="memItemLeft" align="right" valign="top">typedef bool(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a5a8d4d98e2ba3178a1a8772d8dd4d3c2">Eval_H_CB</a>) (<a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> n, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *x, bool new_x, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> obj_factor, <a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> m, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *lambda, bool new_lambda, <a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> nele_hess, <a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> *iRow, <a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> *jCol, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *values, <a class="el" href="IpStdCInterface_8h.html#a34729529d9e43f5954710164cafe4894">UserDataPtr</a> user_data)</td></tr>
+<tr class="memdesc:a5a8d4d98e2ba3178a1a8772d8dd4d3c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type defining the callback function for evaluating the Hessian of the Lagrangian function.  <a href="IpStdCInterface_8h.html#a5a8d4d98e2ba3178a1a8772d8dd4d3c2">More...</a><br /></td></tr>
+<tr class="separator:a5a8d4d98e2ba3178a1a8772d8dd4d3c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a2bc6b1dc188466a5eed53a50dd15df"><td class="memItemLeft" align="right" valign="top">typedef bool(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a0a2bc6b1dc188466a5eed53a50dd15df">Intermediate_CB</a>) (<a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> alg_mod, <a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> iter_count, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> obj_value, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> inf_pr, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> inf_du, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> mu, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> d_norm, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> regularization_size, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> alpha_du, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> alpha_pr, <a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> ls_trials, <a class="el" href="IpStdCInterface_8h.html#a34729529d9e43f5954710164cafe4894">UserDataPtr</a> user_data)</td></tr>
+<tr class="memdesc:a0a2bc6b1dc188466a5eed53a50dd15df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type defining the callback function for giving intermediate execution control to the user.  <a href="IpStdCInterface_8h.html#a0a2bc6b1dc188466a5eed53a50dd15df">More...</a><br /></td></tr>
+<tr class="separator:a0a2bc6b1dc188466a5eed53a50dd15df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a064ecc05d4945d0c9a4689b5c4039675"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> <a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a064ecc05d4945d0c9a4689b5c4039675">CreateIpoptProblem</a> (<a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> n, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *x_L, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *x_U, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> m, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *g_L, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *g_U, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> nele_jac, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> nele_hess, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> index_style, <a class="el" href="IpStdCInterface_8h.html#a564024fb8a0c187f361a39ed07507f5c">Eval_F_CB</a> eval_f, <a class="el" href="IpStdCInterface_8h.html#aa1bb552e8de03d99d8bfcd3e57411e76">Eval_G_CB</a> eval_g, <a class="el" href="IpStdCInterface_8h.html#a9bafd261fce11ab0eb8ff430f88292c1">Eval_Grad_F_CB</a> eval_grad_f, <a class="el" href="IpStdCInterface_8h.html#a07d8fad0da6cccf5ee7dcca52ab14d8f">Eval_Jac_G_CB</a> eval_jac_g, <a class="el" href="IpStdCInterface_8h.html#a6688e104732f5309e11ddb79b2c3909d">Eval_H_CB</a> eval_h)</td></tr>
-<tr class="memdesc:a064ecc05d4945d0c9a4689b5c4039675"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function for creating a new <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> Problem object.  <a href="IpStdCInterface_8h.html#a064ecc05d4945d0c9a4689b5c4039675">More...</a><br /></td></tr>
-<tr class="separator:a064ecc05d4945d0c9a4689b5c4039675"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3560885d47fc7282c85ed1364108a4ab"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a3560885d47fc7282c85ed1364108a4ab">FreeIpoptProblem</a> (<a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> ipopt_problem)</td></tr>
-<tr class="memdesc:a3560885d47fc7282c85ed1364108a4ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method for freeing a previously created IpoptProblem.  <a href="IpStdCInterface_8h.html#a3560885d47fc7282c85ed1364108a4ab">More...</a><br /></td></tr>
-<tr class="separator:a3560885d47fc7282c85ed1364108a4ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adff6271fbde661dba1a2e59316c5f6c0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#adff6271fbde661dba1a2e59316c5f6c0">AddIpoptStrOption</a> (<a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> ipopt_problem, char *keyword, char *val)</td></tr>
-<tr class="memdesc:adff6271fbde661dba1a2e59316c5f6c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function for adding a string option.  <a href="IpStdCInterface_8h.html#adff6271fbde661dba1a2e59316c5f6c0">More...</a><br /></td></tr>
-<tr class="separator:adff6271fbde661dba1a2e59316c5f6c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afba87fc0265689aa0caa15d896aa0b8a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#afba87fc0265689aa0caa15d896aa0b8a">AddIpoptNumOption</a> (<a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> ipopt_problem, char *keyword, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> val)</td></tr>
-<tr class="memdesc:afba87fc0265689aa0caa15d896aa0b8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function for adding a Number option.  <a href="IpStdCInterface_8h.html#afba87fc0265689aa0caa15d896aa0b8a">More...</a><br /></td></tr>
-<tr class="separator:afba87fc0265689aa0caa15d896aa0b8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a19ab838c66ff503c0896bc61289f53fe"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a19ab838c66ff503c0896bc61289f53fe">AddIpoptIntOption</a> (<a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> ipopt_problem, char *keyword, <a class="el" href="IpStdCInterface_8h.html#a7cc214a236ad3bb6ad435bdcf5262a3f">Int</a> val)</td></tr>
-<tr class="memdesc:a19ab838c66ff503c0896bc61289f53fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function for adding an Int option.  <a href="IpStdCInterface_8h.html#a19ab838c66ff503c0896bc61289f53fe">More...</a><br /></td></tr>
-<tr class="separator:a19ab838c66ff503c0896bc61289f53fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac5fface8b0aa5480dd8e526878d02025"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#ac5fface8b0aa5480dd8e526878d02025">OpenIpoptOutputFile</a> (<a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> ipopt_problem, char *file_name, <a class="el" href="IpStdCInterface_8h.html#a7cc214a236ad3bb6ad435bdcf5262a3f">Int</a> print_level)</td></tr>
-<tr class="memdesc:ac5fface8b0aa5480dd8e526878d02025"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function for opening an output file for a given name with given printlevel.  <a href="IpStdCInterface_8h.html#ac5fface8b0aa5480dd8e526878d02025">More...</a><br /></td></tr>
-<tr class="separator:ac5fface8b0aa5480dd8e526878d02025"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a17eb4861ff7fc751d1208fe41865ec2e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a17eb4861ff7fc751d1208fe41865ec2e">SetIpoptProblemScaling</a> (<a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> ipopt_problem, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> obj_scaling, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *x_scaling, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *g_scaling)</td></tr>
-<tr class="memdesc:a17eb4861ff7fc751d1208fe41865ec2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Optional function for setting scaling parameter for the NLP.  <a href="IpStdCInterface_8h.html#a17eb4861ff7fc751d1208fe41865ec2e">More...</a><br /></td></tr>
-<tr class="separator:a17eb4861ff7fc751d1208fe41865ec2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a92e2c344447a142cc9b2bde38522e062"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a92e2c344447a142cc9b2bde38522e062">SetIntermediateCallback</a> (<a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> ipopt_problem, <a class="el" href="IpStdCInterface_8h.html#ab4979ff76a16c222dac808998013b345">Intermediate_CB</a> intermediate_cb)</td></tr>
-<tr class="memdesc:a92e2c344447a142cc9b2bde38522e062"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting a callback function for the "intermediate callback" method in the TNLP.  <a href="IpStdCInterface_8h.html#a92e2c344447a142cc9b2bde38522e062">More...</a><br /></td></tr>
-<tr class="separator:a92e2c344447a142cc9b2bde38522e062"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2219c823d971c40381eca8b2844297ea"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> enum <a class="el" href="IpReturnCodes__inc_8h.html#ab542e0b1ca364a9b7525a876ffdae7d7">ApplicationReturnStatus</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a2219c823d971c40381eca8b2844297ea">IpoptSolve</a> (<a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> ipopt_problem, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *x, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *g, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *obj_val, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *mult_g, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *mult_x_L, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *mult_x_U, <a class="el" href="IpStdCInterface_8h.html#a34729529d9e43f5954710164cafe4894">UserDataPtr</a> user_data)</td></tr>
-<tr class="memdesc:a2219c823d971c40381eca8b2844297ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function calling the <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> optimization algorithm for a problem previously defined with CreateIpoptProblem.  <a href="IpStdCInterface_8h.html#a2219c823d971c40381eca8b2844297ea">More...</a><br /></td></tr>
-<tr class="separator:a2219c823d971c40381eca8b2844297ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1c7c5bba4e9ca11142b12c1d434764e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> <a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> <a class="el" href="IpTypes_8h.html#ae7eaa5fbc2133bb2a78973a87cc7bb5b">IPOPT_CALLCONV</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#ad1c7c5bba4e9ca11142b12c1d434764e">CreateIpoptProblem</a> (<a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> n, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *x_L, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *x_U, <a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> m, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *g_L, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *g_U, <a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> nele_jac, <a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> nele_hess, <a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> index_style, <a class="el" href="IpStdCInterface_8h.html#aab30234055c386ab38a7f50fffea65ed">Eval_F_CB</a> eval_f, <a class="el" href="IpStdCInterface_8h.html#a5daaee1b7bfa5667670e788a91cae09f">Eval_G_CB</a> eval_g, <a class="el" href="IpStdCInterface_8h.html#ae26561e1d9045d17521cb5f1e9992abb">Eval_Grad_F_CB</a> eval_grad_f, <a class="el" href="IpStdCInterface_8h.html#afdc0651b551e43ee347d208a4125d28c">Eval_Jac_G_CB</a> eval_jac_g, <a class="el" href="IpStdCInterface_8h.html#a5a8d4d98e2ba3178a1a8772d8dd4d3c2">Eval_H_CB</a> eval_h)</td></tr>
+<tr class="memdesc:ad1c7c5bba4e9ca11142b12c1d434764e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function for creating a new <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> Problem object.  <a href="IpStdCInterface_8h.html#ad1c7c5bba4e9ca11142b12c1d434764e">More...</a><br /></td></tr>
+<tr class="separator:ad1c7c5bba4e9ca11142b12c1d434764e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2776b701c950d9700509f1e601d787f6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> void <a class="el" href="IpTypes_8h.html#ae7eaa5fbc2133bb2a78973a87cc7bb5b">IPOPT_CALLCONV</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a2776b701c950d9700509f1e601d787f6">FreeIpoptProblem</a> (<a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> ipopt_problem)</td></tr>
+<tr class="memdesc:a2776b701c950d9700509f1e601d787f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method for freeing a previously created IpoptProblem.  <a href="IpStdCInterface_8h.html#a2776b701c950d9700509f1e601d787f6">More...</a><br /></td></tr>
+<tr class="separator:a2776b701c950d9700509f1e601d787f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6b7c62bfbc8dea71b3a6f724c36b377"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> bool <a class="el" href="IpTypes_8h.html#ae7eaa5fbc2133bb2a78973a87cc7bb5b">IPOPT_CALLCONV</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#ab6b7c62bfbc8dea71b3a6f724c36b377">AddIpoptStrOption</a> (<a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> ipopt_problem, char *keyword, char *val)</td></tr>
+<tr class="memdesc:ab6b7c62bfbc8dea71b3a6f724c36b377"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function for adding a string option.  <a href="IpStdCInterface_8h.html#ab6b7c62bfbc8dea71b3a6f724c36b377">More...</a><br /></td></tr>
+<tr class="separator:ab6b7c62bfbc8dea71b3a6f724c36b377"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7af9acc5df419794044bc4c6717a89ca"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> bool <a class="el" href="IpTypes_8h.html#ae7eaa5fbc2133bb2a78973a87cc7bb5b">IPOPT_CALLCONV</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a7af9acc5df419794044bc4c6717a89ca">AddIpoptNumOption</a> (<a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> ipopt_problem, char *keyword, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> val)</td></tr>
+<tr class="memdesc:a7af9acc5df419794044bc4c6717a89ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function for adding a Number option.  <a href="IpStdCInterface_8h.html#a7af9acc5df419794044bc4c6717a89ca">More...</a><br /></td></tr>
+<tr class="separator:a7af9acc5df419794044bc4c6717a89ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a408cfbc4c2e69def583fd8c0ca85d88c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> bool <a class="el" href="IpTypes_8h.html#ae7eaa5fbc2133bb2a78973a87cc7bb5b">IPOPT_CALLCONV</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a408cfbc4c2e69def583fd8c0ca85d88c">AddIpoptIntOption</a> (<a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> ipopt_problem, char *keyword, <a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> val)</td></tr>
+<tr class="memdesc:a408cfbc4c2e69def583fd8c0ca85d88c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function for adding an Integer option.  <a href="IpStdCInterface_8h.html#a408cfbc4c2e69def583fd8c0ca85d88c">More...</a><br /></td></tr>
+<tr class="separator:a408cfbc4c2e69def583fd8c0ca85d88c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a217bdf5c36c19c81b44fab50d8af8a8a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> bool <a class="el" href="IpTypes_8h.html#ae7eaa5fbc2133bb2a78973a87cc7bb5b">IPOPT_CALLCONV</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a217bdf5c36c19c81b44fab50d8af8a8a">OpenIpoptOutputFile</a> (<a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> ipopt_problem, char *file_name, int print_level)</td></tr>
+<tr class="memdesc:a217bdf5c36c19c81b44fab50d8af8a8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function for opening an output file for a given name with given printlevel.  <a href="IpStdCInterface_8h.html#a217bdf5c36c19c81b44fab50d8af8a8a">More...</a><br /></td></tr>
+<tr class="separator:a217bdf5c36c19c81b44fab50d8af8a8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe4f90a0c6f89253924c7afb067f87e2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> bool <a class="el" href="IpTypes_8h.html#ae7eaa5fbc2133bb2a78973a87cc7bb5b">IPOPT_CALLCONV</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#afe4f90a0c6f89253924c7afb067f87e2">SetIpoptProblemScaling</a> (<a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> ipopt_problem, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> obj_scaling, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *x_scaling, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *g_scaling)</td></tr>
+<tr class="memdesc:afe4f90a0c6f89253924c7afb067f87e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Optional function for setting scaling parameter for the NLP.  <a href="IpStdCInterface_8h.html#afe4f90a0c6f89253924c7afb067f87e2">More...</a><br /></td></tr>
+<tr class="separator:afe4f90a0c6f89253924c7afb067f87e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab86b55545fa3e0232a0e646409e0e82b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> bool <a class="el" href="IpTypes_8h.html#ae7eaa5fbc2133bb2a78973a87cc7bb5b">IPOPT_CALLCONV</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#ab86b55545fa3e0232a0e646409e0e82b">SetIntermediateCallback</a> (<a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> ipopt_problem, <a class="el" href="IpStdCInterface_8h.html#a0a2bc6b1dc188466a5eed53a50dd15df">Intermediate_CB</a> intermediate_cb)</td></tr>
+<tr class="memdesc:ab86b55545fa3e0232a0e646409e0e82b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setting a callback function for the "intermediate callback" method in the TNLP.  <a href="IpStdCInterface_8h.html#ab86b55545fa3e0232a0e646409e0e82b">More...</a><br /></td></tr>
+<tr class="separator:ab86b55545fa3e0232a0e646409e0e82b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a68928c505f008c1245088bca5b7b16"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> enum <a class="el" href="IpReturnCodes__inc_8h.html#ab542e0b1ca364a9b7525a876ffdae7d7">ApplicationReturnStatus</a> <a class="el" href="IpTypes_8h.html#ae7eaa5fbc2133bb2a78973a87cc7bb5b">IPOPT_CALLCONV</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a5a68928c505f008c1245088bca5b7b16">IpoptSolve</a> (<a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> ipopt_problem, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *x, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *g, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *obj_val, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *mult_g, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *mult_x_L, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *mult_x_U, <a class="el" href="IpStdCInterface_8h.html#a34729529d9e43f5954710164cafe4894">UserDataPtr</a> user_data)</td></tr>
+<tr class="memdesc:a5a68928c505f008c1245088bca5b7b16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function calling the <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> optimization algorithm for a problem previously defined with CreateIpoptProblem.  <a href="IpStdCInterface_8h.html#a5a68928c505f008c1245088bca5b7b16">More...</a><br /></td></tr>
+<tr class="separator:a5a68928c505f008c1245088bca5b7b16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf68350650b7a893061e110ab0e9264f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> bool <a class="el" href="IpTypes_8h.html#ae7eaa5fbc2133bb2a78973a87cc7bb5b">IPOPT_CALLCONV</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#acf68350650b7a893061e110ab0e9264f">GetIpoptCurrentIterate</a> (<a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> ipopt_problem, bool scaled, <a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> n, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *x, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *z_L, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *z_U, <a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> m, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *g, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *lambda)</td></tr>
+<tr class="memdesc:acf68350650b7a893061e110ab0e9264f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get primal and dual variable values of the current iterate.  <a href="IpStdCInterface_8h.html#acf68350650b7a893061e110ab0e9264f">More...</a><br /></td></tr>
+<tr class="separator:acf68350650b7a893061e110ab0e9264f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae505cff0e907b9049062f665dadd8be9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> bool <a class="el" href="IpTypes_8h.html#ae7eaa5fbc2133bb2a78973a87cc7bb5b">IPOPT_CALLCONV</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#ae505cff0e907b9049062f665dadd8be9">GetIpoptCurrentViolations</a> (<a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> ipopt_problem, bool scaled, <a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> n, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *x_L_violation, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *x_U_violation, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *compl_x_L, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *compl_x_U, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *grad_lag_x, <a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> m, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *nlp_constraint_violation, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *compl_g)</td></tr>
+<tr class="memdesc:ae505cff0e907b9049062f665dadd8be9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get primal and dual infeasibility of the current iterate.  <a href="IpStdCInterface_8h.html#ae505cff0e907b9049062f665dadd8be9">More...</a><br /></td></tr>
+<tr class="separator:ae505cff0e907b9049062f665dadd8be9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:ab974f23c40ccaad0dacd611e3f4885e9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="IpTypes_8h.html#a24c578b20e2cd4eeb0060056ea13cbe5">IPOPT_DEPRECATED</a> typedef <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#ab974f23c40ccaad0dacd611e3f4885e9">Number</a></td></tr>
+<tr class="memdesc:ab974f23c40ccaad0dacd611e3f4885e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type for all number.  <a href="IpStdCInterface_8h.html#ab974f23c40ccaad0dacd611e3f4885e9">More...</a><br /></td></tr>
+<tr class="separator:ab974f23c40ccaad0dacd611e3f4885e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3aa63858b3377c5aaf789a43e5b47b5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="IpTypes_8h.html#a24c578b20e2cd4eeb0060056ea13cbe5">IPOPT_DEPRECATED</a> typedef int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#ac3aa63858b3377c5aaf789a43e5b47b5">Index</a></td></tr>
+<tr class="memdesc:ac3aa63858b3377c5aaf789a43e5b47b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type for all indices.  <a href="IpStdCInterface_8h.html#ac3aa63858b3377c5aaf789a43e5b47b5">More...</a><br /></td></tr>
+<tr class="separator:ac3aa63858b3377c5aaf789a43e5b47b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a981fcddf5a1e9bbdc3d71ef0f994259b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="IpTypes_8h.html#a24c578b20e2cd4eeb0060056ea13cbe5">IPOPT_DEPRECATED</a> typedef int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a981fcddf5a1e9bbdc3d71ef0f994259b">Int</a></td></tr>
+<tr class="memdesc:a981fcddf5a1e9bbdc3d71ef0f994259b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type for all integers.  <a href="IpStdCInterface_8h.html#a981fcddf5a1e9bbdc3d71ef0f994259b">More...</a><br /></td></tr>
+<tr class="separator:a981fcddf5a1e9bbdc3d71ef0f994259b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="aa8cecfc5c5c054d2875c03e77b7be15d"></a>
@@ -202,7 +214,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00057">57</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00058">58</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
 
 </div>
 </div>
@@ -218,68 +230,11 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00060">60</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00062">62</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Typedef Documentation</h2>
-<a id="a288a17d7858455cb06f6bce13912c92c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a288a17d7858455cb06f6bce13912c92c">&#9670;&nbsp;</a></span>Number</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef double <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Type for all number. </p>
-<p>We need to make sure that this is identical with what is defined in <a class="el" href="IpTypes_8hpp.html">Common/IpTypes.hpp</a> </p>
-
-<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00030">30</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
-
-</div>
-</div>
-<a id="a4a0e50e01fef3e431767a928c2631cab"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4a0e50e01fef3e431767a928c2631cab">&#9670;&nbsp;</a></span>Index</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef int <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Type for all indices. </p>
-<p>We need to make sure that this is identical with what is defined in <a class="el" href="IpTypes_8hpp.html">Common/IpTypes.hpp</a> </p>
-
-<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00036">36</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
-
-</div>
-</div>
-<a id="a7cc214a236ad3bb6ad435bdcf5262a3f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7cc214a236ad3bb6ad435bdcf5262a3f">&#9670;&nbsp;</a></span>Int</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef int <a class="el" href="IpStdCInterface_8h.html#a7cc214a236ad3bb6ad435bdcf5262a3f">Int</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Type for all integers. </p>
-<p>We need to make sure that this is identical with what is defined in <a class="el" href="IpTypes_8hpp.html">Common/IpTypes.hpp</a> </p>
-
-<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00042">42</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
-
-</div>
-</div>
 <a id="ae32712b8d014ab2144fee84432e4a347"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae32712b8d014ab2144fee84432e4a347">&#9670;&nbsp;</a></span>IpoptProblem</h2>
 
@@ -294,23 +249,24 @@ Functions</h2></td></tr>
 
 <p>Pointer to an <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> Problem. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00051">51</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00049">49</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
 
 </div>
 </div>
-<a id="afdcfe6db5bea87bd493a3fe2c513d5ef"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afdcfe6db5bea87bd493a3fe2c513d5ef">&#9670;&nbsp;</a></span>Bool</h2>
+<a id="a76a8b016e5ad61faf9062cc387df5016"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a76a8b016e5ad61faf9062cc387df5016">&#9670;&nbsp;</a></span>Bool</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef int <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a></td>
+          <td class="memname">typedef bool <a class="el" href="IpStdCInterface_8h.html#a76a8b016e5ad61faf9062cc387df5016">Bool</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>define a boolean type for C </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000019">Deprecated:</a></b></dt><dd>Use bool instead.</dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00054">54</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
 
@@ -330,18 +286,18 @@ Functions</h2></td></tr>
 
 <p>A pointer for anything that is to be passed between the called and individual callback function. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00063">63</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00065">65</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
 
 </div>
 </div>
-<a id="a564024fb8a0c187f361a39ed07507f5c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a564024fb8a0c187f361a39ed07507f5c">&#9670;&nbsp;</a></span>Eval_F_CB</h2>
+<a id="aab30234055c386ab38a7f50fffea65ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aab30234055c386ab38a7f50fffea65ed">&#9670;&nbsp;</a></span>Eval_F_CB</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a>(* Eval_F_CB) (<a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> n, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *x, <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a> new_x, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *obj_value, <a class="el" href="IpStdCInterface_8h.html#a34729529d9e43f5954710164cafe4894">UserDataPtr</a> user_data)</td>
+          <td class="memname">typedef bool(* Eval_F_CB) (<a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> n, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *x, bool new_x, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *obj_value, <a class="el" href="IpStdCInterface_8h.html#a34729529d9e43f5954710164cafe4894">UserDataPtr</a> user_data)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -350,18 +306,18 @@ Functions</h2></td></tr>
 <p>Return value should be set to false if there was a problem doing the evaluation.</p>
 <p>See also <a class="el" href="classIpopt_1_1TNLP.html#a709c03900227bc573b046ce0705e6c84" title="Method to request the value of the objective function.">Ipopt::TNLP::eval_f</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00071">71</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00073">73</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
 
 </div>
 </div>
-<a id="a9bafd261fce11ab0eb8ff430f88292c1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9bafd261fce11ab0eb8ff430f88292c1">&#9670;&nbsp;</a></span>Eval_Grad_F_CB</h2>
+<a id="ae26561e1d9045d17521cb5f1e9992abb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae26561e1d9045d17521cb5f1e9992abb">&#9670;&nbsp;</a></span>Eval_Grad_F_CB</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a>(* Eval_Grad_F_CB) (<a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> n, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *x, <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a> new_x, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *grad_f, <a class="el" href="IpStdCInterface_8h.html#a34729529d9e43f5954710164cafe4894">UserDataPtr</a> user_data)</td>
+          <td class="memname">typedef bool(* Eval_Grad_F_CB) (<a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> n, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *x, bool new_x, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *grad_f, <a class="el" href="IpStdCInterface_8h.html#a34729529d9e43f5954710164cafe4894">UserDataPtr</a> user_data)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -370,18 +326,18 @@ Functions</h2></td></tr>
 <p>Return value should be set to false if there was a problem doing the evaluation.</p>
 <p>See also <a class="el" href="classIpopt_1_1TNLP.html#a52698f1861ffef271d5e317c0e168652" title="Method to request the gradient of the objective function.">Ipopt::TNLP::eval_grad_f</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00085">85</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00087">87</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
 
 </div>
 </div>
-<a id="aa1bb552e8de03d99d8bfcd3e57411e76"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa1bb552e8de03d99d8bfcd3e57411e76">&#9670;&nbsp;</a></span>Eval_G_CB</h2>
+<a id="a5daaee1b7bfa5667670e788a91cae09f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5daaee1b7bfa5667670e788a91cae09f">&#9670;&nbsp;</a></span>Eval_G_CB</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a>(* Eval_G_CB) (<a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> n, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *x, <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a> new_x, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> m, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *g, <a class="el" href="IpStdCInterface_8h.html#a34729529d9e43f5954710164cafe4894">UserDataPtr</a> user_data)</td>
+          <td class="memname">typedef bool(* Eval_G_CB) (<a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> n, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *x, bool new_x, <a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> m, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *g, <a class="el" href="IpStdCInterface_8h.html#a34729529d9e43f5954710164cafe4894">UserDataPtr</a> user_data)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -390,18 +346,18 @@ Functions</h2></td></tr>
 <p>Return value should be set to false if there was a problem doing the evaluation.</p>
 <p>See also <a class="el" href="classIpopt_1_1TNLP.html#afcfd8404b772dc4960f2d2db4e8bb382" title="Method to request the constraint values.">Ipopt::TNLP::eval_g</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00099">99</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00101">101</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
 
 </div>
 </div>
-<a id="a07d8fad0da6cccf5ee7dcca52ab14d8f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a07d8fad0da6cccf5ee7dcca52ab14d8f">&#9670;&nbsp;</a></span>Eval_Jac_G_CB</h2>
+<a id="afdc0651b551e43ee347d208a4125d28c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afdc0651b551e43ee347d208a4125d28c">&#9670;&nbsp;</a></span>Eval_Jac_G_CB</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a>(* Eval_Jac_G_CB) (<a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> n, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *x, <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a> new_x, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> m, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> nele_jac, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> *iRow, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> *jCol, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *values, <a class="el" href="IpStdCInterface_8h.html#a34729529d9e43f5954710164cafe4894">UserDataPtr</a> user_data)</td>
+          <td class="memname">typedef bool(* Eval_Jac_G_CB) (<a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> n, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *x, bool new_x, <a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> m, <a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> nele_jac, <a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> *iRow, <a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> *jCol, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *values, <a class="el" href="IpStdCInterface_8h.html#a34729529d9e43f5954710164cafe4894">UserDataPtr</a> user_data)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -410,18 +366,18 @@ Functions</h2></td></tr>
 <p>Return value should be set to false if there was a problem doing the evaluation.</p>
 <p>See also <a class="el" href="classIpopt_1_1TNLP.html#aa4162d052f69d4f9946a42feec012853" title="Method to request either the sparsity structure or the values of the Jacobian of the constraints.">Ipopt::TNLP::eval_jac_g</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00114">114</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00116">116</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
 
 </div>
 </div>
-<a id="a6688e104732f5309e11ddb79b2c3909d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6688e104732f5309e11ddb79b2c3909d">&#9670;&nbsp;</a></span>Eval_H_CB</h2>
+<a id="a5a8d4d98e2ba3178a1a8772d8dd4d3c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a8d4d98e2ba3178a1a8772d8dd4d3c2">&#9670;&nbsp;</a></span>Eval_H_CB</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a>(* Eval_H_CB) (<a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> n, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *x, <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a> new_x, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> obj_factor, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> m, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *lambda, <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a> new_lambda, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> nele_hess, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> *iRow, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> *jCol, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *values, <a class="el" href="IpStdCInterface_8h.html#a34729529d9e43f5954710164cafe4894">UserDataPtr</a> user_data)</td>
+          <td class="memname">typedef bool(* Eval_H_CB) (<a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> n, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *x, bool new_x, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> obj_factor, <a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> m, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *lambda, bool new_lambda, <a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> nele_hess, <a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> *iRow, <a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> *jCol, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *values, <a class="el" href="IpStdCInterface_8h.html#a34729529d9e43f5954710164cafe4894">UserDataPtr</a> user_data)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -430,18 +386,18 @@ Functions</h2></td></tr>
 <p>Return value should be set to false if there was a problem doing the evaluation.</p>
 <p>See also <a class="el" href="classIpopt_1_1TNLP.html#a26b9145267e2574c53acc284fef1c354" title="Method to request either the sparsity structure or the values of the Hessian of the Lagrangian.">Ipopt::TNLP::eval_h</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00132">132</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00134">134</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
 
 </div>
 </div>
-<a id="ab4979ff76a16c222dac808998013b345"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab4979ff76a16c222dac808998013b345">&#9670;&nbsp;</a></span>Intermediate_CB</h2>
+<a id="a0a2bc6b1dc188466a5eed53a50dd15df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a2bc6b1dc188466a5eed53a50dd15df">&#9670;&nbsp;</a></span>Intermediate_CB</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a>(* Intermediate_CB) (<a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> alg_mod, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> iter_count, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> obj_value, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> inf_pr, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> inf_du, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> mu, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> d_norm, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> regularization_size, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> alpha_du, <a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> alpha_pr, <a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a> ls_trials, <a class="el" href="IpStdCInterface_8h.html#a34729529d9e43f5954710164cafe4894">UserDataPtr</a> user_data)</td>
+          <td class="memname">typedef bool(* Intermediate_CB) (<a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> alg_mod, <a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> iter_count, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> obj_value, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> inf_pr, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> inf_du, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> mu, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> d_norm, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> regularization_size, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> alpha_du, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> alpha_pr, <a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> ls_trials, <a class="el" href="IpStdCInterface_8h.html#a34729529d9e43f5954710164cafe4894">UserDataPtr</a> user_data)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -450,99 +406,99 @@ Functions</h2></td></tr>
 <p>If set, it is called once per iteration, providing the user with some information on the state of the optimization. This can be used to print some user-defined output. It also gives the user a way to terminate the optimization prematurely. If this method returns false, <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> will terminate the optimization.</p>
 <p>See also <a class="el" href="classIpopt_1_1TNLP.html#a2f962a4c43464adb7928771af84503d6" title="Intermediate Callback method for the user.">Ipopt::TNLP::intermediate_callback</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00157">157</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00159">159</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a064ecc05d4945d0c9a4689b5c4039675"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a064ecc05d4945d0c9a4689b5c4039675">&#9670;&nbsp;</a></span>CreateIpoptProblem()</h2>
+<a id="ad1c7c5bba4e9ca11142b12c1d434764e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1c7c5bba4e9ca11142b12c1d434764e">&#9670;&nbsp;</a></span>CreateIpoptProblem()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> <a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> CreateIpoptProblem </td>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> <a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> <a class="el" href="IpTypes_8h.html#ae7eaa5fbc2133bb2a78973a87cc7bb5b">IPOPT_CALLCONV</a> CreateIpoptProblem </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *&#160;</td>
           <td class="paramname"><em>x_L</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *&#160;</td>
           <td class="paramname"><em>x_U</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a>&#160;</td>
           <td class="paramname"><em>m</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *&#160;</td>
           <td class="paramname"><em>g_L</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *&#160;</td>
           <td class="paramname"><em>g_U</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a>&#160;</td>
           <td class="paramname"><em>nele_jac</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a>&#160;</td>
           <td class="paramname"><em>nele_hess</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#a4a0e50e01fef3e431767a928c2631cab">Index</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a>&#160;</td>
           <td class="paramname"><em>index_style</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#a564024fb8a0c187f361a39ed07507f5c">Eval_F_CB</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#aab30234055c386ab38a7f50fffea65ed">Eval_F_CB</a>&#160;</td>
           <td class="paramname"><em>eval_f</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#aa1bb552e8de03d99d8bfcd3e57411e76">Eval_G_CB</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#a5daaee1b7bfa5667670e788a91cae09f">Eval_G_CB</a>&#160;</td>
           <td class="paramname"><em>eval_g</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#a9bafd261fce11ab0eb8ff430f88292c1">Eval_Grad_F_CB</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#ae26561e1d9045d17521cb5f1e9992abb">Eval_Grad_F_CB</a>&#160;</td>
           <td class="paramname"><em>eval_grad_f</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#a07d8fad0da6cccf5ee7dcca52ab14d8f">Eval_Jac_G_CB</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#afdc0651b551e43ee347d208a4125d28c">Eval_Jac_G_CB</a>&#160;</td>
           <td class="paramname"><em>eval_jac_g</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#a6688e104732f5309e11ddb79b2c3909d">Eval_H_CB</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#a5a8d4d98e2ba3178a1a8772d8dd4d3c2">Eval_H_CB</a>&#160;</td>
           <td class="paramname"><em>eval_h</em>&#160;</td>
         </tr>
         <tr>
@@ -599,14 +555,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a3560885d47fc7282c85ed1364108a4ab"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3560885d47fc7282c85ed1364108a4ab">&#9670;&nbsp;</a></span>FreeIpoptProblem()</h2>
+<a id="a2776b701c950d9700509f1e601d787f6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2776b701c950d9700509f1e601d787f6">&#9670;&nbsp;</a></span>FreeIpoptProblem()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> void FreeIpoptProblem </td>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> void <a class="el" href="IpTypes_8h.html#ae7eaa5fbc2133bb2a78973a87cc7bb5b">IPOPT_CALLCONV</a> FreeIpoptProblem </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a>&#160;</td>
           <td class="paramname"><em>ipopt_problem</em></td><td>)</td>
@@ -620,14 +576,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="adff6271fbde661dba1a2e59316c5f6c0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adff6271fbde661dba1a2e59316c5f6c0">&#9670;&nbsp;</a></span>AddIpoptStrOption()</h2>
+<a id="ab6b7c62bfbc8dea71b3a6f724c36b377"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab6b7c62bfbc8dea71b3a6f724c36b377">&#9670;&nbsp;</a></span>AddIpoptStrOption()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a> AddIpoptStrOption </td>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> bool <a class="el" href="IpTypes_8h.html#ae7eaa5fbc2133bb2a78973a87cc7bb5b">IPOPT_CALLCONV</a> AddIpoptStrOption </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a>&#160;</td>
           <td class="paramname"><em>ipopt_problem</em>, </td>
@@ -653,18 +609,18 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Function for adding a string option. </p>
-<dl class="section return"><dt>Returns</dt><dd>FALSE, if the option could not be set (e.g., if keyword is unknown) </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>false, if the option could not be set (e.g., if keyword is unknown) </dd></dl>
 
 </div>
 </div>
-<a id="afba87fc0265689aa0caa15d896aa0b8a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afba87fc0265689aa0caa15d896aa0b8a">&#9670;&nbsp;</a></span>AddIpoptNumOption()</h2>
+<a id="a7af9acc5df419794044bc4c6717a89ca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7af9acc5df419794044bc4c6717a89ca">&#9670;&nbsp;</a></span>AddIpoptNumOption()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a> AddIpoptNumOption </td>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> bool <a class="el" href="IpTypes_8h.html#ae7eaa5fbc2133bb2a78973a87cc7bb5b">IPOPT_CALLCONV</a> AddIpoptNumOption </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a>&#160;</td>
           <td class="paramname"><em>ipopt_problem</em>, </td>
@@ -678,7 +634,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a>&#160;</td>
           <td class="paramname"><em>val</em>&#160;</td>
         </tr>
         <tr>
@@ -690,18 +646,18 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Function for adding a Number option. </p>
-<dl class="section return"><dt>Returns</dt><dd>FALSE, if the option could not be set (e.g., if keyword is unknown) </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>false, if the option could not be set (e.g., if keyword is unknown) </dd></dl>
 
 </div>
 </div>
-<a id="a19ab838c66ff503c0896bc61289f53fe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a19ab838c66ff503c0896bc61289f53fe">&#9670;&nbsp;</a></span>AddIpoptIntOption()</h2>
+<a id="a408cfbc4c2e69def583fd8c0ca85d88c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a408cfbc4c2e69def583fd8c0ca85d88c">&#9670;&nbsp;</a></span>AddIpoptIntOption()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a> AddIpoptIntOption </td>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> bool <a class="el" href="IpTypes_8h.html#ae7eaa5fbc2133bb2a78973a87cc7bb5b">IPOPT_CALLCONV</a> AddIpoptIntOption </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a>&#160;</td>
           <td class="paramname"><em>ipopt_problem</em>, </td>
@@ -715,7 +671,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#a7cc214a236ad3bb6ad435bdcf5262a3f">Int</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a>&#160;</td>
           <td class="paramname"><em>val</em>&#160;</td>
         </tr>
         <tr>
@@ -726,19 +682,19 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Function for adding an Int option. </p>
-<dl class="section return"><dt>Returns</dt><dd>FALSE, if the option could not be set (e.g., if keyword is unknown) @ </dd></dl>
+<p>Function for adding an Integer option. </p>
+<dl class="section return"><dt>Returns</dt><dd>false, if the option could not be set (e.g., if keyword is unknown) @ </dd></dl>
 
 </div>
 </div>
-<a id="ac5fface8b0aa5480dd8e526878d02025"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac5fface8b0aa5480dd8e526878d02025">&#9670;&nbsp;</a></span>OpenIpoptOutputFile()</h2>
+<a id="a217bdf5c36c19c81b44fab50d8af8a8a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a217bdf5c36c19c81b44fab50d8af8a8a">&#9670;&nbsp;</a></span>OpenIpoptOutputFile()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a> OpenIpoptOutputFile </td>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> bool <a class="el" href="IpTypes_8h.html#ae7eaa5fbc2133bb2a78973a87cc7bb5b">IPOPT_CALLCONV</a> OpenIpoptOutputFile </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a>&#160;</td>
           <td class="paramname"><em>ipopt_problem</em>, </td>
@@ -752,7 +708,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#a7cc214a236ad3bb6ad435bdcf5262a3f">Int</a>&#160;</td>
+          <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>print_level</em>&#160;</td>
         </tr>
         <tr>
@@ -764,18 +720,18 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Function for opening an output file for a given name with given printlevel. </p>
-<dl class="section return"><dt>Returns</dt><dd>FALSE, if there was a problem opening the file. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>false, if there was a problem opening the file. </dd></dl>
 
 </div>
 </div>
-<a id="a17eb4861ff7fc751d1208fe41865ec2e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a17eb4861ff7fc751d1208fe41865ec2e">&#9670;&nbsp;</a></span>SetIpoptProblemScaling()</h2>
+<a id="afe4f90a0c6f89253924c7afb067f87e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afe4f90a0c6f89253924c7afb067f87e2">&#9670;&nbsp;</a></span>SetIpoptProblemScaling()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a> SetIpoptProblemScaling </td>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> bool <a class="el" href="IpTypes_8h.html#ae7eaa5fbc2133bb2a78973a87cc7bb5b">IPOPT_CALLCONV</a> SetIpoptProblemScaling </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a>&#160;</td>
           <td class="paramname"><em>ipopt_problem</em>, </td>
@@ -783,19 +739,19 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a>&#160;</td>
           <td class="paramname"><em>obj_scaling</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *&#160;</td>
           <td class="paramname"><em>x_scaling</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *&#160;</td>
           <td class="paramname"><em>g_scaling</em>&#160;</td>
         </tr>
         <tr>
@@ -811,14 +767,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a92e2c344447a142cc9b2bde38522e062"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a92e2c344447a142cc9b2bde38522e062">&#9670;&nbsp;</a></span>SetIntermediateCallback()</h2>
+<a id="ab86b55545fa3e0232a0e646409e0e82b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab86b55545fa3e0232a0e646409e0e82b">&#9670;&nbsp;</a></span>SetIntermediateCallback()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> <a class="el" href="IpStdCInterface_8h.html#afdcfe6db5bea87bd493a3fe2c513d5ef">Bool</a> SetIntermediateCallback </td>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> bool <a class="el" href="IpTypes_8h.html#ae7eaa5fbc2133bb2a78973a87cc7bb5b">IPOPT_CALLCONV</a> SetIntermediateCallback </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a>&#160;</td>
           <td class="paramname"><em>ipopt_problem</em>, </td>
@@ -826,7 +782,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#ab4979ff76a16c222dac808998013b345">Intermediate_CB</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#a0a2bc6b1dc188466a5eed53a50dd15df">Intermediate_CB</a>&#160;</td>
           <td class="paramname"><em>intermediate_cb</em>&#160;</td>
         </tr>
         <tr>
@@ -842,14 +798,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a2219c823d971c40381eca8b2844297ea"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2219c823d971c40381eca8b2844297ea">&#9670;&nbsp;</a></span>IpoptSolve()</h2>
+<a id="a5a68928c505f008c1245088bca5b7b16"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a68928c505f008c1245088bca5b7b16">&#9670;&nbsp;</a></span>IpoptSolve()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> enum <a class="el" href="IpReturnCodes__inc_8h.html#ab542e0b1ca364a9b7525a876ffdae7d7">ApplicationReturnStatus</a> IpoptSolve </td>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> enum <a class="el" href="IpReturnCodes__inc_8h.html#ab542e0b1ca364a9b7525a876ffdae7d7">ApplicationReturnStatus</a> <a class="el" href="IpTypes_8h.html#ae7eaa5fbc2133bb2a78973a87cc7bb5b">IPOPT_CALLCONV</a> IpoptSolve </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a>&#160;</td>
           <td class="paramname"><em>ipopt_problem</em>, </td>
@@ -857,37 +813,37 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *&#160;</td>
           <td class="paramname"><em>x</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *&#160;</td>
           <td class="paramname"><em>g</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *&#160;</td>
           <td class="paramname"><em>obj_val</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *&#160;</td>
           <td class="paramname"><em>mult_g</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *&#160;</td>
           <td class="paramname"><em>mult_x_L</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#a288a17d7858455cb06f6bce13912c92c">Number</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *&#160;</td>
           <td class="paramname"><em>mult_x_U</em>, </td>
         </tr>
         <tr>
@@ -925,6 +881,262 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <p>This will be passed unmodified to the callback functions. </p>
+
+</div>
+</div>
+<a id="acf68350650b7a893061e110ab0e9264f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acf68350650b7a893061e110ab0e9264f">&#9670;&nbsp;</a></span>GetIpoptCurrentIterate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> bool <a class="el" href="IpTypes_8h.html#ae7eaa5fbc2133bb2a78973a87cc7bb5b">IPOPT_CALLCONV</a> GetIpoptCurrentIterate </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a>&#160;</td>
+          <td class="paramname"><em>ipopt_problem</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>scaled</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a>&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *&#160;</td>
+          <td class="paramname"><em>z_L</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *&#160;</td>
+          <td class="paramname"><em>z_U</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a>&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *&#160;</td>
+          <td class="paramname"><em>g</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *&#160;</td>
+          <td class="paramname"><em>lambda</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get primal and dual variable values of the current iterate. </p>
+<p>This method can be used to get the values of the current iterate during the intermediate callback set by <a class="el" href="IpStdCInterface_8h.html#ab86b55545fa3e0232a0e646409e0e82b" title="Setting a callback function for the &quot;intermediate callback&quot; method in the TNLP.">SetIntermediateCallback()</a>. The method expects the number of variables (dimension of x), number of constraints (dimension of g(x)), and allocated arrays of appropriate lengths as input.</p>
+<p>The method translates the x(), c(), d(), y_c(), y_d(), z_L(), and z_U() vectors from <a class="el" href="classIpopt_1_1IpoptData.html#a7ea3aeb9b62b340f7671d61b88a9b056" title="Current point.">Ipopt::IpoptData::curr()</a> of the internal NLP representation into the form used by the TNLP. For the correspondence between scaled and unscaled solutions, see the detailed description of <a class="el" href="classIpopt_1_1OrigIpoptNLP.html" title="This class maps the traditional NLP into something that is more useful for Ipopt.">Ipopt::OrigIpoptNLP</a>. If Ipopt is in restoration mode, it maps the current iterate of restoration NLP (see <a class="el" href="classIpopt_1_1RestoIpoptNLP.html" title="This class maps a IpoptNLP into one that is used for the restoration phase of Ipopt.">Ipopt::RestoIpoptNLP</a>) back to the original TNLP.</p>
+<p>If there are fixed variables and fixed_variable_treatment=make_parameter, then requesting z_L and z_U can trigger a reevaluation of the Gradient of the objective function and the Jacobian of the constraint functions.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ipopt_problem</td><td>(in) Problem that is currently optimized. </td></tr>
+    <tr><td class="paramname">n</td><td>(in) the number of variables \(x\) in the problem; can be arbitrary if skipping x, z_L, and z_U </td></tr>
+    <tr><td class="paramname">scaled</td><td>(in) whether to retrieve scaled or unscaled iterate </td></tr>
+    <tr><td class="paramname">x</td><td>(out) buffer to store value of primal variables \(x\), must have length at least n; pass NULL to skip retrieving x </td></tr>
+    <tr><td class="paramname">z_L</td><td>(out) buffer to store the lower bound multipliers \(z_L\), must have length at least n; pass NULL to skip retrieving z_L and Z_U </td></tr>
+    <tr><td class="paramname">z_U</td><td>(out) buffer to store the upper bound multipliers \(z_U\), must have length at least n; pass NULL to skip retrieving z_L and Z_U </td></tr>
+    <tr><td class="paramname">m</td><td>(in) the number of constraints \(g(x)\); can be arbitrary if skipping g and lambda </td></tr>
+    <tr><td class="paramname">g</td><td>(out) buffer to store the constraint values \(g(x)\), must have length at least m; pass NULL to skip retrieving g </td></tr>
+    <tr><td class="paramname">lambda</td><td>(out) buffer to store the constraint multipliers \(\lambda\), must have length at least m; pass NULL to skip retrieving lambda</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> has successfully filled the given arrays </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+
+</div>
+</div>
+<a id="ae505cff0e907b9049062f665dadd8be9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae505cff0e907b9049062f665dadd8be9">&#9670;&nbsp;</a></span>GetIpoptCurrentViolations()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> bool <a class="el" href="IpTypes_8h.html#ae7eaa5fbc2133bb2a78973a87cc7bb5b">IPOPT_CALLCONV</a> GetIpoptCurrentViolations </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a>&#160;</td>
+          <td class="paramname"><em>ipopt_problem</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>scaled</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a>&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *&#160;</td>
+          <td class="paramname"><em>x_L_violation</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *&#160;</td>
+          <td class="paramname"><em>x_U_violation</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *&#160;</td>
+          <td class="paramname"><em>compl_x_L</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *&#160;</td>
+          <td class="paramname"><em>compl_x_U</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *&#160;</td>
+          <td class="paramname"><em>grad_lag_x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a>&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *&#160;</td>
+          <td class="paramname"><em>nlp_constraint_violation</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *&#160;</td>
+          <td class="paramname"><em>compl_g</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get primal and dual infeasibility of the current iterate. </p>
+<p>This method can be used to get the violations of constraints and optimality conditions at the current iterate during the intermediate callback set by <a class="el" href="IpStdCInterface_8h.html#ab86b55545fa3e0232a0e646409e0e82b" title="Setting a callback function for the &quot;intermediate callback&quot; method in the TNLP.">SetIntermediateCallback()</a>. The method expects the number of variables (dimension of x), number of constraints (dimension of g(x)), and allocated arrays of appropriate lengths as input.</p>
+<p>The method makes the vectors behind (unscaled_)curr_orig_bounds_violation(), (unscaled_)curr_nlp_constraint_violation(), (unscaled_)curr_dual_infeasibility(), (unscaled_)curr_complementarity() from <a class="el" href="classIpopt_1_1IpoptCalculatedQuantities.html" title="Class for all IPOPT specific calculated quantities.">Ipopt::IpoptCalculatedQuantities</a> of the internal NLP representation available into the form used by the TNLP. If Ipopt is in restoration mode, it maps the current iterate of restoration NLP (see <a class="el" href="classIpopt_1_1RestoIpoptNLP.html" title="This class maps a IpoptNLP into one that is used for the restoration phase of Ipopt.">Ipopt::RestoIpoptNLP</a>) back to the original TNLP.</p>
+<dl class="section note"><dt>Note</dt><dd>If in restoration phase, then requesting grad_lag_x can trigger a call to Eval_F_CB.</dd>
+<dd>
+<a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> by default relaxes variable bounds (option bound_relax_factor &gt; 0.0). x_L_violation and x_U_violation report the violation of a solution w.r.t. the original unrelaxed bounds. However, compl_x_L and compl_x_U use the relaxed variable bounds to calculate the complementarity.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ipopt_problem</td><td>(in) Problem that is currently optimized. </td></tr>
+    <tr><td class="paramname">scaled</td><td>(in) whether to retrieve scaled or unscaled violations </td></tr>
+    <tr><td class="paramname">n</td><td>(in) the number of variables \(x\) in the problem; can be arbitrary if skipping compl_x_L, compl_x_U, and grad_lag_x </td></tr>
+    <tr><td class="paramname">x_L_violation</td><td>(out) buffer to store violation of original lower bounds on variables (max(orig_x_L-x,0)), must have length at least n; pass NULL to skip retrieving orig_x_L </td></tr>
+    <tr><td class="paramname">x_U_violation</td><td>(out) buffer to store violation of original upper bounds on variables (max(x-orig_x_U,0)), must have length at least n; pass NULL to skip retrieving orig_x_U </td></tr>
+    <tr><td class="paramname">compl_x_L</td><td>(out) buffer to store violation of complementarity for lower bounds on variables ( \((x-x_L)z_L\)), must have length at least n; pass NULL to skip retrieving compl_x_L </td></tr>
+    <tr><td class="paramname">compl_x_U</td><td>(out) buffer to store violation of complementarity for upper bounds on variables ( \((x_U-x)z_U\)), must have length at least n; pass NULL to skip retrieving compl_x_U </td></tr>
+    <tr><td class="paramname">grad_lag_x</td><td>(out) buffer to store gradient of Lagrangian w.r.t. variables \(x\), must have length at least n; pass NULL to skip retrieving grad_lag_x </td></tr>
+    <tr><td class="paramname">m</td><td>(in) the number of constraints \(g(x)\); can be arbitrary if skipping lambda </td></tr>
+    <tr><td class="paramname">nlp_constraint_violation</td><td>(out) buffer to store violation of constraints \(max(g_l-g(x),g(x)-g_u,0)\), must have length at least m; pass NULL to skip retrieving constraint_violation </td></tr>
+    <tr><td class="paramname">compl_g</td><td>(out) buffer to store violation of complementarity of constraint ( \((g(x)-g_l)*\lambda^+ + (g_l-g(x))*\lambda^-\), where \(\lambda^+=max(0,\lambda)\) and \(\lambda^-=max(0,-\lambda)\) (componentwise)), must have length at least m; pass NULL to skip retrieving compl_g</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> has successfully filled the given arrays </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">Variable Documentation</h2>
+<a id="ab974f23c40ccaad0dacd611e3f4885e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab974f23c40ccaad0dacd611e3f4885e9">&#9670;&nbsp;</a></span>Number</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="IpTypes_8h.html#a24c578b20e2cd4eeb0060056ea13cbe5">IPOPT_DEPRECATED</a> typedef <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> Number</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Type for all number. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000016">Deprecated:</a></b></dt><dd>Use ipnumber instead. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00031">31</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
+
+</div>
+</div>
+<a id="ac3aa63858b3377c5aaf789a43e5b47b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3aa63858b3377c5aaf789a43e5b47b5">&#9670;&nbsp;</a></span>Index</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="IpTypes_8h.html#a24c578b20e2cd4eeb0060056ea13cbe5">IPOPT_DEPRECATED</a> typedef int Index</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Type for all indices. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000017">Deprecated:</a></b></dt><dd>Use ipindex instead. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00037">37</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
+
+</div>
+</div>
+<a id="a981fcddf5a1e9bbdc3d71ef0f994259b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a981fcddf5a1e9bbdc3d71ef0f994259b">&#9670;&nbsp;</a></span>Int</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="IpTypes_8h.html#a24c578b20e2cd4eeb0060056ea13cbe5">IPOPT_DEPRECATED</a> typedef int Int</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Type for all integers. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000018">Deprecated:</a></b></dt><dd>Use int instead. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="IpStdCInterface_8h_source.html#l00043">43</a> of file <a class="el" href="IpStdCInterface_8h_source.html">IpStdCInterface.h</a>.</p>
 
 </div>
 </div>

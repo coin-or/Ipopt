@@ -28,10 +28,12 @@ var classIpopt_1_1TNLP =
     [ "eval_g", "classIpopt_1_1TNLP.html#afcfd8404b772dc4960f2d2db4e8bb382", null ],
     [ "eval_jac_g", "classIpopt_1_1TNLP.html#aa4162d052f69d4f9946a42feec012853", null ],
     [ "eval_h", "classIpopt_1_1TNLP.html#a26b9145267e2574c53acc284fef1c354", null ],
+    [ "get_number_of_nonlinear_variables", "classIpopt_1_1TNLP.html#a015506564afc611060f4416dbb08aa4d", null ],
+    [ "get_list_of_nonlinear_variables", "classIpopt_1_1TNLP.html#a9bb5f16cdc2754d1667749268fb1308c", null ],
     [ "finalize_solution", "classIpopt_1_1TNLP.html#a3debb40a1dc203d3d53a93ccc7ea928d", null ],
     [ "finalize_metadata", "classIpopt_1_1TNLP.html#a729711b5af6b46e409a3bc34c832a9c5", null ],
     [ "intermediate_callback", "classIpopt_1_1TNLP.html#a2f962a4c43464adb7928771af84503d6", null ],
-    [ "get_number_of_nonlinear_variables", "classIpopt_1_1TNLP.html#a015506564afc611060f4416dbb08aa4d", null ],
-    [ "get_list_of_nonlinear_variables", "classIpopt_1_1TNLP.html#a9bb5f16cdc2754d1667749268fb1308c", null ],
+    [ "get_curr_iterate", "classIpopt_1_1TNLP.html#a8b8a5be340562ea82358a7b6d2bb0969", null ],
+    [ "get_curr_violations", "classIpopt_1_1TNLP.html#a723401f01da3ee61d4f51a2e05d9b2f9", null ],
     [ "operator=", "classIpopt_1_1TNLP.html#aa6851ab40f3fa6b806ded1c092fc0831", null ]
 ];

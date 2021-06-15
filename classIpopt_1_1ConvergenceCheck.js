@@ -6,6 +6,7 @@ var classIpopt_1_1ConvergenceCheck =
       [ "CONVERGED_TO_ACCEPTABLE_POINT", "classIpopt_1_1ConvergenceCheck.html#a0c6c029f369b9529443d945db60c6a98a9884285be2e6b7e8c5118ecb0e5bc4f3", null ],
       [ "MAXITER_EXCEEDED", "classIpopt_1_1ConvergenceCheck.html#a0c6c029f369b9529443d945db60c6a98af6cc09c6ffc4540519b9eb339791461f", null ],
       [ "CPUTIME_EXCEEDED", "classIpopt_1_1ConvergenceCheck.html#a0c6c029f369b9529443d945db60c6a98a63d078cf9468e26a972ddc9af25f39b0", null ],
+      [ "WALLTIME_EXCEEDED", "classIpopt_1_1ConvergenceCheck.html#a0c6c029f369b9529443d945db60c6a98abbe978a354bce3102588133de6f255cf", null ],
       [ "DIVERGING", "classIpopt_1_1ConvergenceCheck.html#a0c6c029f369b9529443d945db60c6a98ac72af428ae2a9b21b7494f90fa73a327", null ],
       [ "USER_STOP", "classIpopt_1_1ConvergenceCheck.html#a0c6c029f369b9529443d945db60c6a98ab42f85acd14df65771faa300210b8cb9", null ],
       [ "FAILED", "classIpopt_1_1ConvergenceCheck.html#a0c6c029f369b9529443d945db60c6a98adb600f333a33716069cb7df79f404e65", null ]

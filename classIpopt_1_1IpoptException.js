@@ -1,6 +1,6 @@
 var classIpopt_1_1IpoptException =
 [
-    [ "IpoptException", "classIpopt_1_1IpoptException.html#a1724cd9096b01f3f4d2f726cc0f40804", null ],
+    [ "IpoptException", "classIpopt_1_1IpoptException.html#a0ddf344ee3efe49405923a61352e6e58", null ],
     [ "IpoptException", "classIpopt_1_1IpoptException.html#aa85913719ac340e29cd0115e2ec18c35", null ],
     [ "~IpoptException", "classIpopt_1_1IpoptException.html#a299ed01d621b8a084cb709b7a18f5f18", null ],
     [ "IpoptException", "classIpopt_1_1IpoptException.html#af9f46403d01a561e1a97c649b248d903", null ],

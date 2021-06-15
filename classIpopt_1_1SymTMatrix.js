@@ -10,7 +10,7 @@ var classIpopt_1_1SymTMatrix =
     [ "Jcols", "classIpopt_1_1SymTMatrix.html#a36fff1c8221bdb7490cae64eacd4ad0b", null ],
     [ "Values", "classIpopt_1_1SymTMatrix.html#ab7d1a3ccec713eadc8bec1d0080f3d61", null ],
     [ "Values", "classIpopt_1_1SymTMatrix.html#a5d1fef5429bb155b4c921e889fa0d1c0", null ],
-    [ "FillStruct", "classIpopt_1_1SymTMatrix.html#a599cc2092c3e2f7b11a6abc9a4bbe301", null ],
+    [ "FillStruct", "classIpopt_1_1SymTMatrix.html#a8424ae5ac56510012841135fd4a0f116", null ],
     [ "FillValues", "classIpopt_1_1SymTMatrix.html#afa03a40010f5e110a4dfaa3cb4262a25", null ],
     [ "MultVectorImpl", "classIpopt_1_1SymTMatrix.html#adb529c784dd27766d1f736fef9d90dc3", null ],
     [ "HasValidNumbersImpl", "classIpopt_1_1SymTMatrix.html#a45ea3660b36b64c75a0b3b233cc35b0a", null ],

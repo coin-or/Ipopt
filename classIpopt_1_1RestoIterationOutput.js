@@ -10,6 +10,6 @@ var classIpopt_1_1RestoIterationOutput =
     [ "resto_orig_iteration_output_", "classIpopt_1_1RestoIterationOutput.html#a3a513942ae3b29528486ae1225d07450", null ],
     [ "print_info_string_", "classIpopt_1_1RestoIterationOutput.html#aadce9745121325872958ff8fab502e14", null ],
     [ "inf_pr_output_", "classIpopt_1_1RestoIterationOutput.html#a54fba4f279c136772833485d25278a97", null ],
-    [ "print_frequency_iter_", "classIpopt_1_1RestoIterationOutput.html#ab8a5b1df467f92238ae0a2be57cf5a45", null ],
+    [ "print_frequency_iter_", "classIpopt_1_1RestoIterationOutput.html#a4c3e6b8c069267a95f7f5ba25924cc97", null ],
     [ "print_frequency_time_", "classIpopt_1_1RestoIterationOutput.html#a575981ad51f1ea37df5c5564fcd8f90c", null ]
 ];

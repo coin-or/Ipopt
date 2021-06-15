@@ -54,7 +54,7 @@ var classIpopt_1_1FilterLSAcceptor =
     [ "watchdog_barr_", "classIpopt_1_1FilterLSAcceptor.html#abfe9c306944a494348bb93295e9eabad", null ],
     [ "watchdog_gradBarrTDelta_", "classIpopt_1_1FilterLSAcceptor.html#a3430a4835d477467a49875ca4f68ce57", null ],
     [ "filter_", "classIpopt_1_1FilterLSAcceptor.html#a53f409ad3ad4a82422f4e9f1d591c5ba", null ],
-    [ "last_rejection_due_to_filter_", "classIpopt_1_1FilterLSAcceptor.html#a60c3df33dc62386b1c04a4f4d237bcb6", null ],
+    [ "last_rejection_due_to_filter_", "classIpopt_1_1FilterLSAcceptor.html#a4fed3562a28dc999c72ab5c3956dbbea", null ],
     [ "count_successive_filter_rejections_", "classIpopt_1_1FilterLSAcceptor.html#a3f1b4f8c416b002afe455d1d52953c77", null ],
     [ "n_filter_resets_", "classIpopt_1_1FilterLSAcceptor.html#a6e59ecd25c778f2583eafef52fa9a29e", null ],
     [ "pd_solver_", "classIpopt_1_1FilterLSAcceptor.html#a0ba7a86acd144dd52b002f90805bc5d8", null ]

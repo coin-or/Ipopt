@@ -1,5 +1,5 @@
-<!-- HTML header for doxygen 1.8.13-->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- HTML header for doxygen 1.8.18-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.13.4</span-->
+   &#160;<!--span id="projectnumber">3.14.0</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -177,12 +177,9 @@ Contributors:
 - Stefan Vigerske (GAMS)
   Dynamic loading of linear solver shared libraries
 
-  src/contrib/LinearSolverLoader/HSLLoader.c
-  src/contrib/LinearSolverLoader/HSLLoader.h
-  src/contrib/LinearSolverLoader/LibraryHandler.c
-  src/contrib/LinearSolverLoader/LibraryHandler.h
-  src/contrib/LinearSolverLoader/PardisoLoader.c
-  src/contrib/LinearSolverLoader/PardisoLoader.h
+  src/Common/IpLibraryLoader.hpp
+  src/Common/IpLibraryLoader.cpp
+  HSL and Pardiso interface files
 
 - Marcel Roelofs (AIMMS)
   MSVC project files for Intel Fortran compiler, creating a DLL
@@ -220,22 +217,34 @@ Contributors:
   R interface with examples, all files in directory (and subdirectory of)
 
   contrib/RInterface
-  
+
 - Tony Kelman (Berkeley)
   improvements to Matlab interface
-  
+
   Ipopt/contrib/MatlabInterface
 
 - Gabriel Hackebeil
   improved use compound component spaces
-  
+
 - Nai-Yuan Chiang and Victor M. Zavala Tejeda (Argonne National Laboratory)
   inertia free curvature test in solution of primal-dual system (full approach)
 
 - Brad Bell
   recursive NLP example
-  
+
   examples/recursive_nlp/recursive_nlp.cpp
+
+- Mitchell Clement
+  support for use of single-precision floating point number
+
+  many source files affected, see https://github.com/coin-or/Ipopt/pull/428
+
+- Byron Tasseff (LANL, University of Michigan)
+  Spral interface
+
+  src/Algorithm/LinearSolvers/IpSpralSolverInterface.hpp
+  src/Algorithm/LinearSolvers/IpSpralSolverInterface.cpp
+
 
 Contributors of code that is no longer included in Ipopt distribution:
 

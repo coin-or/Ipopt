@@ -21,6 +21,7 @@ var classIpopt_1_1CompoundVector =
     [ "SetImpl", "classIpopt_1_1CompoundVector.html#a95ea30b8d093b048fb3464746c103b94", null ],
     [ "ElementWiseDivideImpl", "classIpopt_1_1CompoundVector.html#a72b3c8d7ae20d2fbae6493d21fef8446", null ],
     [ "ElementWiseMultiplyImpl", "classIpopt_1_1CompoundVector.html#a447431285a175ad7f1cf4d2343c35b73", null ],
+    [ "ElementWiseSelectImpl", "classIpopt_1_1CompoundVector.html#a0f84e3ffcd9659dcd4ecb4038b365947", null ],
     [ "ElementWiseMaxImpl", "classIpopt_1_1CompoundVector.html#a95839fa6f0de2808d430f7b992ee5548", null ],
     [ "ElementWiseMinImpl", "classIpopt_1_1CompoundVector.html#a775897a4cdf181dae6e04aeb5239f53f", null ],
     [ "ElementWiseReciprocalImpl", "classIpopt_1_1CompoundVector.html#ac003ad5179efa8a4b67f2a9593158e28", null ],
