@@ -235,7 +235,7 @@ inline Observer::~Observer()
    {
       for( size_t i = 0; i < subjects_.size(); ++i )
       {
-         DBG_PRINT((1, "subjects_[%zd] = %p\n", i, subjects_[i]));
+         DBG_PRINT((1, "subjects_[%zd] = %p\n", i, (const void*)subjects_[i]));
       }
    }
 #endif
@@ -243,7 +243,7 @@ inline Observer::~Observer()
    for( size_t i = subjects_.size(); i > 0; --i )
    {
 #ifdef IP_DEBUG_OBSERVER
-      DBG_PRINT((1, "About to detach subjects_[%zd] = %p\n", i, subjects_[i - 1]));
+      DBG_PRINT((1, "About to detach subjects_[%zd] = %p\n", i, (const void*)subjects_[i - 1]));
 #endif
 
       RequestDetach(NT_All, subjects_[i - 1]);
@@ -280,7 +280,7 @@ void Observer::RequestDetach(
 {
 #ifdef IP_DEBUG_OBSERVER
    DBG_START_METH("Observer::RequestDetach", dbg_verbosity);
-   DBG_PRINT((1, "Requesting detach of subject: %p\n", subject));
+   DBG_PRINT((1, "Requesting detach of subject: %p\n", (const void*)subject));
    DBG_ASSERT(subject);
 #endif
 
@@ -296,7 +296,7 @@ void Observer::RequestDetach(
       if( attached_subject != subjects_.end() )
       {
 #ifdef IP_DEBUG_OBSERVER
-         DBG_PRINT((1, "Removing subject: %p from the list\n", subject));
+         DBG_PRINT((1, "Removing subject: %p from the list\n", (const void*)subject));
 #endif
 
          subjects_.erase(attached_subject);

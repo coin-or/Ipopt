@@ -884,7 +884,7 @@ void CachedResults<T>::DebugPrintCachedResults() const
          DBG_PRINT((2, "Current set of cached results:\n"));
          for (iter = cached_results_->begin(); iter != cached_results_->end(); ++iter)
          {
-            DBG_PRINT((2, "  DependentResult: %p\n", (*iter)));
+            DBG_PRINT((2, "  DependentResult: %p\n", (void*)*iter));
          }
       }
    }
