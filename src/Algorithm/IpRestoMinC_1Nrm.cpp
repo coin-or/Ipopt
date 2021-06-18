@@ -324,10 +324,18 @@ bool MinC_1NrmRestorationPhase::PerformRestoration()
       // Use requested stop during restoration phase - rethrow exception
       THROW_EXCEPTION(RESTORATION_USER_STOP, "User requested stop during restoration phase");
    }
+   else if( resto_status == INVALID_NUMBER_DETECTED )
+   {
+      // this could be that we got stuck at a point that can be evaluated, but not differentiated
+      Jnlst().Printf(J_STRONGWARNING, J_LINE_SEARCH,
+                     "Restoration phase failed due to evaluation errors.\n");
+      retval = 1;
+   }
    else
    {
-      Jnlst().Printf(J_ERROR, J_MAIN,
-                     "Sorry, things failed ?!?!\n");
+      // often this
+      Jnlst().Printf(J_STRONGWARNING, J_LINE_SEARCH,
+                     "Restoration phase failed with unexpected solverreturn status %d\n", (int)resto_status);
       retval = 1;
    }
 
