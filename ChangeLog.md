@@ -7,6 +7,10 @@ More detailed information about incremental changes can be found in the
 
 ## 3.14
 
+### 3.14.1 (2021-xx-yy)
+
+- Fixed invalidation of cached Hessians when reoptimizing with same structure.
+
 ### 3.14.0 (2021-06-15)
 
 #### Data Types

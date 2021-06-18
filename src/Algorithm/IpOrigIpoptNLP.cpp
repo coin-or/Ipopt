@@ -188,6 +188,7 @@ bool OrigIpoptNLP::Initialize(
    d_cache_.InvalidateResult(deps, sdeps);
    jac_c_cache_.InvalidateResult(deps, sdeps);
    jac_d_cache_.InvalidateResult(deps, sdeps);
+   deps.resize(3, NULL);
    h_cache_.InvalidateResult(deps, sdeps);
 
    if( !nlp_->ProcessOptions(options, prefix) )
