@@ -228,10 +228,20 @@ public:
       bool               allow_clobber = true,
       bool               dont_print = false
    );
+
+   /// @since 3.14.1
+   virtual bool SetBoolValue(
+      const std::string& tag,
+      bool               value,
+      bool               allow_clobber = true,
+      bool               dont_print = false
+   )
+   {
+      return SetStringValue(tag, value ? "yes" : "no", allow_clobber, dont_print);
+   }
    ///@}
 
-   /** @name Methods for setting options only if they have not been
-    *  set before*/
+   /** @name Methods for setting options only if they have not been set before */
    ///@{
    virtual bool SetStringValueIfUnset(
       const std::string& tag,
@@ -253,10 +263,22 @@ public:
       bool               allow_clobber = true,
       bool               dont_print = false
    );
+
+   /// @since 3.14.1
+   virtual bool SetBoolValueIfUnset(
+      const std::string& tag,
+      bool               value,
+      bool               allow_clobber = true,
+      bool               dont_print = false
+   )
+   {
+      return SetStringValueIfUnset(tag, value ? "yes" : "no", allow_clobber, dont_print);
+   }
    ///@}
 
-   /** @name Methods for retrieving values from the options list.  If
-    *  a tag is not found, the methods return false, and value is set
+   /** @name Methods for retrieving values from the options list.
+    *
+    *  If a tag is not found, the methods return false, and value is set
     *  to the default value defined in the registered options. */
    ///@{
    virtual bool GetStringValue(
