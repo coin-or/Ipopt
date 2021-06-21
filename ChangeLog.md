@@ -13,6 +13,8 @@ More detailed information about incremental changes can be found in the
 - Added `OptionsList::SetBoolValue()` and `OptionsList::SetBoolValueIfUnset()`. [#492]
 - Skip check for and link against libdl if linear solver loader is disabled.
 - Fixed missing initialization of `BacktrackingLineSearch::in_watchdog_`.
+- Fixed a problem with the current solution not being reset when
+  initialization of a NLP fails in reoptimization.
 
 ### 3.14.0 (2021-06-15)
 

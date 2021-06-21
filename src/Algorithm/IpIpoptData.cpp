@@ -124,6 +124,11 @@ bool IpoptData::InitializeDataStructures(
    SmartPtr<Vector> new_v_L;
    SmartPtr<Vector> new_v_U;
 
+   // clear curr_ from previous optimize, if any, in case ip_nlp.InitializeStructures() fails,
+   // e.g., because OrigIpoptNLP throws a too-few-degrees-of-freedom exception
+   curr_ = NULL;
+   iterates_space_ = NULL;
+
    // Get the required linear algebra structures from the model
    bool retValue = ip_nlp.InitializeStructures(new_x, want_x, new_y_c, want_y_c, new_y_d, want_y_d, new_z_L, want_z_L,
                    new_z_U, want_z_U, new_v_L, new_v_U);

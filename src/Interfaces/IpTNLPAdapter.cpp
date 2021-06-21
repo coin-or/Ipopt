@@ -450,7 +450,7 @@ bool TNLPAdapter::GetSpaces(
 
       bool done = false;
       // We might have to do the following twice: If we detect that we
-      // don't have enought degrees of freedom, we simply redo
+      // don't have enough degrees of freedom, we simply redo
       // everything with fixed_variable_treatment to set RELAX_BOUNDS
       while( !done )
       {

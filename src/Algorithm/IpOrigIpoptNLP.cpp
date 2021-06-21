@@ -288,7 +288,7 @@ bool OrigIpoptNLP::InitializeStructures(
       NLP_scaling()->DetermineScaling(x_space_, c_space_, d_space_, jac_c_space_, jac_d_space_, h_space_,
                                       scaled_jac_c_space_, scaled_jac_d_space_, scaled_h_space_, *Px_L, *x_L, *Px_U, *x_U);
 
-      if( x_space_->Dim() < c_space_->Dim() )
+      if( x_space_->Dim() < c_space_->Dim() && x_space_->Dim() > 0 )
       {
          char msg[128];
          Snprintf(msg, 127, "Too few degrees of freedom: %" IPOPT_INDEX_FORMAT " equality constraints but only %" IPOPT_INDEX_FORMAT " variables",
