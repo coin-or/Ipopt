@@ -28,6 +28,7 @@ BacktrackingLineSearch::BacktrackingLineSearch(
    const SmartPtr<ConvergenceCheck>&       conv_check
 )
    : LineSearch(),
+     in_watchdog_(false),
      acceptor_(acceptor),
      resto_phase_(resto_phase),
      conv_check_(conv_check)
