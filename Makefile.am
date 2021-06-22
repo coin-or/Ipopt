@@ -19,6 +19,7 @@ test: all
 
 doc :
 	cd doc && doxygen
+	sed -i -e 's@<p><a class="anchor" id="OPT_\(.*\)"></a>@<p><a class="anchor" id="OPT_\1"></a><a href="#OPT_\1">\&#x25B8;\&nbsp;</a>@g' doc/html/OPTIONS.html
 
 if BUILD_JAVA
 javadoc :
