@@ -17,6 +17,8 @@
 namespace Ipopt
 {
 
+#ifdef IPOPT_HAS_LINEARSOLVERLOADER
+
 #ifdef HAVE_WINDOWS_H
 // add description of last error on windows to string
 // see https://stackoverflow.com/questions/455434/how-should-i-use-formatmessage-properly-in-c
@@ -176,5 +178,34 @@ void* LibraryLoader::loadSymbol(
 
    return symbol;
 }
+
+#else // IPOPT_HAS_LINEARSOLVERLOADER
+
+void LibraryLoader::loadLibrary()
+{
+   THROW_EXCEPTION(DYNAMIC_LIBRARY_FAILURE, "Cannot load library at runtime. Ipopt has been build with --disable-linear-solver-loader.");
+}
+
+void LibraryLoader::unloadLibrary()
+{
+   if( libhandle == NULL )
+   {
+      return;
+   }
+
+   THROW_EXCEPTION(DYNAMIC_LIBRARY_FAILURE, "Cannot load library at runtime. Ipopt has been build with --disable-linear-solver-loader");
+}
+
+/** tries to load symbol from a loaded library */
+void* LibraryLoader::loadSymbol(
+   const std::string&
+)
+{
+   THROW_EXCEPTION(DYNAMIC_LIBRARY_FAILURE, "Cannot load library at runtime. Ipopt has been build with --disable-linear-solver-loader");
+
+   return NULL;
+}
+
+#endif // !IPOPT_HAS_LINEARSOLVERLOADER
 
 } // namespace Ipopt

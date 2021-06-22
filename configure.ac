@@ -430,12 +430,13 @@ AC_MSG_RESULT([$use_linearsolverloader])
 if test $use_linearsolverloader = yes; then
   AC_DEFINE([IPOPT_HAS_LINEARSOLVERLOADER],[1],
             [Define to 1 if the linear solver loader should be used to load libraries with linear solvers at runtime])
+
+  AC_LANG_PUSH(C)
+  AC_CHECK_LIB(dl,[dlopen],[IPOPTLIB_LFLAGS="$IPOPTLIB_LFLAGS -ldl"],[])
+  AC_LANG_POP(C)
 fi
 
-AC_LANG_PUSH(C)
 AC_CHECK_HEADER([windows.h],AC_DEFINE(HAVE_WINDOWS_H,[1],[Define to 1 if windows.h is available.]))
-AC_CHECK_LIB(dl,[dlopen],[IPOPTLIB_LFLAGS="$IPOPTLIB_LFLAGS -ldl"],[])
-AC_LANG_POP(C)
 
 ########################################################################
 ##                             sIpopt                                 ##

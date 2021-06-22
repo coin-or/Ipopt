@@ -11,6 +11,7 @@ More detailed information about incremental changes can be found in the
 
 - Fixed invalidation of cached Hessians when reoptimizing with same structure.
 - Added `OptionsList::SetBoolValue()` and `OptionsList::SetBoolValueIfUnset()`. [#492]
+- Skip check for and link against libdl if linear solver loader is disabled.
 
 ### 3.14.0 (2021-06-15)
 
