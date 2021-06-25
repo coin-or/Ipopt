@@ -7,7 +7,7 @@ More detailed information about incremental changes can be found in the
 
 ## 3.14
 
-### 3.14.1 (2021-xx-yy)
+### 3.14.1 (2021-06-25)
 
 - Fixed invalidation of cached Hessians when reoptimizing with same structure.
 - Added `OptionsList::SetBoolValue()` and `OptionsList::SetBoolValueIfUnset()`. [#492]
@@ -15,6 +15,7 @@ More detailed information about incremental changes can be found in the
 - Fixed missing initialization of `BacktrackingLineSearch::in_watchdog_`.
 - Fixed a problem with the current solution not being reset when
   initialization of a NLP fails in reoptimization.
+- Fixed that C++11 capability was not correctly identified with MS/Intel compilers.
 
 ### 3.14.0 (2021-06-15)
 
