@@ -679,8 +679,10 @@ ApplicationReturnStatus IpoptApplication::call_optimize()
          }
          catch( IpoptNLP::Eval_Error& exc )
          {
+            // this can happen if the final point was accepted because functions can be evaluated,
+            // but functions are not differentiable, so dual infeasibility cannot be computed
             status = INVALID_NUMBER_DETECTED;
-            exc.ReportException(*jnlst_, J_ERROR);
+            exc.ReportException(*jnlst_, J_STRONGWARNING);
          }
       }
 
