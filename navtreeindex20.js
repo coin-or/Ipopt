@@ -1,5 +1,7 @@
 var NAVTREEINDEX20 =
 {
+"classIpopt_1_1SensitivityStepCalculator.html#a2acea24a733218b3dad27fbce9fd8c7f":[1,0,0,158,3],
+"classIpopt_1_1SensitivityStepCalculator.html#a84c70b13797c52c880810cec45cc8c60":[1,0,0,158,6],
 "classIpopt_1_1SensitivityStepCalculator.html#aac22e9e047c136947c1f68070097b6a2":[1,0,0,158,0],
 "classIpopt_1_1SensitivityStepCalculator.html#ab17bdae52537aca85d264f79cbce527c":[1,0,0,158,9],
 "classIpopt_1_1SensitivityStepCalculator.html#ad0330778dd37df229d5b750908228390":[1,0,0,158,2],
@@ -247,7 +249,5 @@ var NAVTREEINDEX20 =
 "classIpopt_1_1StdInterfaceTNLP.html#a87dd23bc9fec4bdf536082f31eeff0e2":[1,0,0,167,31],
 "classIpopt_1_1StdInterfaceTNLP.html#a8f2d9b4988313f8caa6ac55cc67188dc":[1,0,0,167,12],
 "classIpopt_1_1StdInterfaceTNLP.html#a8fdd3112193ef1333d788bdd95502f4c":[1,0,0,167,2],
-"classIpopt_1_1StdInterfaceTNLP.html#a91a506d63b773359a95280681eb2581e":[1,0,0,167,20],
-"classIpopt_1_1StdInterfaceTNLP.html#a97b7dab46ae67c2243c068a05cf82c37":[1,0,0,167,40],
-"classIpopt_1_1StdInterfaceTNLP.html#a9956ba3a0116497a6ab7167e89b8c04d":[1,0,0,167,46]
+"classIpopt_1_1StdInterfaceTNLP.html#a91a506d63b773359a95280681eb2581e":[1,0,0,167,20]
 };

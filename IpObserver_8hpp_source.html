@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.14.0</span-->
+   &#160;<!--span id="projectnumber">3.14.1</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -246,7 +246,7 @@ $(document).ready(function(){initNavTree('IpObserver_8hpp_source.html',''); init
 <div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;   {</div>
 <div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;      <span class="keywordflow">for</span>( <span class="keywordtype">size_t</span> i = 0; i &lt; <a class="code" href="classIpopt_1_1Observer.html#a9910eb64060c426e2b9695fec3f98cae">subjects_</a>.size(); ++i )</div>
 <div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;      {</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;         <a class="code" href="IpDebug_8hpp.html#a40fdb0e5238b05a8134decce9cedad0f">DBG_PRINT</a>((1, <span class="stringliteral">&quot;subjects_[%zd] = %p\n&quot;</span>, i, <a class="code" href="classIpopt_1_1Observer.html#a9910eb64060c426e2b9695fec3f98cae">subjects_</a>[i]));</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;         <a class="code" href="IpDebug_8hpp.html#a40fdb0e5238b05a8134decce9cedad0f">DBG_PRINT</a>((1, <span class="stringliteral">&quot;subjects_[%zd] = %p\n&quot;</span>, i, (<span class="keyword">const</span> <span class="keywordtype">void</span>*)<a class="code" href="classIpopt_1_1Observer.html#a9910eb64060c426e2b9695fec3f98cae">subjects_</a>[i]));</div>
 <div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;      }</div>
 <div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;   }</div>
 <div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;<span class="preprocessor">#endif</span></div>
@@ -254,7 +254,7 @@ $(document).ready(function(){initNavTree('IpObserver_8hpp_source.html',''); init
 <div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;   <span class="keywordflow">for</span>( <span class="keywordtype">size_t</span> i = <a class="code" href="classIpopt_1_1Observer.html#a9910eb64060c426e2b9695fec3f98cae">subjects_</a>.size(); i &gt; 0; --i )</div>
 <div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;   {</div>
 <div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;<span class="preprocessor">#ifdef IP_DEBUG_OBSERVER</span></div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;      <a class="code" href="IpDebug_8hpp.html#a40fdb0e5238b05a8134decce9cedad0f">DBG_PRINT</a>((1, <span class="stringliteral">&quot;About to detach subjects_[%zd] = %p\n&quot;</span>, i, <a class="code" href="classIpopt_1_1Observer.html#a9910eb64060c426e2b9695fec3f98cae">subjects_</a>[i - 1]));</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;      <a class="code" href="IpDebug_8hpp.html#a40fdb0e5238b05a8134decce9cedad0f">DBG_PRINT</a>((1, <span class="stringliteral">&quot;About to detach subjects_[%zd] = %p\n&quot;</span>, i, (<span class="keyword">const</span> <span class="keywordtype">void</span>*)<a class="code" href="classIpopt_1_1Observer.html#a9910eb64060c426e2b9695fec3f98cae">subjects_</a>[i - 1]));</div>
 <div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160; </div>
 <div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;      <a class="code" href="classIpopt_1_1Observer.html#a7006c91bc2893aa7aaa03799820f76dd">RequestDetach</a>(<a class="code" href="classIpopt_1_1Observer.html#a828a9e0833e87e84bef75d05bf0a99b8aa99f42cc1404f26f7261dd53de56ff74">NT_All</a>, <a class="code" href="classIpopt_1_1Observer.html#a9910eb64060c426e2b9695fec3f98cae">subjects_</a>[i - 1]);</div>
@@ -291,7 +291,7 @@ $(document).ready(function(){initNavTree('IpObserver_8hpp_source.html',''); init
 <div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;{</div>
 <div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;<span class="preprocessor">#ifdef IP_DEBUG_OBSERVER</span></div>
 <div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;   <a class="code" href="IpDebug_8hpp.html#abac44fd4713c03644cf925f4a1bcb22a">DBG_START_METH</a>(<span class="stringliteral">&quot;Observer::RequestDetach&quot;</span>, dbg_verbosity);</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;   <a class="code" href="IpDebug_8hpp.html#a40fdb0e5238b05a8134decce9cedad0f">DBG_PRINT</a>((1, <span class="stringliteral">&quot;Requesting detach of subject: %p\n&quot;</span>, subject));</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;   <a class="code" href="IpDebug_8hpp.html#a40fdb0e5238b05a8134decce9cedad0f">DBG_PRINT</a>((1, <span class="stringliteral">&quot;Requesting detach of subject: %p\n&quot;</span>, (<span class="keyword">const</span> <span class="keywordtype">void</span>*)subject));</div>
 <div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;   <a class="code" href="IpDebug_8hpp.html#a346733cd6806024295f8c3564071d021">DBG_ASSERT</a>(subject);</div>
 <div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160; </div>
@@ -307,14 +307,14 @@ $(document).ready(function(){initNavTree('IpObserver_8hpp_source.html',''); init
 <div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;      <span class="keywordflow">if</span>( attached_subject != <a class="code" href="classIpopt_1_1Observer.html#a9910eb64060c426e2b9695fec3f98cae">subjects_</a>.end() )</div>
 <div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;      {</div>
 <div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;<span class="preprocessor">#ifdef IP_DEBUG_OBSERVER</span></div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;         <a class="code" href="IpDebug_8hpp.html#a40fdb0e5238b05a8134decce9cedad0f">DBG_PRINT</a>((1, <span class="stringliteral">&quot;Removing subject: %p from the list\n&quot;</span>, subject));</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;         <a class="code" href="IpDebug_8hpp.html#a40fdb0e5238b05a8134decce9cedad0f">DBG_PRINT</a>((1, <span class="stringliteral">&quot;Removing subject: %p from the list\n&quot;</span>, (<span class="keyword">const</span> <span class="keywordtype">void</span>*)subject));</div>
 <div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160; </div>
 <div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;         <a class="code" href="classIpopt_1_1Observer.html#a9910eb64060c426e2b9695fec3f98cae">subjects_</a>.erase(attached_subject);</div>
 <div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;      }</div>
 <div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160; </div>
 <div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;      <span class="comment">// Detach the observer from the subject</span></div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;      subject-&gt;<a class="code" href="classIpopt_1_1Subject.html#a907d18f260ed26a5549538f3c09e5f56">DetachObserver</a>(notify_type, <span class="keyword">this</span>);</div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;      subject-&gt;DetachObserver(notify_type, <span class="keyword">this</span>);</div>
 <div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;   }</div>
 <div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;}</div>
 <div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160; </div>

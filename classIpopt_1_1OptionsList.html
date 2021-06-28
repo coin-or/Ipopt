@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.14.0</span-->
+   &#160;<!--span id="projectnumber">3.14.1</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -173,17 +173,19 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:adde087f723f0c8387f4bc9ee580a9ce9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a87f1acbe095b001a04741da6e75109e4"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1OptionsList.html#a87f1acbe095b001a04741da6e75109e4">SetIntegerValue</a> (const std::string &amp;tag, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> value, bool allow_clobber=true, bool dont_print=false)</td></tr>
 <tr class="separator:a87f1acbe095b001a04741da6e75109e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr><td colspan="2"><div class="groupHeader">Methods for setting options only if they have not been</div></td></tr>
-<tr><td colspan="2"><div class="groupText"><p>set before </p>
-</div></td></tr>
+<tr class="memitem:aa0a95ba72628544205660e256438ea26"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1OptionsList.html#aa0a95ba72628544205660e256438ea26">SetBoolValue</a> (const std::string &amp;tag, bool value, bool allow_clobber=true, bool dont_print=false)</td></tr>
+<tr class="separator:aa0a95ba72628544205660e256438ea26"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Methods for setting options only if they have not been set before</div></td></tr>
 <tr class="memitem:aebb554b15adb25a7ca1d4d657c69bd07"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1OptionsList.html#aebb554b15adb25a7ca1d4d657c69bd07">SetStringValueIfUnset</a> (const std::string &amp;tag, const std::string &amp;value, bool allow_clobber=true, bool dont_print=false)</td></tr>
 <tr class="separator:aebb554b15adb25a7ca1d4d657c69bd07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a268524709d7a4f16f3fe3baf31474de4"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1OptionsList.html#a268524709d7a4f16f3fe3baf31474de4">SetNumericValueIfUnset</a> (const std::string &amp;tag, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> value, bool allow_clobber=true, bool dont_print=false)</td></tr>
 <tr class="separator:a268524709d7a4f16f3fe3baf31474de4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab225855fafe76d18dc7becfb222aba4b"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1OptionsList.html#ab225855fafe76d18dc7becfb222aba4b">SetIntegerValueIfUnset</a> (const std::string &amp;tag, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> value, bool allow_clobber=true, bool dont_print=false)</td></tr>
 <tr class="separator:ab225855fafe76d18dc7becfb222aba4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr><td colspan="2"><div class="groupHeader">Methods for retrieving values from the options list. If</div></td></tr>
-<tr><td colspan="2"><div class="groupText"><p>a tag is not found, the methods return false, and value is set to the default value defined in the registered options. </p>
+<tr class="memitem:ab2e64c4295019a2397156efcb1a3f38c"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1OptionsList.html#ab2e64c4295019a2397156efcb1a3f38c">SetBoolValueIfUnset</a> (const std::string &amp;tag, bool value, bool allow_clobber=true, bool dont_print=false)</td></tr>
+<tr class="separator:ab2e64c4295019a2397156efcb1a3f38c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Methods for retrieving values from the options list.</div></td></tr>
+<tr><td colspan="2"><div class="groupText"><p>If a tag is not found, the methods return false, and value is set to the default value defined in the registered options. </p>
 </div></td></tr>
 <tr class="memitem:a3a9e6aeae539db8e2bac3c120524de62"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1OptionsList.html#a3a9e6aeae539db8e2bac3c120524de62">GetStringValue</a> (const std::string &amp;tag, std::string &amp;value, const std::string &amp;prefix) const</td></tr>
 <tr class="separator:a3a9e6aeae539db8e2bac3c120524de62"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -627,6 +629,57 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="aa0a95ba72628544205660e256438ea26"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa0a95ba72628544205660e256438ea26">&#9670;&nbsp;</a></span>SetBoolValue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool Ipopt::OptionsList::SetBoolValue </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>tag</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>allow_clobber</em> = <code>true</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>dont_print</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section since"><dt>Since</dt><dd>3.14.1 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="IpOptionsList_8hpp_source.html#l00233">233</a> of file <a class="el" href="IpOptionsList_8hpp_source.html">IpOptionsList.hpp</a>.</p>
+
+</div>
+</div>
 <a id="aebb554b15adb25a7ca1d4d657c69bd07"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aebb554b15adb25a7ca1d4d657c69bd07">&#9670;&nbsp;</a></span>SetStringValueIfUnset()</h2>
 
@@ -768,6 +821,57 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab2e64c4295019a2397156efcb1a3f38c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab2e64c4295019a2397156efcb1a3f38c">&#9670;&nbsp;</a></span>SetBoolValueIfUnset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool Ipopt::OptionsList::SetBoolValueIfUnset </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>tag</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>allow_clobber</em> = <code>true</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>dont_print</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section since"><dt>Since</dt><dd>3.14.1 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="IpOptionsList_8hpp_source.html#l00268">268</a> of file <a class="el" href="IpOptionsList_8hpp_source.html">IpOptionsList.hpp</a>.</p>
 
 </div>
 </div>
@@ -1248,7 +1352,7 @@ Private Attributes</h2></td></tr>
 <p>Default Constructor. </p>
 <p>map for storing the options </p>
 
-<p class="definition">Definition at line <a class="el" href="IpOptionsList_8hpp_source.html#l00332">332</a> of file <a class="el" href="IpOptionsList_8hpp_source.html">IpOptionsList.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpOptionsList_8hpp_source.html#l00354">354</a> of file <a class="el" href="IpOptionsList_8hpp_source.html">IpOptionsList.hpp</a>.</p>
 
 </div>
 </div>
@@ -1274,7 +1378,7 @@ Private Attributes</h2></td></tr>
 
 <p>list of all the registered options to validate against </p>
 
-<p class="definition">Definition at line <a class="el" href="IpOptionsList_8hpp_source.html#l00335">335</a> of file <a class="el" href="IpOptionsList_8hpp_source.html">IpOptionsList.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpOptionsList_8hpp_source.html#l00357">357</a> of file <a class="el" href="IpOptionsList_8hpp_source.html">IpOptionsList.hpp</a>.</p>
 
 </div>
 </div>
@@ -1300,7 +1404,7 @@ Private Attributes</h2></td></tr>
 
 <p><a class="el" href="classIpopt_1_1Journalist.html" title="Class responsible for all message output.">Journalist</a> for writing error messages, etc. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpOptionsList_8hpp_source.html#l00338">338</a> of file <a class="el" href="IpOptionsList_8hpp_source.html">IpOptionsList.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpOptionsList_8hpp_source.html#l00360">360</a> of file <a class="el" href="IpOptionsList_8hpp_source.html">IpOptionsList.hpp</a>.</p>
 
 </div>
 </div>
@@ -1326,7 +1430,7 @@ Private Attributes</h2></td></tr>
 
 <p>auxiliary string set by lowercase method </p>
 
-<p class="definition">Definition at line <a class="el" href="IpOptionsList_8hpp_source.html#l00377">377</a> of file <a class="el" href="IpOptionsList_8hpp_source.html">IpOptionsList.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpOptionsList_8hpp_source.html#l00399">399</a> of file <a class="el" href="IpOptionsList_8hpp_source.html">IpOptionsList.hpp</a>.</p>
 
 </div>
 </div>
