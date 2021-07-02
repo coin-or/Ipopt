@@ -101,8 +101,8 @@ before_script:
     brew update;
     brew install bash gcc metis hwloc;
     $SINGLEPRECISION && brew install lapack;
-    if [[ "$OSX" == 10.14 ]] ; then export CC=gcc-9 ; export CXX=g++-9 ;
-    elif [[ "$OSX" == 10.15 ]] ; then export CC=gcc-10 ; export CXX=g++-10 ;
+    if [[ "$OSX" == 10.14 ]] ; then export CC=gcc-11 ; export CXX=g++-11 ;
+    elif [[ "$OSX" == 10.15 ]] ; then export CC=gcc-11 ; export CXX=g++-11 ;
     elif [[ "$OSX" == 11 ]] ; then export CC=gcc-11 ; export CXX=g++-11 ; fi ;
     $CC --version; $CXX --version; gfortran --version;
     fi
