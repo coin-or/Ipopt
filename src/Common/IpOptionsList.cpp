@@ -283,6 +283,27 @@ bool OptionsList::SetIntegerValue(
    return true;
 }
 
+bool OptionsList::UnsetValue(
+   const std::string& tag
+)
+{
+   if( !will_allow_clobber(tag) )
+   {
+      if( IsValid(jnlst_) )
+      {
+         std::string msg = "WARNING: Tried to unset option \"" + tag;
+         msg += "\",\n         but the current value is set to disallow clobbering.\n";
+         msg += "         The setting will remain as: \"" + tag;
+         msg += " " + options_[lowercase(tag)].GetValue();
+         msg += "\"\n";
+         jnlst_->Printf(J_WARNING, J_MAIN, "%s", msg.c_str());
+      }
+      return false;
+   }
+
+   return options_.erase(lowercase(tag)) > 0;
+}
+
 bool OptionsList::SetStringValueIfUnset(
    const std::string& tag,
    const std::string& value,

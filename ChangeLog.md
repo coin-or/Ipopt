@@ -7,6 +7,10 @@ More detailed information about incremental changes can be found in the
 
 ## 3.14
 
+### 3.14.2 (2021-xx-yy)
+
+- Added `OptionsList::UnsetValue()` to remove an option setting.
+
 ### 3.14.1 (2021-06-25)
 
 - Fixed invalidation of cached Hessians when reoptimizing with same structure.

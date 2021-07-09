@@ -239,6 +239,14 @@ public:
    {
       return SetStringValue(tag, value ? "yes" : "no", allow_clobber, dont_print);
    }
+
+   /// Resets an option to its default value, if clobber is allowed.
+   ///
+   /// @return Whether value has been unset, i.e., value was set before and clobber was allowed.
+   /// @since 3.14.2
+   virtual bool UnsetValue(
+      const std::string& tag
+   );
    ///@}
 
    /** @name Methods for setting options only if they have not been set before */
