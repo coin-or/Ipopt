@@ -827,60 +827,98 @@ void AmplTNLP::finalize_solution(
    obj_sol_ = obj_value;
 
    std::string message = " \nIpopt " IPOPT_VERSION ": ";
-   if( status == SUCCESS )
+   switch( status )
    {
-      message += "Optimal Solution Found";
-      solve_result_num = 0;
-   }
-   else if( status == MAXITER_EXCEEDED )
-   {
-      message += "Maximum Number of Iterations Exceeded.";
-      solve_result_num = 400;
-   }
-   else if( status == CPUTIME_EXCEEDED )
-   {
-      message += "Maximum CPU Time Exceeded.";
-      solve_result_num = 401;
-   }
-   else if( status == WALLTIME_EXCEEDED )
-   {
-      message += "Maximum Wallclock Time Exceeded.";
-      solve_result_num = 402;
-   }
-   else if( status == STOP_AT_TINY_STEP )
-   {
-      message += "Search Direction becomes Too Small.";
-      solve_result_num = 500;
-   }
-   else if( status == STOP_AT_ACCEPTABLE_POINT )
-   {
-      message += "Solved To Acceptable Level.";
-      solve_result_num = 1;
-   }
-   else if( status == FEASIBLE_POINT_FOUND )
-   {
-      message += "Found feasible point for square problem.";
-      solve_result_num = 2;
-   }
-   else if( status == LOCAL_INFEASIBILITY )
-   {
-      message += "Converged to a locally infeasible point. Problem may be infeasible.";
-      solve_result_num = 200;
-   }
-   else if( status == RESTORATION_FAILURE )
-   {
-      message += "Restoration Phase Failed.";
-      solve_result_num = 501;
-   }
-   else if( status == DIVERGING_ITERATES )
-   {
-      message += "Iterates diverging; problem might be unbounded.";
-      solve_result_num = 300;
-   }
-   else
-   {
-      message += "Unknown Error";
-      solve_result_num = 502;
+      case SUCCESS:
+         message += "Optimal Solution Found";
+         solve_result_num = 0;
+         break;
+
+      case STOP_AT_ACCEPTABLE_POINT:
+         message += "Solved To Acceptable Level.";
+         solve_result_num = 1;
+         break;
+
+      case FEASIBLE_POINT_FOUND:
+         message += "Found feasible point for square problem.";
+         solve_result_num = 2;
+         break;
+
+      case LOCAL_INFEASIBILITY:
+         message += "Converged to a locally infeasible point. Problem may be infeasible.";
+         solve_result_num = 200;
+         break;
+
+      case DIVERGING_ITERATES:
+         message += "Iterates diverging; problem might be unbounded.";
+         solve_result_num = 300;
+         break;
+
+      case MAXITER_EXCEEDED:
+         message += "Maximum Number of Iterations Exceeded.";
+         solve_result_num = 400;
+         break;
+
+      case CPUTIME_EXCEEDED:
+         message += "Maximum CPU Time Exceeded.";
+         solve_result_num = 401;
+         break;
+
+      case WALLTIME_EXCEEDED:
+         message += "Maximum Wallclock Time Exceeded.";
+         solve_result_num = 402;
+         break;
+
+      case USER_REQUESTED_STOP:
+         message += "User requested stop.";
+         solve_result_num = 403;
+         break;
+
+      case STOP_AT_TINY_STEP:
+         message += "Search Direction becomes Too Small.";
+         solve_result_num = 500;
+         break;
+
+      case RESTORATION_FAILURE:
+         message += "Restoration Phase Failed.";
+         solve_result_num = 501;
+         break;
+
+      case ERROR_IN_STEP_COMPUTATION:
+         message += "Error in step computation.";
+         solve_result_num = 502;
+         break;
+
+      // the following should be dead code, i.e., finalize_solution isn't called in these cases
+      case INVALID_NUMBER_DETECTED:
+         message += "Invalid number in NLP function or derivative detected.";
+         solve_result_num = 550;
+         break;
+
+      case TOO_FEW_DEGREES_OF_FREEDOM:
+         message += "NLP has too few degrees of freedom.";
+         solve_result_num = 551;
+         break;
+
+      case INVALID_OPTION:
+         message += "Invalid option setting.";
+         solve_result_num = 552;
+         break;
+
+      case OUT_OF_MEMORY:
+         message += "Out of memory.";
+         solve_result_num = 553;
+         break;
+
+      case INTERNAL_ERROR:
+         message += "Internal error.";
+         solve_result_num = 554;
+         break;
+
+      case UNASSIGNED:
+         message += "Unknown Error";
+         solve_result_num = 599;
+         break;
    }
 
    if( IsValid(suffix_handler_) )
