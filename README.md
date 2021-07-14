@@ -47,9 +47,9 @@ And we are certainly very keen on feedback from users, including contributions!
 In order to compile Ipopt, certain third party code is required (such as some linear algebra routines).
 Those are available under different conditions/licenses.
 
-If you want to learn more about Ipopt, you can find references in the [bibliography of the documentation](https://coin-or.github.io/Ipopt/citelist.html) and this ["Papers about Ipopt" page](https://github.com/coin-or/Ipopt/wiki/IpoptPapers).
+If you want to learn more about Ipopt, you can find references in the [bibliography of the documentation](https://coin-or.github.io/Ipopt/citelist.html).
 
-For information on projects that use Ipopt, refer to the [Success Stories page](https://github.com/coin-or/Ipopt/wiki/SuccessStories).
+For information on projects or papers that use Ipopt, refer to the [Ipopt usage stories and papers](https://github.com/coin-or/Ipopt/discussions/497) discussion.
 
 
 Getting Started
@@ -124,7 +124,6 @@ Getting Help
    Please include as much information as possible, and if possible some (ideally simple) example code so that we can reproduce the error.
  * **[Discussions](https://github.com/coin-or/Ipopt/discussions)**: ask questions, share ideas, engage with the Ipopt community
  * **[Mailing list archive](http://list.coin-or.org/pipermail/ipopt/)** (2002-2020): predecessor of Discussions
- * **[Ipopt Wiki](https://github.com/coin-or/Ipopt/wiki)** with hints and tricks
  * External resources:
    * [short Ipopt tutorial](http://drops.dagstuhl.de/volltexte/2009/2089/pdf/09061.WaechterAndreas.Paper.2089.pdf)
    * [build Ipopt on Windows step-by-step](https://github.com/Ishanki/IPOPT-Installation-on-Windows-10)
@@ -133,7 +132,7 @@ Please Cite Us
 --------------
 
 We provide this program in the hope that it may be useful to others, and we would very much like to hear about your experience with it.
-If you found it helpful and are using it within our software, we encourage you to add your feedback to the [Success Stories page](https://github.com/coin-or/Ipopt/wiki/SuccessStories).
+If you found it helpful and are using it within our software, we encourage you to add your feedback to the [Ipopt usage stories and papers](https://github.com/coin-or/Ipopt/discussions/497) discussion.
 
 Since a lot of time and effort has gone into Ipopt's development, **please cite the following publication if you are using Ipopt for your own research**:
 

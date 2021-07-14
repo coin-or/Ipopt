@@ -79,8 +79,8 @@ used %Ipopt, and to cite the publication \cite WaecBieg06:mp.
 Writing high-quality numerical software takes a lot of time and effort,
 and does usually not translate into a large number of publications,
 therefore we believe this request is only fair :).
-We also have space in the [%Ipopt wiki](https://github.com/coin-or/Ipopt/wiki)
-where we list publications,
+We also have space in the [%Ipopt usage stories and papers](https://github.com/coin-or/Ipopt/discussions/497)
+discussion where we list publications,
 projects, etc., in which %Ipopt has been used. We would be
 very happy to hear about your experiences.
 
@@ -317,8 +317,7 @@ maintained by other people, among them are:
 
 \subsection MOREINFO More Information and Contributions
 
-An issue tracking, discussion system, and a wiki can be found at the %Ipopt
-homepage,
+An issue tracking and discussion system can be found at the %Ipopt homepage,
 
 https://github.com/coin-or/Ipopt.
 
