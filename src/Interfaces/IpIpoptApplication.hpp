@@ -157,9 +157,8 @@ public:
    /** Solve a problem (that inherits from TNLP) for a repeated time.
     *
     *  The OptimizeTNLP method must have been called before.  The
-    *  TNLP must be the same object, and the structure (number of
-    *  variables and constraints and position of nonzeros in Jacobian
-    *  and Hessian must be the same).
+    *  TNLP must be the same object. The IpoptAlgorithm object from the
+    *  previous solve will be reused.
     */
    virtual ApplicationReturnStatus ReOptimizeTNLP(
       const SmartPtr<TNLP>& tnlp
@@ -168,9 +167,8 @@ public:
    /** Solve a problem (that inherits from NLP) for a repeated time.
     *
     *  The OptimizeNLP method must have been called before.  The
-    *  NLP must be the same object, and the structure (number of
-    *  variables and constraints and position of nonzeros in Jacobian
-    *  and Hessian must be the same).
+    *  NLP must be the same object. The IpoptAlgorithm object from the
+    *  previous solve will be reused.
     */
    virtual ApplicationReturnStatus ReOptimizeNLP(
       const SmartPtr<NLP>& nlp
