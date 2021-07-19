@@ -14,9 +14,6 @@
 // - Since Mumps 5.1.0, mumps_->nz (MUMPS_INT) is deprecated and mumps_->nnz (MUMPS_INT8) should be used.
 //   For now (Mumps 5.4.0), mumps_->nz still works and has no disadvantage for us.
 
-// The following line is a fix for otherwise twice-defined global variable
-// (This would have to be taken out for a parallel MUMPS version!)
-#define MPI_COMM_WORLD IPOPT_MPI_COMM_WORLD
 #ifdef __GNUC__
 #pragma GCC diagnostic ignored "-Wunused-variable"
 #endif
