@@ -128,6 +128,19 @@ AC_COIN_CHK_PKG(Mumps,[IpoptLib],[coinmumps])
 #   we assume that MPI_Finalized is present if MPI_Initialized is present
 AC_CHECK_FUNCS([MPI_Initialized])
 
+AC_ARG_ENABLE([mpiinit],
+  [AS_HELP_STRING([--disable-mpiinit],[disable that (un)loading the Ipopt library initalizes (finalizes) MPI if the MPI version of MUMPS is linked])],
+  [case "$enableval" in
+     no | yes) ;;
+     *)
+       AC_MSG_ERROR([invalid argument for --enable-mpiinit: $enableval]);;
+   esac
+   mpiinit=$enableval],
+  [mpiinit=yes])
+if test $mpiinit = yes ; then
+  AC_DEFINE(IPOPT_MPIINIT,1,[Define to 1 if MPI should be initialized (finalized) when Ipopt library is (un)loaded.])
+fi
+
 #######
 # HSL #
 #######

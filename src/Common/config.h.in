@@ -155,6 +155,10 @@
 /* As IPOPT_LAPACK_FUNC, but for C identifiers containing underscores. */
 #undef IPOPT_LAPACK_FUNC_
 
+/* Define to 1 if MPI should be initialized (finalized) when Ipopt library is
+   (un)loaded. */
+#undef IPOPT_MPIINIT
+
 /* Define to 1 if using single precision floating point */
 #undef IPOPT_SINGLE
 

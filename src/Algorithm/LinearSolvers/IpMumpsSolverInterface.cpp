@@ -55,7 +55,7 @@ static std::mutex mumps_call_mutex;
 #define USE_COMM_WORLD -987654
 
 // initialize MPI when library is loaded; finalize MPI when library is unloaded
-#if defined(__GNUC__) && !defined(MUMPS_MPI_H) && defined(HAVE_MPI_INITIALIZED)
+#if defined(__GNUC__) && defined(IPOPT_MPIINIT) && !defined(MUMPS_MPI_H) && defined(HAVE_MPI_INITIALIZED)
 __attribute__((constructor))
 static void MPIinit(void)
 {

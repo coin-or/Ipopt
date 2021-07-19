@@ -911,6 +911,7 @@ with_asl_cflags
 with_mumps
 with_mumps_lflags
 with_mumps_cflags
+enable_mpiinit
 with_hsl
 with_hsl_lflags
 with_hsl_cflags
@@ -1594,6 +1595,9 @@ Optional Features:
   --enable-fast-install[=PKGS]
                           optimize for fast installation [default=yes]
   --disable-libtool-lock  avoid locking (might break parallel builds)
+  --disable-mpiinit       disable that (un)loading the Ipopt library
+                          initalizes (finalizes) MPI if the MPI version of
+                          MUMPS is linked
   --disable-pardisomkl    disable check for MKL version of Pardiso in Lapack
   --enable-inexact-solver enable inexact linear solver version EXPERIMENTAL!
                           (default: no)
@@ -24168,6 +24172,25 @@ then :
 fi
 
 
+# Check whether --enable-mpiinit was given.
+if test ${enable_mpiinit+y}
+then :
+  enableval=$enable_mpiinit; case "$enableval" in
+     no | yes) ;;
+     *)
+       as_fn_error $? "invalid argument for --enable-mpiinit: $enableval" "$LINENO" 5;;
+   esac
+   mpiinit=$enableval
+else $as_nop
+  mpiinit=yes
+fi
+
+if test $mpiinit = yes ; then
+
+printf "%s\n" "#define IPOPT_MPIINIT 1" >>confdefs.h
+
+fi
+
 #######
 # HSL #
 #######
@@ -25963,7 +25986,7 @@ else $as_nop
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25966 "configure" */
+/* #line 25989 "configure" */
 public class Test {
 }
 EOF
@@ -26489,7 +26512,7 @@ else $as_nop
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 26492 "configure" */
+/* #line 26515 "configure" */
 public class Test {
 }
 EOF
@@ -26524,7 +26547,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 26527 "configure" */
+/* [#]line 26550 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);
