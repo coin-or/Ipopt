@@ -140,11 +140,6 @@ private:
     *  again.
     */
    bool refactorize_;
-   /** Counter on number of alive Mumps interface objects, if we have called MPI_Initialize.
-    *
-    * When the last object is destroyed, we will call MPI_Finalize.
-    */
-   static int instancecount_mpi;
    ///@}
 
    /** @name Solver specific data/options */

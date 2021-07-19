@@ -52,23 +52,13 @@
 static std::mutex mumps_call_mutex;
 #endif
 
-namespace Ipopt
-{
-#if IPOPT_VERBOSITY > 0
-static const Index dbg_verbosity = 0;
-#endif
-
 #define USE_COMM_WORLD -987654
 
-int MumpsSolverInterface::instancecount_mpi = 0;
-
-MumpsSolverInterface::MumpsSolverInterface()
+// initialize MPI when library is loaded; finalize MPI when library is unloaded
+#if defined(__GNUC__) && !defined(MUMPS_MPI_H) && defined(HAVE_MPI_INITIALIZED)
+__attribute__((constructor))
+static void MPIinit(void)
 {
-   DBG_START_METH("MumpsSolverInterface::MumpsSolverInterface()",
-                  dbg_verbosity);
-
-#ifndef MUMPS_MPI_H
-#if defined(HAVE_MPI_INITIALIZED)
    int mpi_initialized;
    MPI_Initialized(&mpi_initialized);
    if( !mpi_initialized )
@@ -76,14 +66,32 @@ MumpsSolverInterface::MumpsSolverInterface()
       int argc = 1;
       char** argv = NULL;
       MPI_Init(&argc, &argv);
-      DBG_ASSERT(instancecount_mpi == 0);
-      instancecount_mpi = 1;
    }
-   else if( instancecount_mpi > 0 )
-   {
-      ++instancecount_mpi;
-   }
+}
+
+__attribute__((destructor))
+static void MPIfini(void)
+{
+   int mpi_finalized;
+   MPI_Finalized(&mpi_finalized);
+   if(!mpi_finalized)
+      MPI_Finalize();
+}
 #endif
+
+
+namespace Ipopt
+{
+#if IPOPT_VERBOSITY > 0
+static const Index dbg_verbosity = 0;
+#endif
+
+MumpsSolverInterface::MumpsSolverInterface()
+{
+   DBG_START_METH("MumpsSolverInterface::MumpsSolverInterface()",
+                  dbg_verbosity);
+
+#ifndef MUMPS_MPI_H
    int myid;
    MPI_Comm_rank(MPI_COMM_WORLD, &myid);
 #endif
@@ -118,18 +126,6 @@ MumpsSolverInterface::~MumpsSolverInterface()
    MUMPS_STRUC_C* mumps_ = static_cast<MUMPS_STRUC_C*>(mumps_ptr_);
    mumps_->job = -2; //terminate mumps
    mumps_c(mumps_);
-#ifndef MUMPS_MPI_H
-#ifdef HAVE_MPI_INITIALIZED
-   if( instancecount_mpi == 1 )
-   {
-      int mpi_finalized;
-      MPI_Finalized(&mpi_finalized);
-      DBG_ASSERT(!mpi_finalized);
-      MPI_Finalize();
-   }
-   --instancecount_mpi;
-#endif
-#endif
    delete[] mumps_->a;
    free(mumps_);
 }
