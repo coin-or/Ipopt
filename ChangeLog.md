@@ -11,7 +11,10 @@ More detailed information about incremental changes can be found in the
 
 - Added `OptionsList::UnsetValue()` to remove an option setting.
 - Added missing translation of some Ipopt status codes into AMPL solve result codes.
-- Fixed assert not being defined in Mumps interface in some build setups.
+- If using the MPI-parallel version of MUMPS: Moved calls to
+  `MPI_Init()`/`MPI_Finalize()` in MUMPS interface into global constructor/destructor
+  of Ipopt library (if building with GCC/clang). Use configure flag
+  `--disable-mpiinit` to disable. [#500]
 
 ### 3.14.1 (2021-06-25)
 
