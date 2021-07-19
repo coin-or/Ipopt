@@ -79,7 +79,7 @@ MumpsSolverInterface::MumpsSolverInterface()
       int argc = 1;
       char** argv = NULL;
       MPI_Init(&argc, &argv);
-      assert(instancecount_mpi == 0);
+      DBG_ASSERT(instancecount_mpi == 0);
       instancecount_mpi = 1;
    }
    else if( instancecount_mpi > 0 )
@@ -127,7 +127,7 @@ MumpsSolverInterface::~MumpsSolverInterface()
    {
       int mpi_finalized;
       MPI_Finalized(&mpi_finalized);
-      assert(!mpi_finalized);
+      DBG_ASSERT(!mpi_finalized);
       MPI_Finalize();
    }
    --instancecount_mpi;

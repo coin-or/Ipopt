@@ -11,6 +11,7 @@ More detailed information about incremental changes can be found in the
 
 - Added `OptionsList::UnsetValue()` to remove an option setting.
 - Added missing translation of some Ipopt status codes into AMPL solve result codes.
+- Fixed assert not being defined in Mumps interface in some build setups.
 
 ### 3.14.1 (2021-06-25)
 
