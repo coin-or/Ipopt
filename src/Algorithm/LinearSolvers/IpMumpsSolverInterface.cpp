@@ -91,11 +91,6 @@ MumpsSolverInterface::MumpsSolverInterface()
    DBG_START_METH("MumpsSolverInterface::MumpsSolverInterface()",
                   dbg_verbosity);
 
-#ifndef MUMPS_MPI_H
-   int myid;
-   MPI_Comm_rank(MPI_COMM_WORLD, &myid);
-#endif
-
    //initialize mumps
    MUMPS_STRUC_C* mumps_ = static_cast<MUMPS_STRUC_C*>(calloc(1, sizeof(MUMPS_STRUC_C)));
    mumps_->job = -1; //initialize mumps
