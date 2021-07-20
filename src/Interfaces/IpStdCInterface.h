@@ -158,17 +158,17 @@ typedef bool (*Eval_H_CB)(
  */
 typedef bool (*Intermediate_CB)(
    ipindex     alg_mod,   /**< algorithm mode: 0 is regular, 1 is restoration */
-   ipindex     iter_count,
-   ipnumber    obj_value,
-   ipnumber    inf_pr,
-   ipnumber    inf_du,
-   ipnumber    mu,
-   ipnumber    d_norm,
-   ipnumber    regularization_size,
-   ipnumber    alpha_du,
-   ipnumber    alpha_pr,
-   ipindex     ls_trials,
-   UserDataPtr user_data
+   ipindex     iter_count,/**< iteration number */
+   ipnumber    obj_value, /**< objective function value */
+   ipnumber    inf_pr,    /**< primal infeasibility */
+   ipnumber    inf_du,    /**< dual infeasibility */
+   ipnumber    mu,        /**< barrier parameter */
+   ipnumber    d_norm,    /**< infinity-norm of primal step */
+   ipnumber    regularization_size,  /**< size of regularization of Hessian of Lagrangian */
+   ipnumber    alpha_du,  /**< step length for dual variables */
+   ipnumber    alpha_pr,  /**< step length for primal variables */
+   ipindex     ls_trials, /**< number of backtracking line search steps */
+   UserDataPtr user_data  /**< user data */
 );
 
 /** Function for creating a new Ipopt Problem object.
