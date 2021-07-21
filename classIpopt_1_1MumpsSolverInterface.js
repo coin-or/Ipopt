@@ -24,7 +24,6 @@ var classIpopt_1_1MumpsSolverInterface =
     [ "initialized_", "classIpopt_1_1MumpsSolverInterface.html#ae429537d801ee4605aa9c5741b63541a", null ],
     [ "pivtol_changed_", "classIpopt_1_1MumpsSolverInterface.html#abe09db2820133322bb5aec36fa080c55", null ],
     [ "refactorize_", "classIpopt_1_1MumpsSolverInterface.html#a8ecb26e0dc0a8a6dd727fea6a69556d6", null ],
-    [ "instancecount_mpi", "classIpopt_1_1MumpsSolverInterface.html#a85a7d62d92b145695cc34063c54c8305", null ],
     [ "pivtol_", "classIpopt_1_1MumpsSolverInterface.html#a3758fd445724622637593827effc9889", null ],
     [ "pivtolmax_", "classIpopt_1_1MumpsSolverInterface.html#ae07abe718e386ee7e01973bbe62a3ca6", null ],
     [ "mem_percent_", "classIpopt_1_1MumpsSolverInterface.html#ae0300ad4241b1a4f5ee2b6cacc2fa268", null ],

@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.14.1</span-->
+   &#160;<!--span id="projectnumber">3.14.2</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -243,6 +243,16 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:ab75d84e60be8fa575ae29d82970ca3eb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#ab75d84e60be8fa575ae29d82970ca3eb">negevals_</a></td></tr>
 <tr class="memdesc:ab75d84e60be8fa575ae29d82970ca3eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of negative eigenvalues.  <a href="classIpopt_1_1MumpsSolverInterface.html#ab75d84e60be8fa575ae29d82970ca3eb">More...</a><br /></td></tr>
 <tr class="separator:ab75d84e60be8fa575ae29d82970ca3eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Initialization flags</div></td></tr>
+<tr class="memitem:ae429537d801ee4605aa9c5741b63541a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#ae429537d801ee4605aa9c5741b63541a">initialized_</a></td></tr>
+<tr class="memdesc:ae429537d801ee4605aa9c5741b63541a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag indicating if internal data is initialized.  <a href="classIpopt_1_1MumpsSolverInterface.html#ae429537d801ee4605aa9c5741b63541a">More...</a><br /></td></tr>
+<tr class="separator:ae429537d801ee4605aa9c5741b63541a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe09db2820133322bb5aec36fa080c55"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#abe09db2820133322bb5aec36fa080c55">pivtol_changed_</a></td></tr>
+<tr class="memdesc:abe09db2820133322bb5aec36fa080c55"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag indicating if the matrix has to be refactorized because the pivot tolerance has been changed.  <a href="classIpopt_1_1MumpsSolverInterface.html#abe09db2820133322bb5aec36fa080c55">More...</a><br /></td></tr>
+<tr class="separator:abe09db2820133322bb5aec36fa080c55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ecb26e0dc0a8a6dd727fea6a69556d6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#a8ecb26e0dc0a8a6dd727fea6a69556d6">refactorize_</a></td></tr>
+<tr class="memdesc:a8ecb26e0dc0a8a6dd727fea6a69556d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag that is true if we just requested the values of the matrix again (SYMSOLVER_CALL_AGAIN) and have to factorize again.  <a href="classIpopt_1_1MumpsSolverInterface.html#a8ecb26e0dc0a8a6dd727fea6a69556d6">More...</a><br /></td></tr>
+<tr class="separator:a8ecb26e0dc0a8a6dd727fea6a69556d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Solver specific data/options</div></td></tr>
 <tr class="memitem:a3758fd445724622637593827effc9889"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#a3758fd445724622637593827effc9889">pivtol_</a></td></tr>
 <tr class="memdesc:a3758fd445724622637593827effc9889"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pivot tolerance.  <a href="classIpopt_1_1MumpsSolverInterface.html#a3758fd445724622637593827effc9889">More...</a><br /></td></tr>
@@ -268,21 +278,6 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:af838e5548c543997dd46d4be58034c49"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#af838e5548c543997dd46d4be58034c49">warm_start_same_structure_</a></td></tr>
 <tr class="memdesc:af838e5548c543997dd46d4be58034c49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag indicating whether the <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> with identical structure has already been solved before.  <a href="classIpopt_1_1MumpsSolverInterface.html#af838e5548c543997dd46d4be58034c49">More...</a><br /></td></tr>
 <tr class="separator:af838e5548c543997dd46d4be58034c49"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="member-group"></a>
-Initialization flags</h2></td></tr>
-<tr class="memitem:ae429537d801ee4605aa9c5741b63541a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#ae429537d801ee4605aa9c5741b63541a">initialized_</a></td></tr>
-<tr class="memdesc:ae429537d801ee4605aa9c5741b63541a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag indicating if internal data is initialized.  <a href="classIpopt_1_1MumpsSolverInterface.html#ae429537d801ee4605aa9c5741b63541a">More...</a><br /></td></tr>
-<tr class="separator:ae429537d801ee4605aa9c5741b63541a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe09db2820133322bb5aec36fa080c55"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#abe09db2820133322bb5aec36fa080c55">pivtol_changed_</a></td></tr>
-<tr class="memdesc:abe09db2820133322bb5aec36fa080c55"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag indicating if the matrix has to be refactorized because the pivot tolerance has been changed.  <a href="classIpopt_1_1MumpsSolverInterface.html#abe09db2820133322bb5aec36fa080c55">More...</a><br /></td></tr>
-<tr class="separator:abe09db2820133322bb5aec36fa080c55"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8ecb26e0dc0a8a6dd727fea6a69556d6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#a8ecb26e0dc0a8a6dd727fea6a69556d6">refactorize_</a></td></tr>
-<tr class="memdesc:a8ecb26e0dc0a8a6dd727fea6a69556d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flag that is true if we just requested the values of the matrix again (SYMSOLVER_CALL_AGAIN) and have to factorize again.  <a href="classIpopt_1_1MumpsSolverInterface.html#a8ecb26e0dc0a8a6dd727fea6a69556d6">More...</a><br /></td></tr>
-<tr class="separator:a8ecb26e0dc0a8a6dd727fea6a69556d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a85a7d62d92b145695cc34063c54c8305"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1MumpsSolverInterface.html#a85a7d62d92b145695cc34063c54c8305">instancecount_mpi</a></td></tr>
-<tr class="memdesc:a85a7d62d92b145695cc34063c54c8305"><td class="mdescLeft">&#160;</td><td class="mdescRight">Counter on number of alive Mumps interface objects, if we have called MPI_Initialize.  <a href="classIpopt_1_1MumpsSolverInterface.html#a85a7d62d92b145695cc34063c54c8305">More...</a><br /></td></tr>
-<tr class="separator:a85a7d62d92b145695cc34063c54c8305"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -1105,33 +1100,6 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a85a7d62d92b145695cc34063c54c8305"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a85a7d62d92b145695cc34063c54c8305">&#9670;&nbsp;</a></span>instancecount_mpi</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">int Ipopt::MumpsSolverInterface::instancecount_mpi</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Counter on number of alive Mumps interface objects, if we have called MPI_Initialize. </p>
-<p>When the last object is destroyed, we will call MPI_Finalize. </p>
-
-<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00147">147</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
-
-</div>
-</div>
 <a id="a3758fd445724622637593827effc9889"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3758fd445724622637593827effc9889">&#9670;&nbsp;</a></span>pivtol_</h2>
 
@@ -1154,7 +1122,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Pivot tolerance. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00153">153</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00148">148</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1180,7 +1148,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Maximal pivot tolerance. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00156">156</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00151">151</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1206,7 +1174,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Percent increase in memory. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00159">159</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00154">154</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1232,7 +1200,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Permutation and scaling method in MUMPS. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00162">162</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00157">157</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1258,7 +1226,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Pivot order in MUMPS. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00165">165</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00160">160</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1284,7 +1252,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Scaling in MUMPS. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00168">168</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00163">163</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1310,7 +1278,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Threshold in MUMPS to state that a constraint is linearly dependent. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00171">171</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00166">166</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1336,7 +1304,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Flag indicating whether the <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> with identical structure has already been solved before. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00176">176</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00171">171</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -1362,7 +1330,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Flag indicating if symbolic factorization has already been called. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00180">180</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpMumpsSolverInterface_8hpp_source.html#l00175">175</a> of file <a class="el" href="IpMumpsSolverInterface_8hpp_source.html">IpMumpsSolverInterface.hpp</a>.</p>
 
 </div>
 </div>

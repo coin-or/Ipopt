@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.14.1</span-->
+   &#160;<!--span id="projectnumber">3.14.2</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -234,7 +234,7 @@ make
 sudo make install
 </pre><dl class="section note"><dt>Note</dt><dd>MUMPS will perform better if the matrix ordering algorithms implemented in <a href="http://glaros.dtc.umn.edu/gkhome/metis/metis/overview">METIS</a> are available on the system.</dd>
 <dd>
-MUMPS uses internally a fake implementation of MPI. If you are using Ipopt within an MPI program together with MUMPS, the code will not run. You will have to modify the MUMPS sources so that the MPI symbols inside the MUMPS code are renamed.</dd>
+The non-MPI version of MUMPS uses internally a fake implementation of MPI, which can prevent using Ipopt together with MUMPS within an MPI program. You will have to either modify the MUMPS sources so that the MPI symbols inside the MUMPS code are renamed or use a MPI-parallel version of MUMPS. In the latter case and if a GCC compatible compiler is used, the Ipopt library will call <code>MPI_Init()</code> and <code>MPI_Finalize()</code> when loaded and unloaded, respectively. To prevent this, use the configure flag <code>--disable-mpiinit</code>. Note that the Ipopt executable, tests, and examples will not work in this case (if using MUMPS as linear solver).</dd>
 <dd>
 Branch <code>stable/2.1</code> of project ThirdParty-Mumps can be used to build a library of MUMPS 4 that is usable with Ipopt. Initial experiments on the CUTEst testset have shown that performance with MUMPS 5.2.x is worse than with MUMPS 4.10.0 on average, but note that MUMPS 4 is not longer maintained.</dd></dl>
 <p>To compile Ipopt with a precompiled MUMPS library, you need to specify the <code>-I</code> flag to have the compiler find the directory containing the MUMPS header files with the <code>--with-mumps-cflags</code> flag of Ipopt's configure, e.g., </p><pre class="fragment">--with-mumps-cflags="-I$HOME/MUMPS/include"

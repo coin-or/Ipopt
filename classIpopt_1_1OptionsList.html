@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.14.1</span-->
+   &#160;<!--span id="projectnumber">3.14.2</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -175,6 +175,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a87f1acbe095b001a04741da6e75109e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa0a95ba72628544205660e256438ea26"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1OptionsList.html#aa0a95ba72628544205660e256438ea26">SetBoolValue</a> (const std::string &amp;tag, bool value, bool allow_clobber=true, bool dont_print=false)</td></tr>
 <tr class="separator:aa0a95ba72628544205660e256438ea26"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ea4d285a8a8ea7120df250dea2658be"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1OptionsList.html#a2ea4d285a8a8ea7120df250dea2658be">UnsetValue</a> (const std::string &amp;tag)</td></tr>
+<tr class="memdesc:a2ea4d285a8a8ea7120df250dea2658be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resets an option to its default value, if clobber is allowed.  <a href="classIpopt_1_1OptionsList.html#a2ea4d285a8a8ea7120df250dea2658be">More...</a><br /></td></tr>
+<tr class="separator:a2ea4d285a8a8ea7120df250dea2658be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Methods for setting options only if they have not been set before</div></td></tr>
 <tr class="memitem:aebb554b15adb25a7ca1d4d657c69bd07"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1OptionsList.html#aebb554b15adb25a7ca1d4d657c69bd07">SetStringValueIfUnset</a> (const std::string &amp;tag, const std::string &amp;value, bool allow_clobber=true, bool dont_print=false)</td></tr>
 <tr class="separator:aebb554b15adb25a7ca1d4d657c69bd07"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -680,6 +683,36 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a2ea4d285a8a8ea7120df250dea2658be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ea4d285a8a8ea7120df250dea2658be">&#9670;&nbsp;</a></span>UnsetValue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool Ipopt::OptionsList::UnsetValue </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>tag</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Resets an option to its default value, if clobber is allowed. </p>
+<dl class="section return"><dt>Returns</dt><dd>Whether value has been unset, i.e., value was set before and clobber was allowed. </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.14.2 </dd></dl>
+
+</div>
+</div>
 <a id="aebb554b15adb25a7ca1d4d657c69bd07"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aebb554b15adb25a7ca1d4d657c69bd07">&#9670;&nbsp;</a></span>SetStringValueIfUnset()</h2>
 
@@ -871,7 +904,7 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 <dl class="section since"><dt>Since</dt><dd>3.14.1 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="IpOptionsList_8hpp_source.html#l00268">268</a> of file <a class="el" href="IpOptionsList_8hpp_source.html">IpOptionsList.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpOptionsList_8hpp_source.html#l00276">276</a> of file <a class="el" href="IpOptionsList_8hpp_source.html">IpOptionsList.hpp</a>.</p>
 
 </div>
 </div>
@@ -1352,7 +1385,7 @@ Private Attributes</h2></td></tr>
 <p>Default Constructor. </p>
 <p>map for storing the options </p>
 
-<p class="definition">Definition at line <a class="el" href="IpOptionsList_8hpp_source.html#l00354">354</a> of file <a class="el" href="IpOptionsList_8hpp_source.html">IpOptionsList.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpOptionsList_8hpp_source.html#l00362">362</a> of file <a class="el" href="IpOptionsList_8hpp_source.html">IpOptionsList.hpp</a>.</p>
 
 </div>
 </div>
@@ -1378,7 +1411,7 @@ Private Attributes</h2></td></tr>
 
 <p>list of all the registered options to validate against </p>
 
-<p class="definition">Definition at line <a class="el" href="IpOptionsList_8hpp_source.html#l00357">357</a> of file <a class="el" href="IpOptionsList_8hpp_source.html">IpOptionsList.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpOptionsList_8hpp_source.html#l00365">365</a> of file <a class="el" href="IpOptionsList_8hpp_source.html">IpOptionsList.hpp</a>.</p>
 
 </div>
 </div>
@@ -1404,7 +1437,7 @@ Private Attributes</h2></td></tr>
 
 <p><a class="el" href="classIpopt_1_1Journalist.html" title="Class responsible for all message output.">Journalist</a> for writing error messages, etc. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpOptionsList_8hpp_source.html#l00360">360</a> of file <a class="el" href="IpOptionsList_8hpp_source.html">IpOptionsList.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpOptionsList_8hpp_source.html#l00368">368</a> of file <a class="el" href="IpOptionsList_8hpp_source.html">IpOptionsList.hpp</a>.</p>
 
 </div>
 </div>
@@ -1430,7 +1463,7 @@ Private Attributes</h2></td></tr>
 
 <p>auxiliary string set by lowercase method </p>
 
-<p class="definition">Definition at line <a class="el" href="IpOptionsList_8hpp_source.html#l00399">399</a> of file <a class="el" href="IpOptionsList_8hpp_source.html">IpOptionsList.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpOptionsList_8hpp_source.html#l00407">407</a> of file <a class="el" href="IpOptionsList_8hpp_source.html">IpOptionsList.hpp</a>.</p>
 
 </div>
 </div>

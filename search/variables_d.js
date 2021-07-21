@@ -88,7 +88,7 @@ var searchData=
   ['not_5fenough_5fdegrees_5fof_5ffre_7152',['NOT_ENOUGH_DEGREES_OF_FRE',['../classorg_1_1coinor_1_1Ipopt.html#a5b51f92e8764572d9c48569908a22dce',1,'org::coinor::Ipopt']]],
   ['np_5f_7153',['np_',['../classIpopt_1_1SensAlgorithm.html#a17db15bdf2f9166796ea058557380ebe',1,'Ipopt::SensAlgorithm']]],
   ['nrm2_5fcache_5ftag_5f_7154',['nrm2_cache_tag_',['../classIpopt_1_1Vector.html#a29c13a03f941940f50d555954bbf9e95',1,'Ipopt::Vector']]],
-  ['nrows_5f_7155',['nRows_',['../classIpopt_1_1MatrixSpace.html#a156d99aca8da52830b67cd64e00280aa',1,'Ipopt::MatrixSpace::nRows_()'],['../classIpopt_1_1IndexPCalculator.html#aa3e83851cbec02a015f8d92dcfa3f394',1,'Ipopt::IndexPCalculator::nrows_()'],['../classIpopt_1_1SchurData.html#a94209d32f74ab7fcf6ba489788d87685',1,'Ipopt::SchurData::nrows_()']]],
+  ['nrows_5f_7155',['nrows_',['../classIpopt_1_1IndexPCalculator.html#aa3e83851cbec02a015f8d92dcfa3f394',1,'Ipopt::IndexPCalculator::nrows_()'],['../classIpopt_1_1SchurData.html#a94209d32f74ab7fcf6ba489788d87685',1,'Ipopt::SchurData::nrows_()'],['../classIpopt_1_1MatrixSpace.html#a156d99aca8da52830b67cd64e00280aa',1,'Ipopt::MatrixSpace::nRows_()']]],
   ['ns_5f_7156',['ns_',['../classIpopt_1_1SensAlgorithm.html#a16c172bc51744a99f1396f7fd111cc58',1,'Ipopt::SensAlgorithm']]],
   ['nsteps_5f_7157',['nsteps_',['../classIpopt_1_1Ma27TSolverInterface.html#a7ccbc97641d119a3647a0ab33c9ec225',1,'Ipopt::Ma27TSolverInterface']]],
   ['nsup_7158',['nsup',['../structma77__info__d.html#af13160d148da9f05acf339b8e9b41b00',1,'ma77_info_d::nsup()'],['../structma77__info__s.html#a5eb04f00467b7eca577cd4c0269986ac',1,'ma77_info_s::nsup()']]],

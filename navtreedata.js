@@ -86,7 +86,8 @@ var NAVTREEINDEX =
 "classIpopt_1_1Vector.html#a8598b191608711b4df646858cdf704f8",
 "configall__system__msc_8h.html#a2a3bf31daa768a230d4fb36ce26316c3",
 "hsl__ma86d_8h.html#a8299753f0e59dabd229fb564da59d654",
-"structma77__control__d.html#af8db806e75612a2d4c61c244b27f6c83"
+"structma77__control__d.html#af4801f20033c1262e1e36b6cec32e5bb",
+"structmc68__info__i.html#acd3905ba8e81137fa7c0dae2572a71bd"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

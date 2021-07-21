@@ -13,6 +13,7 @@ var classIpopt_1_1OptionsList =
     [ "SetNumericValue", "classIpopt_1_1OptionsList.html#adde087f723f0c8387f4bc9ee580a9ce9", null ],
     [ "SetIntegerValue", "classIpopt_1_1OptionsList.html#a87f1acbe095b001a04741da6e75109e4", null ],
     [ "SetBoolValue", "classIpopt_1_1OptionsList.html#aa0a95ba72628544205660e256438ea26", null ],
+    [ "UnsetValue", "classIpopt_1_1OptionsList.html#a2ea4d285a8a8ea7120df250dea2658be", null ],
     [ "SetStringValueIfUnset", "classIpopt_1_1OptionsList.html#aebb554b15adb25a7ca1d4d657c69bd07", null ],
     [ "SetNumericValueIfUnset", "classIpopt_1_1OptionsList.html#a268524709d7a4f16f3fe3baf31474de4", null ],
     [ "SetIntegerValueIfUnset", "classIpopt_1_1OptionsList.html#ab225855fafe76d18dc7becfb222aba4b", null ],
