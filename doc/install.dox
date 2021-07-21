@@ -302,10 +302,15 @@ To do so, execute
 in [METIS](http://glaros.dtc.umn.edu/gkhome/metis/metis/overview) are
 available on the system.
 
-\note MUMPS uses internally a fake implementation of MPI. If you are
-using %Ipopt within an MPI program together with MUMPS, the
-code will not run. You will have to modify the MUMPS sources so that the
-MPI symbols inside the MUMPS code are renamed.
+\note The non-MPI version of MUMPS uses internally a fake implementation
+of MPI, which can prevent using %Ipopt together with MUMPS within an MPI program.
+You will have to either modify the MUMPS sources so that the MPI symbols
+inside the MUMPS code are renamed or use a MPI-parallel version of MUMPS.
+In the latter case and if a GCC compatible compiler is used, the %Ipopt
+library will call `MPI_Init()` and `MPI_Finalize()` when loaded and unloaded,
+respectively. To prevent this, use the configure flag `--disable-mpiinit`.
+Note that the %Ipopt executable, tests, and examples will not work in this
+case (if using MUMPS as linear solver).
 
 \note Branch `stable/2.1` of project ThirdParty-Mumps can be used to build
 a library of MUMPS 4 that is usable with %Ipopt. Initial experiments on
