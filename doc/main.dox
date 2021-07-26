@@ -311,10 +311,6 @@ maintained by other people, among them are:
     and communication between clients and solvers, including %Ipopt, in a
     distributed environment using Web Services.
 
--   [PyIpopt](https://github.com/xuy/pyipopt)
-
-    An interface to the **Python** language.
-
 -   [Scilab](https://www.scilab.org/) (free Matlab-like environment):
 
     A Scilab interface is available at https://atoms.scilab.org/toolboxes/sci_ipopt.
