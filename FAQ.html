@@ -106,34 +106,34 @@ $(document).ready(function(){initNavTree('FAQ.html',''); initResizable(); });
 <div class="contents">
 <div class="textblock"><p>Contained below is a list of the frequently asked questions for Ipopt.</p>
 <h2><a class="anchor" id="autotoc_md0"></a>
-What is %Ipopt?</h2>
+What is Ipopt?</h2>
 <p>Ipopt (*I*nterior *P*oint *OPT*imizer, pronounced eye-pea-Opt) is a software package for large-scale nonlinear optimization. Ipopt implements an interior-point algorithm for continuous, nonlinear, nonconvex, constrained optimization problems. It is meant to be a general purpose nonlinear programming (NLP) solver. However, it is mainly written for large-scale problems with up to million of variables and constraints. (For such large problems, it is assumed that the derivative matrices are sparse.)</p>
 <p>Please see the <a href="https://github.com/coin-or/Ipopt">Ipopt project page</a> for a more detailed description.</p>
 <h2><a class="anchor" id="autotoc_md1"></a>
-How do I use %Ipopt?</h2>
-<p>You can use Ipopt directly from your own computer code (C++, C, Fortran, Java, R). You can also use <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> from optimization modeling environments such as <a href="http://www.ampl.com/">AMPL</a>, <a href="http://www.gams.com/">GAMS</a>, <a href="https://github.com/ralna/CUTEst">CUTEst</a>, as well as on the <a href="http://www-neos.mcs.anl.gov/neos/solvers/nco:Ipopt/AMPL.html">NEOS Server</a>.</p>
+How do I use Ipopt?</h2>
+<p>See <a class="el" href="index.html#HOWTOUSE">How to use Ipopt</a>.</p>
 <h2><a class="anchor" id="autotoc_md2"></a>
-What license is %Ipopt released under?</h2>
+What license is Ipopt released under?</h2>
 <p>The Ipopt source code is now released under the <a href="http://www.eclipse.org/legal/epl-v10.html">Eclipse Public License (EPL)</a>.</p>
 <p>Originally (before release 3.9.2), IPOPT was released under the Common Public License (CPL). However, the CPL has been "deprecated and superseded" by the Ecplise Public License (EPL). The new license (EPL) is almost the same as the old with 2 "new and improved" features: (i) the license steward is the Eclipse Foundation (not IBM) and (ii) the EPL does not have the "defense termination clause" (aka the patent retaliation bit) which was a point of objection by some. Some additional information regarding the licenses might be found at this <a href="http://www.ibm.com/developerworks/library/os-cplfaq.html">FAQ</a>.</p>
 <h2><a class="anchor" id="autotoc_md3"></a>
-What do I need to build %Ipopt?</h2>
+What do I need to build Ipopt?</h2>
 <p>While the source code for Ipopt itself is released as open source under the Eclipse Public License (EPL), compilation requires third party components (such as BLAS, LAPACK, some sparse linear solver library) which you have to obtain separately. The Ipopt documentation gives detailed instructions on how to obtain and compile these components. (These components may be covered by license agreements different from EPL and may not be free for commercial use.)</p>
 <h2><a class="anchor" id="autotoc_md4"></a>
-On what operating systems can %Ipopt be used?</h2>
+On what operating systems can Ipopt be used?</h2>
 <p>Convenient configuration scripts and Makefiles are provided and have been tested for several flavors of GNU/Linux, macOS, and MSYS2/MinGW. Previous versions of IPOPT have also been run on an old iPod, as well as BlueGene.</p>
 <h2><a class="anchor" id="autotoc_md5"></a>
-Is %Ipopt thread-safe?</h2>
+Is Ipopt thread-safe?</h2>
 <p>Ipopt itself is thread-safe. Please check the used third-party components, i.e., linear algebra and linear solvers, for thread-safety, too. For example, MUMPS is not thread-safe. Since Ipopt 3.14.0, however, calls into MUMPS are protected by a mutex in the Ipopt/MUMPS interface, so that it should be possible to use Ipopt with MUMPS in a multi-threading environment as well.</p>
 <h2><a class="anchor" id="autotoc_md6"></a>
-What is the method behind %Ipopt?</h2>
+What is the method behind Ipopt?</h2>
 <p>Ipopt implements a interior point method for nonlinear programming. Search directions (coming from a linearization of the optimality conditions) can be computed in a full-space version by solving a large symmetric linear system.</p>
 <p>Ipopt can employ second derivative information, if available, or otherwise approximate it by means of a limited-memory quasi-Newton approach (BFGS and SR1).</p>
 <p>Global convergence of the method is ensured by a line search procedure, based on a filter method.</p>
 <p>This paper describes the implementation of Ipopt: <a class="el" href="citelist.html#CITEREF_WaecBieg06:mp">[12]</a>.</p>
 <p>Additional technical information may be found in other publications <a href="https://researcher.ibm.com/researcher/view_page.php?id=1717">here</a>.</p>
 <h2><a class="anchor" id="autotoc_md7"></a>
-Who do I contact with questions about %Ipopt?</h2>
+Who do I contact with questions about Ipopt?</h2>
 <p>If you have any questions or comments please create a discussion at the <a href="https://github.com/coin-or/Ipopt/discussions">Ipopt GitHub Discussions system</a>. Please include detailed information about your configuration (operating system, compilers, version number of <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a>, etc) if you are writing about a compilation or execution problem. (Note: You need a GitHub account to create or contribute to a discussion.)</p>
 <h2><a class="anchor" id="autotoc_md8"></a>
 What is the difference between the Fortran version and the C++ version?</h2>

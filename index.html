@@ -159,7 +159,7 @@ Prerequisites</h2>
 <li>From hardware vendors:<ul>
 <li><a href="https://developer.apple.com/documentation/accelerate">Accelerate</a> Framework by Apple</li>
 <li><a href="https://github.com/amd/blis">BLIS fork</a> (BLAS-like Library Instantiation Software Framework) by AMD</li>
-<li><a href="https://www.ibm.com/support/knowledgecenter/en/SSFHY8/essl_welcome.html">ESSL</a> (Engineering Scientific Subroutine Library) by IBM</li>
+<li><a href="https://www.ibm.com/docs/en/essl">ESSL</a> (Engineering Scientific Subroutine Library) by IBM</li>
 <li><a href="https://software.intel.com/content/www/us/en/develop/tools/math-kernel-library.html">MKL</a> (Math Kernel Library) by Intel</li>
 <li><a href="https://docs.oracle.com/cd/E18659_01/html/821-2763/gjgis.html">Sun Performance Library</a> by Sun</li>
 </ul>
@@ -193,7 +193,7 @@ Prerequisites</h2>
 <p>When using GNU compilers, we recommend you use the same version numbers for gcc, g++, and gfortran. Further, mixing clang (for C/C++) and gfortran has been problematic and should be avoided.</p>
 <h2><a class="anchor" id="HOWTOUSE"></a>
 How to use Ipopt</h2>
-<p>If desired, the Ipopt distribution generates an executable for the modeling environment AMPL. As well, you can link your problem statement with Ipopt using interfaces for C++, C, Java, or Fortran. Ipopt can be used with most Linux/Unix environments, and on Windows using Msys2/MinGW. In <a class="el" href="INTERFACES.html">Interfacing your NLP to Ipopt</a> this document demonstrates how to solve problems using Ipopt. This includes installation and compilation of Ipopt for use with AMPL as well as linking with your own code.</p>
+<p>If desired, the Ipopt distribution generates an executable for the modeling environment AMPL. As well, you can link your problem statement with Ipopt using interfaces for C++, C, Java, or Fortran. Ipopt can be used with most Linux/Unix environments, and on Windows using Msys2/MinGW. In <a class="el" href="INTERFACES.html">Interfacing your NLP to Ipopt</a> this document demonstrates how to solve problems using Ipopt. This includes installation and compilation of Ipopt for use with AMPL as well as linking with your own code. An installation of the AMPL link to Ipopt is also available on <a href="https://neos-server.org/neos/solvers/nco:Ipopt/AMPL.html">NEOS</a>.</p>
 <p>Additionally, the Ipopt distribution includes an interface for the R project for statistical computing, see <a class="el" href="INTERFACES.html#INTERFACE_R">The R Interface ipoptr</a>.</p>
 <p>There is also software that facilitates use of Ipopt maintained by other people, among them are:</p>
 <ul>
@@ -218,11 +218,12 @@ How to use Ipopt</h2>
 </li>
 <li><p class="startli">GAMS (modeling environment)</p>
 <p class="startli">The <a href="https://github.com/coin-or/GAMSlinks">GAMSlinks project</a> on COIN-OR includes a GAMS interface for Ipopt.</p>
+<p class="startli">An installation of GAMS with Ipopt is also available on <a href="https://neos-server.org/neos/solvers/nco:Ipopt/GAMS.html">NEOS</a>.</p>
 </li>
 <li><p class="startli"><a href="https://github.com/ethz-adrl/ifopt">ifopt</a></p>
 <p class="startli">Modern, light-weight (~1k loc), <b>Eigen</b>-based <b>C++</b> interface to Ipopt and Snopt.</p>
 </li>
-<li><p class="startli"><a href="https://github.com/g-braeunlich/ipyopt">IPyOpt</a></p>
+<li><p class="startli"><a href="https://gitlab.com/g-braeunlich/ipyopt">IPyOpt</a></p>
 <p class="startli">Interfacing Ipopt from <b>Python</b>.</p>
 </li>
 <li><p class="startli"><a href="http://juliaopt.org">JuliaOpt</a></p>
@@ -240,7 +241,7 @@ How to use Ipopt</h2>
 <li><p class="startli"><a href="https://github.com/coin-or/OS">Optimization Services</a></p>
 <p class="startli">The Optimization Services (OS) project provides a set of standards for representing optimization instances, results, solver options, and communication between clients and solvers, including&#160;Ipopt, in a distributed environment using Web Services.</p>
 </li>
-<li><p class="startli"><a href="https://github.com/g-braeunlich/IPyOpt">PyIpopt</a></p>
+<li><p class="startli"><a href="https://github.com/xuy/pyipopt">PyIpopt</a></p>
 <p class="startli">An interface to the <b>Python</b> language.</p>
 </li>
 <li><p class="startli"><a href="https://www.scilab.org/">Scilab</a> (free Matlab-like environment):</p>

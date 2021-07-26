@@ -1799,7 +1799,7 @@ The Java Interface JIpopt</h2>
 The R Interface ipoptr</h2>
 <p>This section is based on documentation by Jelmer Ypma (University College London).</p>
 <p>The <code>ipoptr</code> package (see also <a class="el" href="INSTALL.html#INSTALL_R">Compiling and Installing the R Interface ipoptr</a>) offers a R function <code>ipoptr</code> which takes an NLP specification, a starting point, and Ipopt options as input and returns information about an Ipopt run (status, message, ...) and a solution point.</p>
-<p>In the following, we discuss necessary steps to implement example (HS071) with <code>ipoptr</code>. A more detailed documentation of <code>ipoptr</code> is available in <a href="https://github.com/coin-or/Ipopt/raw/master/contrib/RInterface/inst/doc/ipoptr.pdf">contrib/RInterface/inst/doc/ipoptr.pdf</a>.</p>
+<p>In the following, we discuss necessary steps to implement example (HS071) with <code>ipoptr</code>. A more detailed documentation of <code>ipoptr</code> is available in <a href="https://github.com/coin-or/Ipopt/raw/stable/3.14/contrib/RInterface/inst/doc/ipoptr.pdf">contrib/RInterface/inst/doc/ipoptr.pdf</a>.</p>
 <p>First, we define the objective function and its gradient </p><div class="fragment"><div class="line">&gt; eval_f &lt;- function( x ) {</div>
 <div class="line">    return( x[1]*x[4]*(x[1] + x[2] + x[3]) + x[3] )</div>
 <div class="line">  }</div>
