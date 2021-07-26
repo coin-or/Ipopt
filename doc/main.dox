@@ -113,7 +113,7 @@ required:
 
         -   [BLIS fork](https://github.com/amd/blis) (BLAS-like Library Instantiation Software Framework) by AMD
 
-        -   [ESSL](https://www.ibm.com/support/knowledgecenter/en/SSFHY8/essl_welcome.html) (Engineering Scientific Subroutine Library) by IBM
+        -   [ESSL](https://www.ibm.com/docs/en/essl) (Engineering Scientific Subroutine Library) by IBM
 
         -   [MKL](https://software.intel.com/content/www/us/en/develop/tools/math-kernel-library.html) (Math Kernel Library) by Intel
 
@@ -218,6 +218,8 @@ In \ref INTERFACES this document demonstrates how to
 solve problems using %Ipopt. This includes installation and
 compilation of %Ipopt for use with AMPL as well as linking
 with your own code.
+An installation of the AMPL link to %Ipopt is also available on
+[NEOS](https://neos-server.org/neos/solvers/nco:Ipopt/AMPL.html).
 
 Additionally, the %Ipopt distribution includes an interface
 for the R project for statistical computing, see \ref INTERFACE_R.
@@ -268,11 +270,13 @@ maintained by other people, among them are:
     The [GAMSlinks project](https://github.com/coin-or/GAMSlinks) on
     COIN-OR includes a GAMS interface for %Ipopt.
 
+    An installation of GAMS with %Ipopt is also available on [NEOS](https://neos-server.org/neos/solvers/nco:Ipopt/GAMS.html).
+
 -   [ifopt](https://github.com/ethz-adrl/ifopt)
 
     Modern, light-weight (~1k loc), **Eigen**-based <strong>C++</strong> interface to %Ipopt and Snopt.
 
--   [IPyOpt](https://github.com/g-braeunlich/IPyOpt)
+-   [IPyOpt](https://gitlab.com/g-braeunlich/ipyopt)
 
     Interfacing %Ipopt from **Python**.
 
@@ -307,7 +311,7 @@ maintained by other people, among them are:
     and communication between clients and solvers, including %Ipopt, in a
     distributed environment using Web Services.
 
--   [PyIpopt](https://github.com/g-braeunlich/IPyOpt)
+-   [PyIpopt](https://github.com/xuy/pyipopt)
 
     An interface to the **Python** language.
 

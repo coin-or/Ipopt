@@ -1014,7 +1014,7 @@ options as input and returns information about an %Ipopt run
 
 In the following, we discuss necessary steps to implement example (HS071)
 with `ipoptr`. A more detailed documentation of `ipoptr` is
-available in [contrib/RInterface/inst/doc/ipoptr.pdf](https://github.com/coin-or/Ipopt/raw/master/contrib/RInterface/inst/doc/ipoptr.pdf).
+available in [contrib/RInterface/inst/doc/ipoptr.pdf](https://github.com/coin-or/Ipopt/raw/stable/3.14/contrib/RInterface/inst/doc/ipoptr.pdf).
 
 First, we define the objective function and its gradient
 \code{.unparsed}
