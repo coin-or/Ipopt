@@ -265,6 +265,10 @@ maintained by other people, among them are:
 
     Interfacing Ipopt from .NET languages such as **C#**, **F#** and **Visual Basic.NET**.
 
+-   [cyipopt](https://github.com/mechmotum/cyipopt)
+
+    A **Python** wrapper around %Ipopt with a SciPy-style interface.
+
 -   GAMS (modeling environment)
 
     The [GAMSlinks project](https://github.com/coin-or/GAMSlinks) on
