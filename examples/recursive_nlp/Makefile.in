@@ -47,7 +47,7 @@ exec_prefix=@exec_prefix@
 all: $(EXE)
 
 $(EXE): $(SRC)
-	$(CXX) $(CXXLINKFLAGS) $(CXXFLAGS) $(INCL) -o $@ $^ $(LIBS) $(ADDLIBS)
+	$(CXX) $(CXXLINKFLAGS) $(CXXFLAGS) $(INCL) -o $@ $(SRC) $(LIBS) $(ADDLIBS)
 
 clean:
 	rm -rf $(EXE)
