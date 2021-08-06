@@ -538,6 +538,7 @@ SolverReturn IpoptAlgorithm::Optimize(
    catch( IpoptNLP::Eval_Error& exc )
    {
       exc.ReportException(Jnlst(), J_MOREDETAILED);
+      IpData().TimingStats().InitializeIterates().EndIfStarted();
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
       retval = INVALID_NUMBER_DETECTED;
    }

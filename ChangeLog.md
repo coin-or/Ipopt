@@ -7,6 +7,11 @@ More detailed information about incremental changes can be found in the
 
 ## 3.14
 
+### 3.14.3 (2021-xx-yy)
+
+- Fixed timing for iterate initialization if initialization fails due to
+  an evaluation error.
+
 ### 3.14.2 (2021-07-21)
 
 - Added `OptionsList::UnsetValue()` to remove an option setting.
