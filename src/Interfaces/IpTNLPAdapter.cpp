@@ -58,10 +58,6 @@ TNLPAdapter::TNLPAdapter(
      jac_idx_map_(NULL),
      h_idx_map_(NULL),
      x_fixed_map_(NULL),
-     jac_fixed_idx_map_(NULL),
-     jac_fixed_iRow_(NULL),
-     jac_fixed_jCol_(NULL),
-     nz_jac_fixed_(0),
      findiff_jac_ia_(NULL),
      findiff_jac_ja_(NULL),
      findiff_jac_postriplet_(NULL),
@@ -81,9 +77,6 @@ TNLPAdapter::~TNLPAdapter()
    delete[] jac_idx_map_;
    delete[] h_idx_map_;
    delete[] x_fixed_map_;
-   delete[] jac_fixed_idx_map_;
-   delete[] jac_fixed_iRow_;
-   delete[] jac_fixed_jCol_;
    delete[] findiff_jac_ia_;
    delete[] findiff_jac_ja_;
    delete[] findiff_jac_postriplet_;
@@ -366,12 +359,14 @@ bool TNLPAdapter::GetSpaces(
       h_idx_map_ = NULL;
       delete[] x_fixed_map_;
       x_fixed_map_ = NULL;
-      delete[] jac_fixed_idx_map_;
-      jac_fixed_idx_map_ = NULL;
-      delete[] jac_fixed_iRow_;
-      jac_fixed_iRow_ = NULL;
-      delete[] jac_fixed_jCol_;
-      jac_fixed_jCol_ = NULL;
+      jac_fixed_idx_map_.clear();
+      jac_fixed_iRow_.clear();
+      jac_fixed_jCol_.clear();
+#if __cplusplus >= 201103L
+      jac_fixed_idx_map_.shrink_to_fit();
+      jac_fixed_iRow_.shrink_to_fit();
+      jac_fixed_jCol_.shrink_to_fit();
+#endif
    }
 
    // Get the full dimensions of the problem
@@ -1087,19 +1082,6 @@ bool TNLPAdapter::GetSpaces(
       Index* jac_c_jCol = new Index[nz_jac_all];
       Index current_nz = 0;
 
-      // prepare memory for mapping from Jacobian on fixed variables to full Jacobian
-      // cppcheck-suppress unreadVariable
-      Index jac_fixed_length = 0;
-      if( fixed_variable_treatment_ == MAKE_PARAMETER && IsValid(P_x_full_x_) )
-      {
-         nz_jac_fixed_ = 0;
-         // the Jacobian w.r.t. fixed variables can have at most number-of-fixed-variables*number-of-constraints nonzeros
-         jac_fixed_length = std::min(nz_jac_all, n_x_fixed_ * n_full_g);
-         jac_fixed_idx_map_ = new Index[jac_fixed_length];
-         jac_fixed_iRow_ = new Index[jac_fixed_length];
-         jac_fixed_jCol_ = new Index[jac_fixed_length];
-      }
-
       const Index* c_row_pos = P_c_g_->CompressedPosIndices();
       if( IsValid(P_x_full_x_) )
       {
@@ -1120,11 +1102,9 @@ bool TNLPAdapter::GetSpaces(
             {
                // c_col == -1 should mean a fixed variables
                // c_row == -1 should mean a row in d(x)  (but the distinction into c(x) and d(x) isn't relevant for us here)
-               DBG_ASSERT(nz_jac_fixed_ < jac_fixed_length);
-               jac_fixed_idx_map_[nz_jac_fixed_] = i;
-               jac_fixed_iRow_[nz_jac_fixed_] = g_iRow[i];
-               jac_fixed_jCol_[nz_jac_fixed_] = g_jCol[i];
-               nz_jac_fixed_++;
+               jac_fixed_idx_map_.push_back(i);
+               jac_fixed_iRow_.push_back(g_iRow[i]);
+               jac_fixed_jCol_.push_back(g_jCol[i]);
             }
          }
       }
@@ -2623,7 +2603,7 @@ bool TNLPAdapter::ResortBoundMultipliers(
          return false;
       }
 
-      if( nz_jac_fixed_ > 0 )
+      if( !jac_fixed_idx_map_.empty() )
       {
          if( !internal_eval_jac_g(false) )
          {
@@ -2637,7 +2617,7 @@ bool TNLPAdapter::ResortBoundMultipliers(
          // mappings from full g() indices to index in c() and d()
          const Index* c_row_pos = P_c_g_->CompressedPosIndices();
          const Index* d_row_pos = P_d_g_->CompressedPosIndices();
-         for( Index i = 0; i < nz_jac_fixed_; i++ )
+         for( size_t i = 0; i < jac_fixed_idx_map_.size(); i++ )
          {
             // Assume the same structure as initially given
             // correct for 1-based indexing in jac_fixed_iRow_ and jac_fixed_jCol_

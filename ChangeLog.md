@@ -11,6 +11,9 @@ More detailed information about incremental changes can be found in the
 
 - Fixed timing for iterate initialization if initialization fails due to
   an evaluation error.
+- Fixed possible integer overflow when reserving space for indices of Jacobian
+  belonging to fixed variables (introduced with 3.14.0) and reduced memory
+  usage for indices of Jacobian belonging to fixed variables.
 
 ### 3.14.2 (2021-07-21)
 

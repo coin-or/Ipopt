@@ -612,10 +612,9 @@ private:
    Index* x_fixed_map_;
 
    /** Index mapping of Jacobian w.r.t. fixed variables. */
-   Index* jac_fixed_idx_map_;
-   Index* jac_fixed_iRow_;
-   Index* jac_fixed_jCol_;
-   Index nz_jac_fixed_;
+   std::vector<Index> jac_fixed_idx_map_;
+   std::vector<Index> jac_fixed_iRow_;
+   std::vector<Index> jac_fixed_jCol_;
    ///@}
 
    /** @name Data for finite difference approximations of derivatives */
