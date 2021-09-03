@@ -7,7 +7,7 @@ More detailed information about incremental changes can be found in the
 
 ## 3.14
 
-### 3.14.3 (2021-xx-yy)
+### 3.14.3 (2021-09-03)
 
 - Fixed timing for iterate initialization if initialization fails due to
   an evaluation error.
