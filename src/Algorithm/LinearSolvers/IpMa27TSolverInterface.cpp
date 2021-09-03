@@ -90,39 +90,34 @@ void Ma27TSolverInterface::RegisterOptions(
       0.0, true,
       1.0, true,
       1e-8,
-      "A smaller number pivots for sparsity, a larger number pivots for stability. "
-      "This option is only available if Ipopt has been compiled with MA27.");
+      "A smaller number pivots for sparsity, a larger number pivots for stability.");
    roptions->AddBoundedNumberOption(
       "ma27_pivtolmax",
       "Maximum pivot tolerance for the linear solver MA27.",
       0.0, true,
       1.0, true,
       1e-4,
-      "Ipopt may increase pivtol as high as pivtolmax to get a more accurate solution to the linear system. "
-      "This option is only available if Ipopt has been compiled with MA27.");
+      "Ipopt may increase pivtol as high as ma27_pivtolmax to get a more accurate solution to the linear system.");
    roptions->AddLowerBoundedNumberOption(
       "ma27_liw_init_factor",
       "Integer workspace memory for MA27.",
       1.0, false,
       5.0,
       "The initial integer workspace memory = liw_init_factor * memory required by unfactored system. "
-      "Ipopt will increase the workspace size by meminc_factor if required. "
-      "This option is only available if Ipopt has been compiled with MA27.");
+      "Ipopt will increase the workspace size by ma27_meminc_factor if required.");
    roptions->AddLowerBoundedNumberOption(
       "ma27_la_init_factor",
       "Real workspace memory for MA27.",
       1.0, false,
       5.0,
       "The initial real workspace memory = la_init_factor * memory required by unfactored system. "
-      "Ipopt will increase the workspace size by meminc_factor if required. "
-      "This option is only available if Ipopt has been compiled with MA27.");
+      "Ipopt will increase the workspace size by ma27_meminc_factor if required.");
    roptions->AddLowerBoundedNumberOption(
       "ma27_meminc_factor",
       "Increment factor for workspace size for MA27.",
       1.0, false,
       2.0,
-      "If the integer or real workspace is not large enough, Ipopt will increase its size by this factor. "
-      "This option is only available if Ipopt has been compiled with MA27.");
+      "If the integer or real workspace is not large enough, Ipopt will increase its size by this factor.");
    roptions->AddBoolOption(
       "ma27_skip_inertia_check",
       "Whether to always pretend that inertia is correct.",
