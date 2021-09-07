@@ -170,16 +170,16 @@ implementation of the BLAS and LAPACK library**, tailored to your hardware;
 Section \ref PREREQUISITES lists a few options.
 For instance, to have configure pick up a local installation of
 [ATLAS](http://math-atlas.sourceforge.net) in $HOME/lib, one would use
-the `--with-lapack` flag when running `configure` (see \ref COMPILEINSTALL):
+the `--with-lapack-lflags` flag when running `configure` (see \ref COMPILEINSTALL):
 \verbatim
-./configure --with-lapack="-L$HOME/lib -lf77blas -lcblas -latlas"
+./configure --with-lapack-lflags="-L$HOME/lib -lf77blas -lcblas -latlas"
 \endverbatim
 The configure script already tries to find Intel MKL libraries on some
 systems. If that fails, e.g., because the libraries are not available
-in a standard search path, then also use the `--with-lapack` flag to
+in a standard search path, then also use the `--with-lapack-lflags` flag to
 explictly state what flags are necessary to use MKL, e.g.,
 \verbatim
-./configure --with-lapack="-L${MKLROOT}/lib/intel64 -Wl,--no-as-needed -lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lm"
+./configure --with-lapack-lflags="-L${MKLROOT}/lib/intel64 -Wl,--no-as-needed -lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lm"
 \endverbatim
 
 \subsection DOWNLOAD_HSL HSL (Harwell Subroutines Library)
@@ -836,7 +836,7 @@ Regarding dependencies of %Ipopt, the situation is as follows:
   Many implementations of Blas and Lapack include a single-precision variant.
   \attention macOS vecLib single-precision routines do not work as expected by gfortran.
   However, configure would still select the Accelerate framework by default and %Ipopt will try to run with faulty numbers.
-  You may want to try switch to Lapack from HomeBrew instead (`--with-lapack="-L/usr/local/opt/lapack/lib -llapack -lblas"`) or try out [this vecLib wrapper](https://github.com/mcg1969/vecLibFort).
+  You may want to try switch to Lapack from HomeBrew instead (`--with-lapack-lflags="-L/usr/local/opt/lapack/lib -llapack -lblas"`) or try out [this vecLib wrapper](https://github.com/mcg1969/vecLibFort).
 - The interface to MUMPS can use a single-precision version of MUMPS.
   See the [ThirdParty-Mumps docu](https://github.com/coin-or-tools/ThirdParty-Mumps/#single-precision-codes) for details.
 - The interfaces to the HSL routines can use single-precision versions of these routines.
