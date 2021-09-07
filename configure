@@ -1625,34 +1625,38 @@ Optional Packages:
                           (default)
   --with-intsize          integer type to use: specify 32 for int or 64 for
                           int64_t
-  --with-lapack           Use lapack. If an argument is given, 'yes' is
-                          equivalent to --with-lapack, 'no' is
-                          equivalent to --without-lapack. Any other argument
-                          is applied as for --with-lapack-lflags
+  --without-lapack        Do not use lapack. If an argument is given to
+                          --with-lapack, then 'yes' is equivalent
+                          to --with-lapack, 'no' is equivalent to
+                          --without-lapack and any other argument is applied
+                          as for --with-lapack-lflags.
   --with-lapack-lflags    Linker flags for lapack appropriate for your
                           environment. (Most often, -l specs for libraries.)
-  --with-asl              Use ASL. If an argument is given, 'yes' is
-                          equivalent to --with-asl, 'no' is
-                          equivalent to --without-asl. Any other argument is
-                          applied as for --with-asl-lflags
+  --without-asl           Do not use ASL. If an argument is given to
+                          --with-asl, then 'yes' is equivalent to
+                          --with-asl, 'no' is equivalent to
+                          --without-asl and any other argument is applied as
+                          for --with-asl-lflags.
   --with-asl-lflags       Linker flags for ASL appropriate for your
                           environment. (Most often, -l specs for libraries.)
   --with-asl-cflags       Compiler flags for ASL appropriate for your
                           environment. (Most often, -I specs for header file
                           directories.)
-  --with-mumps            Use Mumps. If an argument is given, 'yes' is
-                          equivalent to --with-mumps, 'no' is
-                          equivalent to --without-mumps. Any other argument is
-                          applied as for --with-mumps-lflags
+  --without-mumps         Do not use Mumps. If an argument is given to
+                          --with-mumps, then 'yes' is equivalent
+                          to --with-mumps, 'no' is equivalent to
+                          --without-mumps and any other argument is applied as
+                          for --with-mumps-lflags.
   --with-mumps-lflags     Linker flags for Mumps appropriate for your
                           environment. (Most often, -l specs for libraries.)
   --with-mumps-cflags     Compiler flags for Mumps appropriate for your
                           environment. (Most often, -I specs for header file
                           directories.)
-  --with-hsl              Use HSL. If an argument is given, 'yes' is
-                          equivalent to --with-hsl, 'no' is
-                          equivalent to --without-hsl. Any other argument is
-                          applied as for --with-hsl-lflags
+  --without-hsl           Do not use HSL. If an argument is given to
+                          --with-hsl, then 'yes' is equivalent to
+                          --with-hsl, 'no' is equivalent to
+                          --without-hsl and any other argument is applied as
+                          for --with-hsl-lflags.
   --with-hsl-lflags       Linker flags for HSL appropriate for your
                           environment. (Most often, -l specs for libraries.)
   --with-hsl-cflags       Compiler flags for HSL appropriate for your
@@ -1660,10 +1664,11 @@ Optional Packages:
                           directories.)
   --with-pardiso          specify Pardiso library (>= 4.0) from
                           pardiso-project.org
-  --with-spral            Use Spral. If an argument is given, 'yes' is
-                          equivalent to --with-spral, 'no' is
-                          equivalent to --without-spral. Any other argument is
-                          applied as for --with-spral-lflags
+  --without-spral         Do not use Spral. If an argument is given to
+                          --with-spral, then 'yes' is equivalent
+                          to --with-spral, 'no' is equivalent to
+                          --without-spral and any other argument is applied as
+                          for --with-spral-lflags.
   --with-spral-lflags     Linker flags for Spral appropriate for your
                           environment. (Most often, -l specs for libraries.)
   --with-spral-cflags     Compiler flags for Spral appropriate for your
@@ -25986,7 +25991,7 @@ else $as_nop
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 25989 "configure" */
+/* #line 25994 "configure" */
 public class Test {
 }
 EOF
@@ -26512,7 +26517,7 @@ else $as_nop
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 26515 "configure" */
+/* #line 26520 "configure" */
 public class Test {
 }
 EOF
@@ -26547,7 +26552,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 26550 "configure" */
+/* [#]line 26555 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);
