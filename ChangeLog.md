@@ -10,6 +10,7 @@ More detailed information about incremental changes can be found in the
 ### 3.14.4 (2021-xx-yy)
 
 - Only skip build of Java interface if javac found, but no jar [#510].
+  Only give warning if javac and jar are found, but no java or javadoc.
 
 ### 3.14.3 (2021-09-03)
 

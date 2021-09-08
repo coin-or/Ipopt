@@ -26302,11 +26302,8 @@ printf "%s\n" "$as_me: WARNING: JAVA compiler found, but no acceptable jar progr
 fi
 
 if test "$enable_java" != no ; then
-  # the following macros can make configure stop with an error
-  # we could work around that, but having javac and no jar, java, or javadoc would be odd anyway
-  # look for more java to run tests and examples and do documentation
-
-if test "x$JAVAPREFIX" = x
+  # look for java to run tests, but skip check whether java works (so just the test may fail)
+    if test "x$JAVAPREFIX" = x
 then :
   test x$JAVA = x && for ac_prog in kaffe java
 do
@@ -26404,198 +26401,13 @@ fi
 done
 
 fi
-test x$JAVA = x && as_fn_error $? "no acceptable Java virtual machine found in \$PATH" "$LINENO" 5
-
-        if test x$ac_cv_prog_javac_works = xno; then
-                as_fn_error $? "Cannot compile java source. $JAVAC does not work properly" "$LINENO" 5
-        fi
-        if test x$ac_cv_prog_javac_works = x; then
-
-if test "x$JAVAPREFIX" = x
-then :
-  test "x$JAVAC" = x && for ac_prog in "gcj -C" guavac jikes javac
-do
-  # Extract the first word of "$ac_prog", so it can be a program name with args.
-set dummy $ac_prog; ac_word=$2
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-printf %s "checking for $ac_word... " >&6; }
-if test ${ac_cv_prog_JAVAC+y}
-then :
-  printf %s "(cached) " >&6
-else $as_nop
-  if test -n "$JAVAC"; then
-  ac_cv_prog_JAVAC="$JAVAC" # Let the user override the test.
-else
-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  case $as_dir in #(((
-    '') as_dir=./ ;;
-    */) ;;
-    *) as_dir=$as_dir/ ;;
-  esac
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir$ac_word$ac_exec_ext"; then
-    ac_cv_prog_JAVAC="$ac_prog"
-    printf "%s\n" "$as_me:${as_lineno-$LINENO}: found $as_dir$ac_word$ac_exec_ext" >&5
-    break 2
+  if test -z "$JAVA" ; then
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: JAVA compiler found, but no acceptable JAVA executable found in \$PATH. Disabling tests of Java interface. Java example will not run." >&5
+printf "%s\n" "$as_me: WARNING: JAVA compiler found, but no acceptable JAVA executable found in \$PATH. Disabling tests of Java interface. Java example will not run." >&2;}
   fi
-done
-  done
-IFS=$as_save_IFS
 
-fi
-fi
-JAVAC=$ac_cv_prog_JAVAC
-if test -n "$JAVAC"; then
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $JAVAC" >&5
-printf "%s\n" "$JAVAC" >&6; }
-else
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
-printf "%s\n" "no" >&6; }
-fi
-
-
-  test -n "$JAVAC" && break
-done
-
-else $as_nop
-  test "x$JAVAC" = x && for ac_prog in "gcj -C" guavac jikes javac
-do
-  # Extract the first word of "$ac_prog", so it can be a program name with args.
-set dummy $ac_prog; ac_word=$2
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-printf %s "checking for $ac_word... " >&6; }
-if test ${ac_cv_prog_JAVAC+y}
-then :
-  printf %s "(cached) " >&6
-else $as_nop
-  if test -n "$JAVAC"; then
-  ac_cv_prog_JAVAC="$JAVAC" # Let the user override the test.
-else
-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $JAVAPREFIX/bin
-do
-  IFS=$as_save_IFS
-  case $as_dir in #(((
-    '') as_dir=./ ;;
-    */) ;;
-    *) as_dir=$as_dir/ ;;
-  esac
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir$ac_word$ac_exec_ext"; then
-    ac_cv_prog_JAVAC="$ac_prog"
-    printf "%s\n" "$as_me:${as_lineno-$LINENO}: found $as_dir$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-fi
-fi
-JAVAC=$ac_cv_prog_JAVAC
-if test -n "$JAVAC"; then
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $JAVAC" >&5
-printf "%s\n" "$JAVAC" >&6; }
-else
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
-printf "%s\n" "no" >&6; }
-fi
-
-
-  test -n "$JAVAC" && break
-done
-
-fi
-test "x$JAVAC" = x && as_fn_error $? "no acceptable Java compiler found in \$PATH" "$LINENO" 5
-
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking if $JAVAC works" >&5
-printf %s "checking if $JAVAC works... " >&6; }
-if test ${ac_cv_prog_javac_works+y}
-then :
-  printf %s "(cached) " >&6
-else $as_nop
-
-JAVA_TEST=Test.java
-CLASS_TEST=Test.class
-cat << \EOF > $JAVA_TEST
-/* #line 26524 "configure" */
-public class Test {
-}
-EOF
-if { ac_try='$JAVAC $JAVACFLAGS $JAVA_TEST'
-  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; } >/dev/null 2>&1; then
-  ac_cv_prog_javac_works=yes
-else
-  as_fn_error $? "The Java compiler $JAVAC failed (see config.log, check the CLASSPATH?)" "$LINENO" 5
-  echo "configure: failed program was:" >&5
-  cat $JAVA_TEST >&5
-fi
-rm -f $JAVA_TEST $CLASS_TEST
-
-fi
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_cv_prog_javac_works" >&5
-printf "%s\n" "$ac_cv_prog_javac_works" >&6; }
-
-
-        fi
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking if $JAVA works" >&5
-printf %s "checking if $JAVA works... " >&6; }
-if test ${ac_cv_prog_java_works+y}
-then :
-  printf %s "(cached) " >&6
-else $as_nop
-
-JAVA_TEST=Test.java
-CLASS_TEST=Test.class
-TEST=Test
-cat << \EOF > $JAVA_TEST
-/* [#]line 26559 "configure" */
-public class Test {
-public static void main (String args[]) {
-        System.exit (0);
-} }
-EOF
-        if { ac_try='$JAVAC $JAVACFLAGS $JAVA_TEST'
-  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; } && test -s $CLASS_TEST; then
-                :
-        else
-          echo "configure: failed program was:" >&5
-          cat $JAVA_TEST >&5
-          as_fn_error $? "The Java compiler $JAVAC failed (see config.log, check the CLASSPATH?)" "$LINENO" 5
-        fi
-if { ac_try='$JAVA -classpath . $JAVAFLAGS $TEST'
-  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; } >/dev/null 2>&1; then
-  ac_cv_prog_java_works=yes
-else
-  echo "configure: failed program was:" >&5
-  cat $JAVA_TEST >&5
-  as_fn_error $? "The Java VM $JAVA failed (see config.log, check the CLASSPATH?)" "$LINENO" 5
-fi
-rm -f $JAVA_TEST $CLASS_TEST
-
-fi
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_cv_prog_java_works" >&5
-printf "%s\n" "$ac_cv_prog_java_works" >&6; }
-
-
-
-
-if test "x$JAVAPREFIX" = x
+  # look for javadoc to build documentation
+    if test "x$JAVAPREFIX" = x
 then :
   test "x$JAVADOC" = x && for ac_prog in javadoc
 do
@@ -26693,8 +26505,10 @@ fi
 done
 
 fi
-test "x$JAVADOC" = x && as_fn_error $? "no acceptable javadoc generator found in \$PATH" "$LINENO" 5
-
+  if test -z "$JAVADOC" ; then
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: JAVA compiler found, but no javadoc found in \$PATH. Building the Java documentation (make javadoc) will fail." >&5
+printf "%s\n" "$as_me: WARNING: JAVA compiler found, but no javadoc found in \$PATH. Building the Java documentation (make javadoc) will fail." >&2;}
+  fi
 fi
 
  if test "$enable_java" != no; then

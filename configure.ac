@@ -423,11 +423,23 @@ if test "$enable_java" != no ; then
 fi
 
 if test "$enable_java" != no ; then
-  # the following macros can make configure stop with an error
-  # we could work around that, but having javac and no jar, java, or javadoc would be odd anyway
-  # look for more java to run tests and examples and do documentation
-  AX_PROG_JAVA
-  AX_PROG_JAVADOC
+  # look for java to run tests, but skip check whether java works (so just the test may fail)
+  dnl copied from AX_PROG_JAVA
+  AS_IF([test "x$JAVAPREFIX" = x],
+        [test x$JAVA = x && AC_CHECK_PROGS([JAVA], [kaffe java])],
+        [test x$JAVA = x && AC_CHECK_PROGS([JAVA], [kaffe java], [], [$JAVAPREFIX/bin])])
+  if test -z "$JAVA" ; then
+    AC_MSG_WARN([JAVA compiler found, but no acceptable JAVA executable found in \$PATH. Disabling tests of Java interface. Java example will not run.])
+  fi
+
+  # look for javadoc to build documentation
+  dnl copied from AX_PROG_JAVADOC
+  AS_IF([test "x$JAVAPREFIX" = x],
+        [test "x$JAVADOC" = x && AC_CHECK_PROGS([JAVADOC], [javadoc])],
+        [test "x$JAVADOC" = x && AC_CHECK_PROGS([JAVADOC], [javadoc], [], [$JAVAPREFIX/bin])])
+  if test -z "$JAVADOC" ; then
+    AC_MSG_WARN([JAVA compiler found, but no javadoc found in \$PATH. Building the Java documentation (make javadoc) will fail.])
+  fi
 fi
 
 AM_CONDITIONAL([BUILD_JAVA], [test "$enable_java" != no])
