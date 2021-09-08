@@ -26195,12 +26195,8 @@ printf "%s\n" "$as_me: No JNI header directory. Disabling build of Java interfac
 fi
 
 if test "$enable_java" != no ; then
-  # the following macros can make configure stop with an error
-  # we could work around that, but having javac and no jar, java, or javadoc would be odd anyway
-
   # look for jar: required to pack Java interface
-
-if test "x$JAVAPREFIX" = x
+    if test "x$JAVAPREFIX" = x
 then :
   test "x$JAR" = x && for ac_prog in jar
 do
@@ -26298,8 +26294,16 @@ fi
 done
 
 fi
-test "x$JAR" = x && as_fn_error $? "no acceptable jar program found in \$PATH" "$LINENO" 5
+  if test -z "$JAR" ; then
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: JAVA compiler found, but no acceptable jar program found in \$PATH. Disabling build of Java interface." >&5
+printf "%s\n" "$as_me: WARNING: JAVA compiler found, but no acceptable jar program found in \$PATH. Disabling build of Java interface." >&2;}
+    enable_java=no
+  fi
+fi
 
+if test "$enable_java" != no ; then
+  # the following macros can make configure stop with an error
+  # we could work around that, but having javac and no jar, java, or javadoc would be odd anyway
   # look for more java to run tests and examples and do documentation
 
 if test "x$JAVAPREFIX" = x
@@ -26517,7 +26521,7 @@ else $as_nop
 JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 cat << \EOF > $JAVA_TEST
-/* #line 26520 "configure" */
+/* #line 26524 "configure" */
 public class Test {
 }
 EOF
@@ -26552,7 +26556,7 @@ JAVA_TEST=Test.java
 CLASS_TEST=Test.class
 TEST=Test
 cat << \EOF > $JAVA_TEST
-/* [#]line 26555 "configure" */
+/* [#]line 26559 "configure" */
 public class Test {
 public static void main (String args[]) {
         System.exit (0);

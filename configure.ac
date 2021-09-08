@@ -411,11 +411,20 @@ if test "$enable_java" != no ; then
 fi
 
 if test "$enable_java" != no ; then
+  # look for jar: required to pack Java interface
+  dnl copied from AX_PROG_JAR
+  AS_IF([test "x$JAVAPREFIX" = x],
+        [test "x$JAR" = x && AC_CHECK_PROGS([JAR], [jar])],
+        [test "x$JAR" = x && AC_CHECK_PROGS([JAR], [jar], [], [$JAVAPREFIX/bin])])
+  if test -z "$JAR" ; then
+    AC_MSG_WARN([JAVA compiler found, but no acceptable jar program found in \$PATH. Disabling build of Java interface.])
+    enable_java=no
+  fi
+fi
+
+if test "$enable_java" != no ; then
   # the following macros can make configure stop with an error
   # we could work around that, but having javac and no jar, java, or javadoc would be odd anyway
-
-  # look for jar: required to pack Java interface
-  AX_PROG_JAR
   # look for more java to run tests and examples and do documentation
   AX_PROG_JAVA
   AX_PROG_JAVADOC
