@@ -22862,7 +22862,7 @@ fi
   lapack_keep_looking=yes
 
   if test "$with_lapack" != "no" ; then
-    if test "$with_lapack" != "yes" ; then
+    if test "$with_lapack" != "yes" && test -z "$with_lapack_lflags" ; then
       with_lapack_lflags="$with_lapack"
     fi
     if test -n "$with_lapack_lflags" ; then
