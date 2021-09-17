@@ -74,7 +74,7 @@ After installation, a number of additional packages need to be installed:
 (I might have forgotten something.)
 If you also want to use GNU compilers, then install them, too:
 
-    pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-gfortran
+    pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-gcc-fortran
 
 When using MinGW, it is convenient to install MinGW's Lapack and METIS as well:
 
