@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.14.3</span-->
+   &#160;<!--span id="projectnumber">3.14.4</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -157,7 +157,7 @@ brew link --overwrite gcc
 Windows with MSYS2/MinGW</h2>
 <p>For Windows, one can compile Ipopt under MSYS2/MinGW, which is a light-weight UNIX-like environment for Windows.</p>
 <p>MSYS2/MinGW can be obtained from <a href="https://www.msys2.org/">https://www.msys2.org/</a>. After installation, a number of additional packages need to be installed: </p><pre class="fragment">pacman -S binutils diffutils git grep make patch pkg-config
-</pre><p>(I might have forgotten something.) If you also want to use GNU compilers, then install them, too: </p><pre class="fragment">pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-gfortran
+</pre><p>(I might have forgotten something.) If you also want to use GNU compilers, then install them, too: </p><pre class="fragment">pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-gcc-fortran
 </pre><p>When using MinGW, it is convenient to install MinGW's Lapack and METIS as well: </p><pre class="fragment">pacman -S mingw-w64-x86_64-lapack mingw-w64-x86_64-metis
 </pre><p>To use MSYS2/MinGW to compile Ipopt with native MSVC/Intel compilers, the basic version MSYS2 version without MinGW is sufficient. To use the GNU compilers, MinGW is required.</p>
 <p>If you want to use the native MSVC or Intel compiler, you need to make sure that environment variables are setup for the compilers. One way is to create a shell script that executes the batch files that are provided by Microsoft and Intel for this purpose before starting MSYS2. For using MSVC, this script may have a form similar to </p><pre class="fragment">set MSYS2_PATH_TYPE=inherit
