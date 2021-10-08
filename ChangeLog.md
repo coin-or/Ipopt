@@ -7,6 +7,10 @@ More detailed information about incremental changes can be found in the
 
 ## 3.14
 
+### 3.14.5 (202x-yy-zz)
+
+- Tried to fix recognition of JNI headers on macOS >= 11 [#516].
+
 ### 3.14.4 (2021-09-20)
 
 - Skip build of Java interface if either java or jar is not found [#510].
