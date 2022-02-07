@@ -896,6 +896,8 @@ ApplicationReturnStatus IpoptApplication::call_optimize()
       {
          case SUCCESS:
          case MAXITER_EXCEEDED:
+         case CPUTIME_EXCEEDED:
+         case WALLTIME_EXCEEDED:
          case STOP_AT_TINY_STEP:
          case STOP_AT_ACCEPTABLE_POINT:
          case LOCAL_INFEASIBILITY:
