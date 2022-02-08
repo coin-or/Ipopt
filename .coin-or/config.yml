@@ -22,21 +22,18 @@ Dependencies:
   - Description: ThirdParty wrapper for building ASL
     URL: https://github.com/coin-or-tools/ThirdParty-ASL
     Version: stable/2.0
-    # actually optional, but then coinbrew would skip over it unless --enable-optional is set
-    Required: Required
+    Required: Recommended
   - Description: ThirdParty wrapper for building Mumps
     URL: https://github.com/coin-or-tools/ThirdParty-Mumps
     Version: stable/3.0
-    # actually optional, but then coinbrew would skip over it unless --enable-optional is set
-    Required: Required
+    Required: Recommended
   - Description: ThirdParty wrapper for building HSL codes
     URL: https://github.com/coin-or-tools/ThirdParty-HSL
     Version: stable/2.2
-    # actually optional, but then coinbrew would skip over it unless --enable-optional is set
-    Required: Required
+    Required: Recommended
   - Description: Parallel Sparse Direct Solver from Pardiso-Project
     URL: http://www.pardiso-project.org/
-    Required: Optional
+    Required: Recommended
   - Description: Parallel Sparse Direct Solver from Intel MKL
     URL: https://software.intel.com/content/www/us/en/develop/tools/math-kernel-library.html
     Required: Optional
