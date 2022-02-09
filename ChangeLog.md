@@ -7,10 +7,10 @@ More detailed information about incremental changes can be found in the
 
 ## 3.14
 
-### 3.14.5 (202x-yy-zz)
+### 3.14.5 (2022-02-09)
 
 - Tried to fix recognition of JNI headers on macOS >= 11 [#516].
-- Fixed that only primal variable values where passed to finalize_solution()
+- Fixed that only primal variable values where passed to `finalize_solution()`
   when a timelimit was reached [#552].
 
 ### 3.14.4 (2021-09-20)
