@@ -162,7 +162,7 @@ if test "$coin_has_hsl" = yes ; then
   esac
   AC_COIN_TRY_LINK(ma27ad,[$HSLLIB_LFLAGS],,
     [AC_COIN_DEFINENAMEMANGLING(IPOPT_HSL,$ma27ad_namemangling)],
-    [AC_MSG_ERROR([Provided package HSL is not working or does not contain MA27.])])
+    [AC_MSG_ERROR([Provided package HSL is not working or does not contain MA27. See config.log for details on failed checks.])])
 
   # extra check for MA28(s), since that decides whether we have to build IpMa28(s)Partition.F
   if test -n "$F77" ; then
@@ -258,7 +258,7 @@ if test $have_wsmp$precision$intsize = yesdouble32 ; then
      IPOPTLIB_LFLAGS="$wsmp_lflags $IPOPTLIB_LFLAGS"
      AC_DEFINE(IPOPT_HAS_WSMP,1,[Define to 1 if WSMP is available])
     ],
-    [AC_MSG_ERROR([Symbol wssmp not found with WSMP flags $wsmp_lflags.])])
+    [AC_MSG_ERROR([Symbol wssmp not found with WSMP flags $wsmp_lflags. See config.log for details on failed checks.])])
 fi
 
 AM_CONDITIONAL([HAVE_WSMP],[test $have_wsmp = yes])
@@ -282,7 +282,7 @@ case "$ac_cv_sizeof_int_p" in
   8 | 8?) BITS_PER_POINTER=64
      BIT32FCOMMENT='C'
      BIT64FCOMMENT='' ;;
-  *) AC_MSG_ERROR([Unknown length of int *]);;
+  *) AC_MSG_ERROR([Unknown length of int*]);;
 esac
 
 ############################################################################

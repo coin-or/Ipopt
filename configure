@@ -24637,7 +24637,7 @@ printf "%s\n" "$as_me: WARNING: Unsupported or unknown name-mangling scheme: $ma
       ;;
   esac
 
-    else as_fn_error $? "Provided package HSL is not working or does not contain MA27." "$LINENO" 5
+    else as_fn_error $? "Provided package HSL is not working or does not contain MA27. See config.log for details on failed checks." "$LINENO" 5
   fi
 
 
@@ -25393,7 +25393,7 @@ printf "%s\n" "$as_me: WARNING: Unsupported or unknown name-mangling scheme: $ws
 printf "%s\n" "#define IPOPT_HAS_WSMP 1" >>confdefs.h
 
 
-    else as_fn_error $? "Symbol wssmp not found with WSMP flags $wsmp_lflags." "$LINENO" 5
+    else as_fn_error $? "Symbol wssmp not found with WSMP flags $wsmp_lflags. See config.log for details on failed checks." "$LINENO" 5
   fi
 
 fi
@@ -25468,7 +25468,7 @@ case "$ac_cv_sizeof_int_p" in
   8 | 8?) BITS_PER_POINTER=64
      BIT32FCOMMENT='C'
      BIT64FCOMMENT='' ;;
-  *) as_fn_error $? "Unknown length of int *" "$LINENO" 5;;
+  *) as_fn_error $? "Unknown length of int*" "$LINENO" 5;;
 esac
 
 ############################################################################
