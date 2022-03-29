@@ -280,7 +280,7 @@ void BacktrackingLineSearch::FindAcceptableTrialPoint()
    }
 
    // Store current iterate if the optimality error is on acceptable
-   // level to restored if things fail later
+   // level to be restored if things fail later
    if( CurrentIsAcceptable() )
    {
       Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
