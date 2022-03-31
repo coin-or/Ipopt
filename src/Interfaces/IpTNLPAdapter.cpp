@@ -928,19 +928,19 @@ bool TNLPAdapter::GetSpaces(
 
             string_md.clear();
             string_md.resize(n_d_l);
-            pos_idx = P_d_l_space->ExpandedPosIndices();
+            const Index* d_pos_idx = P_d_l_space->ExpandedPosIndices();
             for( Index i = 0; i < n_d_l; i++ )
             {
-               string_md[i] = iter->second[pos_idx[i]];
+               string_md[i] = iter->second[pos_idx[d_pos_idx[i]]];
             }
             dv_d_l_space->SetStringMetaData(iter->first, string_md);
 
             string_md.clear();
             string_md.resize(n_d_u);
-            pos_idx = P_d_u_space->ExpandedPosIndices();
+            d_pos_idx = P_d_u_space->ExpandedPosIndices();
             for( Index i = 0; i < n_d_u; i++ )
             {
-               string_md[i] = iter->second[pos_idx[i]];
+               string_md[i] = iter->second[pos_idx[d_pos_idx[i]]];
             }
             dv_d_u_space->SetStringMetaData(iter->first, string_md);
          }
