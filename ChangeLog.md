@@ -7,6 +7,11 @@ More detailed information about incremental changes can be found in the
 
 ## 3.14
 
+### 3.14.6 (2022-xx-yy)
+
+- Fixed mapping of meta data for inequalities, e.g., constraint names,
+  from TNLP to Ipopts internal NLP [#570, by Daniel Dias].
+
 ### 3.14.5 (2022-02-09)
 
 - Tried to fix recognition of JNI headers on macOS >= 11 [#516].
