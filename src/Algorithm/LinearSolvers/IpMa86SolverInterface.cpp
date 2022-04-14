@@ -251,6 +251,11 @@ ESymSolverStatus Ma86SolverInterface::InitializeStructure(
    // Store size for later use
    ndim_ = dim;
 
+   if( HaveIpData() )
+   {
+      IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
+   }
+
    // Determine an ordering
    mc68_default_control(&control68);
    control68.f_array_in = 1; // Use Fortran numbering (faster)
@@ -282,11 +287,6 @@ ESymSolverStatus Ma86SolverInterface::InitializeStructure(
    if( info68.flag < 0 )
    {
       return SYMSOLVER_FATAL_ERROR;
-   }
-
-   if( HaveIpData() )
-   {
-      IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
    }
 
    // perform analyse

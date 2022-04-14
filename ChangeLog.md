@@ -11,6 +11,8 @@ More detailed information about incremental changes can be found in the
 
 - Fixed mapping of meta data for inequalities, e.g., constraint names,
   from TNLP to Ipopts internal NLP [#570, by Daniel Dias].
+- Fixed that MC68 ordering time was not accounted in symbolic factorization
+  time of HSL MA86 [#571].
 
 ### 3.14.5 (2022-02-09)
 
