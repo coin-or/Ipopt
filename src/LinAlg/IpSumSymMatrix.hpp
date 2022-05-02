@@ -18,7 +18,7 @@ class SumSymMatrixSpace;
 
 /** Class for Matrices which are sum of symmetric matrices.
  *
- *  For each term in the we store the matrix and a factor.
+ *  For each term in the sum we store the matrix and a factor.
  */
 class IPOPTLIB_EXPORT SumSymMatrix: public SymMatrix
 {
