@@ -13,6 +13,8 @@ More detailed information about incremental changes can be found in the
   from TNLP to Ipopts internal NLP [#570, by Daniel Dias].
 - Fixed that MC68 ordering time was not accounted in symbolic factorization
   time of HSL MA86 [#571].
+- Include more header files in IpIpoptCalculatedQuantities.hpp for setups
+  where forward declarations are not sufficients [#572].
 
 ### 3.14.5 (2022-02-09)
 
