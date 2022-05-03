@@ -150,6 +150,21 @@ void TNLPAdapter::RegisterOptions(
       "The Hessian is then not approximated in this space. "
       "If the get_number_of_nonlinear_variables method in the TNLP is implemented, this option is ignored.",
       true);
+   roptions->AddStringOption2(
+      "jacobian_approximation",
+      "Specifies technique to compute constraint Jacobian",
+      "exact",
+      "exact", "user-provided derivatives",
+      "finite-difference-values", "user-provided structure, values by finite differences",
+      "",
+      true);
+   roptions->AddLowerBoundedNumberOption(
+      "findiff_perturbation",
+      "Size of the finite difference perturbation for derivative approximation.",
+      0., true,
+      1e-7,
+      "This determines the relative perturbation of the variable entries.",
+      true);
 
    roptions->SetRegisteringCategory("Derivative Checker");
    roptions->AddStringOption4(
@@ -189,21 +204,6 @@ void TNLPAdapter::RegisterOptions(
       "Indicates whether information for all estimated derivatives should be printed.",
       false,
       "Determines verbosity of derivative checker.");
-   roptions->AddStringOption2(
-      "jacobian_approximation",
-      "Specifies technique to compute constraint Jacobian",
-      "exact",
-      "exact", "user-provided derivatives",
-      "finite-difference-values", "user-provided structure, values by finite differences",
-      "",
-      true);
-   roptions->AddLowerBoundedNumberOption(
-      "findiff_perturbation",
-      "Size of the finite difference perturbation for derivative approximation.",
-      0., true,
-      1e-7,
-      "This determines the relative perturbation of the variable entries.",
-      true);
    roptions->AddLowerBoundedNumberOption(
       "point_perturbation_radius",
       "Maximal perturbation of an evaluation point.",
