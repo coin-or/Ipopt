@@ -7,10 +7,12 @@ More detailed information about incremental changes can be found in the
 
 ## 3.14
 
+### 3.14.7 (2022-xx-yy)
+
 ### 3.14.6 (2022-05-02)
 
 - Fixed mapping of meta data for inequalities, e.g., constraint names,
-  from TNLP to Ipopts internal NLP [#570, by Daniel Dias].
+  from TNLP to Ipopts internal NLP [#570, by Daniel Oliveira].
 - Fixed that MC68 ordering time was not accounted in symbolic factorization
   time of HSL MA86 [#571].
 - Include more header files in IpIpoptCalculatedQuantities.hpp for setups

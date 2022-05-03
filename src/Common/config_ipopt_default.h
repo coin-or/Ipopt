@@ -5,7 +5,7 @@
 /***************************************************************************/
 
 /* Version number of project */
-#define IPOPT_VERSION "3.14.6"
+#define IPOPT_VERSION "3.14.7"
 
 /* Major Version number of project */
 #define IPOPT_VERSION_MAJOR 3
@@ -14,7 +14,7 @@
 #define IPOPT_VERSION_MINOR 14
 
 /* Release Version number of project */
-#define IPOPT_VERSION_RELEASE 6
+#define IPOPT_VERSION_RELEASE 7
 
 /* Define to the C type corresponding to Fortran INTEGER
  * @deprecated Use ipindex instead.
