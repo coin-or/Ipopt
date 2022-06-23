@@ -261,6 +261,13 @@ public:
       JAC_FINDIFF_VALUES
    };
 
+   /** Enum for specifying technique for computing objective Gradient */
+   enum GradientApproxEnum
+   {
+      OBJGRAD_EXACT = 0,
+      OBJGRAD_FINDIFF_VALUES
+   };
+
    /** Method for performing the derivative test */
    bool CheckDerivatives(
       DerivativeTestEnum deriv_test,
@@ -489,6 +496,8 @@ private:
    Index num_linear_variables_;
    /** Flag indicating how Jacobian is computed. */
    JacobianApproxEnum jacobian_approximation_;
+   /** Flag indicating how objective Gradient is computed. */
+   GradientApproxEnum gradient_approximation_;
    /** Size of the perturbation for the derivative approximation */
    Number findiff_perturbation_;
    /** Maximal perturbation of the initial point */

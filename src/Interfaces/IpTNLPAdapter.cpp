@@ -158,6 +158,14 @@ void TNLPAdapter::RegisterOptions(
       "finite-difference-values", "user-provided structure, values by finite differences",
       "",
       true);
+   roptions->AddStringOption2(
+      "gradient_approximation",
+      "Specifies technique to compute objective Gradient",
+      "exact",
+      "exact", "user-provided gradient",
+      "finite-difference-values", "values by finite differences",
+      "",
+      true);
    roptions->AddLowerBoundedNumberOption(
       "findiff_perturbation",
       "Size of the finite difference perturbation for derivative approximation.",
@@ -247,6 +255,8 @@ bool TNLPAdapter::ProcessOptions(
 
    options.GetEnumValue("jacobian_approximation", enum_int, prefix);
    jacobian_approximation_ = JacobianApproxEnum(enum_int);
+   options.GetEnumValue("gradient_approximation", enum_int, prefix);
+   gradient_approximation_ = GradientApproxEnum(enum_int);
    options.GetNumericValue("findiff_perturbation", findiff_perturbation_, prefix);
 
    options.GetNumericValue("point_perturbation_radius", point_perturbation_radius_, prefix);
@@ -1465,7 +1475,7 @@ bool TNLPAdapter::GetBoundsInformation(
    }
 
    // In case we are doing finite differences, keep a copy of the bounds
-   if( jacobian_approximation_ != JAC_EXACT )
+   if( jacobian_approximation_ != JAC_EXACT || gradient_approximation_ != OBJGRAD_EXACT )
    {
       delete[] findiff_x_l_;
       delete[] findiff_x_u_;
@@ -1670,23 +1680,69 @@ bool TNLPAdapter::Eval_grad_f(
    DenseVector* dg_f = static_cast<DenseVector*>(&g_f);
    DBG_ASSERT(dynamic_cast<DenseVector*>(&g_f));
    Number* values = dg_f->Values();
-   if( IsValid(P_x_full_x_) )
+
+   if( gradient_approximation_ == OBJGRAD_EXACT )
    {
-      Number* full_grad_f = new Number[n_full_x_];
-      if( tnlp_->eval_grad_f(n_full_x_, full_x_, new_x, full_grad_f) )
+      if( IsValid(P_x_full_x_) )
       {
-         const Index* x_pos = P_x_full_x_->ExpandedPosIndices();
-         for( Index i = 0; i < g_f.Dim(); i++ )
+         Number* full_grad_f = new Number[n_full_x_];
+         if( tnlp_->eval_grad_f(n_full_x_, full_x_, new_x, full_grad_f) )
          {
-            values[i] = full_grad_f[x_pos[i]];
+            const Index* x_pos = P_x_full_x_->ExpandedPosIndices();
+            for( Index i = 0; i < g_f.Dim(); i++ )
+            {
+               values[i] = full_grad_f[x_pos[i]];
+            }
+            retvalue = true;
          }
-         retvalue = true;
+         delete[] full_grad_f;
       }
-      delete[] full_grad_f;
+      else
+      {
+         retvalue = tnlp_->eval_grad_f(n_full_x_, full_x_, new_x, values);
+      }
    }
    else
    {
-      retvalue = tnlp_->eval_grad_f(n_full_x_, full_x_, new_x, values);
+      // make sure we have the value of the objective at the point
+      Number f;
+      retvalue = tnlp_->eval_f(n_full_x_, full_x_, new_x, f);
+      if( retvalue )
+      {
+         Number* full_x_pert = new Number[n_full_x_];
+         IpBlasCopy(n_full_x_, full_x_, 1, full_x_pert, 1);
+         const Index* x_pos = NULL;
+         if( IsValid(P_x_full_x_) )
+            x_pos = P_x_full_x_->ExpandedPosIndices();
+
+         // Compute the finite difference objective
+         for( Index i = 0; i < g_f.Dim(); i++ )
+         {
+            Index ivar = x_pos != NULL ? x_pos[i] : i;
+            if( findiff_x_l_[ivar] < findiff_x_u_[ivar] )
+            {
+               const Number xorig = full_x_pert[ivar];
+               Number this_perturbation = findiff_perturbation_ * Max(Number(1.), std::abs(full_x_[ivar]));
+               full_x_pert[ivar] += this_perturbation;
+               if( full_x_pert[ivar] > findiff_x_u_[ivar] )
+               {
+                  // if at upper bound, then change direction towards lower bound
+                  this_perturbation = -this_perturbation;
+                  full_x_pert[ivar] = xorig + this_perturbation;
+               }
+               Number f_pert;
+               retvalue = tnlp_->eval_f(n_full_x_, full_x_pert, true, f_pert);
+               if( !retvalue )
+                  break;
+
+               values[i] = (f_pert - f) / this_perturbation;
+
+               full_x_pert[ivar] = xorig;
+            }
+         }
+
+         delete[] full_x_pert;
+      }
    }
 
    return retvalue;

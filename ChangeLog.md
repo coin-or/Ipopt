@@ -11,6 +11,8 @@ More detailed information about incremental changes can be found in the
 
 - Fixed that ComputeSensitivityMatrix() of sIpopt assumed that there are
   no more than two parameters [#578, by Andrea Vescovini].
+- For completeness, added option `gradient_approximation` to enable approximation
+  of gradient of objective function by finite differences. Do not use. [#573]
 
 ### 3.14.6 (2022-05-02)
 
