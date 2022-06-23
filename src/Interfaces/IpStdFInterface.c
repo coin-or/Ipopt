@@ -582,3 +582,15 @@ IPOPTLIB_EXPORT ipindex F77_FUNC(ipgetcurrviolations, IPGETCURRVIOLATIONS)(
                                     *get_compl ? COMPL_G : NULL)
           ? OKRetVal : NotOKRetVal;
 }
+
+/// @since 3.14.7
+IPOPTLIB_EXPORT ipindex F77_FUNC(ipsetproblemscaling, IPSETPROBLEMSCALING)(
+    fptr*      FProblem,
+    ipnumber*  obj_scaling,
+    ipnumber*  X_SCALING,
+    ipnumber*  G_SCALING
+)
+{
+    FUserData* fuser_data = (FUserData*) *FProblem;
+    return SetIpoptProblemScaling(fuser_data->Problem, *obj_scaling, X_SCALING, G_SCALING) ? OKRetVal : NotOKRetVal;
+}

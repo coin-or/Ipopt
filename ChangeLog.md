@@ -13,6 +13,8 @@ More detailed information about incremental changes can be found in the
   no more than two parameters [#578, by Andrea Vescovini].
 - For completeness, added option `gradient_approximation` to enable approximation
   of gradient of objective function by finite differences. Do not use. [#573]
+- Added function `IPSETPROBLEMSCALING` to Fortran interface to set problem
+  scaling [#577, by Steven R. Hall]
 
 ### 3.14.6 (2022-05-02)
 
