@@ -1713,7 +1713,9 @@ bool TNLPAdapter::Eval_grad_f(
          IpBlasCopy(n_full_x_, full_x_, 1, full_x_pert, 1);
          const Index* x_pos = NULL;
          if( IsValid(P_x_full_x_) )
+         {
             x_pos = P_x_full_x_->ExpandedPosIndices();
+         }
 
          // Compute the finite difference objective
          for( Index i = 0; i < g_f.Dim(); i++ )
@@ -1733,7 +1735,9 @@ bool TNLPAdapter::Eval_grad_f(
                Number f_pert;
                retvalue = tnlp_->eval_f(n_full_x_, full_x_pert, true, f_pert);
                if( !retvalue )
+               {
                   break;
+               }
 
                values[i] = (f_pert - f) / this_perturbation;
 

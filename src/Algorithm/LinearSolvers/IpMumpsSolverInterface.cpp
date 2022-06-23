@@ -75,7 +75,9 @@ static void MPIfini(void)
    int mpi_finalized;
    MPI_Finalized(&mpi_finalized);
    if(!mpi_finalized)
+   {
       MPI_Finalize();
+   }
 }
 #endif
 
