@@ -52,8 +52,8 @@ C
 C
 C     Vector of lower and upper bounds
 C
-      double precision X_L(N), X_U(N), Z_L(N), Z_U(N)
-      double precision G_L(M), G_U(M)
+      double precision X_L(N), X_U(N), X_SCALING(N), Z_L(N), Z_U(N)
+      double precision G_L(M), G_U(M), G_SCALING(M)
 C
 C     Private data for evaluation routines
 C     This could be used to pass double precision and integer arrays untouched
@@ -72,8 +72,8 @@ C
 @BIT64FCOMMENT@      integer*8 IPCREATE
 C
       integer IERR
-      integer IPSOLVE, IPADDSTROPTION
-      integer IPADDNUMOPTION, IPADDINTOPTION
+      integer IPSOLVE, IPSETPROBLEMSCALING
+      integer IPADDSTROPTION, IPADDNUMOPTION, IPADDINTOPTION
       integer IPOPENOUTPUTFILE
 C
       double precision F
@@ -90,16 +90,18 @@ CC     iteration.
 CC
       external ITER_CB
 C
-C     Set initial point and bounds:
+C     Set initial point, bounds, and scaling:
 C
-      data X   / 1d0, 5d0, 5d0, 1d0/
+      data X   / 1d0, 5d0, 5d0, 1d0 /
       data X_L / 1d0, 1d0, 1d0, 1d0 /
       data X_U / 5d0, 5d0, 5d0, 5d0 /
+      data X_SCALING / 1d0, 1d0, 1d0, 1d0 /
 C
-C     Set bounds for the constraints
+C     Set bounds and scaling for the constraints
 C
       data G_L / 25d0, 40d0 /
       data G_U / 1d40, 40d0 /
+      data G_SCALING / 1d0, 1d0 /
 C
 C     First create a handle for the Ipopt problem (and read the options
 C     file)
@@ -135,6 +137,12 @@ C
 C     Set a double precision option
 C
       IERR = IPADDNUMOPTION(IPROBLEM, 'tol', 1.d-7)
+      if (IERR.ne.0 ) goto 9990
+
+C
+C     Set scaling
+C
+      IERR = IPSETPROBLEMSCALING(IPROBLEM, 1d0, X_SCALING, G_SCALING)
       if (IERR.ne.0 ) goto 9990
 
 CC
