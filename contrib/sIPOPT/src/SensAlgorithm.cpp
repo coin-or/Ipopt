@@ -207,7 +207,7 @@ SensAlgorithmExitStatus SensAlgorithm::ComputeSensitivityMatrix(void)
    SmartPtr < IteratesVector > trialcopy;
 
    SmartPtr < DenseVectorSpace > delta_u_space;
-   delta_u_space = new DenseVectorSpace(2);
+   delta_u_space = new DenseVectorSpace(np_);
 
    SmartPtr < DenseVector > delta_u = new DenseVector(GetRawPtr(ConstPtr(delta_u_space)));
 
