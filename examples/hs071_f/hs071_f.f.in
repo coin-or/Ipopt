@@ -50,10 +50,19 @@ C     Vector of variables
 C
       double precision X(N)
 C
-C     Vector of lower and upper bounds
+C     Vector of lower and upper bounds, left and right hand sides, and scaling
 C
       double precision X_L(N), X_U(N), X_SCALING(N), Z_L(N), Z_U(N)
       double precision G_L(M), G_U(M), G_SCALING(M)
+
+C     To indicate to IPSETPROBLEMSCALING below that scaling for constraints
+C     should be omitted, a NULL pointer can be passed for G_SCALING. With
+C     Fortran > 77, this is done by removing the declaration of G_SCALING
+C     from the line above and the data G_SCALING line below and enabling
+C     the following line instead:
+C
+C     double precision, allocatable, dimension(:) :: G_SCALING
+C
 C
 C     Private data for evaluation routines
 C     This could be used to pass double precision and integer arrays untouched
