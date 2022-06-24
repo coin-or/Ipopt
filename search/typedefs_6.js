@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['regcategoriesbypriority_7760',['RegCategoriesByPriority',['../classIpopt_1_1RegisteredOptions.html#af0d537262cb2369bcc231d2c30cd4a31',1,'Ipopt::RegisteredOptions']]],
-  ['regcategorieslist_7761',['RegCategoriesList',['../classIpopt_1_1RegisteredOptions.html#a9063fef9e9c49b050e94d131343cbca5',1,'Ipopt::RegisteredOptions']]],
-  ['regoptionslist_7762',['RegOptionsList',['../classIpopt_1_1RegisteredOptions.html#ae13f9ef9aeba8fb5eb4aa4fae754094d',1,'Ipopt::RegisteredOptions']]]
+  ['regcategoriesbypriority_7765',['RegCategoriesByPriority',['../classIpopt_1_1RegisteredOptions.html#af0d537262cb2369bcc231d2c30cd4a31',1,'Ipopt::RegisteredOptions']]],
+  ['regcategorieslist_7766',['RegCategoriesList',['../classIpopt_1_1RegisteredOptions.html#a9063fef9e9c49b050e94d131343cbca5',1,'Ipopt::RegisteredOptions']]],
+  ['regoptionslist_7767',['RegOptionsList',['../classIpopt_1_1RegisteredOptions.html#ae13f9ef9aeba8fb5eb4aa4fae754094d',1,'Ipopt::RegisteredOptions']]]
 ];

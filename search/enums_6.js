@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['hessianapproximationspace_7788',['HessianApproximationSpace',['../namespaceIpopt.html#a09f738bada55618d7839e9609e6c77fe',1,'Ipopt']]],
-  ['hessianapproximationtype_7789',['HessianApproximationType',['../namespaceIpopt.html#a45350a854761d20f431a5cf3a33ebc98',1,'Ipopt']]]
+  ['gradientapproxenum_7793',['GradientApproxEnum',['../classIpopt_1_1TNLPAdapter.html#a0c0497ffe36d77c4b5f7c8d54ebed778',1,'Ipopt::TNLPAdapter']]]
 ];

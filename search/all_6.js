@@ -141,6 +141,8 @@ var searchData=
   ['grad_5fkappa_5ftimes_5fdamping_5fs_5fcache_5f_1147',['grad_kappa_times_damping_s_cache_',['../classIpopt_1_1IpoptCalculatedQuantities.html#ae1559488bb42d152c432d1faecd561cc',1,'Ipopt::IpoptCalculatedQuantities']]],
   ['grad_5fkappa_5ftimes_5fdamping_5fx_1148',['grad_kappa_times_damping_x',['../classIpopt_1_1IpoptCalculatedQuantities.html#a82a18db973e05ca43622fcce864c44c1',1,'Ipopt::IpoptCalculatedQuantities']]],
   ['grad_5fkappa_5ftimes_5fdamping_5fx_5fcache_5f_1149',['grad_kappa_times_damping_x_cache_',['../classIpopt_1_1IpoptCalculatedQuantities.html#acf4817fefab8ee67ae348f6dd414ff80',1,'Ipopt::IpoptCalculatedQuantities']]],
-  ['gradientscaling_1150',['GradientScaling',['../classIpopt_1_1GradientScaling.html',1,'Ipopt::GradientScaling'],['../classIpopt_1_1GradientScaling.html#a4b6a8ebaa2b41b9362c0e05b09a7f6ae',1,'Ipopt::GradientScaling::GradientScaling(const SmartPtr&lt; NLP &gt; &amp;nlp)'],['../classIpopt_1_1GradientScaling.html#a83502514c297ee8a5c988ae47fecfe13',1,'Ipopt::GradientScaling::GradientScaling(const GradientScaling &amp;)']]],
-  ['gutsofconstructor_1151',['gutsOfConstructor',['../classIpopt_1_1AmplTNLP.html#a362e90482ca019dca0f34431cfe18447',1,'Ipopt::AmplTNLP']]]
+  ['gradient_5fapproximation_5f_1150',['gradient_approximation_',['../classIpopt_1_1TNLPAdapter.html#a35c7768ef5b0b2f5b94f3e7a22b63bf7',1,'Ipopt::TNLPAdapter']]],
+  ['gradientapproxenum_1151',['GradientApproxEnum',['../classIpopt_1_1TNLPAdapter.html#a0c0497ffe36d77c4b5f7c8d54ebed778',1,'Ipopt::TNLPAdapter']]],
+  ['gradientscaling_1152',['GradientScaling',['../classIpopt_1_1GradientScaling.html',1,'Ipopt::GradientScaling'],['../classIpopt_1_1GradientScaling.html#a4b6a8ebaa2b41b9362c0e05b09a7f6ae',1,'Ipopt::GradientScaling::GradientScaling(const SmartPtr&lt; NLP &gt; &amp;nlp)'],['../classIpopt_1_1GradientScaling.html#a83502514c297ee8a5c988ae47fecfe13',1,'Ipopt::GradientScaling::GradientScaling(const GradientScaling &amp;)']]],
+  ['gutsofconstructor_1153',['gutsOfConstructor',['../classIpopt_1_1AmplTNLP.html#a362e90482ca019dca0f34431cfe18447',1,'Ipopt::AmplTNLP']]]
 ];

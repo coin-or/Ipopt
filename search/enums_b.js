@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['order_5fopts_7798',['order_opts',['../classIpopt_1_1Ma77SolverInterface.html#a38ff39a84440ce512e6aa9208432db94',1,'Ipopt::Ma77SolverInterface::order_opts()'],['../classIpopt_1_1Ma86SolverInterface.html#ad57d7156e13d31ccbd963b31ec06f176',1,'Ipopt::Ma86SolverInterface::order_opts()'],['../classIpopt_1_1Ma97SolverInterface.html#a5b2c78767aec22fbf8f6c78e59759b87',1,'Ipopt::Ma97SolverInterface::order_opts()']]],
-  ['outputmode_7799',['OutputMode',['../classIpopt_1_1RegisteredOptions.html#a492dff9972c12a43e66368942fd6fd5b',1,'Ipopt::RegisteredOptions']]]
+  ['normenum_7802',['NormEnum',['../classIpopt_1_1QualityFunctionMuOracle.html#ad9578c4ff61b24338cace9f6984c618e',1,'Ipopt::QualityFunctionMuOracle']]],
+  ['notifytype_7803',['NotifyType',['../classIpopt_1_1Observer.html#a828a9e0833e87e84bef75d05bf0a99b8',1,'Ipopt::Observer']]]
 ];

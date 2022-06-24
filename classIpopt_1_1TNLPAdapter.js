@@ -16,6 +16,10 @@ var classIpopt_1_1TNLPAdapter =
       [ "JAC_EXACT", "classIpopt_1_1TNLPAdapter.html#a52c4e476a807a7beadf5180890345785a371b53b90e8793f43cb192ed821fbb96", null ],
       [ "JAC_FINDIFF_VALUES", "classIpopt_1_1TNLPAdapter.html#a52c4e476a807a7beadf5180890345785a462616fd854f81d1bc564abc687f81a6", null ]
     ] ],
+    [ "GradientApproxEnum", "classIpopt_1_1TNLPAdapter.html#a0c0497ffe36d77c4b5f7c8d54ebed778", [
+      [ "OBJGRAD_EXACT", "classIpopt_1_1TNLPAdapter.html#a0c0497ffe36d77c4b5f7c8d54ebed778a7a1842be27b4db6e6547b7388bfda24c", null ],
+      [ "OBJGRAD_FINDIFF_VALUES", "classIpopt_1_1TNLPAdapter.html#a0c0497ffe36d77c4b5f7c8d54ebed778a7f9c9fb9aa132c5087866aee06c0f2c5", null ]
+    ] ],
     [ "TNLPAdapter", "classIpopt_1_1TNLPAdapter.html#a1010390adc57a4abaae35be0eea101cc", null ],
     [ "~TNLPAdapter", "classIpopt_1_1TNLPAdapter.html#a8d508a72b983de4d7f54b42cc436e67d", null ],
     [ "TNLPAdapter", "classIpopt_1_1TNLPAdapter.html#aa160c36cc9adc31525df45c7d33dc135", null ],
@@ -72,6 +76,7 @@ var classIpopt_1_1TNLPAdapter =
     [ "hessian_approximation_", "classIpopt_1_1TNLPAdapter.html#ad1a16aaeab49d5fe2e47722318985223", null ],
     [ "num_linear_variables_", "classIpopt_1_1TNLPAdapter.html#ae56c1e08c018c1276dd3461b420b965b", null ],
     [ "jacobian_approximation_", "classIpopt_1_1TNLPAdapter.html#ac90a8a4dc8a93ace500039c2dea12b7e", null ],
+    [ "gradient_approximation_", "classIpopt_1_1TNLPAdapter.html#a35c7768ef5b0b2f5b94f3e7a22b63bf7", null ],
     [ "findiff_perturbation_", "classIpopt_1_1TNLPAdapter.html#a079cfab19250d3e241d54e893605a24a", null ],
     [ "point_perturbation_radius_", "classIpopt_1_1TNLPAdapter.html#a0093b439306068e7373bd3a9fb46ec5e", null ],
     [ "dependency_detection_with_rhs_", "classIpopt_1_1TNLPAdapter.html#a00c3fc0f69fd1d499c2a3f52910c6ac5", null ],

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['pardisomatchingstrategy_7800',['PardisoMatchingStrategy',['../classIpopt_1_1IterativePardisoSolverInterface.html#a51ed4b3910167788c69e77aeb5044ccc',1,'Ipopt::IterativePardisoSolverInterface::PardisoMatchingStrategy()'],['../classIpopt_1_1PardisoMKLSolverInterface.html#a62f2e50b486dc70ac7277c3389aa7524',1,'Ipopt::PardisoMKLSolverInterface::PardisoMatchingStrategy()'],['../classIpopt_1_1PardisoSolverInterface.html#ac8001cd1faad8199ecfad60c0cd25daa',1,'Ipopt::PardisoSolverInterface::PardisoMatchingStrategy()']]]
+  ['order_5fopts_7804',['order_opts',['../classIpopt_1_1Ma77SolverInterface.html#a38ff39a84440ce512e6aa9208432db94',1,'Ipopt::Ma77SolverInterface::order_opts()'],['../classIpopt_1_1Ma86SolverInterface.html#ad57d7156e13d31ccbd963b31ec06f176',1,'Ipopt::Ma86SolverInterface::order_opts()'],['../classIpopt_1_1Ma97SolverInterface.html#a5b2c78767aec22fbf8f6c78e59759b87',1,'Ipopt::Ma97SolverInterface::order_opts()']]],
+  ['outputmode_7805',['OutputMode',['../classIpopt_1_1RegisteredOptions.html#a492dff9972c12a43e66368942fd6fd5b',1,'Ipopt::RegisteredOptions']]]
 ];

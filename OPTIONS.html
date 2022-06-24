@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.14.6</span-->
+   &#160;<!--span id="projectnumber">3.14.7</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -307,6 +307,23 @@ NLP</h2>
 </blockquote>
 <p><a class="anchor" id="OPT_num_linear_variables"></a><a href="#OPT_num_linear_variables">&#x25B8;&nbsp;</a><b>num_linear_variables</b> (<em>advanced</em>): Number of linear variables </p><blockquote class="doxtable">
 <p>When the Hessian is approximated, it is assumed that the first num_linear_variables variables are linear. The Hessian is then not approximated in this space. If the get_number_of_nonlinear_variables method in the TNLP is implemented, this option is ignored. The valid range for this integer option is 0 &le; num_linear_variables and its default value is 0. </p>
+</blockquote>
+<p><a class="anchor" id="OPT_jacobian_approximation"></a><a href="#OPT_jacobian_approximation">&#x25B8;&nbsp;</a><b>jacobian_approximation</b> (<em>advanced</em>): Specifies technique to compute constraint Jacobian </p><blockquote class="doxtable">
+<p>The default value for this string option is "exact".</p>
+<p>Possible values:</p><ul>
+<li>exact: user-provided derivatives</li>
+<li>finite-difference-values: user-provided structure, values by finite differences </li>
+</ul>
+</blockquote>
+<p><a class="anchor" id="OPT_gradient_approximation"></a><a href="#OPT_gradient_approximation">&#x25B8;&nbsp;</a><b>gradient_approximation</b> (<em>advanced</em>): Specifies technique to compute objective Gradient </p><blockquote class="doxtable">
+<p>The default value for this string option is "exact".</p>
+<p>Possible values:</p><ul>
+<li>exact: user-provided gradient</li>
+<li>finite-difference-values: values by finite differences </li>
+</ul>
+</blockquote>
+<p><a class="anchor" id="OPT_findiff_perturbation"></a><a href="#OPT_findiff_perturbation">&#x25B8;&nbsp;</a><b>findiff_perturbation</b> (<em>advanced</em>): Size of the finite difference perturbation for derivative approximation. </p><blockquote class="doxtable">
+<p>This determines the relative perturbation of the variable entries. The valid range for this real option is 0 &lt; findiff_perturbation and its default value is 10<sup>-07</sup>. </p>
 </blockquote>
 <p><a class="anchor" id="OPT_kappa_d"></a><a href="#OPT_kappa_d">&#x25B8;&nbsp;</a><b>kappa_d</b> (<em>advanced</em>): Weight for linear damping term (to handle one-sided bounds). </p><blockquote class="doxtable">
 <p>See Section 3.7 in implementation paper. The valid range for this real option is 0 &le; kappa_d and its default value is 10<sup>-05</sup>. </p>
@@ -977,35 +994,25 @@ Derivative Checker</h2>
 <p>Determines verbosity of derivative checker. The default value for this string option is "no".</p>
 <p>Possible values: yes, no </p>
 </blockquote>
-<p><a class="anchor" id="OPT_jacobian_approximation"></a><a href="#OPT_jacobian_approximation">&#x25B8;&nbsp;</a><b>jacobian_approximation</b> (<em>advanced</em>): Specifies technique to compute constraint Jacobian </p><blockquote class="doxtable">
-<p>The default value for this string option is "exact".</p>
-<p>Possible values:</p><ul>
-<li>exact: user-provided derivatives</li>
-<li>finite-difference-values: user-provided structure, values by finite differences </li>
-</ul>
-</blockquote>
-<p><a class="anchor" id="OPT_findiff_perturbation"></a><a href="#OPT_findiff_perturbation">&#x25B8;&nbsp;</a><b>findiff_perturbation</b> (<em>advanced</em>): Size of the finite difference perturbation for derivative approximation. </p><blockquote class="doxtable">
-<p>This determines the relative perturbation of the variable entries. The valid range for this real option is 0 &lt; findiff_perturbation and its default value is 10<sup>-07</sup>. </p>
-</blockquote>
 <p><a class="anchor" id="OPT_point_perturbation_radius"></a><a href="#OPT_point_perturbation_radius">&#x25B8;&nbsp;</a><b>point_perturbation_radius</b>: Maximal perturbation of an evaluation point. </p><blockquote class="doxtable">
 <p>If a random perturbation of a points is required, this number indicates the maximal perturbation. This is for example used when determining the center point at which the finite difference derivative test is executed. The valid range for this real option is 0 &le; point_perturbation_radius and its default value is 10. </p>
 </blockquote>
 <h2><a class="anchor" id="OPT_MA27_Linear_Solver"></a>
 MA27 Linear Solver</h2>
 <p><a class="anchor" id="OPT_ma27_pivtol"></a><a href="#OPT_ma27_pivtol">&#x25B8;&nbsp;</a><b>ma27_pivtol</b>: Pivot tolerance for the linear solver MA27. </p><blockquote class="doxtable">
-<p>A smaller number pivots for sparsity, a larger number pivots for stability. This option is only available if <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> has been compiled with MA27. The valid range for this real option is 0 &lt; ma27_pivtol &lt; 1 and its default value is 10<sup>-08</sup>. </p>
+<p>A smaller number pivots for sparsity, a larger number pivots for stability. The valid range for this real option is 0 &lt; ma27_pivtol &lt; 1 and its default value is 10<sup>-08</sup>. </p>
 </blockquote>
 <p><a class="anchor" id="OPT_ma27_pivtolmax"></a><a href="#OPT_ma27_pivtolmax">&#x25B8;&nbsp;</a><b>ma27_pivtolmax</b>: Maximum pivot tolerance for the linear solver MA27. </p><blockquote class="doxtable">
-<p><a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> may increase pivtol as high as pivtolmax to get a more accurate solution to the linear system. This option is only available if <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> has been compiled with MA27. The valid range for this real option is 0 &lt; ma27_pivtolmax &lt; 1 and its default value is 0.0001. </p>
+<p><a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> may increase pivtol as high as ma27_pivtolmax to get a more accurate solution to the linear system. The valid range for this real option is 0 &lt; ma27_pivtolmax &lt; 1 and its default value is 0.0001. </p>
 </blockquote>
 <p><a class="anchor" id="OPT_ma27_liw_init_factor"></a><a href="#OPT_ma27_liw_init_factor">&#x25B8;&nbsp;</a><b>ma27_liw_init_factor</b>: Integer workspace memory for MA27. </p><blockquote class="doxtable">
-<p>The initial integer workspace memory = liw_init_factor * memory required by unfactored system. <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> will increase the workspace size by meminc_factor if required. This option is only available if <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> has been compiled with MA27. The valid range for this real option is 1 &le; ma27_liw_init_factor and its default value is 5. </p>
+<p>The initial integer workspace memory = liw_init_factor * memory required by unfactored system. <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> will increase the workspace size by ma27_meminc_factor if required. The valid range for this real option is 1 &le; ma27_liw_init_factor and its default value is 5. </p>
 </blockquote>
 <p><a class="anchor" id="OPT_ma27_la_init_factor"></a><a href="#OPT_ma27_la_init_factor">&#x25B8;&nbsp;</a><b>ma27_la_init_factor</b>: Real workspace memory for MA27. </p><blockquote class="doxtable">
-<p>The initial real workspace memory = la_init_factor * memory required by unfactored system. <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> will increase the workspace size by meminc_factor if required. This option is only available if <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> has been compiled with MA27. The valid range for this real option is 1 &le; ma27_la_init_factor and its default value is 5. </p>
+<p>The initial real workspace memory = la_init_factor * memory required by unfactored system. <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> will increase the workspace size by ma27_meminc_factor if required. The valid range for this real option is 1 &le; ma27_la_init_factor and its default value is 5. </p>
 </blockquote>
 <p><a class="anchor" id="OPT_ma27_meminc_factor"></a><a href="#OPT_ma27_meminc_factor">&#x25B8;&nbsp;</a><b>ma27_meminc_factor</b>: Increment factor for workspace size for MA27. </p><blockquote class="doxtable">
-<p>If the integer or real workspace is not large enough, <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> will increase its size by this factor. This option is only available if <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> has been compiled with MA27. The valid range for this real option is 1 &le; ma27_meminc_factor and its default value is 2. </p>
+<p>If the integer or real workspace is not large enough, <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> will increase its size by this factor. The valid range for this real option is 1 &le; ma27_meminc_factor and its default value is 2. </p>
 </blockquote>
 <p><a class="anchor" id="OPT_ma27_skip_inertia_check"></a><a href="#OPT_ma27_skip_inertia_check">&#x25B8;&nbsp;</a><b>ma27_skip_inertia_check</b> (<em>advanced</em>): Whether to always pretend that inertia is correct. </p><blockquote class="doxtable">
 <p>Setting this option to "yes" essentially disables inertia check. This option makes the algorithm non-robust and easily fail, but it might give some insight into the necessity of inertia control. The default value for this string option is "no".</p>
@@ -1018,13 +1025,13 @@ MA27 Linear Solver</h2>
 <h2><a class="anchor" id="OPT_MA57_Linear_Solver"></a>
 MA57 Linear Solver</h2>
 <p><a class="anchor" id="OPT_ma57_pivtol"></a><a href="#OPT_ma57_pivtol">&#x25B8;&nbsp;</a><b>ma57_pivtol</b>: Pivot tolerance for the linear solver MA57. </p><blockquote class="doxtable">
-<p>A smaller number pivots for sparsity, a larger number pivots for stability. This option is only available if <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> has been compiled with MA57. The valid range for this real option is 0 &lt; ma57_pivtol &lt; 1 and its default value is 10<sup>-08</sup>. </p>
+<p>A smaller number pivots for sparsity, a larger number pivots for stability. The valid range for this real option is 0 &lt; ma57_pivtol &lt; 1 and its default value is 10<sup>-08</sup>. </p>
 </blockquote>
 <p><a class="anchor" id="OPT_ma57_pivtolmax"></a><a href="#OPT_ma57_pivtolmax">&#x25B8;&nbsp;</a><b>ma57_pivtolmax</b>: Maximum pivot tolerance for the linear solver MA57. </p><blockquote class="doxtable">
-<p><a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> may increase pivtol as high as ma57_pivtolmax to get a more accurate solution to the linear system. This option is only available if <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> has been compiled with MA57. The valid range for this real option is 0 &lt; ma57_pivtolmax &lt; 1 and its default value is 0.0001. </p>
+<p><a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> may increase pivtol as high as ma57_pivtolmax to get a more accurate solution to the linear system. The valid range for this real option is 0 &lt; ma57_pivtolmax &lt; 1 and its default value is 0.0001. </p>
 </blockquote>
 <p><a class="anchor" id="OPT_ma57_pre_alloc"></a><a href="#OPT_ma57_pre_alloc">&#x25B8;&nbsp;</a><b>ma57_pre_alloc</b>: Safety factor for work space memory allocation for the linear solver MA57. </p><blockquote class="doxtable">
-<p>If 1 is chosen, the suggested amount of work space is used. However, choosing a larger number might avoid reallocation if the suggest values do not suffice. This option is only available if <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> has been compiled with MA57. The valid range for this real option is 1 &le; ma57_pre_alloc and its default value is 1.05. </p>
+<p>If 1 is chosen, the suggested amount of work space is used. However, choosing a larger number might avoid reallocation if the suggest values do not suffice. The valid range for this real option is 1 &le; ma57_pre_alloc and its default value is 1.05. </p>
 </blockquote>
 <p><a class="anchor" id="OPT_ma57_pivot_order"></a><a href="#OPT_ma57_pivot_order">&#x25B8;&nbsp;</a><b>ma57_pivot_order</b>: Controls pivot order in MA57 </p><blockquote class="doxtable">
 <p>This is ICNTL(6) in MA57. The valid range for this integer option is 0 &le; ma57_pivot_order &le; 5 and its default value is 5. </p>

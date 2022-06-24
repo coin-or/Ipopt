@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['indexstyleenum_7790',['IndexStyleEnum',['../classIpopt_1_1TNLP.html#af81cb3ab5772b440360cfcb48b620514',1,'Ipopt::TNLP']]],
-  ['infproutput_7791',['InfPrOutput',['../classIpopt_1_1IterationOutput.html#aadaec4d7ec1d3a12338b05939907a19f',1,'Ipopt::IterationOutput']]]
+  ['hessianapproximationspace_7794',['HessianApproximationSpace',['../namespaceIpopt.html#a09f738bada55618d7839e9609e6c77fe',1,'Ipopt']]],
+  ['hessianapproximationtype_7795',['HessianApproximationType',['../namespaceIpopt.html#a45350a854761d20f431a5cf3a33ebc98',1,'Ipopt']]]
 ];

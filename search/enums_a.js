@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['normenum_7796',['NormEnum',['../classIpopt_1_1QualityFunctionMuOracle.html#ad9578c4ff61b24338cace9f6984c618e',1,'Ipopt::QualityFunctionMuOracle']]],
-  ['notifytype_7797',['NotifyType',['../classIpopt_1_1Observer.html#a828a9e0833e87e84bef75d05bf0a99b8',1,'Ipopt::Observer']]]
+  ['linearitytype_7799',['LinearityType',['../classIpopt_1_1TNLP.html#ab443d2d4fbc045d7c542d32258aee507',1,'Ipopt::TNLP']]],
+  ['lminitialization_7800',['LMInitialization',['../classIpopt_1_1LimMemQuasiNewtonUpdater.html#a84c23742ee6b01b50a0b1f82a5562dcc',1,'Ipopt::LimMemQuasiNewtonUpdater']]],
+  ['lmupdatetype_7801',['LMUpdateType',['../classIpopt_1_1LimMemQuasiNewtonUpdater.html#acf19d439cad539ceeb80509f92873ad4',1,'Ipopt::LimMemQuasiNewtonUpdater']]]
 ];
