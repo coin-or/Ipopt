@@ -7,7 +7,7 @@ More detailed information about incremental changes can be found in the
 
 ## 3.14
 
-### 3.14.7 (2022-xx-yy)
+### 3.14.7 (2022-06-24)
 
 - Fixed that ComputeSensitivityMatrix() of sIpopt assumed that there are
   no more than two parameters [#578, by Andrea Vescovini].
