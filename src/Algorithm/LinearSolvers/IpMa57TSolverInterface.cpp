@@ -192,6 +192,11 @@ void Ma57TSolverInterface::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )
 {
+   roptions->AddLowerBoundedIntegerOption(
+      "ma57_print_level",
+      "Debug printing level for the linear solver MA57",
+      0, 0,
+      "0: no printing; 1: Error messages only; 2: Error and warning messages; 3: Error and warning messages and terse monitoring; >=4: All information.");
    roptions->AddBoundedNumberOption(
       "ma57_pivtol",
       "Pivot tolerance for the linear solver MA57.",
@@ -321,6 +326,9 @@ bool Ma57TSolverInterface::InitializeImpl(
    DBG_ASSERT(ma57i != NULL);
 
    // Obtain the options settings
+   Index print_level;
+   options.GetIntegerValue("ma57_print_level", print_level, prefix);
+
    options.GetNumericValue("ma57_pivtol", pivtol_, prefix);
    if( options.GetNumericValue("ma57_pivtolmax", pivtolmax_, prefix) )
    {
@@ -361,7 +369,7 @@ bool Ma57TSolverInterface::InitializeImpl(
    wd_icntl_[1] = 0; /* Warning stream. */
 
    wd_icntl_[3] = 1; /* Print statistics.  NOT Used. */
-   wd_icntl_[4] = 0; /* Print error. */
+   wd_icntl_[4] = print_level; /* Print level. */
 
    wd_icntl_[5] = ma57_pivot_order; /* Pivoting order. */
 

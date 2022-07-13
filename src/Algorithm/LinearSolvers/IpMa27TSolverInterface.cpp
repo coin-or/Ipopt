@@ -84,6 +84,11 @@ void Ma27TSolverInterface::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )
 {
+   roptions->AddBoundedIntegerOption(
+      "ma27_print_level",
+      "Debug printing level for the linear solver MA27",
+      0, 4, 0,
+      "0: no printing; 1: Error messages only; 2: Error and warning messages; 3: Error and warning messages and terse monitoring; 4: All information.");
    roptions->AddBoundedNumberOption(
       "ma27_pivtol",
       "Pivot tolerance for the linear solver MA27.",
@@ -200,6 +205,8 @@ bool Ma27TSolverInterface::InitializeImpl(
       pivtolmax_ = Max(pivtolmax_, pivtol_);
    }
 
+   Index print_level;
+   options.GetIntegerValue("ma27_print_level", print_level, prefix);
    options.GetNumericValue("ma27_liw_init_factor", liw_init_factor_, prefix);
    options.GetNumericValue("ma27_la_init_factor", la_init_factor_, prefix);
    options.GetNumericValue("ma27_meminc_factor", meminc_factor_, prefix);
@@ -210,11 +217,13 @@ bool Ma27TSolverInterface::InitializeImpl(
 
    /* Set the default options for MA27 */
    ma27i(icntl_, cntl_);
-#if IPOPT_VERBOSITY == 0
 
-   icntl_[0] = 0;       // Suppress error messages
-   icntl_[1] = 0;       // Suppress diagnostic messages
-#endif
+   if( print_level == 0 )
+      icntl_[0] = 0;       // Suppress error messages
+   if( print_level <= 1 )
+      icntl_[1] = 0;       // Suppress warning messages
+   if( print_level >= 2 )
+      icntl_[2] = print_level - 2; // diagnostic messages level
 
    // Reset all private data
    initialized_ = false;

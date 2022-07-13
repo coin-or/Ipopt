@@ -105,9 +105,8 @@ MumpsSolverInterface::MumpsSolverInterface()
 #endif
 
    mumps_c(mumps_);
-   mumps_->icntl[1] = 0;
-   mumps_->icntl[2] = 0; //QUIETLY!
-   mumps_->icntl[3] = 0;
+   mumps_->icntl[2] = 0;  // global info stream
+   mumps_->icntl[3] = 0;  // print level
    mumps_ptr_ = (void*) mumps_;
 }
 
@@ -131,6 +130,11 @@ void MumpsSolverInterface::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )
 {
+   roptions->AddLowerBoundedIntegerOption(
+      "mumps_print_level",
+      "Debug printing level for the linear solver MUMPS",
+      0, 0,
+      "0: no printing; 1: Error messages only; 2: Error, warning, and main statistic messages; 3: Error and warning messages and terse diagnostics; >=4: All information.");
    roptions->AddBoundedNumberOption(
       "mumps_pivtol",
       "Pivot tolerance for the linear solver MUMPS.",
@@ -190,6 +194,9 @@ bool MumpsSolverInterface::InitializeImpl(
    const std::string& prefix
 )
 {
+   Index print_level;
+   options.GetIntegerValue("mumps_print_level", print_level, prefix);
+
    options.GetNumericValue("mumps_pivtol", pivtol_, prefix);
    if( options.GetNumericValue("mumps_pivtolmax", pivtolmax_, prefix) )
    {
@@ -227,6 +234,12 @@ bool MumpsSolverInterface::InitializeImpl(
    {
       ASSERT_EXCEPTION(mumps_->n > 0 && mumps_->nz > 0, INVALID_WARMSTART,
                        "MumpsSolverInterface called with warm_start_same_structure, but the problem is solved for the first time.");
+   }
+
+   if( print_level > 0 )
+   {
+      mumps_->icntl[2] = 6;  // global info stream
+      mumps_->icntl[3] = print_level;  // print level
    }
 
    return true;
@@ -386,10 +399,6 @@ ESymSolverStatus MumpsSolverInterface::SymbolicFactorization()
    }
 
    mumps_data->job = 1;      //symbolic ordering pass
-
-   //mumps_data->icntl[1] = 6;
-   //mumps_data->icntl[2] = 6;//QUIETLY!
-   //mumps_data->icntl[3] = 4;
 
    mumps_data->icntl[5] = mumps_permuting_scaling_;
    mumps_data->icntl[6] = mumps_pivot_order_;

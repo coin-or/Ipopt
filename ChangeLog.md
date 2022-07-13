@@ -7,6 +7,11 @@ More detailed information about incremental changes can be found in the
 
 ## 3.14
 
+### 3.14.8 (2022-07-13)
+
+- Added options ma27_print_level, ma57_print_level, and mumps_print_level
+  to enable output from these linear solvers.
+
 ### 3.14.7 (2022-06-24)
 
 - Fixed that ComputeSensitivityMatrix() of sIpopt assumed that there are
