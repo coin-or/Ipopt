@@ -1518,6 +1518,12 @@ Possible values: yes, no
 
 \subsection OPT_MA27_Linear_Solver MA27 Linear Solver
 
+\anchor OPT_ma27_print_level
+<strong>ma27_print_level</strong>: Debug printing level for the linear solver MA27
+<blockquote>
+ 0: no printing; 1: Error messages only; 2: Error and warning messages; 3: Error and warning messages and terse monitoring; 4: All information. The valid range for this integer option is 0 &le; ma27_print_level &le; 4 and its default value is 0.
+</blockquote>
+
 \anchor OPT_ma27_pivtol
 <strong>ma27_pivtol</strong>: Pivot tolerance for the linear solver MA27.
 <blockquote>
@@ -1566,6 +1572,12 @@ Possible values: yes, no
 
 
 \subsection OPT_MA57_Linear_Solver MA57 Linear Solver
+
+\anchor OPT_ma57_print_level
+<strong>ma57_print_level</strong>: Debug printing level for the linear solver MA57
+<blockquote>
+ 0: no printing; 1: Error messages only; 2: Error and warning messages; 3: Error and warning messages and terse monitoring; >=4: All information. The valid range for this integer option is 0 &le; ma57_print_level and its default value is 0.
+</blockquote>
 
 \anchor OPT_ma57_pivtol
 <strong>ma57_pivtol</strong>: Pivot tolerance for the linear solver MA57.
@@ -2396,6 +2408,12 @@ Possible values:
 
 
 \subsection OPT_Mumps_Linear_Solver Mumps Linear Solver
+
+\anchor OPT_mumps_print_level
+<strong>mumps_print_level</strong>: Debug printing level for the linear solver MUMPS
+<blockquote>
+ 0: no printing; 1: Error messages only; 2: Error, warning, and main statistic messages; 3: Error and warning messages and terse diagnostics; >=4: All information. The valid range for this integer option is 0 &le; mumps_print_level and its default value is 0.
+</blockquote>
 
 \anchor OPT_mumps_pivtol
 <strong>mumps_pivtol</strong>: Pivot tolerance for the linear solver MUMPS.
