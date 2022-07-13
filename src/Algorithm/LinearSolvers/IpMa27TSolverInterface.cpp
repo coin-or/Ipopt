@@ -219,11 +219,17 @@ bool Ma27TSolverInterface::InitializeImpl(
    ma27i(icntl_, cntl_);
 
    if( print_level == 0 )
-      icntl_[0] = 0;       // Suppress error messages
+   {
+      icntl_[0] = 0;   // Suppress error messages
+   }
    if( print_level <= 1 )
-      icntl_[1] = 0;       // Suppress warning messages
+   {
+      icntl_[1] = 0;   // Suppress warning messages
+   }
    if( print_level >= 2 )
-      icntl_[2] = print_level - 2; // diagnostic messages level
+   {
+      icntl_[2] = print_level - 2;   // diagnostic messages level
+   }
 
    // Reset all private data
    initialized_ = false;
