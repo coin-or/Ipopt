@@ -7,6 +7,11 @@ More detailed information about incremental changes can be found in the
 
 ## 3.14
 
+### 3.14.9 (2022-07-21)
+
+- Fixed mapping of meta data for variable bounds, e.g., variable names,
+  from TNLP to Ipopts internal NLP [#590].
+
 ### 3.14.8 (2022-07-13)
 
 - Added options ma27_print_level, ma57_print_level, and mumps_print_level

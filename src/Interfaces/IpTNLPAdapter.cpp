@@ -751,19 +751,33 @@ bool TNLPAdapter::GetSpaces(
 
             string_md.clear();
             string_md.resize(n_x_l);
-            pos_idx = P_x_x_L_space_->ExpandedPosIndices();
+            const Index* pos_idxL = P_x_x_L_space_->ExpandedPosIndices();
             for( Index i = 0; i < n_x_l; i++ )
             {
-               string_md[i] = iter->second[pos_idx[i]];
+               if( pos_idx != NULL )
+               {
+                  string_md[i] = iter->second[pos_idx[pos_idxL[i]]];
+               }
+               else
+               {
+                  string_md[i] = iter->second[pos_idxL[i]];
+               }
             }
             dv_x_l_space->SetStringMetaData(iter->first, string_md);
 
             string_md.clear();
             string_md.resize(n_x_u);
-            pos_idx = P_x_x_U_space_->ExpandedPosIndices();
+            const Index* pos_idxU = P_x_x_U_space_->ExpandedPosIndices();
             for( Index i = 0; i < n_x_u; i++ )
             {
-               string_md[i] = iter->second[pos_idx[i]];
+               if( pos_idx != NULL )
+               {
+                  string_md[i] = iter->second[pos_idx[pos_idxU[i]]];
+               }
+               else
+               {
+                  string_md[i] = iter->second[pos_idxU[i]];
+               }
             }
             dv_x_u_space->SetStringMetaData(iter->first, string_md);
          }
@@ -794,19 +808,33 @@ bool TNLPAdapter::GetSpaces(
 
             integer_md.clear();
             integer_md.resize(n_x_l);
-            pos_idx = P_x_x_L_space_->ExpandedPosIndices();
+            const Index* pos_idxL = P_x_x_L_space_->ExpandedPosIndices();
             for( Index i = 0; i < n_x_l; i++ )
             {
-               integer_md[i] = iter->second[pos_idx[i]];
+               if( pos_idx != NULL )
+               {
+                  integer_md[i] = iter->second[pos_idx[pos_idxL[i]]];
+               }
+               else
+               {
+                  integer_md[i] = iter->second[pos_idxL[i]];
+               }
             }
             dv_x_l_space->SetIntegerMetaData(iter->first, integer_md);
 
             integer_md.clear();
             integer_md.resize(n_x_u);
-            pos_idx = P_x_x_U_space_->ExpandedPosIndices();
+            const Index* pos_idxU = P_x_x_U_space_->ExpandedPosIndices();
             for( Index i = 0; i < n_x_u; i++ )
             {
-               integer_md[i] = iter->second[pos_idx[i]];
+               if( pos_idx != NULL )
+               {
+                  integer_md[i] = iter->second[pos_idx[pos_idxU[i]]];
+               }
+               else
+               {
+                  integer_md[i] = iter->second[pos_idxU[i]];
+               }
             }
             dv_x_u_space->SetIntegerMetaData(iter->first, integer_md);
          }
@@ -837,19 +865,33 @@ bool TNLPAdapter::GetSpaces(
 
             numeric_md.clear();
             numeric_md.resize(n_x_l);
-            pos_idx = P_x_x_L_space_->ExpandedPosIndices();
+            const Index* pos_idxL = P_x_x_L_space_->ExpandedPosIndices();
             for( Index i = 0; i < n_x_l; i++ )
             {
-               numeric_md[i] = iter->second[pos_idx[i]];
+               if( pos_idx != NULL )
+               {
+                  numeric_md[i] = iter->second[pos_idx[pos_idxL[i]]];
+               }
+               else
+               {
+                  numeric_md[i] = iter->second[pos_idxL[i]];
+               }
             }
             dv_x_l_space->SetNumericMetaData(iter->first, numeric_md);
 
             numeric_md.clear();
             numeric_md.resize(n_x_u);
-            pos_idx = P_x_x_U_space_->ExpandedPosIndices();
+            const Index* pos_idxU = P_x_x_U_space_->ExpandedPosIndices();
             for( Index i = 0; i < n_x_u; i++ )
             {
-               numeric_md[i] = iter->second[pos_idx[i]];
+               if( pos_idx != NULL )
+               {
+                  numeric_md[i] = iter->second[pos_idx[pos_idxU[i]]];
+               }
+               else
+               {
+                  numeric_md[i] = iter->second[pos_idxU[i]];
+               }
             }
             dv_x_u_space->SetNumericMetaData(iter->first, numeric_md);
          }
