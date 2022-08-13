@@ -110,7 +110,7 @@ More details on using coinbrew can be found at the instructions on
 
 Some precompiled binaries of Ipopt are also available:
 
-- **[Ipopt releases page](https://github.com/coin-or/Ipopt/releases)** provides libraries and executables
+- **[Ipopt releases page](https://github.com/coin-or/Ipopt/releases)** provides libraries and executables for Windows
 - **[JuliaBinaryWrappers](https://github.com/JuliaBinaryWrappers/Ipopt_jll.jl/releases)** provides libraries and executables
 - **[IDEAS](https://github.com/IDAES/idaes-ext/releases)** provides executables; these executables include HSL solvers
 - **[AMPL](http://ampl.com/products/solvers/open-source/#ipopt)** provides executables
