@@ -533,6 +533,11 @@ private:
     */
    bool check_derivatives_for_naninf_;
 
+   /** Flag indicating if we need to ask for objective
+    *  Gradient only once
+    */
+   bool grad_f_constant_;
+
    /** Flag indicating if we need to ask for equality constraint
     *  Jacobians only once
     */

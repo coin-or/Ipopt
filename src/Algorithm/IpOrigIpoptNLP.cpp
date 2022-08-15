@@ -90,6 +90,12 @@ void OrigIpoptNLP::RegisterOptions(
       "the matrix is written to output with print_level corresponding to J_MORE_DETAILED; "
       "so beware of large output!");
    roptions->AddBoolOption(
+      "grad_f_constant",
+      "Indicates whether to assume that the objective function is linear",
+      false,
+      "Activating this option will cause Ipopt to ask for the Gradient of the objective function "
+      "only once from the NLP and reuse this information later.");
+   roptions->AddBoolOption(
       "jac_c_constant",
       "Indicates whether to assume that all equality constraints are linear",
       false,
@@ -142,6 +148,7 @@ bool OrigIpoptNLP::Initialize(
    options.GetEnumValue("hessian_approximation_space", enum_int, prefix);
    hessian_approximation_space_ = HessianApproximationSpace(enum_int);
 
+   options.GetBoolValue("grad_f_constant", grad_f_constant_, prefix);
    options.GetBoolValue("jac_c_constant", jac_c_constant_, prefix);
    options.GetBoolValue("jac_d_constant", jac_d_constant_, prefix);
    options.GetBoolValue("hessian_constant", hessian_constant_, prefix);
@@ -507,7 +514,12 @@ SmartPtr<const Vector> OrigIpoptNLP::grad_f(
 {
    SmartPtr<Vector> unscaled_grad_f;
    SmartPtr<const Vector> retValue;
-   if( !grad_f_cache_.GetCachedResult1Dep(retValue, &x) )
+   const Vector* dep = NULL;
+   if( !grad_f_constant_ )
+   {
+      dep = &x;
+   }
+   if( !grad_f_cache_.GetCachedResult1Dep(retValue, dep) )
    {
       grad_f_evals_++;
       unscaled_grad_f = x_space_->MakeNew();
@@ -519,7 +531,7 @@ SmartPtr<const Vector> OrigIpoptNLP::grad_f(
       ASSERT_EXCEPTION(success && IsFiniteNumber(unscaled_grad_f->Nrm2()), Eval_Error,
                        "Error evaluating the gradient of the objective function");
       retValue = NLP_scaling()->apply_grad_obj_scaling(ConstPtr(unscaled_grad_f));
-      grad_f_cache_.AddCachedResult1Dep(retValue, &x);
+      grad_f_cache_.AddCachedResult1Dep(retValue, dep);
    }
 
    return retValue;

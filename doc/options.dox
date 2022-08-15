@@ -373,6 +373,14 @@ Possible values: yes, no
 Possible values: yes, no
 </blockquote>
 
+\anchor OPT_grad_f_constant
+<strong>grad_f_constant</strong>: Indicates whether to assume that the objective function is linear
+<blockquote>
+ Activating this option will cause Ipopt to ask for the Gradient of the objective function only once from the NLP and reuse this information later. The default value for this string option is "no".
+
+Possible values: yes, no
+</blockquote>
+
 \anchor OPT_jac_c_constant
 <strong>jac_c_constant</strong>: Indicates whether to assume that all equality constraints are linear
 <blockquote>

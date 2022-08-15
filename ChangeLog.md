@@ -7,6 +7,11 @@ More detailed information about incremental changes can be found in the
 
 ## 3.14
 
+### 3.14.10 (2022-xx-yy)
+
+- Added option grad_f_constant to specify that objective function is linear.
+  If set, the gradient of the objective will be requested by NLP only once. [#597]
+
 ### 3.14.9 (2022-07-21)
 
 - Fixed mapping of meta data for variable bounds, e.g., variable names,
