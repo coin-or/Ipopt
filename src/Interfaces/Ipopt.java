@@ -777,7 +777,9 @@ public abstract class Ipopt
     * %Ipopt solves the problem, and also to request a premature termination.
     *
     * The information provided by the entities in the argument list correspond
-    * to what %Ipopt prints in the iteration summary (see also \ref OUTPUT).
+    * to what %Ipopt prints in the iteration summary (see also \ref OUTPUT),
+    * except for inf_pr, which by default corresponds to the original problem
+    * in the log but to the scaled internal problem in this callback.
     * The value of algorithmmode is either REGULARMODE or RESTORATIONPHASEMODE.
     *
     * The current iterate and violations of feasibility and optimality can be
