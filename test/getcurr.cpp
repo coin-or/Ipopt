@@ -25,6 +25,7 @@ using namespace Ipopt;
 #define ASSERTEQ(val1, val2) \
    do if( std::abs((val1)-(val2)) > TESTTOL*std::max(1.0,std::max((double)std::abs(val1),(double)std::abs(val2))) ) \
    { \
+      fflush(stdout); \
       fprintf(stderr, "Line %d: Wrong %s = %.12g, expected %s = %.12g\n", __LINE__, #val1, val1, #val2, val2); \
       abort(); \
    } while (false)
@@ -579,6 +580,9 @@ bool run(
    bool maximize
 )
 {
+   printf("\nRun with fixedvar_makeconstr = %d, start_resto = %d, scale = %d, maximize = %d\n",
+      fixedvar_makeconstr, start_resto, scale, maximize);
+
    // Create an instance of your nlp...
    SmartPtr<TNLP> nlp = new TestNLP(fixedvar_makeconstr, scale, maximize);
 
