@@ -185,7 +185,7 @@ public:
     */
    virtual SmartPtr<const SymMatrix> uninitialized_h();
 
-   /** Lower bounds on x */
+   /** Scaled lower bounds on x */
    virtual SmartPtr<const Vector> x_L() const
    {
       return x_L_;
@@ -197,7 +197,7 @@ public:
       return Px_L_;
    }
 
-   /** Original lower bounds on x
+   /** Original unscaled lower bounds on x
     *
     * Returns NULL if bounds are not relaxed.
     * @since 3.14.0
@@ -207,7 +207,7 @@ public:
       return orig_x_L_;
    }
 
-   /** Upper bounds on x */
+   /** Scaled upper bounds on x */
    virtual SmartPtr<const Vector> x_U() const
    {
       return x_U_;
@@ -219,7 +219,7 @@ public:
       return Px_U_;
    }
 
-   /** Original upper bounds on x
+   /** Original unscaled upper bounds on x
     *
     * Returns NULL if bounds are not relaxed.
     * @since 3.14.0
@@ -229,7 +229,7 @@ public:
       return orig_x_U_;
    }
 
-   /** Lower bounds on d */
+   /** Scaled lower bounds on d */
    virtual SmartPtr<const Vector> d_L() const
    {
       return d_L_;
@@ -241,7 +241,7 @@ public:
       return Pd_L_;
    }
 
-   /** Original lower bounds on d
+   /** Original unscaled lower bounds on d
     *
     * Returns NULL if bounds are not relaxed.
     * @since 3.14.10
@@ -251,7 +251,7 @@ public:
       return orig_d_L_;
    }
 
-   /** Upper bounds on d */
+   /** Scaled upper bounds on d */
    virtual SmartPtr<const Vector> d_U() const
    {
       return d_U_;
@@ -263,7 +263,7 @@ public:
       return Pd_U_;
    }
 
-   /** Original upper bounds on d
+   /** Original unscaled upper bounds on d
     *
     * Returns NULL if bounds are not relaxed.
     * @since 3.14.10
