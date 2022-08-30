@@ -238,7 +238,6 @@ public:
    /** Hessian or Hessian approximation (do not hold on to it, it might be changed) */
    SmartPtr<const SymMatrix> W()
    {
-      DBG_ASSERT(IsValid(W_));
       return W_;
    }
 
