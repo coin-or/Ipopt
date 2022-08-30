@@ -347,6 +347,10 @@ bool OrigIpoptNLP::InitializeStructures(
       orig_x_L_ = ConstPtr(tmp);
       tmp = x_U->MakeNewCopy();
       orig_x_U_ = ConstPtr(tmp);
+      tmp = d_L->MakeNewCopy();
+      orig_d_L_ = ConstPtr(tmp);
+      tmp = d_U->MakeNewCopy();
+      orig_d_U_ = ConstPtr(tmp);
 
       relax_bounds(-bound_relax_factor_, *x_L);
       relax_bounds(bound_relax_factor_, *x_U);

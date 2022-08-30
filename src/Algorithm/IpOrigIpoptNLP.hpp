@@ -241,6 +241,16 @@ public:
       return Pd_L_;
    }
 
+   /** Original lower bounds on d
+    *
+    * Returns NULL if bounds are not relaxed.
+    * @since 3.14.10
+    */
+   virtual SmartPtr<const Vector> orig_d_L() const
+   {
+      return orig_d_L_;
+   }
+
    /** Upper bounds on d */
    virtual SmartPtr<const Vector> d_U() const
    {
@@ -251,6 +261,16 @@ public:
    virtual SmartPtr<const Matrix> Pd_U() const
    {
       return Pd_U_;
+   }
+
+   /** Original upper bounds on d
+    *
+    * Returns NULL if bounds are not relaxed.
+    * @since 3.14.10
+    */
+   virtual SmartPtr<const Vector> orig_d_U() const
+   {
+      return orig_d_U_;
    }
 
    virtual SmartPtr<const SymMatrixSpace> HessianMatrixSpace() const
@@ -459,6 +479,12 @@ private:
 
    /** Original unmodified upper bounds on x */
    SmartPtr<const Vector> orig_x_U_;
+
+   /** Original unmodified lower bounds on d */
+   SmartPtr<const Vector> orig_d_L_;
+
+   /** Original unmodified upper bounds on d */
+   SmartPtr<const Vector> orig_d_U_;
    ///@}
 
    /**@name Default Compiler Generated Methods

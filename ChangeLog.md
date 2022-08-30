@@ -11,6 +11,8 @@ More detailed information about incremental changes can be found in the
 
 - Added option grad_f_constant to specify that objective function is linear.
   If set, the gradient of the objective will be requested by NLP only once. [#597]
+- Added `OrigIpoptNLP::orig_d_L()` and `OrigIpoptNLP::orig_d_U()` to get
+  original constraint sides (before relaxation due to bound_relax_factor > 0).
 
 ### 3.14.9 (2022-07-21)
 
