@@ -924,11 +924,22 @@ bool TNLP::get_curr_violations(
 
       // violation of d_L <= d(x) -> compute d_L - d first
       SmartPtr<Vector> d_viol_L;
-      if( orignlp->d_L()->Dim() > 0 )
+      SmartPtr<const Vector> d_L;
+      d_L = orignlp->orig_d_L();
+      if( IsValid(d_L) )
       {
-         SmartPtr<Vector> tmp = orignlp->d_L()->MakeNewCopy();
+         // orig_d_L is unscaled, but we need the scaled one below (because d is scaled)
+         if( orignlp->NLP_scaling()->have_d_scaling() )
+            d_L = orignlp->NLP_scaling()->apply_vector_scaling_d_NonConst(d_L);
+      }
+      else // if no relaxation, then orig_d_L() returns NULL, use d_L instead
+         d_L = orignlp->d_L();
+      if( d_L->Dim() > 0 )
+      {
+         SmartPtr<Vector> tmp = d_L->MakeNewCopy();
          d_viol_L = d->MakeNew();
          d_viol_L->Set(0.);
+
          orignlp->Pd_L()->TransMultVector(-1., *d, 1., *tmp);   // tmp := -P^Td + d_L, scaled
          orignlp->Pd_L()->MultVector(1., *tmp, 0., *d_viol_L);  // d_viol_L := P(d_L - P^Td), scaled
          if( !scaled && orignlp->NLP_scaling()->have_d_scaling() )
@@ -944,9 +955,19 @@ bool TNLP::get_curr_violations(
 
       // violation of d(x) <= d_U -> compute d - d_U first
       SmartPtr<Vector> d_viol_U;
-      if( orignlp->d_U()->Dim() > 0 )
+      SmartPtr<const Vector> d_U;
+      d_U = orignlp->orig_d_U();
+      if( IsValid(d_U) )
       {
-         SmartPtr<Vector> tmp = orignlp->d_U()->MakeNewCopy();
+         // orig_d_U is unscaled, but we need the scaled one below (because d is scaled)
+         if( orignlp->NLP_scaling()->have_d_scaling() )
+            d_U = orignlp->NLP_scaling()->apply_vector_scaling_d_NonConst(d_U);
+      }
+      else // if no relaxation, then orig_d_U() returns NULL, use d_U instead
+         d_U = orignlp->d_U();
+      if( d_U->Dim() > 0 )
+      {
+         SmartPtr<Vector> tmp = d_U->MakeNewCopy();
          d_viol_U = d->MakeNew();
          d_viol_U->Set(0.);
          orignlp->Pd_U()->TransMultVector(1., *d, -1., *tmp);   // tmp := P^Td - d_U, scaled

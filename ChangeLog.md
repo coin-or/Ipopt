@@ -13,6 +13,8 @@ More detailed information about incremental changes can be found in the
   If set, the gradient of the objective will be requested by NLP only once. [#597]
 - Added `OrigIpoptNLP::orig_d_L()` and `OrigIpoptNLP::orig_d_U()` to get
   original constraint sides (before relaxation due to bound_relax_factor > 0).
+- `TNLP::get_curr_violations()` now returns the constraint violation and
+  complementarity w.r.t. the original (non-relaxed) constraint sides. [#603]
 
 ### 3.14.9 (2022-07-21)
 
