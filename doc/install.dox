@@ -186,14 +186,14 @@ explictly state what flags are necessary to use MKL, e.g.,
 
 There are two versions of HSL available:
 
-- HSL Archive:   contains outdated codes that are freely available for personal
+- Coin-HSL Archive: contains outdated codes that are freely available for personal
     commercial or non-commercial usage. Note that you may not
     redistribute these codes in either source or binary form without
     purchasing a licence from the authors. This version includes MA27,
     MA28, and MC19.
 
-- HSL Full:   contains more modern codes that are freely available for academic
-    use only. This version includes the codes from the HSL Archive and
+- Coin-HSL Full: contains more modern codes that are freely available for academic
+    use only. This version includes the codes from the Coin-HSL Archive and
     additionally MA57, HSL_MA77, HSL_MA86, and HSL_MA97.
     %Ipopt supports the HSL Full codes from 2013 and later.
 
@@ -201,7 +201,7 @@ To obtain the HSL code, you can follow the following steps:
 
 1.  Go to <http://hsl.rl.ac.uk/ipopt>.
 
-2.  Choose whether to download either the Archive code or the HSL Full
+2.  Choose whether to download either the Coin-HSL Archive code or the Coin-HSL Full
     code. To download, select the relevant "source" link.
 
 3.  Follow the instructions on the website, read the license, and submit
@@ -227,7 +227,7 @@ To compile the HSL code via the COIN-OR Tools project
     git clone https://github.com/coin-or-tools/ThirdParty-HSL.git
     cd ThirdParty-HSL
 
-Now unpack the HSL sources archive, move and rename the resulting directory
+Now unpack the Coin-HSL sources archive, move and rename the resulting directory
 so that it becomes `ThirdParty-HSL/coinhsl`.
 Then, in `ThirdParty-HSL`, configure, build, and install the HSL sources:
 
