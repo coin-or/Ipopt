@@ -104,7 +104,7 @@ and C index styles, respectively:
  |      row    |        col  |      value      |
  |:------------|:------------|:--------------- |
  | iRow[0] = 1 | jCol[0] = 1 | values[0] = 1.0 |
- | iRow[1] = 2 | jCol[1] = 1 | values[1] = 1.1 |
+ | iRow[1] = 2 | jCol[1] = 2 | values[1] = 1.1 |
  | iRow[2] = 3 | jCol[2] = 1 | values[2] = 3.0 |
  | iRow[3] = 3 | jCol[3] = 3 | values[3] = 1.2 |
  | iRow[4] = 4 | jCol[4] = 3 | values[4] = 6.0 |
@@ -117,7 +117,7 @@ and C index styles, respectively:
  |      row    |        col  |      value      |
  |:------------|:------------|:----------------|
  | iRow[0] = 0 | jCol[0] = 0 | values[0] = 1.0 |
- | iRow[1] = 1 | jCol[1] = 0 | values[1] = 1.1 |
+ | iRow[1] = 1 | jCol[1] = 1 | values[1] = 1.1 |
  | iRow[2] = 2 | jCol[2] = 0 | values[2] = 3.0 |
  | iRow[3] = 2 | jCol[3] = 2 | values[3] = 1.2 |
  | iRow[4] = 3 | jCol[4] = 2 | values[4] = 6.0 |
