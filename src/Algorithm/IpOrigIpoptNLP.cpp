@@ -186,11 +186,12 @@ bool OrigIpoptNLP::Initialize(
    // Reset the cache entries belonging to a dummy dependency.  This
    // is required for repeated solve, since the cache is not updated
    // if a dimension is zero.  It is also required if we choose
-   // jac_[cd]_constant and hessian_constant differently between
-   // runs
+   // jac_[cd]_constant, grad_f_constant, or hessian_constant differently between
+   // runs or when the values of these derivatives changes due to a problem change.
    std::vector<const TaggedObject*> deps(1);
    deps[0] = NULL;
    std::vector<Number> sdeps(0);
+   grad_f_cache_.InvalidateResult(deps, sdeps);
    c_cache_.InvalidateResult(deps, sdeps);
    d_cache_.InvalidateResult(deps, sdeps);
    jac_c_cache_.InvalidateResult(deps, sdeps);
