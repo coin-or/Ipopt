@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.14.9</span-->
+   &#160;<!--span id="projectnumber">3.14.10</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -2344,12 +2344,12 @@ Tong Kewei, BeiHang University </dd></dl>
 
 <p>Intermediate Callback method for the user. </p>
 <p>This method is called once per iteration (during the convergence check), and can be used to obtain information about the optimization status while Ipopt solves the problem, and also to request a premature termination.</p>
-<p>The information provided by the entities in the argument list correspond to what Ipopt prints in the iteration summary (see also <a class="el" href="OUTPUT.html">Ipopt Output</a>). The value of algorithmmode is either REGULARMODE or RESTORATIONPHASEMODE.</p>
+<p>The information provided by the entities in the argument list correspond to what Ipopt prints in the iteration summary (see also <a class="el" href="OUTPUT.html">Ipopt Output</a>), except for inf_pr, which by default corresponds to the original problem in the log but to the scaled internal problem in this callback. The value of algorithmmode is either REGULARMODE or RESTORATIONPHASEMODE.</p>
 <p>The current iterate and violations of feasibility and optimality can be accessed via the methods <a class="el" href="classorg_1_1coinor_1_1Ipopt.html#ac99c6c1aa98865aa73a2b1079a671024" title="Get primal and dual variable values of the current iterate.">get_curr_iterate()</a> and <a class="el" href="classorg_1_1coinor_1_1Ipopt.html#a6596d5beb266e5e60d57a9d5e52c8efa" title="Get primal and dual infeasibility of the current iterate.">get_curr_violations()</a>. These methods translate values for the <em>internal representation</em> of the problem from <code>ip_data</code> and <code>ip_cq</code> objects.</p>
 <dl class="section return"><dt>Returns</dt><dd>If this method returns false, Ipopt will terminate with the User_Requested_Stop status.</dd></dl>
 <p>It is not required to implement (overload) this method. The default implementation always returns true. </p><dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00795">795</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00797">797</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2426,7 +2426,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true on success, otherwise false </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00827">827</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00829">829</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2456,7 +2456,7 @@ Tong Kewei, BeiHang University </dd></dl>
 <p>When LBFGS hessian approximation is used, this method should be overloaded. </p>
 <dl class="section return"><dt>Returns</dt><dd>number of nonlinear variables, a negative value indicates that all variables are negative </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00842">842</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00844">844</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2504,7 +2504,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true on success, otherwise false </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00854">854</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00856">856</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>

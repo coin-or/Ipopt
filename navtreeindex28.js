@@ -1,5 +1,11 @@
 var NAVTREEINDEX28 =
 {
+"structmc68__control__i.html#abe30f64b3362248eed7036142d386f2c":[1,0,13,8],
+"structmc68__control__i.html#ad0c74ac57694a15f1725a420ee5753eb":[1,0,13,1],
+"structmc68__control__i.html#ad6fc3002ce8a187d361c98b6a226bdaa":[1,0,13,6],
+"structmc68__control__i.html#ad9679b2a9625bebdb5dc4a12bfba1d0a":[1,0,13,4],
+"structmc68__control__i.html#ae4f634d8943b2665393661574c95f00e":[1,0,13,0],
+"structmc68__control__i.html#ae767cbceb35158e18cdad5436b138e11":[1,0,13,2],
 "structmc68__info__i.html":[1,0,14],
 "structmc68__info__i.html#a00552529b73386c3de6a9b0cd7113b72":[1,0,14,4],
 "structmc68__info__i.html#a273400067ce62f03387644973c3f9334":[1,0,14,8],

@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.14.9</span-->
+   &#160;<!--span id="projectnumber">3.14.10</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -337,6 +337,10 @@ NLP</h2>
 </blockquote>
 <p><a class="anchor" id="OPT_check_derivatives_for_naninf"></a><a href="#OPT_check_derivatives_for_naninf">&#x25B8;&nbsp;</a><b>check_derivatives_for_naninf</b>: Indicates whether it is desired to check for Nan/Inf in derivative matrices </p><blockquote class="doxtable">
 <p>Activating this option will cause an error if an invalid number is detected in the constraint Jacobians or the Lagrangian Hessian. If this is not activated, the test is skipped, and the algorithm might proceed with invalid numbers and fail. If test is activated and an invalid number is detected, the matrix is written to output with print_level corresponding to J_MORE_DETAILED; so beware of large output! The default value for this string option is "no".</p>
+<p>Possible values: yes, no </p>
+</blockquote>
+<p><a class="anchor" id="OPT_grad_f_constant"></a><a href="#OPT_grad_f_constant">&#x25B8;&nbsp;</a><b>grad_f_constant</b>: Indicates whether to assume that the objective function is linear </p><blockquote class="doxtable">
+<p>Activating this option will cause <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> to ask for the Gradient of the objective function only once from the NLP and reuse this information later. The default value for this string option is "no".</p>
 <p>Possible values: yes, no </p>
 </blockquote>
 <p><a class="anchor" id="OPT_jac_c_constant"></a><a href="#OPT_jac_c_constant">&#x25B8;&nbsp;</a><b>jac_c_constant</b>: Indicates whether to assume that all equality constraints are linear </p><blockquote class="doxtable">

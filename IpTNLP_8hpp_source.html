@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.14.9</span-->
+   &#160;<!--span id="projectnumber">3.14.10</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -403,87 +403,87 @@ $(document).ready(function(){initNavTree('IpTNLP_8hpp_source.html',''); initResi
 <div class="line"><a name="l00638"></a><span class="lineno">  638</span>&#160;      (void) con_numeric_md;</div>
 <div class="line"><a name="l00639"></a><span class="lineno">  639</span>&#160;   }</div>
 <div class="line"><a name="l00640"></a><span class="lineno">  640</span>&#160; </div>
-<div class="line"><a name="l00662"></a><span class="lineno">  662</span>&#160;   <span class="comment">// [TNLP_intermediate_callback]</span></div>
-<div class="line"><a name="l00663"></a><span class="lineno"><a class="line" href="classIpopt_1_1TNLP.html#a2f962a4c43464adb7928771af84503d6">  663</a></span>&#160;   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classIpopt_1_1TNLP.html#a2f962a4c43464adb7928771af84503d6">intermediate_callback</a>(</div>
-<div class="line"><a name="l00664"></a><span class="lineno">  664</span>&#160;      <a class="code" href="IpReturnCodes__inc_8h.html#a5daff61568f9909c518fb61116260387">AlgorithmMode</a>              mode,</div>
-<div class="line"><a name="l00665"></a><span class="lineno">  665</span>&#160;      <a class="code" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>                      iter,</div>
-<div class="line"><a name="l00666"></a><span class="lineno">  666</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>                     obj_value,</div>
-<div class="line"><a name="l00667"></a><span class="lineno">  667</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>                     inf_pr,</div>
-<div class="line"><a name="l00668"></a><span class="lineno">  668</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>                     inf_du,</div>
-<div class="line"><a name="l00669"></a><span class="lineno">  669</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>                     mu,</div>
-<div class="line"><a name="l00670"></a><span class="lineno">  670</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>                     d_norm,</div>
-<div class="line"><a name="l00671"></a><span class="lineno">  671</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>                     regularization_size,</div>
-<div class="line"><a name="l00672"></a><span class="lineno">  672</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>                     alpha_du,</div>
-<div class="line"><a name="l00673"></a><span class="lineno">  673</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>                     alpha_pr,</div>
-<div class="line"><a name="l00674"></a><span class="lineno">  674</span>&#160;      <a class="code" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>                      ls_trials,</div>
-<div class="line"><a name="l00675"></a><span class="lineno">  675</span>&#160;      <span class="keyword">const</span> <a class="code" href="classIpopt_1_1IpoptData.html">IpoptData</a>*           ip_data,</div>
-<div class="line"><a name="l00676"></a><span class="lineno">  676</span>&#160;      <a class="code" href="classIpopt_1_1IpoptCalculatedQuantities.html">IpoptCalculatedQuantities</a>* ip_cq</div>
-<div class="line"><a name="l00677"></a><span class="lineno">  677</span>&#160;   )</div>
-<div class="line"><a name="l00678"></a><span class="lineno">  678</span>&#160;   <span class="comment">// [TNLP_intermediate_callback]</span></div>
-<div class="line"><a name="l00679"></a><span class="lineno">  679</span>&#160;   {</div>
-<div class="line"><a name="l00680"></a><span class="lineno">  680</span>&#160;      (void) mode;</div>
-<div class="line"><a name="l00681"></a><span class="lineno">  681</span>&#160;      (void) iter;</div>
-<div class="line"><a name="l00682"></a><span class="lineno">  682</span>&#160;      (void) obj_value;</div>
-<div class="line"><a name="l00683"></a><span class="lineno">  683</span>&#160;      (void) inf_pr;</div>
-<div class="line"><a name="l00684"></a><span class="lineno">  684</span>&#160;      (void) inf_du;</div>
-<div class="line"><a name="l00685"></a><span class="lineno">  685</span>&#160;      (void) mu;</div>
-<div class="line"><a name="l00686"></a><span class="lineno">  686</span>&#160;      (void) d_norm;</div>
-<div class="line"><a name="l00687"></a><span class="lineno">  687</span>&#160;      (void) regularization_size;</div>
-<div class="line"><a name="l00688"></a><span class="lineno">  688</span>&#160;      (void) alpha_du;</div>
-<div class="line"><a name="l00689"></a><span class="lineno">  689</span>&#160;      (void) alpha_pr;</div>
-<div class="line"><a name="l00690"></a><span class="lineno">  690</span>&#160;      (void) ls_trials;</div>
-<div class="line"><a name="l00691"></a><span class="lineno">  691</span>&#160;      (void) ip_data;</div>
-<div class="line"><a name="l00692"></a><span class="lineno">  692</span>&#160;      (void) ip_cq;</div>
-<div class="line"><a name="l00693"></a><span class="lineno">  693</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00694"></a><span class="lineno">  694</span>&#160;   }</div>
-<div class="line"><a name="l00696"></a><span class="lineno">  696</span>&#160; </div>
+<div class="line"><a name="l00664"></a><span class="lineno">  664</span>&#160;   <span class="comment">// [TNLP_intermediate_callback]</span></div>
+<div class="line"><a name="l00665"></a><span class="lineno"><a class="line" href="classIpopt_1_1TNLP.html#a2f962a4c43464adb7928771af84503d6">  665</a></span>&#160;   <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classIpopt_1_1TNLP.html#a2f962a4c43464adb7928771af84503d6">intermediate_callback</a>(</div>
+<div class="line"><a name="l00666"></a><span class="lineno">  666</span>&#160;      <a class="code" href="IpReturnCodes__inc_8h.html#a5daff61568f9909c518fb61116260387">AlgorithmMode</a>              mode,</div>
+<div class="line"><a name="l00667"></a><span class="lineno">  667</span>&#160;      <a class="code" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>                      iter,</div>
+<div class="line"><a name="l00668"></a><span class="lineno">  668</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>                     obj_value,</div>
+<div class="line"><a name="l00669"></a><span class="lineno">  669</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>                     inf_pr,</div>
+<div class="line"><a name="l00670"></a><span class="lineno">  670</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>                     inf_du,</div>
+<div class="line"><a name="l00671"></a><span class="lineno">  671</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>                     mu,</div>
+<div class="line"><a name="l00672"></a><span class="lineno">  672</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>                     d_norm,</div>
+<div class="line"><a name="l00673"></a><span class="lineno">  673</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>                     regularization_size,</div>
+<div class="line"><a name="l00674"></a><span class="lineno">  674</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>                     alpha_du,</div>
+<div class="line"><a name="l00675"></a><span class="lineno">  675</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>                     alpha_pr,</div>
+<div class="line"><a name="l00676"></a><span class="lineno">  676</span>&#160;      <a class="code" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>                      ls_trials,</div>
+<div class="line"><a name="l00677"></a><span class="lineno">  677</span>&#160;      <span class="keyword">const</span> <a class="code" href="classIpopt_1_1IpoptData.html">IpoptData</a>*           ip_data,</div>
+<div class="line"><a name="l00678"></a><span class="lineno">  678</span>&#160;      <a class="code" href="classIpopt_1_1IpoptCalculatedQuantities.html">IpoptCalculatedQuantities</a>* ip_cq</div>
+<div class="line"><a name="l00679"></a><span class="lineno">  679</span>&#160;   )</div>
+<div class="line"><a name="l00680"></a><span class="lineno">  680</span>&#160;   <span class="comment">// [TNLP_intermediate_callback]</span></div>
+<div class="line"><a name="l00681"></a><span class="lineno">  681</span>&#160;   {</div>
+<div class="line"><a name="l00682"></a><span class="lineno">  682</span>&#160;      (void) mode;</div>
+<div class="line"><a name="l00683"></a><span class="lineno">  683</span>&#160;      (void) iter;</div>
+<div class="line"><a name="l00684"></a><span class="lineno">  684</span>&#160;      (void) obj_value;</div>
+<div class="line"><a name="l00685"></a><span class="lineno">  685</span>&#160;      (void) inf_pr;</div>
+<div class="line"><a name="l00686"></a><span class="lineno">  686</span>&#160;      (void) inf_du;</div>
+<div class="line"><a name="l00687"></a><span class="lineno">  687</span>&#160;      (void) mu;</div>
+<div class="line"><a name="l00688"></a><span class="lineno">  688</span>&#160;      (void) d_norm;</div>
+<div class="line"><a name="l00689"></a><span class="lineno">  689</span>&#160;      (void) regularization_size;</div>
+<div class="line"><a name="l00690"></a><span class="lineno">  690</span>&#160;      (void) alpha_du;</div>
+<div class="line"><a name="l00691"></a><span class="lineno">  691</span>&#160;      (void) alpha_pr;</div>
+<div class="line"><a name="l00692"></a><span class="lineno">  692</span>&#160;      (void) ls_trials;</div>
+<div class="line"><a name="l00693"></a><span class="lineno">  693</span>&#160;      (void) ip_data;</div>
+<div class="line"><a name="l00694"></a><span class="lineno">  694</span>&#160;      (void) ip_cq;</div>
+<div class="line"><a name="l00695"></a><span class="lineno">  695</span>&#160;      <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00696"></a><span class="lineno">  696</span>&#160;   }</div>
 <div class="line"><a name="l00698"></a><span class="lineno">  698</span>&#160; </div>
-<div class="line"><a name="l00728"></a><span class="lineno">  728</span>&#160;   <span class="comment">// [TNLP_get_curr_iterate]</span></div>
-<div class="line"><a name="l00729"></a><span class="lineno"><a class="line" href="classIpopt_1_1TNLP.html#a8b8a5be340562ea82358a7b6d2bb0969">  729</a></span>&#160;   <span class="keywordtype">bool</span> <a class="code" href="classIpopt_1_1TNLP.html#a8b8a5be340562ea82358a7b6d2bb0969">get_curr_iterate</a>(</div>
-<div class="line"><a name="l00730"></a><span class="lineno">  730</span>&#160;      <span class="keyword">const</span> <a class="code" href="classIpopt_1_1IpoptData.html">IpoptData</a>*           ip_data,</div>
-<div class="line"><a name="l00731"></a><span class="lineno">  731</span>&#160;      <a class="code" href="classIpopt_1_1IpoptCalculatedQuantities.html">IpoptCalculatedQuantities</a>* ip_cq,</div>
-<div class="line"><a name="l00732"></a><span class="lineno">  732</span>&#160;      <span class="keywordtype">bool</span>                       scaled,</div>
-<div class="line"><a name="l00733"></a><span class="lineno">  733</span>&#160;      <a class="code" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>                      n,</div>
-<div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>*                    x,</div>
-<div class="line"><a name="l00735"></a><span class="lineno">  735</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>*                    z_L,</div>
-<div class="line"><a name="l00736"></a><span class="lineno">  736</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>*                    z_U,</div>
-<div class="line"><a name="l00737"></a><span class="lineno">  737</span>&#160;      <a class="code" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>                      m,</div>
-<div class="line"><a name="l00738"></a><span class="lineno">  738</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>*                    g,</div>
-<div class="line"><a name="l00739"></a><span class="lineno">  739</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>*                    lambda</div>
-<div class="line"><a name="l00740"></a><span class="lineno">  740</span>&#160;   ) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00741"></a><span class="lineno">  741</span>&#160;   <span class="comment">// [TNLP_get_curr_iterate]</span></div>
-<div class="line"><a name="l00742"></a><span class="lineno">  742</span>&#160; </div>
-<div class="line"><a name="l00776"></a><span class="lineno">  776</span>&#160;   <span class="comment">// [TNLP_get_curr_violations]</span></div>
-<div class="line"><a name="l00777"></a><span class="lineno"><a class="line" href="classIpopt_1_1TNLP.html#a723401f01da3ee61d4f51a2e05d9b2f9">  777</a></span>&#160;   <span class="keywordtype">bool</span> <a class="code" href="classIpopt_1_1TNLP.html#a723401f01da3ee61d4f51a2e05d9b2f9">get_curr_violations</a>(</div>
-<div class="line"><a name="l00778"></a><span class="lineno">  778</span>&#160;      <span class="keyword">const</span> <a class="code" href="classIpopt_1_1IpoptData.html">IpoptData</a>*           ip_data,</div>
-<div class="line"><a name="l00779"></a><span class="lineno">  779</span>&#160;      <a class="code" href="classIpopt_1_1IpoptCalculatedQuantities.html">IpoptCalculatedQuantities</a>* ip_cq,</div>
-<div class="line"><a name="l00780"></a><span class="lineno">  780</span>&#160;      <span class="keywordtype">bool</span>                       scaled,</div>
-<div class="line"><a name="l00781"></a><span class="lineno">  781</span>&#160;      <a class="code" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>                      n,</div>
-<div class="line"><a name="l00782"></a><span class="lineno">  782</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>*                    x_L_violation,</div>
-<div class="line"><a name="l00783"></a><span class="lineno">  783</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>*                    x_U_violation,</div>
-<div class="line"><a name="l00784"></a><span class="lineno">  784</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>*                    compl_x_L,</div>
-<div class="line"><a name="l00785"></a><span class="lineno">  785</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>*                    compl_x_U,</div>
-<div class="line"><a name="l00786"></a><span class="lineno">  786</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>*                    grad_lag_x,</div>
-<div class="line"><a name="l00787"></a><span class="lineno">  787</span>&#160;      <a class="code" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>                      m,</div>
-<div class="line"><a name="l00788"></a><span class="lineno">  788</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>*                    nlp_constraint_violation,</div>
-<div class="line"><a name="l00789"></a><span class="lineno">  789</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>*                    compl_g</div>
-<div class="line"><a name="l00790"></a><span class="lineno">  790</span>&#160;   ) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00791"></a><span class="lineno">  791</span>&#160;   <span class="comment">// [TNLP_get_curr_violations]</span></div>
-<div class="line"><a name="l00793"></a><span class="lineno">  793</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00794"></a><span class="lineno">  794</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00803"></a><span class="lineno">  803</span>&#160; </div>
-<div class="line"><a name="l00805"></a><span class="lineno"><a class="line" href="classIpopt_1_1TNLP.html#ac60badc0020972128377e91cdcb4cc81">  805</a></span>&#160;   <a class="code" href="classIpopt_1_1TNLP.html#ac60badc0020972128377e91cdcb4cc81">TNLP</a>(</div>
-<div class="line"><a name="l00806"></a><span class="lineno">  806</span>&#160;      <span class="keyword">const</span> <a class="code" href="classIpopt_1_1TNLP.html">TNLP</a>&amp;</div>
-<div class="line"><a name="l00807"></a><span class="lineno">  807</span>&#160;   );</div>
-<div class="line"><a name="l00808"></a><span class="lineno">  808</span>&#160; </div>
-<div class="line"><a name="l00810"></a><span class="lineno"><a class="line" href="classIpopt_1_1TNLP.html#aa6851ab40f3fa6b806ded1c092fc0831">  810</a></span>&#160;   <span class="keywordtype">void</span> <a class="code" href="classIpopt_1_1TNLP.html#aa6851ab40f3fa6b806ded1c092fc0831">operator=</a>(</div>
-<div class="line"><a name="l00811"></a><span class="lineno">  811</span>&#160;      <span class="keyword">const</span> <a class="code" href="classIpopt_1_1TNLP.html">TNLP</a>&amp;</div>
-<div class="line"><a name="l00812"></a><span class="lineno">  812</span>&#160;   );</div>
-<div class="line"><a name="l00814"></a><span class="lineno">  814</span>&#160;};</div>
-<div class="line"><a name="l00815"></a><span class="lineno">  815</span>&#160; </div>
-<div class="line"><a name="l00816"></a><span class="lineno">  816</span>&#160;} <span class="comment">// namespace Ipopt</span></div>
+<div class="line"><a name="l00700"></a><span class="lineno">  700</span>&#160; </div>
+<div class="line"><a name="l00730"></a><span class="lineno">  730</span>&#160;   <span class="comment">// [TNLP_get_curr_iterate]</span></div>
+<div class="line"><a name="l00731"></a><span class="lineno"><a class="line" href="classIpopt_1_1TNLP.html#a8b8a5be340562ea82358a7b6d2bb0969">  731</a></span>&#160;   <span class="keywordtype">bool</span> <a class="code" href="classIpopt_1_1TNLP.html#a8b8a5be340562ea82358a7b6d2bb0969">get_curr_iterate</a>(</div>
+<div class="line"><a name="l00732"></a><span class="lineno">  732</span>&#160;      <span class="keyword">const</span> <a class="code" href="classIpopt_1_1IpoptData.html">IpoptData</a>*           ip_data,</div>
+<div class="line"><a name="l00733"></a><span class="lineno">  733</span>&#160;      <a class="code" href="classIpopt_1_1IpoptCalculatedQuantities.html">IpoptCalculatedQuantities</a>* ip_cq,</div>
+<div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160;      <span class="keywordtype">bool</span>                       scaled,</div>
+<div class="line"><a name="l00735"></a><span class="lineno">  735</span>&#160;      <a class="code" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>                      n,</div>
+<div class="line"><a name="l00736"></a><span class="lineno">  736</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>*                    x,</div>
+<div class="line"><a name="l00737"></a><span class="lineno">  737</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>*                    z_L,</div>
+<div class="line"><a name="l00738"></a><span class="lineno">  738</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>*                    z_U,</div>
+<div class="line"><a name="l00739"></a><span class="lineno">  739</span>&#160;      <a class="code" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>                      m,</div>
+<div class="line"><a name="l00740"></a><span class="lineno">  740</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>*                    g,</div>
+<div class="line"><a name="l00741"></a><span class="lineno">  741</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>*                    lambda</div>
+<div class="line"><a name="l00742"></a><span class="lineno">  742</span>&#160;   ) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00743"></a><span class="lineno">  743</span>&#160;   <span class="comment">// [TNLP_get_curr_iterate]</span></div>
+<div class="line"><a name="l00744"></a><span class="lineno">  744</span>&#160; </div>
+<div class="line"><a name="l00778"></a><span class="lineno">  778</span>&#160;   <span class="comment">// [TNLP_get_curr_violations]</span></div>
+<div class="line"><a name="l00779"></a><span class="lineno"><a class="line" href="classIpopt_1_1TNLP.html#a723401f01da3ee61d4f51a2e05d9b2f9">  779</a></span>&#160;   <span class="keywordtype">bool</span> <a class="code" href="classIpopt_1_1TNLP.html#a723401f01da3ee61d4f51a2e05d9b2f9">get_curr_violations</a>(</div>
+<div class="line"><a name="l00780"></a><span class="lineno">  780</span>&#160;      <span class="keyword">const</span> <a class="code" href="classIpopt_1_1IpoptData.html">IpoptData</a>*           ip_data,</div>
+<div class="line"><a name="l00781"></a><span class="lineno">  781</span>&#160;      <a class="code" href="classIpopt_1_1IpoptCalculatedQuantities.html">IpoptCalculatedQuantities</a>* ip_cq,</div>
+<div class="line"><a name="l00782"></a><span class="lineno">  782</span>&#160;      <span class="keywordtype">bool</span>                       scaled,</div>
+<div class="line"><a name="l00783"></a><span class="lineno">  783</span>&#160;      <a class="code" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>                      n,</div>
+<div class="line"><a name="l00784"></a><span class="lineno">  784</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>*                    x_L_violation,</div>
+<div class="line"><a name="l00785"></a><span class="lineno">  785</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>*                    x_U_violation,</div>
+<div class="line"><a name="l00786"></a><span class="lineno">  786</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>*                    compl_x_L,</div>
+<div class="line"><a name="l00787"></a><span class="lineno">  787</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>*                    compl_x_U,</div>
+<div class="line"><a name="l00788"></a><span class="lineno">  788</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>*                    grad_lag_x,</div>
+<div class="line"><a name="l00789"></a><span class="lineno">  789</span>&#160;      <a class="code" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a>                      m,</div>
+<div class="line"><a name="l00790"></a><span class="lineno">  790</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>*                    nlp_constraint_violation,</div>
+<div class="line"><a name="l00791"></a><span class="lineno">  791</span>&#160;      <a class="code" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>*                    compl_g</div>
+<div class="line"><a name="l00792"></a><span class="lineno">  792</span>&#160;   ) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00793"></a><span class="lineno">  793</span>&#160;   <span class="comment">// [TNLP_get_curr_violations]</span></div>
+<div class="line"><a name="l00795"></a><span class="lineno">  795</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00796"></a><span class="lineno">  796</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00805"></a><span class="lineno">  805</span>&#160; </div>
+<div class="line"><a name="l00807"></a><span class="lineno"><a class="line" href="classIpopt_1_1TNLP.html#ac60badc0020972128377e91cdcb4cc81">  807</a></span>&#160;   <a class="code" href="classIpopt_1_1TNLP.html#ac60badc0020972128377e91cdcb4cc81">TNLP</a>(</div>
+<div class="line"><a name="l00808"></a><span class="lineno">  808</span>&#160;      <span class="keyword">const</span> <a class="code" href="classIpopt_1_1TNLP.html">TNLP</a>&amp;</div>
+<div class="line"><a name="l00809"></a><span class="lineno">  809</span>&#160;   );</div>
+<div class="line"><a name="l00810"></a><span class="lineno">  810</span>&#160; </div>
+<div class="line"><a name="l00812"></a><span class="lineno"><a class="line" href="classIpopt_1_1TNLP.html#aa6851ab40f3fa6b806ded1c092fc0831">  812</a></span>&#160;   <span class="keywordtype">void</span> <a class="code" href="classIpopt_1_1TNLP.html#aa6851ab40f3fa6b806ded1c092fc0831">operator=</a>(</div>
+<div class="line"><a name="l00813"></a><span class="lineno">  813</span>&#160;      <span class="keyword">const</span> <a class="code" href="classIpopt_1_1TNLP.html">TNLP</a>&amp;</div>
+<div class="line"><a name="l00814"></a><span class="lineno">  814</span>&#160;   );</div>
+<div class="line"><a name="l00816"></a><span class="lineno">  816</span>&#160;};</div>
 <div class="line"><a name="l00817"></a><span class="lineno">  817</span>&#160; </div>
-<div class="line"><a name="l00818"></a><span class="lineno">  818</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00818"></a><span class="lineno">  818</span>&#160;} <span class="comment">// namespace Ipopt</span></div>
+<div class="line"><a name="l00819"></a><span class="lineno">  819</span>&#160; </div>
+<div class="line"><a name="l00820"></a><span class="lineno">  820</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aIpUtils_8hpp_html"><div class="ttname"><a href="IpUtils_8hpp.html">IpUtils.hpp</a></div></div>
@@ -531,7 +531,7 @@ $(document).ready(function(){initNavTree('IpTNLP_8hpp_source.html',''); initResi
 <div class="ttc" id="aclassIpopt_1_1ReferencedObject_html"><div class="ttname"><a href="classIpopt_1_1ReferencedObject.html">Ipopt::ReferencedObject</a></div><div class="ttdoc">Storing the reference count of all the smart pointers that currently reference it.</div><div class="ttdef"><b>Definition:</b> <a href="IpReferenced_8hpp_source.html#l00169">IpReferenced.hpp:170</a></div></div>
 <div class="ttc" id="aclassIpopt_1_1TNLP_html_a015506564afc611060f4416dbb08aa4d"><div class="ttname"><a href="classIpopt_1_1TNLP.html#a015506564afc611060f4416dbb08aa4d">Ipopt::TNLP::get_number_of_nonlinear_variables</a></div><div class="ttdeci">virtual Index get_number_of_nonlinear_variables()</div><div class="ttdoc">Return the number of variables that appear nonlinearly in the objective function or in at least one c...</div><div class="ttdef"><b>Definition:</b> <a href="IpTNLP_8hpp_source.html#l00526">IpTNLP.hpp:526</a></div></div>
 <div class="ttc" id="aIpReturnCodes__inc_8h_html_a5daff61568f9909c518fb61116260387"><div class="ttname"><a href="IpReturnCodes__inc_8h.html#a5daff61568f9909c518fb61116260387">AlgorithmMode</a></div><div class="ttdeci">AlgorithmMode</div><div class="ttdoc">enum to indicate the mode in which the algorithm is</div><div class="ttdef"><b>Definition:</b> <a href="IpReturnCodes__inc_8h_source.html#l00041">IpReturnCodes_inc.h:42</a></div></div>
-<div class="ttc" id="aclassIpopt_1_1TNLP_html_a2f962a4c43464adb7928771af84503d6"><div class="ttname"><a href="classIpopt_1_1TNLP.html#a2f962a4c43464adb7928771af84503d6">Ipopt::TNLP::intermediate_callback</a></div><div class="ttdeci">virtual bool intermediate_callback(AlgorithmMode mode, Index iter, Number obj_value, Number inf_pr, Number inf_du, Number mu, Number d_norm, Number regularization_size, Number alpha_du, Number alpha_pr, Index ls_trials, const IpoptData *ip_data, IpoptCalculatedQuantities *ip_cq)</div><div class="ttdoc">Intermediate Callback method for the user.</div><div class="ttdef"><b>Definition:</b> <a href="IpTNLP_8hpp_source.html#l00663">IpTNLP.hpp:663</a></div></div>
+<div class="ttc" id="aclassIpopt_1_1TNLP_html_a2f962a4c43464adb7928771af84503d6"><div class="ttname"><a href="classIpopt_1_1TNLP.html#a2f962a4c43464adb7928771af84503d6">Ipopt::TNLP::intermediate_callback</a></div><div class="ttdeci">virtual bool intermediate_callback(AlgorithmMode mode, Index iter, Number obj_value, Number inf_pr, Number inf_du, Number mu, Number d_norm, Number regularization_size, Number alpha_du, Number alpha_pr, Index ls_trials, const IpoptData *ip_data, IpoptCalculatedQuantities *ip_cq)</div><div class="ttdoc">Intermediate Callback method for the user.</div><div class="ttdef"><b>Definition:</b> <a href="IpTNLP_8hpp_source.html#l00665">IpTNLP.hpp:665</a></div></div>
 <div class="ttc" id="aclassIpopt_1_1IteratesVector_html"><div class="ttname"><a href="classIpopt_1_1IteratesVector.html">Ipopt::IteratesVector</a></div><div class="ttdoc">Specialized CompoundVector class specifically for the algorithm iterates.</div><div class="ttdef"><b>Definition:</b> <a href="IpIteratesVector_8hpp_source.html#l00025">IpIteratesVector.hpp:26</a></div></div>
 </body>
 </html>

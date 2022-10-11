@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.14.9</span-->
+   &#160;<!--span id="projectnumber">3.14.10</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -192,13 +192,13 @@ BLAS and LAPACK</h2>
 HSL (Harwell Subroutines Library)</h2>
 <p>There are two versions of HSL available:</p>
 <ul>
-<li>HSL Archive: contains outdated codes that are freely available for personal commercial or non-commercial usage. Note that you may not redistribute these codes in either source or binary form without purchasing a licence from the authors. This version includes MA27, MA28, and MC19.</li>
-<li>HSL Full: contains more modern codes that are freely available for academic use only. This version includes the codes from the HSL Archive and additionally MA57, HSL_MA77, HSL_MA86, and HSL_MA97. Ipopt supports the HSL Full codes from 2013 and later.</li>
+<li>Coin-HSL Archive: contains outdated codes that are freely available for personal commercial or non-commercial usage. Note that you may not redistribute these codes in either source or binary form without purchasing a licence from the authors. This version includes MA27, MA28, and MC19.</li>
+<li>Coin-HSL Full: contains more modern codes that are freely available for academic use only. This version includes the codes from the Coin-HSL Archive and additionally MA57, HSL_MA77, HSL_MA86, and HSL_MA97. Ipopt supports the HSL Full codes from 2013 and later.</li>
 </ul>
 <p>To obtain the HSL code, you can follow the following steps:</p>
 <ol type="1">
 <li>Go to <a href="http://hsl.rl.ac.uk/ipopt">http://hsl.rl.ac.uk/ipopt</a>.</li>
-<li>Choose whether to download either the Archive code or the HSL Full code. To download, select the relevant "source" link.</li>
+<li>Choose whether to download either the Coin-HSL Archive code or the Coin-HSL Full code. To download, select the relevant "source" link.</li>
 <li>Follow the instructions on the website, read the license, and submit the registration form.</li>
 <li>Wait for an email containing a download link (this should take no more than one working day).</li>
 </ol>
@@ -209,7 +209,7 @@ HSL (Harwell Subroutines Library)</h2>
 </ul>
 <p>To compile the HSL code via the COIN-OR Tools project <a href="https://github.com/coin-or-tools/ThirdParty-HSL">ThirdParty-HSL</a>, run </p><pre class="fragment">git clone https://github.com/coin-or-tools/ThirdParty-HSL.git
 cd ThirdParty-HSL
-</pre><p>Now unpack the HSL sources archive, move and rename the resulting directory so that it becomes <code>ThirdParty-HSL/coinhsl</code>. Then, in <code>ThirdParty-HSL</code>, configure, build, and install the HSL sources: </p><pre class="fragment">./configure
+</pre><p>Now unpack the Coin-HSL sources archive, move and rename the resulting directory so that it becomes <code>ThirdParty-HSL/coinhsl</code>. Then, in <code>ThirdParty-HSL</code>, configure, build, and install the HSL sources: </p><pre class="fragment">./configure
 make
 sudo make install
 </pre><dl class="section attention"><dt>Attention</dt><dd>The build system of <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> currently requires that MA27 is part of a HSL library, if a HSL library is provided.</dd></dl>

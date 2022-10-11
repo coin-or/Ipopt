@@ -1,5 +1,10 @@
 var NAVTREEINDEX19 =
 {
+"classIpopt_1_1RestoIpoptNLP.html#aeaeaa80dbaba57307633a96f5979ce2d":[1,0,0,142,50],
+"classIpopt_1_1RestoIpoptNLP.html#aed993a986ed743fc27fdfce127b01db7":[1,0,0,142,60],
+"classIpopt_1_1RestoIpoptNLP.html#af00618921d43af5629a1bc5b3cd4d220":[1,0,0,142,64],
+"classIpopt_1_1RestoIpoptNLP.html#af1ed30d6371dbde3e070320659060b5b":[1,0,0,142,41],
+"classIpopt_1_1RestoIpoptNLP.html#af3905d7b622b8b3f1dad081fd67a78ed":[1,0,0,142,9],
 "classIpopt_1_1RestoIpoptNLP.html#af5b4e3e942b359ba66890707bf4eb090":[1,0,0,142,88],
 "classIpopt_1_1RestoIpoptNLP.html#af8ce923bf9d62135188e31f620376c38":[1,0,0,142,22],
 "classIpopt_1_1RestoIterateInitializer.html":[1,0,0,143],
@@ -244,10 +249,5 @@ var NAVTREEINDEX19 =
 "classIpopt_1_1SensBuilder.html#a6ead46a9ee07e48670c315cf828fb848":[1,0,0,157,1],
 "classIpopt_1_1SensBuilder.html#aaa6a2a124ab13e0b123add20433ac3de":[1,0,0,157,2],
 "classIpopt_1_1SensBuilder.html#ab1610d08cfdc1c6c2118804f75163ced":[1,0,0,157,3],
-"classIpopt_1_1SensBuilder.html#ac314c96662e24e694fd7b5aaad9be387":[1,0,0,157,0],
-"classIpopt_1_1SensitivityStepCalculator.html":[1,0,0,158],
-"classIpopt_1_1SensitivityStepCalculator.html#a0a7c3c9177939fcbd2a25cadfd6c6cfe":[1,0,0,158,4],
-"classIpopt_1_1SensitivityStepCalculator.html#a0e0ee314aef0a33bae20ced15afdb0ff":[1,0,0,158,1],
-"classIpopt_1_1SensitivityStepCalculator.html#a1de66be7f535ac7d77aae7e7ef58f241":[1,0,0,158,5],
-"classIpopt_1_1SensitivityStepCalculator.html#a29dd947fb5db933f59a2178646fce733":[1,0,0,158,7]
+"classIpopt_1_1SensBuilder.html#ac314c96662e24e694fd7b5aaad9be387":[1,0,0,157,0]
 };

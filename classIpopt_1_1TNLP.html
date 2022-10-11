@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.14.9</span-->
+   &#160;<!--span id="projectnumber">3.14.10</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -1771,13 +1771,13 @@ Private Member Functions</h2></td></tr>
 
 <p>Intermediate Callback method for the user. </p>
 <p>This method is called once per iteration (during the convergence check), and can be used to obtain information about the optimization status while Ipopt solves the problem, and also to request a premature termination.</p>
-<p>The information provided by the entities in the argument list correspond to what Ipopt prints in the iteration summary (see also <a class="el" href="OUTPUT.html">Ipopt Output</a>). Further information can be obtained from the ip_data and ip_cq objects. The current iterate and violations of feasibility and optimality can be accessed via the methods <a class="el" href="classIpopt_1_1TNLP.html#a8b8a5be340562ea82358a7b6d2bb0969" title="Get primal and dual variable values of the current iterate.">Ipopt::TNLP::get_curr_iterate()</a> and <a class="el" href="classIpopt_1_1TNLP.html#a723401f01da3ee61d4f51a2e05d9b2f9" title="Get primal and dual infeasibility of the current iterate.">Ipopt::TNLP::get_curr_violations()</a>. These methods translate values for the <em>internal representation</em> of the problem from <code>ip_data</code> and <code>ip_cq</code> objects into the <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> representation.</p>
+<p>The information provided by the entities in the argument list correspond to what Ipopt prints in the iteration summary (see also <a class="el" href="OUTPUT.html">Ipopt Output</a>), except for inf_pr, which by default corresponds to the original problem in the log but to the scaled internal problem in this callback. Further information can be obtained from the ip_data and ip_cq objects. The current iterate and violations of feasibility and optimality can be accessed via the methods <a class="el" href="classIpopt_1_1TNLP.html#a8b8a5be340562ea82358a7b6d2bb0969" title="Get primal and dual variable values of the current iterate.">Ipopt::TNLP::get_curr_iterate()</a> and <a class="el" href="classIpopt_1_1TNLP.html#a723401f01da3ee61d4f51a2e05d9b2f9" title="Get primal and dual infeasibility of the current iterate.">Ipopt::TNLP::get_curr_violations()</a>. These methods translate values for the <em>internal representation</em> of the problem from <code>ip_data</code> and <code>ip_cq</code> objects into the <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> representation.</p>
 <dl class="section return"><dt>Returns</dt><dd>If this method returns false, Ipopt will terminate with the User_Requested_Stop status.</dd></dl>
 <p>It is not required to implement (overload) this method. The default implementation always returns true. </p>
 
 <p>Reimplemented in <a class="el" href="classIpopt_1_1StdInterfaceTNLP.html#ab4fcfcfb900e02cfa1f9a6c8f2498fcc">Ipopt::StdInterfaceTNLP</a>, and <a class="el" href="classIpopt_1_1TNLPReducer.html#acd2d3d379cd52fc7ce111b16f95713f3">Ipopt::TNLPReducer</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="IpTNLP_8hpp_source.html#l00663">663</a> of file <a class="el" href="IpTNLP_8hpp_source.html">IpTNLP.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpTNLP_8hpp_source.html#l00665">665</a> of file <a class="el" href="IpTNLP_8hpp_source.html">IpTNLP.hpp</a>.</p>
 
 </div>
 </div>
