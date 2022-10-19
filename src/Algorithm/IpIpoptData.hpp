@@ -588,6 +588,15 @@ public:
       return timing_statistics_;
    }
 
+   /** Return Timing Statistics Object
+    *
+    * @since 3.14.11
+    */
+   const TimingStatistics& TimingStats() const
+   {
+      return timing_statistics_;
+   }
+
    /** Check if additional data has been set */
    bool HaveAddData()
    {

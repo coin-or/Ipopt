@@ -7,6 +7,10 @@ More detailed information about incremental changes can be found in the
 
 ## 3.14
 
+### 3.14.11 (20xx-yy-zz)
+
+- Added `IpoptData::TimingStats() const` [#611]
+
 ### 3.14.10 (2022-10-11)
 
 - Added option `grad_f_constant` to specify that objective function is linear.
