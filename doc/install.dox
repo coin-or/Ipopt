@@ -328,6 +328,10 @@ e.g.,
 and you also need to provide the linker flags for MUMPS with the
 `--with-mumps-lflags` flag.
 
+A precompiled MUMPS library is sometimes also provided by a distributions package manager.
+For example, on a Debian system, one may install package [libmumps-seq-dev](https://packages.debian.org/bullseye/libmumps-seq-dev)
+and use the configure flags `--with-mumps-cflags=-I/usr/include/mumps_seq --with-mumps-lflags=-ldmumps_seq`.
+
 \subsection DOWNLOAD_PARDISO Pardiso (Parallel Sparse Direct Linear Solver) from Pardiso Project
 
 If you would like to use %Ipopt with Pardiso from Pardiso Project,
