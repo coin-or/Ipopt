@@ -1074,7 +1074,9 @@ void MittelmannBndryCntrlDiriBase3D_27::finalize_solution(
 
     for (Index i=0; i<=N_+1; i++) {
     for (Index j=0; j<=N_+1; j++) {
-    fprintf(fp, "y[%6d,%6d] = %15.8e\n", i, j, x[y_index(i,j)]);
+    for (Index k=0; k<=N_+1; k++) {
+    fprintf(fp, "y[%6d,%6d,%6d] = %15.8e\n", i, j, k, x[y_index(i,j,k)]);
+    }
     }
     }
 
