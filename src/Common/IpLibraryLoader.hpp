@@ -8,7 +8,7 @@
 #include "IpReferenced.hpp"
 #include "IpException.hpp"
 
-#ifdef _MSC_VER
+#ifdef _WIN32
 # define IPOPT_SHAREDLIBEXT "dll"
 #elif defined(__APPLE__)
 # define IPOPT_SHAREDLIBEXT "dylib"

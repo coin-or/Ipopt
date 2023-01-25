@@ -10,6 +10,8 @@ More detailed information about incremental changes can be found in the
 ### 3.14.11 (20xx-yy-zz)
 
 - Added `IpoptData::TimingStats() const` [#611]
+- Assume DLL library extension in linear solver library loader on Windows
+  also when building with other compiler than MSVC/Intel [#628].
 
 ### 3.14.10 (2022-10-11)
 
