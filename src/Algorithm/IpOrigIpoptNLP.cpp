@@ -87,7 +87,7 @@ void OrigIpoptNLP::RegisterOptions(
       "in the constraint Jacobians or the Lagrangian Hessian. "
       "If this is not activated, the test is skipped, and the algorithm might proceed with invalid numbers and fail. "
       "If test is activated and an invalid number is detected, "
-      "the matrix is written to output with print_level corresponding to J_MORE_DETAILED; "
+      "the matrix is written to output with print_level corresponding to J_MOREDETAILED (7); "
       "so beware of large output!");
    roptions->AddBoolOption(
       "grad_f_constant",
