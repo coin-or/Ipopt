@@ -20,7 +20,7 @@ namespace Ipopt
  *  This defines the general interface to linear solvers for sparse
  *  symmetric indefinite matrices.  The matrices can be provided
  *  either in "triplet format" (like for Harwell's MA27 solver), or
- *  in compressed sparse row (CSR) format for the lower triangular
+ *  in compressed sparse row (CSR) format for the upper triangular
  *  part of the symmetric matrix.
  *
  *  The solver should be able to compute the inertia of the matrix,
@@ -101,13 +101,13 @@ public:
    {
       /** Triplet (MA27) format */
       Triplet_Format,
-      /** Compressed sparse row format for lower triangular part, with 0 offset */
+      /** Compressed sparse row format for upper triangular part, with 0 offset */
       CSR_Format_0_Offset,
-      /** Compressed sparse row format for lower triangular part, with 1 offset */
+      /** Compressed sparse row format for upper triangular part, with 1 offset */
       CSR_Format_1_Offset,
-      /** Compressed sparse row format for both lwr and upr parts, with 0 offset */
+      /** Compressed sparse row format for both lower and upper parts, with 0 offset */
       CSR_Full_Format_0_Offset,
-      /** Compressed sparse row format for both lwr and upr parts, with 1 offset */
+      /** Compressed sparse row format for both lower and upper parts, with 1 offset */
       CSR_Full_Format_1_Offset
    };
 
