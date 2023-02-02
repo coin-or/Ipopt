@@ -13,6 +13,7 @@ More detailed information about incremental changes can be found in the
 - Assume DLL library extension in linear solver library loader on Windows
   also when building with other compiler than MSVC/Intel [#628].
 - Updated buildsystem files after upgrading to most recent versions of autotools.
+- Install some additional header files [#637].
 
 ### 3.14.10 (2022-10-11)
 

@@ -10,6 +10,7 @@ includeipopt_HEADERS = \
   Common/IpDebug.hpp \
   Common/IpException.hpp \
   Common/IpJournalist.hpp \
+  Common/IpLibraryLoader.hpp \
   Common/IpObserver.hpp \
   Common/IpOptionsList.hpp \
   Common/IpReferenced.hpp \
@@ -58,7 +59,9 @@ includeipopt_HEADERS = \
   Algorithm/IpNLPScaling.hpp \
   Algorithm/IpPDSystemSolver.hpp \
   Algorithm/IpSearchDirCalculator.hpp \
+  Algorithm/IpStdAugSystemSolver.cpp \
   Algorithm/IpTimingStatistics.hpp \
+  Algorithm/LinearSolvers/IpSparseSymLinearSolverInterface.hpp \
   Algorithm/LinearSolvers/IpSymLinearSolver.hpp \
   Algorithm/LinearSolvers/IpLinearSolvers.h \
   Interfaces/IpAlgTypes.hpp \
