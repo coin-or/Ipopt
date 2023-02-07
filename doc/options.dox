@@ -368,7 +368,7 @@ Possible values: yes, no
 \anchor OPT_check_derivatives_for_naninf
 <strong>check_derivatives_for_naninf</strong>: Indicates whether it is desired to check for Nan/Inf in derivative matrices
 <blockquote>
- Activating this option will cause an error if an invalid number is detected in the constraint Jacobians or the Lagrangian Hessian. If this is not activated, the test is skipped, and the algorithm might proceed with invalid numbers and fail. If test is activated and an invalid number is detected, the matrix is written to output with print_level corresponding to J_MORE_DETAILED; so beware of large output! The default value for this string option is "no".
+ Activating this option will cause an error if an invalid number is detected in the constraint Jacobians or the Lagrangian Hessian. If this is not activated, the test is skipped, and the algorithm might proceed with invalid numbers and fail. If test is activated and an invalid number is detected, the matrix is written to output with print_level corresponding to J_MOREDETAILED (7); so beware of large output! The default value for this string option is "no".
 
 Possible values: yes, no
 </blockquote>
