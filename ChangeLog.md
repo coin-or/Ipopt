@@ -7,7 +7,7 @@ More detailed information about incremental changes can be found in the
 
 ## 3.14
 
-### 3.14.11 (20xx-yy-zz)
+### 3.14.11 (2023-02-07)
 
 - Added `IpoptData::TimingStats() const` [#611]
 - Assume DLL library extension in linear solver library loader on Windows

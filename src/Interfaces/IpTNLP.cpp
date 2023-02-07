@@ -930,10 +930,14 @@ bool TNLP::get_curr_violations(
       {
          // orig_d_L is unscaled, but we need the scaled one below (because d is scaled)
          if( orignlp->NLP_scaling()->have_d_scaling() )
+         {
             d_L = orignlp->NLP_scaling()->apply_vector_scaling_d_NonConst(d_L);
+         }
       }
       else // if no relaxation, then orig_d_L() returns NULL, use d_L instead
+      {
          d_L = orignlp->d_L();
+      }
       if( d_L->Dim() > 0 )
       {
          SmartPtr<Vector> tmp = d_L->MakeNewCopy();
@@ -961,10 +965,14 @@ bool TNLP::get_curr_violations(
       {
          // orig_d_U is unscaled, but we need the scaled one below (because d is scaled)
          if( orignlp->NLP_scaling()->have_d_scaling() )
+         {
             d_U = orignlp->NLP_scaling()->apply_vector_scaling_d_NonConst(d_U);
+         }
       }
       else // if no relaxation, then orig_d_U() returns NULL, use d_U instead
+      {
          d_U = orignlp->d_U();
+      }
       if( d_U->Dim() > 0 )
       {
          SmartPtr<Vector> tmp = d_U->MakeNewCopy();

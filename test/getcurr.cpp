@@ -581,7 +581,7 @@ bool run(
 )
 {
    printf("\nRun with fixedvar_makeconstr = %d, start_resto = %d, scale = %d, maximize = %d\n",
-      fixedvar_makeconstr, start_resto, scale, maximize);
+          fixedvar_makeconstr, start_resto, scale, maximize);
 
    // Create an instance of your nlp...
    SmartPtr<TNLP> nlp = new TestNLP(fixedvar_makeconstr, scale, maximize);
