@@ -19,9 +19,11 @@ namespace Ipopt
  *
  *  This defines the general interface to linear solvers for sparse
  *  symmetric indefinite matrices.  The matrices can be provided
- *  either in "triplet format" (like for Harwell's MA27 solver), or
- *  in compressed sparse row (CSR) format for the upper triangular
- *  part of the symmetric matrix.
+ *  either in "triplet format" for the lower triangular part
+ *  (like for Harwell's MA27 solver), or in compressed sparse row
+ *  (CSR) format for the upper triangular part of the symmetric matrix.
+ *  The latter may equivalently (or better) be referred as compressed
+ *  sparse column (CSC) format for the lower triangular part.
  *
  *  The solver should be able to compute the inertia of the matrix,
  *  or more specifically, the number of negative eigenvalues in the
@@ -99,7 +101,7 @@ public:
    /** Enum to specify sparse matrix format. */
    enum EMatrixFormat
    {
-      /** Triplet (MA27) format */
+      /** Triplet (MA27) format for lower triangular part */
       Triplet_Format,
       /** Compressed sparse row format for upper triangular part, with 0 offset */
       CSR_Format_0_Offset,
