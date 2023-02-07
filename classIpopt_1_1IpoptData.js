@@ -60,6 +60,7 @@ var classIpopt_1_1IpoptData =
     [ "Set_info_iters_since_header", "classIpopt_1_1IpoptData.html#a9c1abeb297b312199a03445d5f1a917d", null ],
     [ "ResetInfo", "classIpopt_1_1IpoptData.html#a885f82e4eed0d97b5f0e99a862a4bc42", null ],
     [ "TimingStats", "classIpopt_1_1IpoptData.html#a53fde5ffec9d56518fb90db19d39aac7", null ],
+    [ "TimingStats", "classIpopt_1_1IpoptData.html#a6623b416affb8c48f8c9bb81b02633c1", null ],
     [ "HaveAddData", "classIpopt_1_1IpoptData.html#a0c0d13009f52550be24d2d9f2a30929f", null ],
     [ "AdditionalData", "classIpopt_1_1IpoptData.html#a9b8dbecac8cb57d39fc8f403b662526e", null ],
     [ "SetAddData", "classIpopt_1_1IpoptData.html#afdf738c0b7cf2bba1e4584ed850f200f", null ],

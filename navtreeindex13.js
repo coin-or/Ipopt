@@ -1,5 +1,6 @@
 var NAVTREEINDEX13 =
 {
+"classIpopt_1_1LimMemQuasiNewtonUpdater.html#af91acff1d8121c05414463d5ff29c5a3":[1,0,0,86,39],
 "classIpopt_1_1LimMemQuasiNewtonUpdater.html#afc1b44ee463310533e3412c274d134ed":[1,0,0,86,70],
 "classIpopt_1_1LineSearch.html":[1,0,0,87],
 "classIpopt_1_1LineSearch.html#a129fe1f77e892e9baf6a1565280afa48":[1,0,0,87,6],
@@ -248,6 +249,5 @@ var NAVTREEINDEX13 =
 "classIpopt_1_1Ma77SolverInterface.html#a4f08314678cb62b218cd3a097be4ddc8":[1,0,0,96,16],
 "classIpopt_1_1Ma77SolverInterface.html#a58771654f41c5b4b59b4bb821f597d7e":[1,0,0,96,30],
 "classIpopt_1_1Ma77SolverInterface.html#a608ed094c6d761c31f3b7b7a39095d06":[1,0,0,96,1],
-"classIpopt_1_1Ma77SolverInterface.html#a66ce2f6b59bbff89f7c737afd45db241":[1,0,0,96,31],
-"classIpopt_1_1Ma77SolverInterface.html#a66d7f32db006941665c3397e0117e985":[1,0,0,96,18]
+"classIpopt_1_1Ma77SolverInterface.html#a66ce2f6b59bbff89f7c737afd45db241":[1,0,0,96,31]
 };

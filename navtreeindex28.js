@@ -1,5 +1,7 @@
 var NAVTREEINDEX28 =
 {
+"structmc68__control__i.html#a8f88261e7bef1e947173ffc68cad0162":[1,0,13,9],
+"structmc68__control__i.html#a9e0922750d25d1e753faf5cf8893fcd4":[1,0,13,7],
 "structmc68__control__i.html#abe30f64b3362248eed7036142d386f2c":[1,0,13,8],
 "structmc68__control__i.html#ad0c74ac57694a15f1725a420ee5753eb":[1,0,13,1],
 "structmc68__control__i.html#ad6fc3002ce8a187d361c98b6a226bdaa":[1,0,13,6],

@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.14.10</span-->
+   &#160;<!--span id="projectnumber">3.14.11</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -235,7 +235,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Base class for interfaces to symmetric indefinite linear solvers for sparse matrices. </p>
-<p>This defines the general interface to linear solvers for sparse symmetric indefinite matrices. The matrices can be provided either in "triplet format" (like for Harwell's MA27 solver), or in compressed sparse row (CSR) format for the lower triangular part of the symmetric matrix.</p>
+<p>This defines the general interface to linear solvers for sparse symmetric indefinite matrices. The matrices can be provided either in "triplet format" for the lower triangular part (like for Harwell's MA27 solver), or in compressed sparse row (CSR) format for the upper triangular part of the symmetric matrix. The latter may equivalently (or better) be referred as compressed sparse column (CSC) format for the lower triangular part.</p>
 <p>The solver should be able to compute the inertia of the matrix, or more specifically, the number of negative eigenvalues in the factorized matrix.</p>
 <p>This interface is used by the calling objective in the following way:</p>
 <ol type="1">
@@ -254,7 +254,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Note, if the matrix is given in triplet format, entries might be listed multiple times, in which case the corresponding elements have to be added.</p>
 <p>A note for warm starts: If the option "warm_start_same_structure" is specified with "yes", the algorithm assumes that a problem with the same sparsity structure is solved for a repeated time. In that case, the linear solver might reuse information from the previous optimization. See <a class="el" href="classIpopt_1_1Ma27TSolverInterface.html" title="Interface to the symmetric linear solver MA27, derived from SparseSymLinearSolverInterface.">Ma27TSolverInterface</a> for an example. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpSparseSymLinearSolverInterface_8hpp_source.html#l00096">96</a> of file <a class="el" href="IpSparseSymLinearSolverInterface_8hpp_source.html">IpSparseSymLinearSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpSparseSymLinearSolverInterface_8hpp_source.html#l00098">98</a> of file <a class="el" href="IpSparseSymLinearSolverInterface_8hpp_source.html">IpSparseSymLinearSolverInterface.hpp</a>.</p>
 </div><h2 class="groupheader">Member Enumeration Documentation</h2>
 <a id="ab41b34870b99ed44069b00fccead7c14"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab41b34870b99ed44069b00fccead7c14">&#9670;&nbsp;</a></span>EMatrixFormat</h2>
@@ -270,19 +270,19 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Enum to specify sparse matrix format. </p>
 <table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ab41b34870b99ed44069b00fccead7c14ab4d29f822fbf951b932a3f3173011517"></a>Triplet_Format&#160;</td><td class="fielddoc"><p>Triplet (MA27) format. </p>
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ab41b34870b99ed44069b00fccead7c14ab4d29f822fbf951b932a3f3173011517"></a>Triplet_Format&#160;</td><td class="fielddoc"><p>Triplet (MA27) format for lower triangular part. </p>
 </td></tr>
-<tr><td class="fieldname"><a id="ab41b34870b99ed44069b00fccead7c14a9520e61f42d759dd43457ea9bb0b9b14"></a>CSR_Format_0_Offset&#160;</td><td class="fielddoc"><p>Compressed sparse row format for lower triangular part, with 0 offset. </p>
+<tr><td class="fieldname"><a id="ab41b34870b99ed44069b00fccead7c14a9520e61f42d759dd43457ea9bb0b9b14"></a>CSR_Format_0_Offset&#160;</td><td class="fielddoc"><p>Compressed sparse row format for upper triangular part, with 0 offset. </p>
 </td></tr>
-<tr><td class="fieldname"><a id="ab41b34870b99ed44069b00fccead7c14a6ec58bbddc3371494ce6e17ed926c7f3"></a>CSR_Format_1_Offset&#160;</td><td class="fielddoc"><p>Compressed sparse row format for lower triangular part, with 1 offset. </p>
+<tr><td class="fieldname"><a id="ab41b34870b99ed44069b00fccead7c14a6ec58bbddc3371494ce6e17ed926c7f3"></a>CSR_Format_1_Offset&#160;</td><td class="fielddoc"><p>Compressed sparse row format for upper triangular part, with 1 offset. </p>
 </td></tr>
-<tr><td class="fieldname"><a id="ab41b34870b99ed44069b00fccead7c14ae633f0ae2434c6d4461cbe23fd641fd2"></a>CSR_Full_Format_0_Offset&#160;</td><td class="fielddoc"><p>Compressed sparse row format for both lwr and upr parts, with 0 offset. </p>
+<tr><td class="fieldname"><a id="ab41b34870b99ed44069b00fccead7c14ae633f0ae2434c6d4461cbe23fd641fd2"></a>CSR_Full_Format_0_Offset&#160;</td><td class="fielddoc"><p>Compressed sparse row format for both lower and upper parts, with 0 offset. </p>
 </td></tr>
-<tr><td class="fieldname"><a id="ab41b34870b99ed44069b00fccead7c14a1ccf57e194d3f8c8e9fa750e3797f4bf"></a>CSR_Full_Format_1_Offset&#160;</td><td class="fielddoc"><p>Compressed sparse row format for both lwr and upr parts, with 1 offset. </p>
+<tr><td class="fieldname"><a id="ab41b34870b99ed44069b00fccead7c14a1ccf57e194d3f8c8e9fa750e3797f4bf"></a>CSR_Full_Format_1_Offset&#160;</td><td class="fielddoc"><p>Compressed sparse row format for both lower and upper parts, with 1 offset. </p>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="IpSparseSymLinearSolverInterface_8hpp_source.html#l00100">100</a> of file <a class="el" href="IpSparseSymLinearSolverInterface_8hpp_source.html">IpSparseSymLinearSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpSparseSymLinearSolverInterface_8hpp_source.html#l00102">102</a> of file <a class="el" href="IpSparseSymLinearSolverInterface_8hpp_source.html">IpSparseSymLinearSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -310,7 +310,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpSparseSymLinearSolverInterface_8hpp_source.html#l00116">116</a> of file <a class="el" href="IpSparseSymLinearSolverInterface_8hpp_source.html">IpSparseSymLinearSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpSparseSymLinearSolverInterface_8hpp_source.html#l00118">118</a> of file <a class="el" href="IpSparseSymLinearSolverInterface_8hpp_source.html">IpSparseSymLinearSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -337,7 +337,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpSparseSymLinearSolverInterface_8hpp_source.html#l00119">119</a> of file <a class="el" href="IpSparseSymLinearSolverInterface_8hpp_source.html">IpSparseSymLinearSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpSparseSymLinearSolverInterface_8hpp_source.html#l00121">121</a> of file <a class="el" href="IpSparseSymLinearSolverInterface_8hpp_source.html">IpSparseSymLinearSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -689,7 +689,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classIpopt_1_1Ma77SolverInterface.html#a869edcf34c12f5aba10d85ec3653bfd3">Ipopt::Ma77SolverInterface</a>, <a class="el" href="classIpopt_1_1Ma97SolverInterface.html#adffbaabf9b7614831b8f5a402c06e8e8">Ipopt::Ma97SolverInterface</a>, <a class="el" href="classIpopt_1_1Ma86SolverInterface.html#af2d1c0d48738a0003f9add771e4a63d2">Ipopt::Ma86SolverInterface</a>, <a class="el" href="classIpopt_1_1SpralSolverInterface.html#ab6ae108bf645940b26cd0df9d630818c">Ipopt::SpralSolverInterface</a>, <a class="el" href="classIpopt_1_1WsmpSolverInterface.html#a2a62abd2a635650fcbc0ce24f9780616">Ipopt::WsmpSolverInterface</a>, and <a class="el" href="classIpopt_1_1MumpsSolverInterface.html#afab6cecc19a070b331f1a6b4d00322bc">Ipopt::MumpsSolverInterface</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="IpSparseSymLinearSolverInterface_8hpp_source.html#l00238">238</a> of file <a class="el" href="IpSparseSymLinearSolverInterface_8hpp_source.html">IpSparseSymLinearSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpSparseSymLinearSolverInterface_8hpp_source.html#l00240">240</a> of file <a class="el" href="IpSparseSymLinearSolverInterface_8hpp_source.html">IpSparseSymLinearSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
@@ -737,7 +737,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classIpopt_1_1WsmpSolverInterface.html#a3f653e02fb93fcdd74145e5cdf045d25">Ipopt::WsmpSolverInterface</a>, <a class="el" href="classIpopt_1_1MumpsSolverInterface.html#a87f08f29818d2baa26a55caaae43b87f">Ipopt::MumpsSolverInterface</a>, <a class="el" href="classIpopt_1_1Ma77SolverInterface.html#a1e80a428be05d6b31d4a8e9d80cd7f1d">Ipopt::Ma77SolverInterface</a>, <a class="el" href="classIpopt_1_1Ma97SolverInterface.html#acc5707d0baa419f7b9f552ea3e968117">Ipopt::Ma97SolverInterface</a>, <a class="el" href="classIpopt_1_1Ma86SolverInterface.html#a0a7b8b943a298d84e5a842aba4525360">Ipopt::Ma86SolverInterface</a>, and <a class="el" href="classIpopt_1_1SpralSolverInterface.html#afd4c3a3ad6d83b72df90c2729689082b">Ipopt::SpralSolverInterface</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="IpSparseSymLinearSolverInterface_8hpp_source.html#l00246">246</a> of file <a class="el" href="IpSparseSymLinearSolverInterface_8hpp_source.html">IpSparseSymLinearSolverInterface.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpSparseSymLinearSolverInterface_8hpp_source.html#l00248">248</a> of file <a class="el" href="IpSparseSymLinearSolverInterface_8hpp_source.html">IpSparseSymLinearSolverInterface.hpp</a>.</p>
 
 </div>
 </div>
