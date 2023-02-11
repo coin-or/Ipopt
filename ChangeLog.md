@@ -7,6 +7,10 @@ More detailed information about incremental changes can be found in the
 
 ## 3.14
 
+### 3.14.12 (2023-xx-yy)
+
+- Fix that a source file was installed and install more header files [#642]
+
 ### 3.14.11 (2023-02-07)
 
 - Added `IpoptData::TimingStats() const` [#611]
