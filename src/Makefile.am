@@ -59,11 +59,15 @@ includeipopt_HEADERS = \
   Algorithm/IpNLPScaling.hpp \
   Algorithm/IpPDSystemSolver.hpp \
   Algorithm/IpSearchDirCalculator.hpp \
-  Algorithm/IpStdAugSystemSolver.cpp \
+  Algorithm/IpStdAugSystemSolver.hpp \
   Algorithm/IpTimingStatistics.hpp \
+  Algorithm/LinearSolvers/IpLinearSolvers.h \
+  Algorithm/LinearSolvers/IpSlackBasedTSymScalingMethod.hpp \
   Algorithm/LinearSolvers/IpSparseSymLinearSolverInterface.hpp \
   Algorithm/LinearSolvers/IpSymLinearSolver.hpp \
-  Algorithm/LinearSolvers/IpLinearSolvers.h \
+  Algorithm/LinearSolvers/IpTripletToCSRConverter.hpp \
+  Algorithm/LinearSolvers/IpTSymLinearSolver.hpp \
+  Algorithm/LinearSolvers/IpTSymScalingMethod.hpp \
   Interfaces/IpAlgTypes.hpp \
   Interfaces/IpIpoptApplication.hpp \
   Interfaces/IpNLP.hpp \
