@@ -9,6 +9,7 @@
 #include "IpOptionsList.hpp"
 #include "IpIpoptApplication.hpp"
 #include "IpBlas.hpp"
+#include "IpSmartPtr.hpp"
 
 struct IpoptProblemInfo
 {
@@ -301,9 +302,12 @@ bool GetIpoptCurrentIterate(
    ipnumber*       lambda
 )
 {
-   if (ipopt_problem->tnlp == NULL){
+   if (IsNull(ipopt_problem->tnlp))
+   {
       return false;
-   } else {
+   }
+   else
+   {
       return ipopt_problem->tnlp->get_curr_iterate(scaled, n, x, z_L, z_U, m, g, lambda);
    }
 }
@@ -322,7 +326,7 @@ bool GetIpoptCurrentViolations(
    ipnumber*     compl_g
 )
 {
-   if (ipopt_problem->tnlp == NULL)
+   if (IsNull(ipopt_problem->tnlp))
    {
       return false;
    }
