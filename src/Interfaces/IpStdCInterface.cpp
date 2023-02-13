@@ -60,6 +60,8 @@ IpoptProblem CreateIpoptProblem(
 
    IpoptProblem retval = new IpoptProblemInfo;
 
+   retval->tnlp = NULL;
+
    retval->n   = n;
    retval->x_L = new ipnumber[n];
    Ipopt::IpBlasCopy(n, x_L, 1, retval->x_L, 1);
@@ -299,7 +301,11 @@ bool GetIpoptCurrentIterate(
    ipnumber*       lambda
 )
 {
-   return ipopt_problem->tnlp->get_curr_iterate(scaled, n, x, z_L, z_U, m, g, lambda);
+   if (ipopt_problem->tnlp == NULL){
+      return false;
+   } else {
+      return ipopt_problem->tnlp->get_curr_iterate(scaled, n, x, z_L, z_U, m, g, lambda);
+   }
 }
 
 bool GetIpoptCurrentViolations(
@@ -316,5 +322,12 @@ bool GetIpoptCurrentViolations(
    ipnumber*     compl_g
 )
 {
-   return ipopt_problem->tnlp->get_curr_violations(scaled != 0, n, x_L_violation, x_U_violation, compl_x_L, compl_x_U, grad_lag_x, m, nlp_constraint_violation, compl_g);
+   if (ipopt_problem->tnlp == NULL)
+   {
+      return false;
+   }
+   else
+   {
+      return ipopt_problem->tnlp->get_curr_violations(scaled != 0, n, x_L_violation, x_U_violation, compl_x_L, compl_x_U, grad_lag_x, m, nlp_constraint_violation, compl_g);
+   }
 }
