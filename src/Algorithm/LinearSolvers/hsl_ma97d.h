@@ -5,7 +5,7 @@
  *
  * Written by: Jonathan Hogg
  *
- * Version 2.6.0
+ * Version 2.8.0
  *
  * THIS FILE ONLY may be redistributed under the below modified BSD licence.
  * All other files distributed as part of the HSL_MA97 package
@@ -96,7 +96,7 @@ struct ma97_control_d {
     int ispare[5]; ma97realtype_d_ rspare[10];
 };
 
-struct ma97_info {
+struct ma97_info_d {
     int flag;                 /* <0 on error */
     int flag68;
     int flag77;
@@ -105,7 +105,7 @@ struct ma97_info {
     int matrix_outrange;      /* number of out of range entries in A */
     int matrix_missing_diag;  /* number of zero diagonal entries in A */
     int maxdepth;             /* height of assembly tree */
-    int maxfront;             /* maximum dimension of frontal matrix */
+    int maxfront;             /* maximum no. rows in a supernode */
     int num_delay;            /* number of times a pivot was delayed */
     long num_factor;          /* number of entries in L */
     long num_flops;           /* number of floating point operations */
@@ -114,9 +114,10 @@ struct ma97_info {
     int num_two;              /* number of 2x2 pivots */
     int ordering;             /* ordering used (as per control.ordering) */
     int stat;                 /* error code from failed memory allocation */
+    int maxsupernode;         /* maximum no. columns in a supernode */
 
     /* Reserve space for future interface changes */
-    int ispare[5]; ma97realtype_d_ rspare[10];         
+    int ispare[4]; ma97realtype_d_ rspare[10];
 };
 
 /* Set default values of control */
