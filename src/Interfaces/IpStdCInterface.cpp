@@ -302,14 +302,12 @@ bool GetIpoptCurrentIterate(
    ipnumber*       lambda
 )
 {
-   if (IsNull(ipopt_problem->tnlp))
+   if( IsNull(ipopt_problem->tnlp) )
    {
       return false;
    }
-   else
-   {
-      return ipopt_problem->tnlp->get_curr_iterate(scaled, n, x, z_L, z_U, m, g, lambda);
-   }
+
+   return ipopt_problem->tnlp->get_curr_iterate(scaled, n, x, z_L, z_U, m, g, lambda);
 }
 
 bool GetIpoptCurrentViolations(
@@ -326,12 +324,10 @@ bool GetIpoptCurrentViolations(
    ipnumber*     compl_g
 )
 {
-   if (IsNull(ipopt_problem->tnlp))
+   if( IsNull(ipopt_problem->tnlp) )
    {
       return false;
    }
-   else
-   {
-      return ipopt_problem->tnlp->get_curr_violations(scaled != 0, n, x_L_violation, x_U_violation, compl_x_L, compl_x_U, grad_lag_x, m, nlp_constraint_violation, compl_g);
-   }
+
+   return ipopt_problem->tnlp->get_curr_violations(scaled != 0, n, x_L_violation, x_U_violation, compl_x_L, compl_x_U, grad_lag_x, m, nlp_constraint_violation, compl_g);
 }

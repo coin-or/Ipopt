@@ -9,7 +9,10 @@ More detailed information about incremental changes can be found in the
 
 ### 3.14.12 (2023-xx-yy)
 
-- Fix that a source file was installed and install more header files [#642]
+- Fix that a source file was installed and install more header files.
+  [#641, #642, by Joao Sousa Pinto]
+- Fixed crash of GetIpoptCurrentIterate() and GetIpoptCurrentViolations() in
+  C interface when called before or after IpoptSolve(). [#644, #645, by Robbybp]
 
 ### 3.14.11 (2023-02-07)
 
