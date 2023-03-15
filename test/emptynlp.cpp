@@ -22,13 +22,14 @@ using namespace Ipopt;
  * min sum_i x_i
  * s.t. x = 0           if not infeasbounds
  *      1 <= x <= 0     if infeasbounds
- *      sum_i x_i >= 0   if not infeascons
+ *      sum_i x_i >= 0   if not infeascons and cons
  *      sum_i x_i >= 1   if infeascons
  */
 class EmptyNLP: public TNLP
 {
 private:
    int nvars;
+   bool cons;
    bool infeascons;
    bool infeasbounds;
 
@@ -36,14 +37,17 @@ public:
    /** constructor */
    EmptyNLP(
       int  nvars_         = 0,
+      bool cons_          = true,
       bool infeascons_    = false,
       bool infeasbounds_  = false
    )
       : nvars(nvars_),
+        cons(cons_),
         infeascons(infeascons_),
         infeasbounds(infeasbounds_)
    {
       assert(!infeasbounds || nvars > 0);
+      assert(!infeascons || cons);
    }
 
    /** destructor */
@@ -59,8 +63,8 @@ public:
    )
    {
       n = nvars;
-      m = 1;
-      nnz_jac_g = n;
+      m = cons ? 1 : 0;
+      nnz_jac_g = cons ? n : 0;
       nnz_h_lag = 0;
       index_style = C_STYLE;
 
@@ -83,9 +87,12 @@ public:
          x_u[i] = 0.0;
       }
 
-      assert(m == 1);
-      g_l[0] = infeascons ? 1.0 : 0.0;
-      g_u[0] = 1e300;
+      assert(m == (cons ? 1 : 0));
+      if( cons )
+      {
+         g_l[0] = infeascons ? 1.0 : 0.0;
+         g_u[0] = 1e300;
+      }
 
       return true;
    }
@@ -157,6 +164,9 @@ public:
       Number*       g
    )
    {
+      if( !cons )
+         return true;
+
       assert(m == 1);
 
       g[0] = 0.0;
@@ -183,9 +193,13 @@ public:
       Number*       values
    )
    {
+      assert(nele_jac == (cons ? n : 0));
+
+      if( !cons )
+         return true;
+
       assert((iRow != NULL) == (jCol != NULL));
       assert((iRow != NULL) == (values == NULL));
-      assert(nele_jac == n);
 
       if( iRow != NULL )
          for( Index i = 0; i < n; ++i )
@@ -289,17 +303,19 @@ public:
 
 bool runEmpty(
    int  nvars,
+   bool cons,
    bool infeascons,
    bool infeasbounds
 )
 {
    std::cout << std::endl << "*** Solve for " << nvars << " variables, "
+             << (cons ? 1 : 0) << ' '
              << (infeascons ? "infeasible" : "feasible") << " constraint, "
              << (infeasbounds ? "infeasible" : "feasible") << " bounds"
              << std::endl;
 
    // Create an instance of your nlp...
-   SmartPtr<TNLP> nlp = new EmptyNLP(nvars, infeascons, infeasbounds);
+   SmartPtr<TNLP> nlp = new EmptyNLP(nvars, cons, infeascons, infeasbounds);
 
    // Create an instance of the IpoptApplication
    SmartPtr<IpoptApplication> app = new IpoptApplication();
@@ -663,27 +679,32 @@ int main(
    char**
 )
 {
-   if( !runEmpty(0, false, false) )
+   if( !runEmpty(0, false, false, false) )
    {
       return EXIT_FAILURE;
    }
 
-   if( !runEmpty(5, false, false) )
+   if( !runEmpty(0, true, false, false) )
    {
       return EXIT_FAILURE;
    }
 
-   if( !runEmpty(0, true, false) )
+   if( !runEmpty(5, true, false, false) )
    {
       return EXIT_FAILURE;
    }
 
-   if( !runEmpty(5, true, false) )
+   if( !runEmpty(0, true, true, false) )
    {
       return EXIT_FAILURE;
    }
 
-   if( !runEmpty(5, false, true) )
+   if( !runEmpty(5, true, true, false) )
+   {
+      return EXIT_FAILURE;
+   }
+
+   if( !runEmpty(5, true, false, true) )
    {
       return EXIT_FAILURE;
    }
