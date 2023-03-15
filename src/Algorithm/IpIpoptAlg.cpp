@@ -867,6 +867,9 @@ void IpoptAlgorithm::ComputeFeasibilityMultipliers()
                   dbg_verbosity);
    DBG_ASSERT(IpCq().IsSquareProblem());
 
+   if( IpData().curr()->y_c()->Dim() == 0 && IpData().curr()->y_d()->Dim() == 0 )
+      return;
+
    // if we don't have an object for computing least square
    // multipliers we don't compute them
    if( IsNull(eq_multiplier_calculator_) )
