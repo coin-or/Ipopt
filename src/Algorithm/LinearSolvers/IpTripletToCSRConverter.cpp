@@ -53,8 +53,6 @@ Index TripletToCSRConverter::InitializeConverter(
    DBG_START_METH("TSymLinearSolver::InitializeStructure",
                   dbg_verbosity);
 
-   DBG_ASSERT(dim > 0);
-   DBG_ASSERT(nonzeros > 0);
    DBG_ASSERT(hf_ == Triangular_Format || hf_ == Full_Format);
 
    delete[] ia_;
@@ -65,6 +63,21 @@ Index TripletToCSRConverter::InitializeConverter(
 
    dim_ = dim;
    nonzeros_triplet_ = nonzeros;
+
+   if( nonzeros == 0 )
+   {
+      ia_ = NULL;
+      ja_ = NULL;
+      ipos_first_ = NULL;
+      ipos_double_triplet_ = NULL;
+      ipos_double_compressed_ = NULL;
+      nonzeros_compressed_ = 0;
+      num_doubles_ = 0;
+      initialized_ = true;
+      return 0;
+   }
+
+   DBG_ASSERT(dim > 0);
 
    // Create a list with all triplet entries
    std::vector<TripletEntry> entry_list(nonzeros);

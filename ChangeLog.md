@@ -13,6 +13,7 @@ More detailed information about incremental changes can be found in the
   [#641, #642, by Joao Sousa Pinto]
 - Fixed crash of GetIpoptCurrentIterate() and GetIpoptCurrentViolations() in
   C interface when called before or after IpoptSolve(). [#644, #645, by Robbybp]
+- Fixed crash when trying to solve problem without variables and constraints. [#648]
 
 ### 3.14.11 (2023-02-07)
 
