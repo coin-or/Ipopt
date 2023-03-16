@@ -53,7 +53,8 @@ public:
    ///@{
    /** Constructor */
    AlgorithmBuilder(
-      SmartPtr<AugSystemSolver> custom_solver = NULL
+      SmartPtr<AugSystemSolver> custom_solver = NULL,
+      const std::string& custom_solver_name   = std::string()   /**< @since 3.14.12 */
    );
 
    /** Destructor */
@@ -402,6 +403,7 @@ private:
    /** Optional pointer to AugSystemSolver.  If this is set in the
     *  constructor, we will use this to solve the linear systems. */
    SmartPtr<AugSystemSolver> custom_solver_;
+   std::string custom_solver_name_;
 
    /// name of linear solver constructed in SymLinearSolverFactory
    std::string linear_solver;

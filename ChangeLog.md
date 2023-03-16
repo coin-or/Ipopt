@@ -14,6 +14,7 @@ More detailed information about incremental changes can be found in the
 - Fixed crash of GetIpoptCurrentIterate() and GetIpoptCurrentViolations() in
   C interface when called before or after IpoptSolve(). [#644, #645, by Robbybp]
 - Fixed crash when trying to solve problem without variables and constraints. [#648]
+- Added optional argument to `AlgorithmBuilder` constructor to provide name of custom solver. [#618]
 
 ### 3.14.11 (2023-02-07)
 

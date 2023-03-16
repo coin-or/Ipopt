@@ -80,9 +80,11 @@ static const Index dbg_verbosity = 0;
 #endif
 
 AlgorithmBuilder::AlgorithmBuilder(
-   SmartPtr<AugSystemSolver> custom_solver /*=NULL*/
+   SmartPtr<AugSystemSolver> custom_solver, /*=NULL*/
+   const std::string& custom_solver_name    /*=std::string()*/
 )
-   : custom_solver_(custom_solver)
+   : custom_solver_(custom_solver),
+     custom_solver_name_(custom_solver_name)
 { }
 
 void AlgorithmBuilder::RegisterOptions(
@@ -576,6 +578,8 @@ SmartPtr<AugSystemSolver> AlgorithmBuilder::AugSystemSolverFactory(
    {
       ASSERT_EXCEPTION(IsValid(custom_solver_), OPTION_INVALID, "Selected linear solver CUSTOM not available.");
       AugSolver = custom_solver_;
+      if( !custom_solver_name_.empty() )
+         linear_solver = custom_solver_name_;
    }
    else
    {
