@@ -571,7 +571,6 @@ SmartPtr<AugSystemSolver> AlgorithmBuilder::AugSystemSolverFactory(
 )
 {
    SmartPtr<AugSystemSolver> AugSolver;
-   std::string linear_solver;
    options.GetStringValue("linear_solver", linear_solver, prefix);
    if( linear_solver == "custom" )
    {
