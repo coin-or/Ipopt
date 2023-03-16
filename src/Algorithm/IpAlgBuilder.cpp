@@ -1003,7 +1003,7 @@ SmartPtr<LineSearch> AlgorithmBuilder::BuildLineSearch(
 
       SmartPtr<IpoptAlgorithm> resto_alg = new IpoptAlgorithm(resto_SearchDirCalc, GetRawPtr(resto_LineSearch),
             GetRawPtr(resto_MuUpdate), GetRawPtr(resto_convCheck), resto_IterInitializer, resto_IterOutput,
-            resto_HessUpdater, resto_EqMultCalculator);
+            resto_HessUpdater, resto_EqMultCalculator, linear_solver);
 
       // Set the restoration phase
       resto_phase = new MinC_1NrmRestorationPhase(*resto_alg, EqMultCalculator_);
