@@ -131,7 +131,9 @@ private:
    SmartPtr<IterationOutput> iter_output_;
    SmartPtr<HessianUpdater> hessian_updater_;
    /** The multiplier calculator (for y_c and y_d) has to be set only
-    *  if option recalc_y is set to true
+    *  if option recalc_y is set to true.
+    *  If set, then it is also used to compute the dual multipliers for
+    *  square problems.
     */
    SmartPtr<EqMultiplierCalculator> eq_multiplier_calculator_;
    ///@}
@@ -184,8 +186,18 @@ private:
    /** Print the problem size statistics */
    void PrintProblemStatistics();
 
-   /** Compute the Lagrangian multipliers for a feasibility problem */
+   /** Tries to compute Lagrangian multipliers for a feasibility problem
+    *
+    * Only computes multipliers if primal feasible but not converged yet.
+    * Restores current iterate if multiplier computation fails or new point does not satisfy convergence criteria, too.
+    */
    void ComputeFeasibilityMultipliers();
+
+   /** Compute the Lagrangian multipliers for a feasibility problem in post processing
+    *
+    * Always tries to compute multipliers and does not restore current iterate if failing.
+    */
+   void ComputeFeasibilityMultipliersPostprocess();
    ///@}
 
    /** @name internal flags */
@@ -218,6 +230,8 @@ private:
    bool mehrotra_algorithm_;
    /** String specifying linear solver */
    std::string linear_solver_name_;
+   /** Constraint violation tolerance on unscaled problem */
+   Number constr_viol_tol_;
    ///@}
 
    /** @name auxiliary functions */

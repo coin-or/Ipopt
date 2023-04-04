@@ -210,14 +210,6 @@ ConvergenceCheck::ConvergenceStatus OptimalityErrorConvergenceCheck::CheckConver
    Number constr_viol = IpCq().unscaled_curr_nlp_constraint_violation(NORM_MAX);
    Number compl_inf = IpCq().unscaled_curr_complementarity(mu_target_, NORM_MAX);
 
-   if( IpData().curr()->x()->Dim() == IpData().curr()->y_c()->Dim() )
-   {
-      // the problem is square, there is no point in looking at dual
-      // infeasibility and complementarity as termination criterion
-      dual_inf_tol_ = 1e300;
-      compl_inf_tol_ = 1e300;
-   }
-
    if( Jnlst().ProduceOutput(J_MOREDETAILED, J_MAIN) )
    {
       Jnlst().Printf(J_MOREDETAILED, J_MAIN,
@@ -311,14 +303,6 @@ bool OptimalityErrorConvergenceCheck::CurrentIsAcceptable()
    DBG_PRINT((1, "acceptable_dual_inf_tol_ = %e\n", acceptable_dual_inf_tol_));
    DBG_PRINT((1, "acceptable_constr_viol_tol_ = %e\n", acceptable_constr_viol_tol_));
    DBG_PRINT((1, "acceptable_compl_inf_tol_ = %e\n", acceptable_compl_inf_tol_));
-
-   if( IpData().curr()->x()->Dim() == IpData().curr()->y_c()->Dim() )
-   {
-      // the problem is square, there is no point in looking at dual
-      // infeasibility and complementarity as termination criterion
-      acceptable_dual_inf_tol_ = 1e300;
-      acceptable_compl_inf_tol_ = 1e300;
-   }
 
    if( Jnlst().ProduceOutput(J_MOREDETAILED, J_MAIN) )
    {

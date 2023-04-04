@@ -246,6 +246,8 @@ bool IpoptAlgorithm::InitializeImpl(
       my_options->GetNumericValue("recalc_y_feas_tol", recalc_y_feas_tol_, prefix);
    }
 
+   my_options->GetNumericValue("constr_viol_tol", constr_viol_tol_, prefix);
+
    if( prefix == "resto." )
    {
       skip_print_problem_stats_ = true;
@@ -404,6 +406,11 @@ SolverReturn IpoptAlgorithm::Optimize(
 
          IpData().Set_iter_count(IpData().iter_count() + 1);
 
+         if( IpCq().IsSquareProblem() )
+         {
+            ComputeFeasibilityMultipliers();
+         }
+
          IpData().TimingStats().CheckConvergence().Start();
          conv_status = conv_check_->CheckConvergence();
          IpData().TimingStats().CheckConvergence().End();
@@ -450,15 +457,6 @@ SolverReturn IpoptAlgorithm::Optimize(
       {
          static_cast<BacktrackingLineSearch*>(GetRawPtr(line_search_))->StopWatchDog();
       }
-
-      if( conv_status == ConvergenceCheck::CONVERGED || conv_status == ConvergenceCheck::CONVERGED_TO_ACCEPTABLE_POINT )
-      {
-         if( IpCq().IsSquareProblem() )
-         {
-            // make the sure multipliers are computed properly
-            ComputeFeasibilityMultipliers();
-         }
-      }
    }
    catch( TINY_STEP_DETECTED& exc )
    {
@@ -470,11 +468,6 @@ SolverReturn IpoptAlgorithm::Optimize(
    {
       exc.ReportException(Jnlst(), J_MOREDETAILED);
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
-      if( IpCq().IsSquareProblem() )
-      {
-         // make the sure multipliers are computed properly
-         ComputeFeasibilityMultipliers();
-      }
       retval = STOP_AT_ACCEPTABLE_POINT;
    }
    catch( LOCALLY_INFEASIBLE& exc )
@@ -490,8 +483,8 @@ SolverReturn IpoptAlgorithm::Optimize(
       IpData().TimingStats().ComputeAcceptableTrialPoint().EndIfStarted();
       if( IpCq().IsSquareProblem() )
       {
-         // make the sure multipliers are computed properly
-         ComputeFeasibilityMultipliers();
+         // make sure the multipliers are computed properly
+         ComputeFeasibilityMultipliersPostprocess();
          retval = FEASIBLE_POINT_FOUND;
       }
       else
@@ -549,7 +542,7 @@ SolverReturn IpoptAlgorithm::Optimize(
       if( IpCq().IsSquareProblem() )
       {
          // make the sure multipliers are computed properly
-         ComputeFeasibilityMultipliers();
+         ComputeFeasibilityMultipliersPostprocess();
       }
       retval = FEASIBLE_POINT_FOUND;
    }
@@ -867,15 +860,104 @@ void IpoptAlgorithm::ComputeFeasibilityMultipliers()
                   dbg_verbosity);
    DBG_ASSERT(IpCq().IsSquareProblem());
 
-   if( IpData().curr()->y_c()->Dim() == 0 && IpData().curr()->y_d()->Dim() == 0 )
+   // if not primal feasible yet, then do not compute multipliers yet
+   Number constr_viol = IpCq().unscaled_curr_nlp_constraint_violation(NORM_MAX);
+   if( constr_viol > constr_viol_tol_ )
+   {
       return;
+   }
+
+   // if we don't have an object for computing least square
+   // multipliers we don't compute them
+   if( IsNull(eq_multiplier_calculator_) )
+   {
+      Jnlst().Printf(J_DETAILED, J_SOLUTION,
+                     "No eq_mult_calculator object available in IpoptAlgorithm to recompute multipliers at solution for square problem.\n");
+      return;
+   }
+
+   IpData().TimingStats().CheckConvergence().Start();
+   ConvergenceCheck::ConvergenceStatus conv_status = conv_check_->CheckConvergence(false);
+   IpData().TimingStats().CheckConvergence().End();
+
+   // if converged or reached some limit, then do not update multipliers
+   // status CONTINUE likely means that we are not dual feasible yet, which we try to fix below
+   if( conv_status != ConvergenceCheck::CONTINUE )
+   {
+      return;
+   }
+
+   // backup current iterate for case eq_mult_calculator fails
+   // TODO we could avoid this backup&restore, if eq_multiplier_calculator_ could be told to calculate the multipliers for the trial instead of the current iterate
+   SmartPtr<const IteratesVector> curr_backup = IpData().curr();
+
+   SmartPtr<IteratesVector> iterates = IpData().curr()->MakeNewContainer();
+   SmartPtr<Vector> tmp = iterates->z_L()->MakeNew();
+   tmp->Set(0.);
+   iterates->Set_z_L(*tmp);
+   tmp = iterates->z_U()->MakeNew();
+   tmp->Set(0.);
+   iterates->Set_z_U(*tmp);
+   tmp = iterates->v_L()->MakeNew();
+   tmp->Set(0.);
+   iterates->Set_v_L(*tmp);
+   tmp = iterates->v_U()->MakeNew();
+   tmp->Set(0.);
+   iterates->Set_v_U(*tmp);
+   SmartPtr<Vector> y_c = iterates->y_c()->MakeNew();
+   SmartPtr<Vector> y_d = iterates->y_d()->MakeNew();
+   IpData().set_trial(iterates);
+   IpData().AcceptTrialPoint();
+   bool retval = eq_multiplier_calculator_->CalculateMultipliers(*y_c, *y_d);
+   if( retval )
+   {
+      //TODO Check if following line is really necessary
+      iterates = IpData().curr()->MakeNewContainer();
+      iterates->Set_y_c(*y_c);
+      iterates->Set_y_d(*y_d);
+      IpData().set_trial(iterates);
+      IpData().AcceptTrialPoint();
+
+      // check whether the new iterate satisfies convergence criteria now
+      // if not, then we better continue with backed up iterate
+      IpData().TimingStats().CheckConvergence().Start();
+      ConvergenceCheck::ConvergenceStatus conv_status = conv_check_->CheckConvergence(false);
+      IpData().TimingStats().CheckConvergence().End();
+
+      if( conv_status == ConvergenceCheck::CONVERGED || conv_status == ConvergenceCheck::CONVERGED_TO_ACCEPTABLE_POINT )
+      {
+         return;
+      }
+
+      Jnlst().Printf(J_DETAILED, J_SOLUTION,
+                     "Multipliers for feasibility problem using eq_mult_calculator does not lead to converged status yet.\n");
+   }
+   else
+   {
+      Jnlst().Printf(J_DETAILED, J_SOLUTION,
+                     "Failed to compute multipliers for feasibility problem using eq_mult_calculator.\n");
+   }
+
+   // restore original iterate
+   Jnlst().Printf(J_DETAILED, J_SOLUTION,
+                  "Restoring iterate from before trying eq_mult_calculator.\n");
+   SmartPtr<IteratesVector> orig_iterate = curr_backup->MakeNewContainer();
+   IpData().set_trial(orig_iterate);
+   IpData().AcceptTrialPoint();
+}
+
+void IpoptAlgorithm::ComputeFeasibilityMultipliersPostprocess()
+{
+   DBG_START_METH("IpoptAlgorithm::ComputeFeasibilityMultipliersPostprocess",
+                  dbg_verbosity);
+   DBG_ASSERT(IpCq().IsSquareProblem());
 
    // if we don't have an object for computing least square
    // multipliers we don't compute them
    if( IsNull(eq_multiplier_calculator_) )
    {
       Jnlst().Printf(J_WARNING, J_SOLUTION,
-                     "This is a square problem, but multipliers cannot be recomputed at solution, since no eq_mult_calculator object is available in IpoptAlgorithm\n");
+                     "No eq_mult_calculator object available in IpoptAlgorithm to recompute multipliers at solution for square problem.\n");
       return;
    }
 
@@ -899,7 +981,7 @@ void IpoptAlgorithm::ComputeFeasibilityMultipliers()
    bool retval = eq_multiplier_calculator_->CalculateMultipliers(*y_c, *y_d);
    if( retval )
    {
-      //Check if following line is really necessary
+      //TODO Check if following line is really necessary
       iterates = IpData().curr()->MakeNewContainer();
       iterates->Set_y_c(*y_c);
       iterates->Set_y_d(*y_d);
@@ -909,7 +991,7 @@ void IpoptAlgorithm::ComputeFeasibilityMultipliers()
    else
    {
       Jnlst().Printf(J_WARNING, J_SOLUTION,
-                     "Cannot recompute multipliers for feasibility problem.  Error in eq_mult_calculator\n");
+                     "Failed to compute multipliers for feasibility problem using eq_mult_calculator.\n");
    }
 }
 

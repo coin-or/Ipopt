@@ -15,6 +15,16 @@ More detailed information about incremental changes can be found in the
   C interface when called before or after IpoptSolve(). [#644, #645, by Robbybp]
 - Fixed crash when trying to solve problem without variables and constraints. [#648]
 - Added optional argument to `AlgorithmBuilder` constructor to provide name of custom solver. [#618]
+- Changed handling of dual solution for square problems: When solving a problem
+  with as many equations as variables, Ipopt used to ignore the violation of
+  dual feasibility and complementarity in the convergence check and computed
+  a final dual solution via a least-square estimate. If this failed, Ipopt would
+  claim a square problem to be solved to optimality without providing a solution
+  that satisfies optimality conditions. With this version, the behavior has
+  been changed so that dual feasibility is no longer ignored by the convergence
+  check, the least-square estimate is only computed if optimality is not proven
+  already, and the normal Ipopt algorithm continues if the least-square estimate
+  does not satisfy optimality conditions.
 
 ### 3.14.11 (2023-02-07)
 
