@@ -579,7 +579,9 @@ SmartPtr<AugSystemSolver> AlgorithmBuilder::AugSystemSolverFactory(
       ASSERT_EXCEPTION(IsValid(custom_solver_), OPTION_INVALID, "Selected linear solver CUSTOM not available.");
       AugSolver = custom_solver_;
       if( !custom_solver_name_.empty() )
+      {
          linear_solver = custom_solver_name_;
+      }
    }
    else
    {

@@ -165,7 +165,9 @@ public:
    )
    {
       if( !cons )
+      {
          return true;
+      }
 
       assert(m == 1);
 
@@ -196,7 +198,9 @@ public:
       assert(nele_jac == (cons ? n : 0));
 
       if( !cons )
+      {
          return true;
+      }
 
       assert((iRow != NULL) == (jCol != NULL));
       assert((iRow != NULL) == (values == NULL));
