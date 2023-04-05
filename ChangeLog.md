@@ -7,7 +7,7 @@ More detailed information about incremental changes can be found in the
 
 ## 3.14
 
-### 3.14.12 (2023-xx-yy)
+### 3.14.12 (2023-04-05)
 
 - Fix that a source file was installed and install more header files.
   [#641, #642, by Joao Sousa Pinto]
@@ -25,6 +25,7 @@ More detailed information about incremental changes can be found in the
   check, the least-square estimate is only computed if optimality is not proven
   already, and the normal Ipopt algorithm continues if the least-square estimate
   does not satisfy optimality conditions.
+- Updated HSL_MC86 header file to the one from HSL MC68 3.3.3 [#653, by Jari Fowkes].
 
 ### 3.14.11 (2023-02-07)
 
