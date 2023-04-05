@@ -53,8 +53,8 @@ public:
    ///@{
    /** Constructor */
    AlgorithmBuilder(
-      SmartPtr<AugSystemSolver> custom_solver = NULL,
-      const std::string& custom_solver_name   = std::string()   /**< @since 3.14.12 */
+      SmartPtr<AugSystemSolver> custom_solver = NULL,           /**< custom linear solver interface object */
+      const std::string& custom_solver_name   = std::string()   /**< name of custom linear solver (since 3.14.12) */
    );
 
    /** Destructor */
