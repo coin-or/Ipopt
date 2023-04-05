@@ -39,7 +39,7 @@
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.14.11</span-->
+   &#160;<!--span id="projectnumber">3.14.12</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -219,8 +219,11 @@ Private Member Functions</h2></td></tr>
 <tr class="memdesc:a66dd6a2651141020fad9c0385ad06501"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the problem size statistics.  <a href="classIpopt_1_1IpoptAlgorithm.html#a66dd6a2651141020fad9c0385ad06501">More...</a><br /></td></tr>
 <tr class="separator:a66dd6a2651141020fad9c0385ad06501"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a99eb454d723a18d0e4c67d8e80978401"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptAlgorithm.html#a99eb454d723a18d0e4c67d8e80978401">ComputeFeasibilityMultipliers</a> ()</td></tr>
-<tr class="memdesc:a99eb454d723a18d0e4c67d8e80978401"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the Lagrangian multipliers for a feasibility problem.  <a href="classIpopt_1_1IpoptAlgorithm.html#a99eb454d723a18d0e4c67d8e80978401">More...</a><br /></td></tr>
+<tr class="memdesc:a99eb454d723a18d0e4c67d8e80978401"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tries to compute Lagrangian multipliers for a feasibility problem.  <a href="classIpopt_1_1IpoptAlgorithm.html#a99eb454d723a18d0e4c67d8e80978401">More...</a><br /></td></tr>
 <tr class="separator:a99eb454d723a18d0e4c67d8e80978401"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2ac20f05d0dab9ae7a89f59f9e466e0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptAlgorithm.html#ab2ac20f05d0dab9ae7a89f59f9e466e0">ComputeFeasibilityMultipliersPostprocess</a> ()</td></tr>
+<tr class="memdesc:ab2ac20f05d0dab9ae7a89f59f9e466e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the Lagrangian multipliers for a feasibility problem in post processing.  <a href="classIpopt_1_1IpoptAlgorithm.html#ab2ac20f05d0dab9ae7a89f59f9e466e0">More...</a><br /></td></tr>
+<tr class="separator:ab2ac20f05d0dab9ae7a89f59f9e466e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">auxiliary functions</div></td></tr>
 <tr class="memitem:ae55bcc9d9e398579d8bc4405ae7fff4a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptAlgorithm.html#ae55bcc9d9e398579d8bc4405ae7fff4a">calc_number_of_bounds</a> (const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x_L, const <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &amp;x_U, const <a class="el" href="classIpopt_1_1Matrix.html">Matrix</a> &amp;Px_L, const <a class="el" href="classIpopt_1_1Matrix.html">Matrix</a> &amp;Px_U, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> &amp;n_tot, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> &amp;n_only_lower, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> &amp;n_both, <a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> &amp;n_only_upper)</td></tr>
 <tr class="separator:ae55bcc9d9e398579d8bc4405ae7fff4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -268,6 +271,9 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:ac04d5d1e83e09dfcd7507fb85ef822fa"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptAlgorithm.html#ac04d5d1e83e09dfcd7507fb85ef822fa">linear_solver_name_</a></td></tr>
 <tr class="memdesc:ac04d5d1e83e09dfcd7507fb85ef822fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">String specifying linear solver.  <a href="classIpopt_1_1IpoptAlgorithm.html#ac04d5d1e83e09dfcd7507fb85ef822fa">More...</a><br /></td></tr>
 <tr class="separator:ac04d5d1e83e09dfcd7507fb85ef822fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2bdced6a3ed9532a8a9abb182f0ec931"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptAlgorithm.html#a2bdced6a3ed9532a8a9abb182f0ec931">constr_viol_tol_</a></td></tr>
+<tr class="memdesc:a2bdced6a3ed9532a8a9abb182f0ec931"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constraint violation tolerance on unscaled problem.  <a href="classIpopt_1_1IpoptAlgorithm.html#a2bdced6a3ed9532a8a9abb182f0ec931">More...</a><br /></td></tr>
+<tr class="separator:a2bdced6a3ed9532a8a9abb182f0ec931"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -874,7 +880,36 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Compute the Lagrangian multipliers for a feasibility problem. </p>
+<p>Tries to compute Lagrangian multipliers for a feasibility problem. </p>
+<p>Only computes multipliers if primal feasible but not converged yet. Restores current iterate if multiplier computation fails or new point does not satisfy convergence criteria, too. </p>
+
+</div>
+</div>
+<a id="ab2ac20f05d0dab9ae7a89f59f9e466e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab2ac20f05d0dab9ae7a89f59f9e466e0">&#9670;&nbsp;</a></span>ComputeFeasibilityMultipliersPostprocess()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Ipopt::IpoptAlgorithm::ComputeFeasibilityMultipliersPostprocess </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Compute the Lagrangian multipliers for a feasibility problem in post processing. </p>
+<p>Always tries to compute multipliers and does not restore current iterate if failing. </p>
 
 </div>
 </div>
@@ -1197,8 +1232,9 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>The multiplier calculator (for y_c and y_d) has to be set only if option recalc_y is set to true. </p>
+<p>If set, then it is also used to compute the dual multipliers for square problems. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptAlg_8hpp_source.html#l00136">136</a> of file <a class="el" href="IpIpoptAlg_8hpp_source.html">IpIpoptAlg.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptAlg_8hpp_source.html#l00138">138</a> of file <a class="el" href="IpIpoptAlg_8hpp_source.html">IpIpoptAlg.hpp</a>.</p>
 
 </div>
 </div>
@@ -1224,7 +1260,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Flag indicating if the statistic should not be printed. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptAlg_8hpp_source.html#l00194">194</a> of file <a class="el" href="IpIpoptAlg_8hpp_source.html">IpIpoptAlg.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptAlg_8hpp_source.html#l00206">206</a> of file <a class="el" href="IpIpoptAlg_8hpp_source.html">IpIpoptAlg.hpp</a>.</p>
 
 </div>
 </div>
@@ -1251,7 +1287,7 @@ Additional Inherited Members</h2></td></tr>
 <p>safeguard factor for bound multipliers. </p>
 <p>If value &gt;= 1, then the dual variables will never deviate from the primal estimate by more than the factors kappa_sigma and 1./kappa_sigma. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptAlg_8hpp_source.html#l00205">205</a> of file <a class="el" href="IpIpoptAlg_8hpp_source.html">IpIpoptAlg.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptAlg_8hpp_source.html#l00217">217</a> of file <a class="el" href="IpIpoptAlg_8hpp_source.html">IpIpoptAlg.hpp</a>.</p>
 
 </div>
 </div>
@@ -1277,7 +1313,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Flag indicating whether the y multipliers should be recalculated with the eq_mutliplier_calculator object for each new point. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptAlg_8hpp_source.html#l00210">210</a> of file <a class="el" href="IpIpoptAlg_8hpp_source.html">IpIpoptAlg.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptAlg_8hpp_source.html#l00222">222</a> of file <a class="el" href="IpIpoptAlg_8hpp_source.html">IpIpoptAlg.hpp</a>.</p>
 
 </div>
 </div>
@@ -1303,7 +1339,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Feasibility threshold for recalc_y. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptAlg_8hpp_source.html#l00212">212</a> of file <a class="el" href="IpIpoptAlg_8hpp_source.html">IpIpoptAlg.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptAlg_8hpp_source.html#l00224">224</a> of file <a class="el" href="IpIpoptAlg_8hpp_source.html">IpIpoptAlg.hpp</a>.</p>
 
 </div>
 </div>
@@ -1330,7 +1366,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Flag indicating if we want to do Mehrotras's algorithm. </p>
 <p>This means that a number of options are ignored, or have to be set (or are automatically set) to certain values. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptAlg_8hpp_source.html#l00218">218</a> of file <a class="el" href="IpIpoptAlg_8hpp_source.html">IpIpoptAlg.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptAlg_8hpp_source.html#l00230">230</a> of file <a class="el" href="IpIpoptAlg_8hpp_source.html">IpIpoptAlg.hpp</a>.</p>
 
 </div>
 </div>
@@ -1356,7 +1392,33 @@ Additional Inherited Members</h2></td></tr>
 
 <p>String specifying linear solver. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptAlg_8hpp_source.html#l00220">220</a> of file <a class="el" href="IpIpoptAlg_8hpp_source.html">IpIpoptAlg.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptAlg_8hpp_source.html#l00232">232</a> of file <a class="el" href="IpIpoptAlg_8hpp_source.html">IpIpoptAlg.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a2bdced6a3ed9532a8a9abb182f0ec931"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2bdced6a3ed9532a8a9abb182f0ec931">&#9670;&nbsp;</a></span>constr_viol_tol_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> Ipopt::IpoptAlgorithm::constr_viol_tol_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constraint violation tolerance on unscaled problem. </p>
+
+<p class="definition">Definition at line <a class="el" href="IpIpoptAlg_8hpp_source.html#l00234">234</a> of file <a class="el" href="IpIpoptAlg_8hpp_source.html">IpIpoptAlg.hpp</a>.</p>
 
 </div>
 </div>

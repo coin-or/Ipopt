@@ -12,7 +12,8 @@ var annotated_dup =
     [ "ma86_info_s", "structma86__info__s.html", "structma86__info__s" ],
     [ "ma97_control_d", "structma97__control__d.html", "structma97__control__d" ],
     [ "ma97_control_s", "structma97__control__s.html", "structma97__control__s" ],
-    [ "ma97_info", "structma97__info.html", "structma97__info" ],
+    [ "ma97_info_d", "structma97__info__d.html", "structma97__info__d" ],
+    [ "ma97_info_s", "structma97__info__s.html", "structma97__info__s" ],
     [ "mc68_control_i", "structmc68__control__i.html", "structmc68__control__i" ],
     [ "mc68_info_i", "structmc68__info__i.html", "structmc68__info__i" ]
 ];

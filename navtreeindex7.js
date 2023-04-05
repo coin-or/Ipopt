@@ -1,5 +1,6 @@
 var NAVTREEINDEX7 =
 {
+"classIpopt_1_1DenseVectorSpace.html#ae403b5d3d36b21ae87d17f67be50bb01":[1,0,0,30,8],
 "classIpopt_1_1DenseVectorSpace.html#ae41977efc786dd75b303841c8732a039":[1,0,0,30,7],
 "classIpopt_1_1DenseVectorSpace.html#ae70b1acb438cc8c6049f9a4507384e29":[1,0,0,30,1],
 "classIpopt_1_1DenseVectorSpace.html#af4180a406b5325d6c008cdcba990ce13":[1,0,0,30,16],
@@ -248,6 +249,5 @@ var NAVTREEINDEX7 =
 "classIpopt_1_1GenAugSystemSolver.html#ada2e013075cc247ea2aa9fe2f4da89b6":[1,0,0,45,12],
 "classIpopt_1_1GenAugSystemSolver.html#ae70c7639c5524bcc0d7230d2abfa047e":[1,0,0,45,9],
 "classIpopt_1_1GenAugSystemSolver.html#aea02c8b245febc8d5790ed969e5b858f":[1,0,0,45,22],
-"classIpopt_1_1GenAugSystemSolver.html#aedb4b94830fc858f0cb5293a81fb883a":[1,0,0,45,15],
-"classIpopt_1_1GenAugSystemSolver.html#af74d33996619213d8aac4a331e220945":[1,0,0,45,17]
+"classIpopt_1_1GenAugSystemSolver.html#aedb4b94830fc858f0cb5293a81fb883a":[1,0,0,45,15]
 };

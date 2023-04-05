@@ -2,7 +2,7 @@ var structmc68__control__i =
 [
     [ "f_array_in", "structmc68__control__i.html#ae4f634d8943b2665393661574c95f00e", null ],
     [ "f_array_out", "structmc68__control__i.html#ad0c74ac57694a15f1725a420ee5753eb", null ],
-    [ "min_l_workspace", "structmc68__control__i.html#ae767cbceb35158e18cdad5436b138e11", null ],
+    [ "min_l_workspace", "structmc68__control__i.html#a979bc2b6fc4580edb156fdb59422cd6b", null ],
     [ "lp", "structmc68__control__i.html#a6d0c5d1caaa8f7c792f68e8f403980d4", null ],
     [ "wp", "structmc68__control__i.html#ad9679b2a9625bebdb5dc4a12bfba1d0a", null ],
     [ "mp", "structmc68__control__i.html#a599bcf26614dd1c8feeb88362397cf0a", null ],

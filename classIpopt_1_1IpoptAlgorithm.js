@@ -19,6 +19,7 @@ var classIpopt_1_1IpoptAlgorithm =
     [ "InitializeIterates", "classIpopt_1_1IpoptAlgorithm.html#ab488e3b25633de2f31a7bcfb84587ce3", null ],
     [ "PrintProblemStatistics", "classIpopt_1_1IpoptAlgorithm.html#a66dd6a2651141020fad9c0385ad06501", null ],
     [ "ComputeFeasibilityMultipliers", "classIpopt_1_1IpoptAlgorithm.html#a99eb454d723a18d0e4c67d8e80978401", null ],
+    [ "ComputeFeasibilityMultipliersPostprocess", "classIpopt_1_1IpoptAlgorithm.html#ab2ac20f05d0dab9ae7a89f59f9e466e0", null ],
     [ "calc_number_of_bounds", "classIpopt_1_1IpoptAlgorithm.html#ae55bcc9d9e398579d8bc4405ae7fff4a", null ],
     [ "correct_bound_multiplier", "classIpopt_1_1IpoptAlgorithm.html#a5a862df4ab20eb68616c03f71c28c15a", null ],
     [ "search_dir_calculator_", "classIpopt_1_1IpoptAlgorithm.html#a13da10f88b6a7e77af8d1ebae80dfd45", null ],
@@ -34,5 +35,6 @@ var classIpopt_1_1IpoptAlgorithm =
     [ "recalc_y_", "classIpopt_1_1IpoptAlgorithm.html#a3daabe007c91d175bf946dfd6ea64c92", null ],
     [ "recalc_y_feas_tol_", "classIpopt_1_1IpoptAlgorithm.html#ad491f2679dab2acf0355e298436a65b4", null ],
     [ "mehrotra_algorithm_", "classIpopt_1_1IpoptAlgorithm.html#a174974faf857114ff07429be6e648ef5", null ],
-    [ "linear_solver_name_", "classIpopt_1_1IpoptAlgorithm.html#ac04d5d1e83e09dfcd7507fb85ef822fa", null ]
+    [ "linear_solver_name_", "classIpopt_1_1IpoptAlgorithm.html#ac04d5d1e83e09dfcd7507fb85ef822fa", null ],
+    [ "constr_viol_tol_", "classIpopt_1_1IpoptAlgorithm.html#a2bdced6a3ed9532a8a9abb182f0ec931", null ]
 ];

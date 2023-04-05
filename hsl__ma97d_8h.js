@@ -1,7 +1,7 @@
 var hsl__ma97d_8h =
 [
     [ "ma97_control_d", "structma97__control__d.html", "structma97__control__d" ],
-    [ "ma97_info", "structma97__info.html", "structma97__info" ],
+    [ "ma97_info_d", "structma97__info__d.html", "structma97__info__d" ],
     [ "ma97_control", "hsl__ma97d_8h.html#a9dba2844ed847b16503d2106b4a4295f", null ],
     [ "ma97_info", "hsl__ma97d_8h.html#addde3698290f945095eda30dabdcd74b", null ],
     [ "ma97_default_control", "hsl__ma97d_8h.html#a8c365bb33eaa6b9bdaf0a71a73264b68", null ],
