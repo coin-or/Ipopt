@@ -53,7 +53,7 @@ struct mc68_control_i {
    int f_array_out;     /* 0 for C array indexing, 1 for Fortran indexing
                          * NOTE: 2x2 pivot information discarded if C indexing
                          * is used for output! */
-   long min_l_workspace; /* Initial size of workspace, as argument in Fortran */
+   int min_l_workspace; /* Initial size of workspace, as argument in Fortran */
    /* Options from Fortran version */
    int lp;              /* stream number for error messages */
    int wp;              /* stream number for warning messages */
