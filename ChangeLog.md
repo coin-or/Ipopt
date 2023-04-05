@@ -13,6 +13,7 @@ More detailed information about incremental changes can be found in the
   [#641, #642, by Joao Sousa Pinto]
 - Fixed crash of GetIpoptCurrentIterate() and GetIpoptCurrentViolations() in
   C interface when called before or after IpoptSolve(). [#644, #645, by Robbybp]
+- Updated HSL_MA97 header file to the one from HSL MA97 2.8.0 [#646, by Jari Fowkes].
 - Fixed crash when trying to solve problem without variables and constraints. [#648]
 - Added optional argument to `AlgorithmBuilder` constructor to provide name of custom solver. [#618]
 - Changed handling of dual solution for square problems: When solving a problem
