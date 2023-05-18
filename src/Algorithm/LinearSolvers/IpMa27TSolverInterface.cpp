@@ -376,7 +376,15 @@ ESymSolverStatus Ma27TSolverInterface::SymbolicFactorization(
    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                   "In Ma27TSolverInterface::InitializeStructure: Using overestimation factor LiwFact = %e\n", LiwFact);
    liw_ = (Index) (LiwFact * (Number(2 * nonzeros_ + 3 * dim_ + 1)));
-   iw_ = new Index[liw_];
+   try
+   {
+      iw_ = new Index[liw_];
+   }
+   catch( const std::bad_alloc& )
+   {
+      Jnlst().Printf(J_STRONGWARNING, J_LINEAR_ALGEBRA, "Failed to allocate initial working space for MA27\n");
+      throw; // will be caught in IpIpoptApplication
+   }
 
    // Get memory for IKEEP
    delete[] ikeep_;
@@ -450,7 +458,7 @@ ESymSolverStatus Ma27TSolverInterface::SymbolicFactorization(
                      "Setting double work space size to %" IPOPT_INDEX_FORMAT "\n", la_);
       a_ = new Number[la_];
    }
-   catch( const std::bad_alloc& e )
+   catch( const std::bad_alloc& )
    {
       Jnlst().Printf(J_STRONGWARNING, J_LINEAR_ALGEBRA, "Failed to allocate more working space for MA27\n");
       throw; // will be caught in IpIpoptApplication
@@ -484,15 +492,23 @@ ESymSolverStatus Ma27TSolverInterface::Factorization(
       Number* a_old = a_;
       Index la_old = la_;
       ComputeMemIncrease(la_, meminc_factor_ * (Number) la_, 0, "double working space for MA27");
-      a_ = new Number[la_];
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "In Ma27TSolverInterface::Factorization: Increasing la from %" IPOPT_INDEX_FORMAT " to %" IPOPT_INDEX_FORMAT "\n", la_old, la_);
+      try
+      {
+         a_ = new Number[la_];
+      }
+      catch( const std::bad_alloc& )
+      {
+         Jnlst().Printf(J_STRONGWARNING, J_LINEAR_ALGEBRA, "Failed to allocate more working space for MA27\n");
+         throw; // will be caught in IpIpoptApplication
+      }
       for( Index i = 0; i < nonzeros_; i++ )
       {
          a_[i] = a_old[i];
       }
       delete[] a_old;
       la_increase_ = false;
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
-                     "In Ma27TSolverInterface::Factorization: Increasing la from %" IPOPT_INDEX_FORMAT " to %" IPOPT_INDEX_FORMAT "\n", la_old, la_);
    }
 
    // Check if liw should be increased
@@ -502,10 +518,18 @@ ESymSolverStatus Ma27TSolverInterface::Factorization(
       iw_ = NULL;
       Index liw_old = liw_;
       ComputeMemIncrease(liw_, meminc_factor_ * (Number) liw_, 0, "integer working space for MA27");
-      iw_ = new Index[liw_];
-      liw_increase_ = false;
       Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "In Ma27TSolverInterface::Factorization: Increasing liw from %" IPOPT_INDEX_FORMAT " to %" IPOPT_INDEX_FORMAT "\n", liw_old, liw_);
+      try
+      {
+         iw_ = new Index[liw_];
+      }
+      catch( const std::bad_alloc& )
+      {
+         Jnlst().Printf(J_STRONGWARNING, J_LINEAR_ALGEBRA, "Failed to allocate more working space for MA27\n");
+         throw; // will be caught in IpIpoptApplication
+      }
+      liw_increase_ = false;
    }
 
    Index iflag;  // Information flag
@@ -557,11 +581,19 @@ ESymSolverStatus Ma27TSolverInterface::Factorization(
          ComputeMemIncrease(liw_, meminc_factor_ * (Number) liw_, 0, "integer working space for MA27");
          ComputeMemIncrease(la_, meminc_factor_ * (Number) ierror, 0, "double working space for MA27");
       }
-      iw_ = new Index[liw_];
-      a_ = new Number[la_];
       Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
                      "MA27BD returned iflag=%" IPOPT_INDEX_FORMAT " and requires more memory.\n Increase liw from %" IPOPT_INDEX_FORMAT " to %" IPOPT_INDEX_FORMAT " and la from %" IPOPT_INDEX_FORMAT " to %" IPOPT_INDEX_FORMAT " and factorize again.\n",
                      iflag, liw_old, liw_, la_old, la_);
+      try
+      {
+         iw_ = new Index[liw_];
+         a_ = new Number[la_];
+      }
+      catch( const std::bad_alloc& )
+      {
+         Jnlst().Printf(J_STRONGWARNING, J_LINEAR_ALGEBRA, "Failed to allocate more working space for MA27\n");
+         throw; // will be caught in IpIpoptApplication
+      }
       if( HaveIpData() )
       {
          IpData().TimingStats().LinearSystemFactorization().End();
