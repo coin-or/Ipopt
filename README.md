@@ -63,6 +63,7 @@ in the Ipopt documentation. In the following, we only summarize some main points
 Ipopt requires at least one of the following solvers for systems of linear equations:
 - MA27, MA57, HSL_MA77, HSL_MA86, or HSL_MA97 from the [Harwell Subroutines Library](http://hsl.rl.ac.uk) (HSL).
   It is recommended to use project [ThirdParty-HSL](https://github.com/coin-or-tools/ThirdParty-HSL) to build a HSL library for use by Ipopt.
+  Alternatively, prebuild libraries are available from JuliaHSL, see the [Ipopt installation instruction](https://coin-or.github.io/Ipopt/INSTALL.html#DOWNLOAD_HSL).
 - [Parallel Sparse Direct Linear Solver](http://www.pardiso-project.org) (Pardiso).
   Note, that the Intel Math Kernel Library (MKL) also includes a version of Pardiso, but the one from Pardiso Project often offers better performance.
 - [Sparse Parallel Robust Algorithms Library](https://github.com/ralna/spral) (SPRAL).
@@ -111,7 +112,7 @@ More details on using coinbrew can be found at the instructions on
 Some precompiled binaries of Ipopt are also available:
 
 - **[Ipopt releases page](https://github.com/coin-or/Ipopt/releases)** provides libraries and executables for Windows
-- **[JuliaBinaryWrappers](https://github.com/JuliaBinaryWrappers/Ipopt_jll.jl/releases)** provides libraries and executables
+- **[JuliaBinaryWrappers](https://github.com/JuliaBinaryWrappers/Ipopt_jll.jl/releases)** provides libraries and executables; [JuliaHSL](https://licences.stfc.ac.uk/product/julia-hsl) provides prebuild HSL libraries
 - **[IDEAS](https://github.com/IDAES/idaes-ext/releases)** provides executables; these executables include HSL solvers
 
 Getting Help
