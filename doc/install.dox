@@ -184,7 +184,7 @@ explictly state what flags are necessary to use MKL, e.g.,
 
 \subsection DOWNLOAD_HSL HSL (Harwell Subroutines Library)
 
-There are two versions of HSL available:
+There are two versions of HSL source code for use in %Ipopt available:
 
 - Coin-HSL Archive: contains outdated codes that are freely available for personal
     commercial or non-commercial usage. Note that you may not
@@ -214,29 +214,28 @@ You may either:
 
 -   Compile the HSL code via the COIN-OR Tools project
     [ThirdParty-HSL](https://github.com/coin-or-tools/ThirdParty-HSL).
-    See the instructions below.
+    See the instructions [there](https://github.com/coin-or-tools/ThirdParty-HSL#installation-steps).
 
 -   Compile the HSL code separately either before or after the
     %Ipopt code and use the shared library loading
     mechanism. See the documentation distributed with the HSL package
     for information on how to do so.
 
-To compile the HSL code via the COIN-OR Tools project
-[ThirdParty-HSL](https://github.com/coin-or-tools/ThirdParty-HSL), run
-
-    git clone https://github.com/coin-or-tools/ThirdParty-HSL.git
-    cd ThirdParty-HSL
-
-Now unpack the Coin-HSL sources archive, move and rename the resulting directory
-so that it becomes `ThirdParty-HSL/coinhsl`.
-Then, in `ThirdParty-HSL`, configure, build, and install the HSL sources:
-
-    ./configure
-    make
-    sudo make install
-
-\attention The build system of Ipopt currently requires that MA27 is part
+\attention The build system of %Ipopt currently requires that MA27 is part
 of a HSL library, if a HSL library is provided.
+
+Next to the HSL source packages, also **prebuild libraries** of HSL are
+available in the HSL_Jll.jl package (directory `override`) from
+https://licences.stfc.ac.uk/product/julia-hsl.
+While these libraries are intended for use with Julia, they can also be
+used by %Ipopt without Julia when using the shared library loading mechanism
+described \ref LINEARSOLVERLOADER "below".
+The HSL libs from HSL_Jll.jl have additional dependencies. If installing
+the package via Julia, the latter will automatically determine and install
+the dependencies. Without Julia, one can install the dependencies manually:
+[OpenBLAS32](https://github.com/JuliaBinaryWrappers/OpenBLAS32_jll.jl/releases),
+[METIS](https://github.com/JuliaBinaryWrappers/METIS_jll.jl/releases),
+[CompilerSupportLibraries](https://github.com/JuliaBinaryWrappers/CompilerSupportLibraries_jll.jl/releases).
 
 \note Whereas it is essential to have at least one linear solver, the
 package MC19 could be omitted (with the consequence that you cannot use
@@ -257,6 +256,8 @@ codes, you can specify the directory containing the `CoinHslConfig.h`
 header file and the linker flags for this library with the
 flags `--with-hsl-cflags` and `--with-hsl-lflags` flags, respectively,
 when running `configure` of %Ipopt  (see \ref COMPILEINSTALL).
+The JuliaHSL libs can not be used with `--with-hsl-lflags`, as they do
+not contain the necessary header files.
 
 \note The linear solvers MA57, HSL_MA77, HSL_MA86, HSL_MA97 can
 make use of the matrix ordering algorithms implemented in
@@ -277,6 +278,8 @@ Option \ref OPT_hsllib "hsllib" can be set to the name of the library from
 which to load HSL routines if a HSL solver is selected. The name can contain
 a path; otherwise, the shared library search path (e.g., `LD_LIBRARY_PATH`)
 will be used.
+
+Prebuild HSL libraries are available from https://licences.stfc.ac.uk/product/julia-hsl (see also above).
 
 \subsection DOWNLOAD_MUMPS MUMPS Linear Solver
 
