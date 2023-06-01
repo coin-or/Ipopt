@@ -190,7 +190,7 @@ BLAS and LAPACK</h2>
 </pre></dd></dl>
 <h2><a class="anchor" id="DOWNLOAD_HSL"></a>
 HSL (Harwell Subroutines Library)</h2>
-<p>There are two versions of HSL available:</p>
+<p>There are two versions of HSL source code for use in Ipopt available:</p>
 <ul>
 <li>Coin-HSL Archive: contains outdated codes that are freely available for personal commercial or non-commercial usage. Note that you may not redistribute these codes in either source or binary form without purchasing a licence from the authors. This version includes MA27, MA28, and MC19.</li>
 <li>Coin-HSL Full: contains more modern codes that are freely available for academic use only. This version includes the codes from the Coin-HSL Archive and additionally MA57, HSL_MA77, HSL_MA86, and HSL_MA97. Ipopt supports the HSL Full codes from 2013 and later.</li>
@@ -204,25 +204,22 @@ HSL (Harwell Subroutines Library)</h2>
 </ol>
 <p>You may either:</p>
 <ul>
-<li>Compile the HSL code via the COIN-OR Tools project <a href="https://github.com/coin-or-tools/ThirdParty-HSL">ThirdParty-HSL</a>. See the instructions below.</li>
+<li>Compile the HSL code via the COIN-OR Tools project <a href="https://github.com/coin-or-tools/ThirdParty-HSL">ThirdParty-HSL</a>. See the instructions <a href="https://github.com/coin-or-tools/ThirdParty-HSL#installation-steps">there</a>.</li>
 <li>Compile the HSL code separately either before or after the Ipopt code and use the shared library loading mechanism. See the documentation distributed with the HSL package for information on how to do so.</li>
 </ul>
-<p>To compile the HSL code via the COIN-OR Tools project <a href="https://github.com/coin-or-tools/ThirdParty-HSL">ThirdParty-HSL</a>, run </p><pre class="fragment">git clone https://github.com/coin-or-tools/ThirdParty-HSL.git
-cd ThirdParty-HSL
-</pre><p>Now unpack the Coin-HSL sources archive, move and rename the resulting directory so that it becomes <code>ThirdParty-HSL/coinhsl</code>. Then, in <code>ThirdParty-HSL</code>, configure, build, and install the HSL sources: </p><pre class="fragment">./configure
-make
-sudo make install
-</pre><dl class="section attention"><dt>Attention</dt><dd>The build system of <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> currently requires that MA27 is part of a HSL library, if a HSL library is provided.</dd></dl>
+<dl class="section attention"><dt>Attention</dt><dd>The build system of Ipopt currently requires that MA27 is part of a HSL library, if a HSL library is provided.</dd></dl>
+<p>Next to the HSL source packages, also <b>prebuild libraries</b> of HSL are available in the HSL_Jll.jl package (directory <code>override</code>) from <a href="https://licences.stfc.ac.uk/product/julia-hsl">https://licences.stfc.ac.uk/product/julia-hsl</a>. While these libraries are intended for use with Julia, they can also be used by Ipopt without Julia when using the shared library loading mechanism described <a class="el" href="INSTALL.html#LINEARSOLVERLOADER">below</a>. The HSL libs from HSL_Jll.jl have additional dependencies. If installing the package via Julia, the latter will automatically determine and install the dependencies. Without Julia, one can install the dependencies manually: <a href="https://github.com/JuliaBinaryWrappers/OpenBLAS32_jll.jl/releases">OpenBLAS32</a>, <a href="https://github.com/JuliaBinaryWrappers/METIS_jll.jl/releases">METIS</a>, <a href="https://github.com/JuliaBinaryWrappers/CompilerSupportLibraries_jll.jl/releases">CompilerSupportLibraries</a>.</p>
 <dl class="section note"><dt>Note</dt><dd>Whereas it is essential to have at least one linear solver, the package MC19 could be omitted (with the consequence that you cannot use this method for scaling the linear systems arising inside the Ipopt algorithm). By default, MC19 is only used to scale the linear system when using one of the HSL solvers, but it can also be switched on for other linear solvers (which usually have internal scaling mechanisms). Further, also the package MA28 can be omitted, since it is used only in the experimental dependency detector, which is not used by default.</dd>
 <dd>
 If you are an academic or a student, we recommend you download the HSL Full package as this ensures you have access to the full range of solvers. MA57 can be considerably faster than MA27 on some problems.</dd>
 <dd>
-If you have a precompiled library containing the HSL codes, you can specify the directory containing the <code>CoinHslConfig.h</code> header file and the linker flags for this library with the flags <code>--with-hsl-cflags</code> and <code>--with-hsl-lflags</code> flags, respectively, when running <code>configure</code> of Ipopt (see <a class="el" href="INSTALL.html#COMPILEINSTALL">Compiling and Installing Ipopt</a>).</dd>
+If you have a precompiled library containing the HSL codes, you can specify the directory containing the <code>CoinHslConfig.h</code> header file and the linker flags for this library with the flags <code>--with-hsl-cflags</code> and <code>--with-hsl-lflags</code> flags, respectively, when running <code>configure</code> of Ipopt (see <a class="el" href="INSTALL.html#COMPILEINSTALL">Compiling and Installing Ipopt</a>). The JuliaHSL libs can not be used with <code>--with-hsl-lflags</code>, as they do not contain the necessary header files.</dd>
 <dd>
 The linear solvers MA57, HSL_MA77, HSL_MA86, HSL_MA97 can make use of the matrix ordering algorithms implemented in <a href="http://glaros.dtc.umn.edu/gkhome/metis/metis/overview">METIS</a>. ThirdParty-HSL will look automatically for a METIS installation in your system and should work with both METIS 4 and METIS 5.</dd></dl>
 <h3><a class="anchor" id="LINEARSOLVERLOADER"></a>
 Providing a HSL library at runtime</h3>
 <p>Alternatively to linking against HSL routines when Ipopt is build, Ipopt can also load a shared library with MA27, MA57, HSL_MA77, HSL_MA86, HSL_MA97, or MC19 at runtime. This means, if you obtain one of those solvers after you compiled Ipopt, you don't need to recompile <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> to use it. Instead, you can just place a shared library onto your system and ensure that Ipopt can find it at runtime. Option <a class="el" href="OPTIONS.html#OPT_hsllib">hsllib</a> can be set to the name of the library from which to load HSL routines if a HSL solver is selected. The name can contain a path; otherwise, the shared library search path (e.g., <code>LD_LIBRARY_PATH</code>) will be used.</p>
+<p>Prebuild HSL libraries are available from <a href="https://licences.stfc.ac.uk/product/julia-hsl">https://licences.stfc.ac.uk/product/julia-hsl</a>.</p>
 <h2><a class="anchor" id="DOWNLOAD_MUMPS"></a>
 MUMPS Linear Solver</h2>
 <p>You can also use the (public domain) sparse linear solver MUMPS. Please visit the <a href="http://mumps.enseeiht.fr/">MUMPS home page</a> for more information about the solver. MUMPS is provided as Fortran 90 and C source code. You need to have a Fortran 90 compiler (e.g., the GNU compiler gfortran) to be able to use it.</p>
