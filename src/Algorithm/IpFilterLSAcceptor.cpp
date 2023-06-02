@@ -110,7 +110,7 @@ void FilterLSAcceptor::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
       0.0, true,
       1.0, true,
       0.05,
-      "This is gamma_alpha in Eqn. (20) in the implementation paper.",
+      "This is gamma_alpha in Eqn. (23) in the implementation paper.",
       true);
    roptions->AddLowerBoundedIntegerOption(
       "max_soc",

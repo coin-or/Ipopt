@@ -492,7 +492,7 @@ Possible values:
 \anchor OPT_bound_mult_init_method
 <strong>bound_mult_init_method</strong>: Initialization method for bound multipliers
 <blockquote>
- This option defines how the iterates for the bound multipliers are initialized. If "constant" is chosen, then all bound multipliers are initialized to the value of "bound_mult_init_val". If "mu-based" is chosen, the each value is initialized to the the value of "mu_init" divided by the corresponding slack variable. This latter option might be useful if the starting point is close to the optimal solution. The default value for this string option is "constant".
+ This option defines how the iterates for the bound multipliers are initialized. If "constant" is chosen, then all bound multipliers are initialized to the value of "bound_mult_init_val". If "mu-based" is chosen, then each value is initialized to the the value of "mu_init" divided by the corresponding slack variable. This latter option might be useful if the starting point is close to the optimal solution. The default value for this string option is "constant".
 
 Possible values:
  - constant: set all bound multipliers to the value of bound_mult_init_val
@@ -938,7 +938,7 @@ Possible values:
 \anchor OPT_theta_min_fact
 <strong>theta_min_fact</strong> (<em>advanced</em>): Determines constraint violation threshold in the switching rule.
 <blockquote>
- The algorithmic parameter theta_min is determined as theta_min_fact times the maximum of 1 and the constraint violation at initial point. The switching rules treats an iteration as an h-type iteration whenever the current constraint violation is larger than theta_min (see paragraph before Eqn. (19) in the implementation paper). The valid range for this real option is 0 < theta_min_fact and its default value is 0.0001.
+ The algorithmic parameter theta_min is determined as theta_min_fact times the maximum of 1 and the constraint violation at initial point. The switching rule treats an iteration as an h-type iteration whenever the current constraint violation is larger than theta_min (see paragraph before Eqn. (19) in the implementation paper). The valid range for this real option is 0 < theta_min_fact and its default value is 0.0001.
 </blockquote>
 
 \anchor OPT_eta_phi
@@ -980,7 +980,7 @@ Possible values:
 \anchor OPT_alpha_min_frac
 <strong>alpha_min_frac</strong> (<em>advanced</em>): Safety factor for the minimal step size (before switching to restoration phase).
 <blockquote>
- This is gamma_alpha in Eqn. (20) in the implementation paper. The valid range for this real option is 0 < alpha_min_frac < 1 and its default value is 0.05.
+ This is gamma_alpha in Eqn. (23) in the implementation paper. The valid range for this real option is 0 < alpha_min_frac < 1 and its default value is 0.05.
 </blockquote>
 
 \anchor OPT_max_soc
