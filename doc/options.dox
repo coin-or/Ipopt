@@ -980,7 +980,7 @@ Possible values:
 \anchor OPT_alpha_min_frac
 <strong>alpha_min_frac</strong> (<em>advanced</em>): Safety factor for the minimal step size (before switching to restoration phase).
 <blockquote>
- This is gamma_alpha in Eqn. (20) in the implementation paper. The valid range for this real option is 0 < alpha_min_frac < 1 and its default value is 0.05.
+ This is gamma_alpha in Eqn. (23) in the implementation paper. The valid range for this real option is 0 < alpha_min_frac < 1 and its default value is 0.05.
 </blockquote>
 
 \anchor OPT_max_soc
