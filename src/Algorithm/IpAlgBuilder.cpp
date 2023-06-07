@@ -225,10 +225,6 @@ void AlgorithmBuilder::RegisterOptions(
    {
       defaultsolver = "pardiso";
    }
-   else if( availablesolverslinked & IPOPTLINEARSOLVER_SPRAL )
-   {
-      defaultsolver = "spral";
-   }
    else if( availablesolverslinked & IPOPTLINEARSOLVER_WSMP )
    {
       defaultsolver = "wsmp";
@@ -240,6 +236,10 @@ void AlgorithmBuilder::RegisterOptions(
    else if( availablesolverslinked & IPOPTLINEARSOLVER_PARDISOMKL )
    {
       defaultsolver = "pardisomkl";
+   }
+   else if( availablesolverslinked & IPOPTLINEARSOLVER_SPRAL )
+   {
+      defaultsolver = "spral";
    }
    else if( availablesolverslinked & IPOPTLINEARSOLVER_MA77 )
    {
