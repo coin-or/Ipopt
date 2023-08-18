@@ -395,8 +395,6 @@ To compile %Ipopt with the linear solver SPRAL,
 [SPRAL](https://github.com/ralna/spral) should first
 be downloaded and compiled according to the associated
 [SPRAL compilation guide](https://github.com/ralna/spral/blob/master/COMPILE.md).
-Alternatively, consider using the [LANL ANSI fork of SPRAL](https://github.com/lanl-ansi/spral).
-The maintainer of this fork test whether their current version works with %Ipopt.
 
 After compilation of SPRAL, while configuring %Ipopt,
 you need to specify the link and include directories for the library with the
@@ -415,7 +413,7 @@ the following flags should be used, instead:
 --with-spral-lflags="-L/path/to/spral/lib -lspral -lgfortran -lhwloc -lm -lcoinmetis -lopenblas -lstdc++ -fopenmp -lcudadevrt -lcudart -lcuda -lcublas"
 --with-spral-cflags="-I/path/to/spral/include"
 \endverbatim
-The above assume a SPRAL compilation using OpenBLAS libraries. For best
+The above assumes a SPRAL compilation using OpenBLAS libraries. For best
 performance, use SPRAL together with linear algebra routines from the Intel MKL
 (see \ref EXTERNALCODE_LINALG).
 
