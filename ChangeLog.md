@@ -10,6 +10,7 @@ More detailed information about incremental changes can be found in the
 ### 3.14.13 (2023-xx-yy)
 
 - Reduced priority for making Spral the default value for option linear_solver [#677].
+- Adapted to change of integer types in Spral interface. Minimal required Spral version is now v2023.03.29.
 
 ### 3.14.12 (2023-04-05)
 

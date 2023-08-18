@@ -14,6 +14,7 @@
 
 #include <cassert>
 #include <cmath>
+#include <cinttypes>
 
 using namespace std;
 
@@ -318,7 +319,7 @@ bool SpralSolverInterface::InitializeImpl(
    // Set min_gpu_work.
    double min_gpu_work_tmp = 5.0e9;
    options.GetNumericValue("spral_min_gpu_work", min_gpu_work_tmp, prefix);
-   control_.min_gpu_work = (long)min_gpu_work_tmp;
+   control_.min_gpu_work = (int64_t)min_gpu_work_tmp;
 
    // Set the pivot method.
    std::string pivot_method;
@@ -328,7 +329,7 @@ bool SpralSolverInterface::InitializeImpl(
    // Set small_subtree_threshold.
    double small_subtree_threshold_tmp = 4.0e6;
    options.GetNumericValue("spral_small_subtree_threshold", small_subtree_threshold_tmp, prefix);
-   control_.small_subtree_threshold = (long)small_subtree_threshold_tmp;
+   control_.small_subtree_threshold = (int64_t)small_subtree_threshold_tmp;
 
    // Reset all private data.
    pivtol_changed_ = false;
@@ -487,7 +488,7 @@ ESymSolverStatus SpralSolverInterface::InitializeStructure(
 
       spral_ssids_analyse_ptr32(false, ndim_, NULL, ia, ja, NULL, &akeep_, &control_, &info);
 
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "nfactor = %ld, nflops = %ld:\n",
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "nfactor = %" PRId64 ", nflops = %" PRId64 ":\n",
                      info.num_factor, info.num_flops);
 
       if( HaveIpData() )
@@ -545,7 +546,7 @@ ESymSolverStatus SpralSolverInterface::MultiSolve(
 
          spral_ssids_analyse_ptr32(false, ndim_, NULL, ia, ja, val_, &akeep_, &control_, &info);
 
-         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "nfactor = %ld, nflops = %ld:\n",
+         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "nfactor = %" PRId64 ", nflops = %" PRId64 ":\n",
                         info.num_factor, info.num_flops);
 
          if( HaveIpData() )
@@ -577,8 +578,8 @@ ESymSolverStatus SpralSolverInterface::MultiSolve(
 
       spral_ssids_factor_ptr32(false, ia, ja, val_, scaling_, akeep_, &fkeep_, &control_, &info);
 
-      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "SPRAL: delays %d, nfactor %ld, "
-                     "nflops %ld, maxfront %d\n", info.num_delay, info.num_factor, info.num_flops,
+      Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "SPRAL: delays %d, nfactor %" PRId64 ", "
+                     "nflops %" PRId64 ", maxfront %d\n", info.num_delay, info.num_factor, info.num_flops,
                      info.maxfront);
 
       if( HaveIpData() )
