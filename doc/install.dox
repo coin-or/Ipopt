@@ -421,8 +421,8 @@ performance, use SPRAL together with linear algebra routines from the Intel MKL
 Finally, ensure the following environment variables are employed when using SPRAL:
 \verbatim
 export OMP_CANCELLATION=TRUE
-export OMP_NESTED=TRUE
 export OMP_PROC_BIND=TRUE
+export OMP_NESTED=TRUE        # not necessary with Spral >= 2023.08.02
 \endverbatim
 
 A guide for building %Ipopt with Spral on Ubuntu Linux is also avaiable
