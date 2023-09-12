@@ -181,6 +181,12 @@ explictly state what flags are necessary to use MKL, e.g.,
 \verbatim
 ./configure --with-lapack-lflags="-L${MKLROOT}/lib/intel64 -Wl,--no-as-needed -lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lm"
 \endverbatim
+Linking against static MKL libraries can be [difficult](https://github.com/coin-or/Ipopt/discussions/694#discussioncomment-6965380)
+due to circular dependencies between libraries and libtool reordering the linker flags.
+A possible workaround is to set all linker flags via a single compiler flag, e.g.,
+\verbatim
+./configure --with-lapack-lflags="-Wl,--no-as-needed -Wl,--start-group,${MKLROOT}/lib/intel64/libmkl_intel_lp64.a,${MKLROOT}/lib/intel64/libmkl_gnu_thread.a,${MKLROOT}/lib/intel64/libmkl_core.a,--end-group -lgomp -lpthread -lm -ldl"
+\endverbatim
 
 \subsection DOWNLOAD_HSL HSL (Harwell Subroutines Library)
 
