@@ -1093,7 +1093,7 @@ bool TNLPAdapter::GetSpaces(
         delete[] g_iRow;
         delete[] g_jCol;
 
-        return false;
+        ASSERT_EXCEPTION(INVALID_TNLP, "eval_jac_g returned false in GetSpaces");
       }
 
       if( index_style_ != TNLP::FORTRAN_STYLE )
