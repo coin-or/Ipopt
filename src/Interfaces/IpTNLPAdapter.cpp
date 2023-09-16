@@ -1085,7 +1085,16 @@ bool TNLPAdapter::GetSpaces(
       // Get the non zero structure
       Index* g_iRow = new Index[nz_full_jac_g_];
       Index* g_jCol = new Index[nz_full_jac_g_];
-      tnlp_->eval_jac_g(n_full_x_, NULL, false, n_full_g_, nz_full_jac_g_, g_iRow, g_jCol, NULL);
+
+      bool retval = tnlp_->eval_jac_g(n_full_x_, NULL, false, n_full_g_, nz_full_jac_g_, g_iRow, g_jCol, NULL);
+
+      if( !retval )
+      {
+        delete[] g_iRow;
+        delete[] g_jCol;
+
+        THROW_EXCEPTION(INVALID_TNLP, "eval_jac_g returned false in GetSpaces");
+      }
 
       if( index_style_ != TNLP::FORTRAN_STYLE )
       {

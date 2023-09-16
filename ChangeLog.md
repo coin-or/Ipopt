@@ -11,6 +11,8 @@ More detailed information about incremental changes can be found in the
 
 - Reduced priority for making Spral the default value for option linear_solver [#677].
 - Adapted to change of integer types in Spral interface. Minimal required Spral version is now v2023.03.29.
+- Fixed that return code from TNLP::eval_jac_g() was ignored at first call [#697, by
+  Christoph Hansknecht].
 
 ### 3.14.12 (2023-04-05)
 
