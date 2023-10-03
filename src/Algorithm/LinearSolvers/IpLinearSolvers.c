@@ -60,6 +60,9 @@ IpoptLinearSolver IpoptGetAvailableLinearSolvers(
    solvers |= IPOPTLINEARSOLVER_MUMPS;
 #endif
 
+  // TODO: Implement HAS_LEOPARD macro
+  solvers |= IPOPTLINEARSOLVER_LEOPARD;
+
 #if defined(IPOPT_HAS_LINEARSOLVERLOADER)
    if( !buildinonly )
    {

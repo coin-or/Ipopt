@@ -218,6 +218,9 @@ if COIN_HAS_MUMPS
   libipopt_la_SOURCES += Algorithm/LinearSolvers/IpMumpsSolverInterface.cpp
 endif
 
+# TODO implement HAVE_LEOPARD
+libipopt_la_SOURCES += Algorithm/LinearSolvers/IpLeopardSolverInterface.cpp
+
 if COIN_HAS_SPRAL
   libipopt_la_SOURCES += Algorithm/LinearSolvers/IpSpralSolverInterface.cpp
 endif

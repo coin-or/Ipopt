@@ -17,6 +17,8 @@
 #include "IpMa97SolverInterface.hpp"
 #include "IpMa28TDependencyDetector.hpp"
 #include "IpPardisoSolverInterface.hpp"
+// TODO IMPLEMENT IPOPT_HAS_LEOPARD
+#include "IpLeopardSolverInterface.hpp"
 #ifdef IPOPT_HAS_PARDISO_MKL
 #include "IpPardisoMKLSolverInterface.hpp"
 #endif
@@ -115,6 +117,13 @@ void RegisterOptions_LinearSolvers(
       IterativeWsmpSolverInterface::RegisterOptions(roptions);
    }
 #endif
+
+// TODO: Implement IPOPT_HAS_LEOPARD
+if( availablesolvers & IPOPTLINEARSOLVER_LEOPARD )
+{
+  roptions->SetRegisteringCategory("Leopard Linear Solver");
+  LeopardSolverInterface::RegisterOptions(roptions);
+}
 
 #if ((defined(COINHSL_HAS_MA28) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MA28S) && defined(IPOPT_SINGLE))) && defined(F77_FUNC)
    roptions->SetRegisteringCategory("MA28 Linear Solver");

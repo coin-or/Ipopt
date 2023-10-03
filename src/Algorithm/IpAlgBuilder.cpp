@@ -59,6 +59,8 @@
 #include "IpMa97SolverInterface.hpp"
 #include "IpMc19TSymScalingMethod.hpp"
 #include "IpPardisoSolverInterface.hpp"
+// TODO Implement IPOPT_HAS_LEOPARD
+#include "IpLeopardSolverInterface.hpp"
 #ifdef IPOPT_HAS_PARDISO_MKL
 # include "IpPardisoMKLSolverInterface.hpp"
 #endif
@@ -183,6 +185,12 @@ void AlgorithmBuilder::RegisterOptions(
       descrs.push_back("use the Pardiso package from Intel MKL");
    }
 
+   if( availablesolvers & IPOPTLINEARSOLVER_LEOPARD )
+   {
+      options.push_back("leopard");
+      descrs.push_back("use Leopard");
+   }
+
    if( availablesolvers & IPOPTLINEARSOLVER_SPRAL )
    {
       options.push_back("spral");
@@ -240,6 +248,10 @@ void AlgorithmBuilder::RegisterOptions(
    else if( availablesolverslinked & IPOPTLINEARSOLVER_PARDISOMKL )
    {
       defaultsolver = "pardisomkl";
+   }
+   else if( availablesolverslinked & IPOPTLINEARSOLVER_LEOPARD )
+   {
+      defaultsolver = "leopard";
    }
    else if( availablesolverslinked & IPOPTLINEARSOLVER_MA77 )
    {
@@ -467,6 +479,12 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
       SolverInterface = new PardisoSolverInterface(GetPardisoLoader(options, prefix));
    }
 #endif
+
+   // TODO Implement IPOPT_HAS_LEOPARD
+   else if( linear_solver == "leopard" )
+   {
+      SolverInterface = new LeopardSolverInterface();
+   }
 
 #ifdef IPOPT_HAS_PARDISO_MKL
    else if( linear_solver == "pardisomkl" )
