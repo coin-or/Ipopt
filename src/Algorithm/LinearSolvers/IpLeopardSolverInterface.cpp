@@ -33,13 +33,44 @@ LeopardSolverInterface::~LeopardSolverInterface() {
 void LeopardSolverInterface::RegisterOptions(
     SmartPtr<RegisteredOptions> roptions
 ) {
-  // TODO
+   roptions->AddBoundedNumberOption(
+      "leopard_pivtol",
+      "Pivot tolerance for the Leopard linear solver.",
+      0.0, true,
+      0.5, true,
+      1e-8,
+      "A smaller number pivots for sparsity, a larger number pivots for stability.");
+   roptions->AddBoundedNumberOption(
+      "leopard_pivtolmax",
+      "Maximum pivot tolerance for the Leopard linear solver.",
+      0.0, true,
+      0.5, true,
+      1e-4,
+      "Ipopt may increase pivtol as high as leopard_pivtolmax to get a more accurate solution to the linear system.");
 }
 
 bool LeopardSolverInterface::InitializeImpl(
     const OptionsList &options,
     const std::string &prefix
 ) {
+  options.GetNumericValue("leopard_pivtol", pivtol_, prefix);
+  if( options.GetNumericValue("leopard_pivtolmax", pivtolmax_, prefix) )
+  {
+     ASSERT_EXCEPTION(pivtolmax_ >= pivtol_, OPTION_INVALID, "Option \"leopard_pivtolmax\": This value must be between "
+                      "leopard_pivtol and 0.5.");
+  }
+  else
+  {
+     pivtolmax_ = Max(pivtolmax_, pivtol_);
+  }
+
+  // Reset all private data
+  initialized_ = false;
+  pivtol_changed_ = false;
+  refactorize_ = false;
+
+  factorization_settings_ = leopard_factorization_settings_new_default_f64();
+
   return true;
 }
 
@@ -56,8 +87,24 @@ ESymSolverStatus LeopardSolverInterface::MultiSolve(
    DBG_ASSERT(!check_NegEVals || ProvidesInertia());
    DBG_ASSERT(initialized_);
 
+   if(pivtol_changed_)
+   {
+      DBG_PRINT((1, "Pivot tolerance has changed.\n"));
+      pivtol_changed_ = false;
+      // If the pivot tolerance has been changed but the matrix is not
+      // new, we have to request the values for the matrix again to do
+      // the factorization again.
+      if( !new_matrix )
+      {
+         DBG_PRINT((1, "Ask caller to call again.\n"));
+         refactorize_ = true;
+         return SYMSOLVER_CALL_AGAIN;
+      }
+   }
+
    // check if a factorization has to be done
-   if( new_matrix )
+   DBG_PRINT((1, "new_matrix = %d\n", new_matrix));
+   if( new_matrix || refactorize_ )
    {
       // perform the factorization
       ESymSolverStatus retval;
@@ -67,6 +114,7 @@ ESymSolverStatus LeopardSolverInterface::MultiSolve(
          DBG_PRINT((1, "FACTORIZATION FAILED!\n"));
          return retval;  // Matrix singular or error occurred
       }
+      refactorize_ = false;
    }
 
    // do the solve
@@ -170,9 +218,11 @@ ESymSolverStatus LeopardSolverInterface::Factorization(
 
   // Do factorization
 #ifdef IPOPT_SINGLE
-  ldl_factorization_ = leopard_ldl_factorize_f32(ordered_ij_.object, a_, ordering_.object, assembly_tree_.object);
+  leopard_factorization_settings_set_pivot_tolerance_f64(factorization_settings_, pivtol_);
+  ldl_factorization_ = leopard_ldl_factorize_f32(ordered_ij_.object, a_, ordering_.object, assembly_tree_.object, factorization_settings_);
 #else
-  ldl_factorization_ = leopard_ldl_factorize_f64(ordered_ij_.object, a_, ordering_.object, assembly_tree_.object);
+  leopard_factorization_settings_set_pivot_tolerance_f64(factorization_settings_, pivtol_);
+  ldl_factorization_ = leopard_ldl_factorize_f64(ordered_ij_.object, a_, ordering_.object, assembly_tree_.object, factorization_settings_);
 #endif
   if(ldl_factorization_.code!=LeopardReturnCode_Ok)
   {
@@ -230,7 +280,6 @@ Index LeopardSolverInterface::NumberOfNegEVals() const {
 
 bool LeopardSolverInterface::IncreaseQuality() {
   DBG_START_METH("LeopardSolverInterface::IncreaseQuality", dbg_verbosity);
-  // TODO
   if (pivtol_ == pivtolmax_) {
     return false;
   }

@@ -141,10 +141,12 @@ class LeopardSolverInterface : public SparseSymLinearSolverInterface {
   OrderedIjResult ordered_ij_ = {.code=LeopardReturnCode_Ok, .object=nullptr};
   /** AssemblyTree */
   AssemblyTreeResult assembly_tree_ = {.code=LeopardReturnCode_Ok, .object=nullptr};
-  /** LDLFactorization */
+  /** FactorizationSettings and LDLFactorization */
 #ifdef IPOPT_SINGLE
+  FactorizationSettingsF32* factorization_settings_ = nullptr;
   LDLFactorizationResultF32 ldl_factorization_ = {.code=LeopardReturnCode_Ok, .object=nullptr};
 #else
+  FactorizationSettingsF64* factorization_settings_ = nullptr;
   LDLFactorizationResultF64 ldl_factorization_ = {.code=LeopardReturnCode_Ok, .object=nullptr};
 #endif
 
