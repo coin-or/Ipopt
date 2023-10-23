@@ -383,6 +383,10 @@ bool TNLPAdapter::GetSpaces(
    Index n_full_x, n_full_g, nz_full_jac_g, nz_full_h;
    bool retval = tnlp_->get_nlp_info(n_full_x, n_full_g, nz_full_jac_g, nz_full_h, index_style_);
    ASSERT_EXCEPTION(retval, INVALID_TNLP, "get_nlp_info returned false");
+   ASSERT_EXCEPTION(n_full_x >= 0, INVALID_TNLP, "number of variables negative");
+   ASSERT_EXCEPTION(n_full_g >= 0, INVALID_TNLP, "number of constraints negative");
+   ASSERT_EXCEPTION(nz_full_jac_g >= 0, INVALID_TNLP, "number of nonzeros in Jacobian negative");
+   ASSERT_EXCEPTION(nz_full_h >= 0, INVALID_TNLP, "number of nonzeros in Hessian negative");
    ASSERT_EXCEPTION(
       !warm_start_same_structure_
       || (n_full_x == n_full_x_ && n_full_g == n_full_g_ && nz_full_jac_g == nz_full_jac_g_
@@ -3003,6 +3007,10 @@ bool TNLPAdapter::CheckDerivatives(
    TNLP::IndexStyleEnum index_style;
    retval = tnlp_->get_nlp_info(nx, ng, nz_jac_g, nz_hess_lag, index_style);
    ASSERT_EXCEPTION(retval, INVALID_TNLP, "get_nlp_info returned false for derivative checker");
+   ASSERT_EXCEPTION(nx >= 0, INVALID_TNLP, "number of variables negative");
+   ASSERT_EXCEPTION(ng >= 0, INVALID_TNLP, "number of constraints negative");
+   ASSERT_EXCEPTION(nz_jac_g >= 0, INVALID_TNLP, "number of nonzeros in Jacobian negative");
+   ASSERT_EXCEPTION(nz_hess_lag >= 0, INVALID_TNLP, "number of nonzeros in Hessian negative");
 
    // Obtain starting point as reference point at which derivative
    // test should be performed
