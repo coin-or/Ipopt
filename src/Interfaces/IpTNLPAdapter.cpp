@@ -1121,7 +1121,7 @@ bool TNLPAdapter::GetSpaces(
       }
 #endif
 
-      if( nz_full_jac_g_ > 0 && jacobian_approximation_ == JAC_FINDIFF_VALUES )
+      if( jacobian_approximation_ == JAC_FINDIFF_VALUES )
       {
          initialize_findiff_jac(g_iRow, g_jCol);
       }
@@ -2951,9 +2951,16 @@ void TNLPAdapter::initialize_findiff_jac(
    findiff_jac_ja_ = new Index[findiff_jac_nnz_];
    findiff_jac_postriplet_ = new Index[findiff_jac_nnz_];
    const Index* ia = findiff_jac_converter->IA();
-   for( Index i = 0; i < n_full_x_ + 1; i++ )
+   if( ia != NULL )
    {
-      findiff_jac_ia_[i] = ia[i];
+      for( Index i = 0; i < n_full_x_ + 1; i++ )
+      {
+         findiff_jac_ia_[i] = ia[i];
+      }
+   }
+   else
+   {
+      memset(findiff_jac_ia_, 0, n_full_x_ * sizeof(Index));
    }
    const Index* ja = findiff_jac_converter->JA();
    for( Index i = 0; i < findiff_jac_nnz_; i++ )
