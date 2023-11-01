@@ -40,7 +40,6 @@
 
 #endif /* HAVE_CONFIG_H */
 
-
 /* overwrite XYZ_EXPORT from config.h when building XYZ
  * we want it to be __declspec(dllexport) when building a DLL on Windows
  * we want it to be __attribute__((__visibility__("default"))) when building with GCC,

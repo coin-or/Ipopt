@@ -81,7 +81,6 @@ static void MPIfini(void)
 }
 #endif
 
-
 namespace Ipopt
 {
 #if IPOPT_VERBOSITY > 0
@@ -710,4 +709,3 @@ ESymSolverStatus MumpsSolverInterface::DetermineDependentRows(
 }
 
 }  //end Ipopt namespace
-

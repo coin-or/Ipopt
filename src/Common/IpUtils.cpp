@@ -142,7 +142,6 @@ void IpResetRandom01()
 #endif
 }
 
-
 static double Wallclock_firstCall_ = -1.;
 
 // The following function were taken from CoinTime.hpp in COIN/Coin

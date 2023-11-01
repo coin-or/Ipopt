@@ -245,8 +245,10 @@ ESymSolverStatus Ma86SolverInterface::InitializeStructure(
    struct ma86_info info, info2;
    struct mc68_control control68;
    struct mc68_info info68;
-   int* order_amd, *order_metis;
-   void* keep_amd, *keep_metis;
+   int* order_amd;
+   int* order_metis;
+   void* keep_amd;
+   void* keep_metis;
 
    // Store size for later use
    ndim_ = dim;

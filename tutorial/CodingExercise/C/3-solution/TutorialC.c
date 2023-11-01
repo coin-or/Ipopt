@@ -29,7 +29,6 @@
 #include <stdio.h>
 #include <math.h>
 
-
 /* Function Declarations */
 Bool eval_f(
    Index       n,

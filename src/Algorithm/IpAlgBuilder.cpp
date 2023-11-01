@@ -263,7 +263,6 @@ void AlgorithmBuilder::RegisterOptions(
       descrs,
       "Determines which linear algebra package is to be used for the solution of the augmented linear system (for obtaining the search directions).");
 
-
    options.clear();
    descrs.clear();
 

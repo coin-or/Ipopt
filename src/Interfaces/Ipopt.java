@@ -258,7 +258,6 @@ public abstract class Ipopt
       System.load(file.getAbsolutePath());
    }
 
-
    /** Method to request bounds on the variables and constraints.
     *
     * The values of n and m that were specified in create() and are passed
@@ -416,7 +415,6 @@ public abstract class Ipopt
       int[]    jCol,
       double[] values
    );
-
 
    /** Method to request either the sparsity structure or the values of the Hessian of the Lagrangian.
     *

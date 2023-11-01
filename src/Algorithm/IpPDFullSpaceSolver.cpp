@@ -95,7 +95,6 @@ void PDFullSpaceSolver::RegisterOptions(
       "no",  "use original IPOPT approach, in which the primal regularization is ignored");
 }
 
-
 bool PDFullSpaceSolver::InitializeImpl(
    const OptionsList& options,
    const std::string& prefix

@@ -1094,10 +1094,10 @@ bool TNLPAdapter::GetSpaces(
 
       if( !retval )
       {
-        delete[] g_iRow;
-        delete[] g_jCol;
+         delete[] g_iRow;
+         delete[] g_jCol;
 
-        THROW_EXCEPTION(INVALID_TNLP, "eval_jac_g returned false in GetSpaces");
+         THROW_EXCEPTION(INVALID_TNLP, "eval_jac_g returned false in GetSpaces");
       }
 
       if( index_style_ != TNLP::FORTRAN_STYLE )

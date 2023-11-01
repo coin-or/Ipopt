@@ -131,7 +131,6 @@ void Ma77SolverInterface::RegisterOptions(
       "metis", "Use the MeTiS nested dissection algorithm (if available)");
 }
 
-
 /// set MA77 functions to use for every instantiation of this class
 void Ma77SolverInterface::SetFunctions(
    IPOPT_DECL_MA77_DEFAULT_CONTROL(*ma77_default_control),

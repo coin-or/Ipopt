@@ -89,7 +89,6 @@ extern "C"
    const struct ma86_control* control \
 )
 
-
 namespace Ipopt
 {
 

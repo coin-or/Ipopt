@@ -400,7 +400,6 @@ void RegisteredOption::OutputDoxygenDescription(
          //       "-&infin; < ");
          //}
 
-
          jnlst.Printf(J_SUMMARY, J_DOCUMENTATION, "%s",
                       name_.c_str());
 

@@ -471,7 +471,8 @@ ESymSolverStatus Ma97SolverInterface::InitializeStructure(
 )
 {
    struct ma97_info info, info2;
-   void* akeep_amd, *akeep_metis;
+   void* akeep_amd;
+   void* akeep_metis;
 
    // Store size for later use
    ndim_ = dim;

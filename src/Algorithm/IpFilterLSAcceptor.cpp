@@ -569,7 +569,6 @@ FilterLSAcceptor::TrySecondOrderCorrection(
       SmartPtr<IteratesVector> delta_soc = actual_delta->MakeNewIteratesVector(true);
       SmartPtr<IteratesVector> rhs = actual_delta->MakeNewContainer();
 
-
       switch (soc_method_)
       {
          case 0:
@@ -896,6 +895,5 @@ void FilterLSAcceptor::PrepareRestoPhaseStart()
 {
    AugmentFilter();
 }
-
 
 } // namespace Ipopt

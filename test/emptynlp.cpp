@@ -677,7 +677,6 @@ bool runReOpt(
    return true;
 }
 
-
 int main(
    int,
    char**
