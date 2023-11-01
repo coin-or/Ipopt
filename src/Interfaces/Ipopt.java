@@ -189,8 +189,6 @@ public abstract class Ipopt
     * This expects the the Ipopt DLL can somehow be found
     * and that it has the canoncial name "ipopt" (on Unix, et.al.)
     * or "ipopt-3" or "ipopt-0" (on Windows).
-    *
-    * @see #Ipopt()
     */
    public Ipopt()
    {
@@ -237,8 +235,6 @@ public abstract class Ipopt
     * The given file must be located in some library search path.
     *
     * @param DLL the name of the DLL (without the extension or any platform dependent prefix).
-    *
-    * @see #Ipopt()
     */
    public Ipopt(
       String DLL)
@@ -252,8 +248,6 @@ public abstract class Ipopt
     *
     * @param path the path where the DLL is found.
     * @param DLL the name of the DLL (without the extension or any platform dependent prefix).
-    *
-    * @see #Ipopt()
     */
    public Ipopt(
       String path,
@@ -606,7 +600,7 @@ public abstract class Ipopt
     *
     * @return the solve status
     *
-    * @see #getStatus()
+    * @see getStatus()
     */
    public int OptimizeNLP()
    {
@@ -731,7 +725,7 @@ public abstract class Ipopt
    /** Gives Ipopt status of last OptimizeNLP call.
     * @return the status of the solver.
     *
-    * @see #OptimizeNLP()
+    * @see OptimizeNLP()
     */
    public int getStatus()
    {

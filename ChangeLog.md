@@ -554,7 +554,7 @@ A more detailed, probably incomplete, list of changes follows:
 ### 3.12.6 (2016-07-20)
 
 - better support for custom algorithm development [r2659] (by Gabriel Hackebeil):
-  "Reorganization of the `AlgorithmBuilder` class to allow easier
+  &quot;Reorganization of the `AlgorithmBuilder` class to allow easier
   customization of the Ipopt algorithm. In particular, we wanted to
   make use of the code that creates the `SymLinearSolver` object to
   implement our own `SymLinearSolver` without copy-pasting everything
@@ -567,7 +567,7 @@ A more detailed, probably incomplete, list of changes follows:
   methods.
   Also, included is a change to install a few more header files with Ipopt.
   Some of these are required to subclass AlgorithmBuilder, and the others
-  are simply some matrix types that we require."
+  are simply some matrix types that we require.&quot;
 - extend build system to work without Fortran compiler [r2660,r2661]:
   If no Fortran compiler is available (`F77=unavailable`), then
   the build system checks for functions in Blas, Lapack, and
