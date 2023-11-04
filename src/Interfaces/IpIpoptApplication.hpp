@@ -180,8 +180,9 @@ public:
     *  @return false if there was a problem
     */
    virtual bool OpenOutputFile(
-      std::string  file_name,
-      EJournalLevel print_level
+      std::string   file_name,             /**< name of file to open */
+      EJournalLevel print_level,           /**< print level to be used */
+      bool          file_append = false    /**< whether to append to file or truncate (since 3.14.13) */
    );
 
    /**@name Accessor methods */

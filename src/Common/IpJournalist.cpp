@@ -264,14 +264,15 @@ bool Journalist::AddJournal(
 SmartPtr<Journal> Journalist::AddFileJournal(
    const std::string& journal_name,
    const std::string& fname,
-   EJournalLevel      default_level
+   EJournalLevel      default_level,
+   bool               file_append
 )
 {
    SmartPtr<FileJournal> temp = new FileJournal(journal_name, default_level);
 
    // Open the file (Note:, a fname of "stdout" is handled by the
    // Journal class to mean stdout, etc.
-   if( temp->Open(fname.c_str()) && AddJournal(GetRawPtr(temp)) )
+   if( temp->Open(fname.c_str(), file_append) && AddJournal(GetRawPtr(temp)) )
    {
       return GetRawPtr(temp);
    }
@@ -392,7 +393,10 @@ FileJournal::~FileJournal()
    file_ = NULL;
 }
 
-bool FileJournal::Open(const char* fname)
+bool FileJournal::Open(
+   const char* fname,
+   bool        fappend
+)
 {
    if( file_ && file_ != stdout && file_ != stderr )
    {
@@ -414,7 +418,7 @@ bool FileJournal::Open(const char* fname)
    else
    {
       // open the file on disk
-      file_ = fopen(fname, "w+");
+      file_ = fopen(fname, fappend ? "a+" : "w+");
       if( file_ )
       {
          return true;

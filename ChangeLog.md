@@ -15,6 +15,10 @@ More detailed information about incremental changes can be found in the
   Christoph Hansknecht].
 - Print additional messages when reallocation of MA27 working space failed
   [#671, by Daniel Oliveira].
+- Added option `file_append` to specify whether to append to `output_file` instead of
+  truncating it. Added default argument `file_append` to `Journalist::AddFileJournal()`,
+  added default argument `fappend` to `FileJournal::Open()`, and added default argument
+  `file_append` to `IpoptApplication::OpenOutputFile()`. [#720]
 
 ### 3.14.12 (2023-04-05)
 

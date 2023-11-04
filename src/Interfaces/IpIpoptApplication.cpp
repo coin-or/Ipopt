@@ -227,7 +227,9 @@ ApplicationReturnStatus IpoptApplication::Initialize(
             {
                file_print_level = print_level;
             }
-            bool openend = OpenOutputFile(output_filename, file_print_level);
+            bool file_append;
+            options_->GetBoolValue("file_append", file_append, "");
+            bool openend = OpenOutputFile(output_filename, file_print_level, file_append);
             if( !openend )
             {
                jnlst_->Printf(J_ERROR, J_INITIALIZATION, "Error opening output file \"%s\"\n", output_filename.c_str());
@@ -386,6 +388,11 @@ void IpoptApplication::RegisterOptions(
       "NOTE: This option only works when read from the ipopt.opt options file! "
       "Determines the verbosity level for the file specified by \"output_file\". "
       "By default it is the same as \"print_level\".");
+   roptions->AddBoolOption(
+      "file_append",
+      "Whether to append to output file, if set, instead of truncating.",
+      false,
+      "NOTE: This option only works when read from the ipopt.opt options file!");
    roptions->AddBoolOption(
       "print_user_options",
       "Print all options set by the user.",
@@ -943,14 +950,15 @@ ApplicationReturnStatus IpoptApplication::call_optimize()
 
 bool IpoptApplication::OpenOutputFile(
    std::string   file_name,
-   EJournalLevel print_level
+   EJournalLevel print_level,
+   bool          file_append
 )
 {
    SmartPtr<Journal> file_jrnl = jnlst_->GetJournal("OutputFile:" + file_name);
 
    if( IsNull(file_jrnl) )
    {
-      file_jrnl = jnlst_->AddFileJournal("OutputFile:" + file_name, file_name.c_str(), print_level);
+      file_jrnl = jnlst_->AddFileJournal("OutputFile:" + file_name, file_name.c_str(), print_level, file_append);
    }
 
    // Check, if the output file could be created properly

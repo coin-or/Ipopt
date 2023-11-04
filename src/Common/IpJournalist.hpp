@@ -231,7 +231,8 @@ public:
    virtual SmartPtr<Journal> AddFileJournal(
       const std::string& location_name,            /**< string identifier, which can be used to obtain the pointer to the new Journal at a later point using the GetJournal method */
       const std::string& fname,                    /**< name of the file to which this Journal corresponds; use "stdout" for stdout and use "stderr" for stderr */
-      EJournalLevel      default_level = J_WARNING /**< default journal level used to initialize the printing level for all categories */
+      EJournalLevel      default_level = J_WARNING,/**< default journal level used to initialize the printing level for all categories */
+      bool               file_append = false       /**< whether to append to file or truncate it (since 3.14.13) */
    );
 
    /** Get an existing journal.
@@ -432,7 +433,8 @@ public:
     *  @return false only if the file with the given name could not be opened
     */
    virtual bool Open(
-      const char* fname
+      const char* fname,             /**< name of file to open */
+      bool        fappend = false    /**< whether to append or truncate file (since 3.14.13) */
    );
 
 protected:
