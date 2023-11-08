@@ -1,6 +1,6 @@
 var IpMa97SolverInterface_8hpp =
 [
-    [ "Ma97SolverInterface", "classIpopt_1_1Ma97SolverInterface.html", "classIpopt_1_1Ma97SolverInterface" ],
+    [ "Ipopt::Ma97SolverInterface", "classIpopt_1_1Ma97SolverInterface.html", "classIpopt_1_1Ma97SolverInterface" ],
     [ "IPOPT_DECL_MA97_DEFAULT_CONTROL", "IpMa97SolverInterface_8hpp.html#aae8248e964814e08e10d8df96df1766a", null ],
     [ "IPOPT_DECL_MA97_ANALYSE", "IpMa97SolverInterface_8hpp.html#acc01e94f62ba2e87890a26e89bebd016", null ],
     [ "IPOPT_DECL_MA97_FACTOR", "IpMa97SolverInterface_8hpp.html#aeaabc23efbf6d3b3802d28eb3d03f1cd", null ],

@@ -5,7 +5,7 @@ var classIpopt_1_1IpoptException =
     [ "~IpoptException", "classIpopt_1_1IpoptException.html#a299ed01d621b8a084cb709b7a18f5f18", null ],
     [ "IpoptException", "classIpopt_1_1IpoptException.html#af9f46403d01a561e1a97c649b248d903", null ],
     [ "ReportException", "classIpopt_1_1IpoptException.html#a590c35a9c2f5984574933f9fcaab25c4", null ],
-    [ "Message", "classIpopt_1_1IpoptException.html#a415c61b31e4d20a2d0a0fd52f409b15e", null ],
+    [ "Message", "classIpopt_1_1IpoptException.html#a53173a11d3603da7387e57fed67e695c", null ],
     [ "operator=", "classIpopt_1_1IpoptException.html#aaef01182e1a6236110613dbf85b9bf33", null ],
     [ "msg_", "classIpopt_1_1IpoptException.html#a7926e6d47b99d76945161ff137aad2a2", null ],
     [ "file_name_", "classIpopt_1_1IpoptException.html#af594a9b97f2ac672a5e94d17da0576dc", null ],

@@ -11,8 +11,8 @@ var classIpopt_1_1Journalist =
     [ "ProduceOutput", "classIpopt_1_1Journalist.html#aeeaaaa3e6524ecfbc6883cc81f65e6a3", null ],
     [ "FlushBuffer", "classIpopt_1_1Journalist.html#a6d49b34e32e27e66db6d4d62c785ae40", null ],
     [ "AddJournal", "classIpopt_1_1Journalist.html#a4ec3328a483310668aec1af8aa0af106", null ],
-    [ "AddFileJournal", "classIpopt_1_1Journalist.html#aca518c2de141f844f3f06d0e21aa1adc", null ],
-    [ "GetJournal", "classIpopt_1_1Journalist.html#ab0d3dab3246cb19979c1fc173302fedd", null ],
+    [ "AddFileJournal", "classIpopt_1_1Journalist.html#a1a16fa12dbbfccc5e7091cf4a4bdbfdb", null ],
+    [ "GetJournal", "classIpopt_1_1Journalist.html#a5573c1b8df1a1a305804e97fa914965f", null ],
     [ "DeleteAllJournals", "classIpopt_1_1Journalist.html#a7f20b2b26174eb62dd5adc713ae7daa7", null ],
     [ "operator=", "classIpopt_1_1Journalist.html#a72555ba50a1108103cd15b54f0df7926", null ],
     [ "journals_", "classIpopt_1_1Journalist.html#a97cc5689fdad1d92b9466d9d172468f7", null ]

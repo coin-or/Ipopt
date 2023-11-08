@@ -4,7 +4,7 @@ var classIpopt_1_1TransposeMatrix =
     [ "~TransposeMatrix", "classIpopt_1_1TransposeMatrix.html#a241dba74e6a533675167b505a3b129db", null ],
     [ "TransposeMatrix", "classIpopt_1_1TransposeMatrix.html#ac78401396a3d80c7bdb56174cb5a92d8", null ],
     [ "TransposeMatrix", "classIpopt_1_1TransposeMatrix.html#a931c0ff6b243d4696a3557972ab24c79", null ],
-    [ "OrigMatrix", "classIpopt_1_1TransposeMatrix.html#a306242a1afee64c7984aeeade5e9abe7", null ],
+    [ "OrigMatrix", "classIpopt_1_1TransposeMatrix.html#ae39dd7fdb1f09570e8cdf5e78c2abdf9", null ],
     [ "MultVectorImpl", "classIpopt_1_1TransposeMatrix.html#ae3a04553635dc8e39e2f5a7ec495c764", null ],
     [ "TransMultVectorImpl", "classIpopt_1_1TransposeMatrix.html#ac32e4ad00e154500f5de7b6c6324a329", null ],
     [ "HasValidNumbersImpl", "classIpopt_1_1TransposeMatrix.html#a1af8f5981cf62747e65130fb94de19ef", null ],

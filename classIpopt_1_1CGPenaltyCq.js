@@ -18,7 +18,7 @@ var classIpopt_1_1CGPenaltyCq =
     [ "compute_curr_cg_penalty_scale", "classIpopt_1_1CGPenaltyCq.html#aa8f8abed0e16fb46d6f4b1c531b9b44a", null ],
     [ "RegisterOptions", "classIpopt_1_1CGPenaltyCq.html#a308c64081261b031d11ab9fce557f717", null ],
     [ "operator=", "classIpopt_1_1CGPenaltyCq.html#afcf1bfe64a839ef29112cac7a75b18c9", null ],
-    [ "CGPenData", "classIpopt_1_1CGPenaltyCq.html#a6e7984b1657524daf7d383139d6abe78", null ],
+    [ "CGPenData", "classIpopt_1_1CGPenaltyCq.html#a1e5ce9e29b31778e43ae3eef35e77b01", null ],
     [ "ip_nlp_", "classIpopt_1_1CGPenaltyCq.html#ab3aa6277ce982fda386639c1141eb18a", null ],
     [ "ip_data_", "classIpopt_1_1CGPenaltyCq.html#adf8a9a01f87558a8d9c9e6372dc147e8", null ],
     [ "ip_cq_", "classIpopt_1_1CGPenaltyCq.html#a1955a1bbf1375c101fce1bba0326b199", null ],

@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['deprecated_20list_8240',['Deprecated List',['../deprecated.html',1,'']]],
-  ['documentation_8241',['Documentation',['../index.html',1,'']]]
+  ['deprecated_20list_0',['Deprecated List',['../deprecated.html',1,'']]],
+  ['details_1',['Implementation Details',['../IMPL.html',1,'index']]],
+  ['documentation_2',['Documentation',['../index.html',1,'']]]
 ];

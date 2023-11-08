@@ -7,7 +7,7 @@ var classIpopt_1_1IpoptAlgorithm =
     [ "InitializeImpl", "classIpopt_1_1IpoptAlgorithm.html#a9ad444afb80b4980eec246c05c0e0c41", null ],
     [ "Optimize", "classIpopt_1_1IpoptAlgorithm.html#a7d1ee4c8c9d4f5abd6043b17b6456c43", null ],
     [ "RegisterOptions", "classIpopt_1_1IpoptAlgorithm.html#ac8e03902f681e8d3e7089efc103f58ed", null ],
-    [ "SearchDirCalc", "classIpopt_1_1IpoptAlgorithm.html#a195b852a45b3cd7b6b94cf24e6891cdd", null ],
+    [ "SearchDirCalc", "classIpopt_1_1IpoptAlgorithm.html#a3a94b5f9145ef45b1365da962c532eab", null ],
     [ "print_copyright_message", "classIpopt_1_1IpoptAlgorithm.html#a1dfb2750ec82fc9bb63969b2286a22bd", null ],
     [ "operator=", "classIpopt_1_1IpoptAlgorithm.html#a3baf5808d6c8ca0eb21404d5c24a08df", null ],
     [ "UpdateHessian", "classIpopt_1_1IpoptAlgorithm.html#a62fa01d8850fbf12adc9fbe6c9abcfba", null ],

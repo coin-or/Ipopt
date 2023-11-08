@@ -6,10 +6,10 @@ var classIpopt_1_1SumMatrixSpace =
     [ "SumMatrixSpace", "classIpopt_1_1SumMatrixSpace.html#aa0411c154cb540194748a2396c679883", null ],
     [ "NTerms", "classIpopt_1_1SumMatrixSpace.html#aa7ca9a5d9a609eb2c608ce1ad7a44384", null ],
     [ "SetTermSpace", "classIpopt_1_1SumMatrixSpace.html#a98a597fa74f087bbe3b2fffb63510368", null ],
-    [ "GetTermSpace", "classIpopt_1_1SumMatrixSpace.html#a4a5bf61304f70aa64887b45d2bc92039", null ],
-    [ "MakeNewSumMatrix", "classIpopt_1_1SumMatrixSpace.html#a9a337ac9c6d31d4b65abc2b79f1e88f6", null ],
-    [ "MakeNew", "classIpopt_1_1SumMatrixSpace.html#af1900cad0a60fdd9ec7a83f4c6fc83d1", null ],
-    [ "operator=", "classIpopt_1_1SumMatrixSpace.html#ac6108b42585a838fb4ebd9ba630590b0", null ],
+    [ "GetTermSpace", "classIpopt_1_1SumMatrixSpace.html#a198e7b6daeaae670d2546097b1e8bdba", null ],
+    [ "MakeNewSumMatrix", "classIpopt_1_1SumMatrixSpace.html#a9246e5d57c33f8a5902ac0d58e9c7961", null ],
+    [ "MakeNew", "classIpopt_1_1SumMatrixSpace.html#a1fe91367e6c447dd555dadaaf91c5059", null ],
+    [ "operator=", "classIpopt_1_1SumMatrixSpace.html#a6a5c5feb182a8da1da3cd8b2238f69fa", null ],
     [ "nterms_", "classIpopt_1_1SumMatrixSpace.html#ab1eb836503d7ad925be70d918a6bbbc8", null ],
     [ "term_spaces_", "classIpopt_1_1SumMatrixSpace.html#ae8967be458662c7dd66504e538d1c9a1", null ]
 ];

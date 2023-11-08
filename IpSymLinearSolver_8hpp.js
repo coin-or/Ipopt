@@ -1,6 +1,6 @@
 var IpSymLinearSolver_8hpp =
 [
-    [ "SymLinearSolver", "classIpopt_1_1SymLinearSolver.html", "classIpopt_1_1SymLinearSolver" ],
+    [ "Ipopt::SymLinearSolver", "classIpopt_1_1SymLinearSolver.html", "classIpopt_1_1SymLinearSolver" ],
     [ "ESymSolverStatus", "IpSymLinearSolver_8hpp.html#a4cd69d3019b82e511236cb759033224b", [
       [ "SYMSOLVER_SUCCESS", "IpSymLinearSolver_8hpp.html#a4cd69d3019b82e511236cb759033224ba81348b8b02c41300f056dfe1e55d83ae", null ],
       [ "SYMSOLVER_SINGULAR", "IpSymLinearSolver_8hpp.html#a4cd69d3019b82e511236cb759033224baad7c848c4f36eaa686fe7f218220e0fe", null ],

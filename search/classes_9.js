@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['journal_4075',['Journal',['../classIpopt_1_1Journal.html',1,'Ipopt']]],
-  ['journalist_4076',['Journalist',['../classIpopt_1_1Journalist.html',1,'Ipopt']]]
+  ['journal_0',['Journal',['../classIpopt_1_1Journal.html',1,'Ipopt']]],
+  ['journalist_1',['Journalist',['../classIpopt_1_1Journalist.html',1,'Ipopt']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['special_20features_8247',['Special Features',['../SPECIALS.html',1,'index']]]
+  ['nlp_20to_20ipopt_0',['Interfacing your NLP to Ipopt',['../INTERFACES.html',1,'index']]]
 ];

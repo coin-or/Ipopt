@@ -8,7 +8,7 @@ var classIpopt_1_1InexactPDTerminationTester =
     [ "TestTermination", "classIpopt_1_1InexactPDTerminationTester.html#ab36f69acbc34373777486a02e5188ea2", null ],
     [ "Clear", "classIpopt_1_1InexactPDTerminationTester.html#a2277e85ac3b6a88e499cf89d6020f35b", null ],
     [ "GetSolverIterations", "classIpopt_1_1InexactPDTerminationTester.html#a300de47e58c04ec133f6eb920d791e6f", null ],
-    [ "operator=", "classIpopt_1_1InexactPDTerminationTester.html#aa29e115d67858db505bdc83f92197c2f", null ],
+    [ "operator=", "classIpopt_1_1InexactPDTerminationTester.html#afc11684b88d8db12bd04b5116ac1e69a", null ],
     [ "tcc_psi_", "classIpopt_1_1InexactPDTerminationTester.html#abe832725cea22ed455524639905b35e0", null ],
     [ "tcc_theta_", "classIpopt_1_1InexactPDTerminationTester.html#aa996b7363a3160235d19ee2b2b51704b", null ],
     [ "tcc_theta_mu_exponent_", "classIpopt_1_1InexactPDTerminationTester.html#ad43fecaf183ab77023ea8b09135861ed", null ],

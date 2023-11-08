@@ -5,7 +5,7 @@ var classIpopt_1_1WsmpSolverInterface =
     [ "WsmpSolverInterface", "classIpopt_1_1WsmpSolverInterface.html#a0980c256349fbcf2b1f7d0e0e8b75df3", null ],
     [ "InitializeImpl", "classIpopt_1_1WsmpSolverInterface.html#a8d3abda2c7e95182c5328aac23659562", null ],
     [ "InitializeStructure", "classIpopt_1_1WsmpSolverInterface.html#a196e9ad419dfbea6e2719c11011c7678", null ],
-    [ "GetValuesArrayPtr", "classIpopt_1_1WsmpSolverInterface.html#aa1f6e3f5cca2a0d0992eeb0a9b48c366", null ],
+    [ "GetValuesArrayPtr", "classIpopt_1_1WsmpSolverInterface.html#ae2f407bfb7aa1b7c998c7c460e5c6a22", null ],
     [ "MultiSolve", "classIpopt_1_1WsmpSolverInterface.html#a2886525706e38e3d804a676333992397", null ],
     [ "NumberOfNegEVals", "classIpopt_1_1WsmpSolverInterface.html#a7f6915e0bc818d68c2da71ec0ea4d08b", null ],
     [ "IncreaseQuality", "classIpopt_1_1WsmpSolverInterface.html#aac6af142a8c102b3910c3da81a2622dd", null ],

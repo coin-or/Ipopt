@@ -7,7 +7,7 @@ var classIpopt_1_1PDSearchDirCalculator =
     [ "InitializeImpl", "classIpopt_1_1PDSearchDirCalculator.html#a25b49874d3863a95e529a912d1eee128", null ],
     [ "ComputeSearchDirection", "classIpopt_1_1PDSearchDirCalculator.html#a70ed71fe20bad40db2f323222b434a39", null ],
     [ "RegisterOptions", "classIpopt_1_1PDSearchDirCalculator.html#a7d20d557c24eafe7ceec21946121044d", null ],
-    [ "PDSolver", "classIpopt_1_1PDSearchDirCalculator.html#ab6a4655c0ede21e301a2b16b35d3d403", null ],
+    [ "PDSolver", "classIpopt_1_1PDSearchDirCalculator.html#a3e99961ac0f80d489e4d611e3d9ae62e", null ],
     [ "operator=", "classIpopt_1_1PDSearchDirCalculator.html#a1e83352a25d0248c29cf774219eb0bf4", null ],
     [ "pd_solver_", "classIpopt_1_1PDSearchDirCalculator.html#af6f72ce0db3036ad781f3c0c0ab74963", null ],
     [ "fast_step_computation_", "classIpopt_1_1PDSearchDirCalculator.html#aa4b63924d8763e2d9cdf10c369baa8dc", null ],

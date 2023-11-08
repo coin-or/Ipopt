@@ -64,7 +64,7 @@ var classIpopt_1_1Vector =
     [ "AddVectorQuotientImpl", "classIpopt_1_1Vector.html#a72ccdf36219235a1e262e5ed460513cc", null ],
     [ "HasValidNumbersImpl", "classIpopt_1_1Vector.html#ade790e1c0f229f0f063dbbedb9feac7e", null ],
     [ "PrintImpl", "classIpopt_1_1Vector.html#ac0c0075804afa3795f1b1957fde5e536", null ],
-    [ "operator=", "classIpopt_1_1Vector.html#acc805584159310a53bc8f7d8a55bc520", null ],
+    [ "operator=", "classIpopt_1_1Vector.html#ac079b8fb7d1705782ee2ddf80bfe3941", null ],
     [ "owner_space_", "classIpopt_1_1Vector.html#a45c46e6bacdec306b2f1d3a7054d0992", null ],
     [ "dot_cache_", "classIpopt_1_1Vector.html#a2a83dd9b5f8b08ea1bcc7c826126a6f3", null ],
     [ "nrm2_cache_tag_", "classIpopt_1_1Vector.html#a29c13a03f941940f50d555954bbf9e95", null ],

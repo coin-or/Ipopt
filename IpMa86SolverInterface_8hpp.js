@@ -1,6 +1,6 @@
 var IpMa86SolverInterface_8hpp =
 [
-    [ "Ma86SolverInterface", "classIpopt_1_1Ma86SolverInterface.html", "classIpopt_1_1Ma86SolverInterface" ],
+    [ "Ipopt::Ma86SolverInterface", "classIpopt_1_1Ma86SolverInterface.html", "classIpopt_1_1Ma86SolverInterface" ],
     [ "IPOPT_DECL_MA86_DEFAULT_CONTROL", "IpMa86SolverInterface_8hpp.html#a6e1f20ac31d39ca75ad51f4318a31ff6", null ],
     [ "IPOPT_DECL_MA86_ANALYSE", "IpMa86SolverInterface_8hpp.html#ad7ec5cce318c358de1ebfac9a1f92f97", null ],
     [ "IPOPT_DECL_MA86_FACTOR", "IpMa86SolverInterface_8hpp.html#a9237e9f021bcc7a4b19b15a8fd0323e4", null ],

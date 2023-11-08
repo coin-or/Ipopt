@@ -11,7 +11,7 @@ var classIpopt_1_1SparseSymLinearSolverInterface =
     [ "~SparseSymLinearSolverInterface", "classIpopt_1_1SparseSymLinearSolverInterface.html#a10b5a695a491500c5a4f103114fb6ec6", null ],
     [ "InitializeImpl", "classIpopt_1_1SparseSymLinearSolverInterface.html#a667325ec88127e074ae76458d3500da3", null ],
     [ "InitializeStructure", "classIpopt_1_1SparseSymLinearSolverInterface.html#a3428ecd1c82262764d1ded8dc2119549", null ],
-    [ "GetValuesArrayPtr", "classIpopt_1_1SparseSymLinearSolverInterface.html#a04d12ba6e29e4b945e112b574cab8e09", null ],
+    [ "GetValuesArrayPtr", "classIpopt_1_1SparseSymLinearSolverInterface.html#aeb751e5f0902ec04f8c86232fbaa24b8", null ],
     [ "MultiSolve", "classIpopt_1_1SparseSymLinearSolverInterface.html#abb894fd70f83310a1c39ab7242efdf2a", null ],
     [ "NumberOfNegEVals", "classIpopt_1_1SparseSymLinearSolverInterface.html#a02e09c0f187cb7718b07c351112e74cd", null ],
     [ "IncreaseQuality", "classIpopt_1_1SparseSymLinearSolverInterface.html#ad02523508b8b71914b4e318a582e8bca", null ],

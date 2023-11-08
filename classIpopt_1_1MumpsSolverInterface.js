@@ -5,7 +5,7 @@ var classIpopt_1_1MumpsSolverInterface =
     [ "MumpsSolverInterface", "classIpopt_1_1MumpsSolverInterface.html#a9e9d5d53f2dc184d59d9363212bdf135", null ],
     [ "InitializeImpl", "classIpopt_1_1MumpsSolverInterface.html#aa821cf1e57f5198fa72f28580c6bb574", null ],
     [ "InitializeStructure", "classIpopt_1_1MumpsSolverInterface.html#a9498bc4d8b9f944657f5e4b25281fa93", null ],
-    [ "GetValuesArrayPtr", "classIpopt_1_1MumpsSolverInterface.html#a8e773fa0562c9b1b4eaff0898dadda90", null ],
+    [ "GetValuesArrayPtr", "classIpopt_1_1MumpsSolverInterface.html#a3468270bfacbc2e97f59c035e61abedf", null ],
     [ "MultiSolve", "classIpopt_1_1MumpsSolverInterface.html#a57b1cab7f45b4aef85e062b7e62e8084", null ],
     [ "NumberOfNegEVals", "classIpopt_1_1MumpsSolverInterface.html#a0af2f4b72066324eeb4cde5b9a8ad3b2", null ],
     [ "IncreaseQuality", "classIpopt_1_1MumpsSolverInterface.html#abfbb3dc56d6054cc0a4fb7eb3378b2b2", null ],

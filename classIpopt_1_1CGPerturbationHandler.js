@@ -8,8 +8,8 @@ var classIpopt_1_1CGPerturbationHandler =
     [ "PerturbForSingularity", "classIpopt_1_1CGPerturbationHandler.html#ae85f4bb6bb44abacfec7205b178f0d79", null ],
     [ "RegisterOptions", "classIpopt_1_1CGPerturbationHandler.html#af7c091e66d74b8c9e0d41d6ab5bfd592", null ],
     [ "operator=", "classIpopt_1_1CGPerturbationHandler.html#a578aa359b5913f96763765b28513c37d", null ],
-    [ "CGPenData", "classIpopt_1_1CGPerturbationHandler.html#ab7d02070566469ebf58c2032dbc605d2", null ],
-    [ "CGPenCq", "classIpopt_1_1CGPerturbationHandler.html#accb917b9c6201785a02185e5aed8b51a", null ],
+    [ "CGPenData", "classIpopt_1_1CGPerturbationHandler.html#a515bdf70de785422cf35147b43885e48", null ],
+    [ "CGPenCq", "classIpopt_1_1CGPerturbationHandler.html#a115ba8ad210beb39608854923365684c", null ],
     [ "penalty_max_", "classIpopt_1_1CGPerturbationHandler.html#ae28f91c3a7df15dfb587218f7e310c3f", null ],
     [ "mult_diverg_feasibility_tol_", "classIpopt_1_1CGPerturbationHandler.html#a1742a5d757256829c810630f44e1961d", null ]
 ];

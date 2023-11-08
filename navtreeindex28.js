@@ -1,16 +1,5 @@
 var NAVTREEINDEX28 =
 {
-"structma97__info__d.html#af7498680aa698cb80d85a191a5f75c89":[1,0,12,9],
-"structma97__info__s.html":[1,0,13],
-"structma97__info__s.html#a05fe31aaca91e57510f943cfc8a3c62d":[1,0,13,16],
-"structma97__info__s.html#a0b49558d55b5dee850670c659c841bd9":[1,0,13,4],
-"structma97__info__s.html#a0d6ae736e8ca28d8edc74dc92e7dc682":[1,0,13,12],
-"structma97__info__s.html#a21db1aef725348a72ff597226082a2fa":[1,0,13,11],
-"structma97__info__s.html#a2aec1d294212368ddf425f9a195f7cd4":[1,0,13,19],
-"structma97__info__s.html#a2ecd46a929d16edc65134f34e8733b0f":[1,0,13,15],
-"structma97__info__s.html#a32fe6f2ad34f93960d7f714db31143fd":[1,0,13,6],
-"structma97__info__s.html#a36b696fdad1ca7d805f759a98587bdcc":[1,0,13,2],
-"structma97__info__s.html#a38c81f048be470b995d559f80b76b431":[1,0,13,7],
 "structma97__info__s.html#a47bc7bccb423fcf27f3c6a8b3b2cc4df":[1,0,13,1],
 "structma97__info__s.html#a4b504e6c81e0d83f1288b95ab50d3a6e":[1,0,13,14],
 "structma97__info__s.html#a62cf141859399cea81495766abe5153c":[1,0,13,9],

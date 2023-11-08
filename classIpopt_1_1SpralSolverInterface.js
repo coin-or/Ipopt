@@ -17,7 +17,7 @@ var classIpopt_1_1SpralSolverInterface =
     [ "GetName", "classIpopt_1_1SpralSolverInterface.html#ac3a97c9942e5759f146f60b5b45fd512", null ],
     [ "InitializeImpl", "classIpopt_1_1SpralSolverInterface.html#a3819a97a4a726657c3c9ad4146691e53", null ],
     [ "InitializeStructure", "classIpopt_1_1SpralSolverInterface.html#af65f85d609916b1602efcd0a816801d1", null ],
-    [ "GetValuesArrayPtr", "classIpopt_1_1SpralSolverInterface.html#a0da8c80d68fa5d3bb090178ad0757ea0", null ],
+    [ "GetValuesArrayPtr", "classIpopt_1_1SpralSolverInterface.html#a50a931d01822ef99f5f09a6ec111acf0", null ],
     [ "MultiSolve", "classIpopt_1_1SpralSolverInterface.html#acf60ee440ae544ad3f70f5a11f36a1a4", null ],
     [ "NumberOfNegEVals", "classIpopt_1_1SpralSolverInterface.html#a75d7a32c3feb9c548d5c20444b654f9b", null ],
     [ "IncreaseQuality", "classIpopt_1_1SpralSolverInterface.html#a5eb28a170fc3f33f66691194daa965ca", null ],

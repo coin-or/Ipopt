@@ -5,7 +5,7 @@ var classIpopt_1_1Ma27TSolverInterface =
     [ "Ma27TSolverInterface", "classIpopt_1_1Ma27TSolverInterface.html#a51c8e6b5deb49ebdfd8c602811a84607", null ],
     [ "InitializeImpl", "classIpopt_1_1Ma27TSolverInterface.html#a08b9b2fa8c0f426503363f810405f56b", null ],
     [ "InitializeStructure", "classIpopt_1_1Ma27TSolverInterface.html#a84e002daaedddab9359bd252e5363888", null ],
-    [ "GetValuesArrayPtr", "classIpopt_1_1Ma27TSolverInterface.html#ad015d479b08de1bcb6176b8240168246", null ],
+    [ "GetValuesArrayPtr", "classIpopt_1_1Ma27TSolverInterface.html#a1b89a8a1a9c85f48b6bfbfcac3203e1c", null ],
     [ "MultiSolve", "classIpopt_1_1Ma27TSolverInterface.html#adc46f5a3efa5656374d6c50e931271b0", null ],
     [ "NumberOfNegEVals", "classIpopt_1_1Ma27TSolverInterface.html#a12f9ee4c651ac61276e25ca51791b2a7", null ],
     [ "IncreaseQuality", "classIpopt_1_1Ma27TSolverInterface.html#a6c9a9e542a59252c2e35e206b1e62b97", null ],

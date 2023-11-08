@@ -24,7 +24,7 @@ var classIpopt_1_1Matrix =
     [ "ComputeRowAMaxImpl", "classIpopt_1_1Matrix.html#aa3bbcb2070641e08b8ed114a22d7f0fc", null ],
     [ "ComputeColAMaxImpl", "classIpopt_1_1Matrix.html#af09c4d60a35f688751f91b39068a5fd0", null ],
     [ "PrintImpl", "classIpopt_1_1Matrix.html#ae00a00b05132ec2b9213eaf3e148f381", null ],
-    [ "operator=", "classIpopt_1_1Matrix.html#afaf10d9d3a27e7c46f3bc06287ed1166", null ],
+    [ "operator=", "classIpopt_1_1Matrix.html#a22d077fe829eeccd53ba5d2f19827720", null ],
     [ "owner_space_", "classIpopt_1_1Matrix.html#a145253a245865d9f785cff82eee561f3", null ],
     [ "valid_cache_tag_", "classIpopt_1_1Matrix.html#a64d5a993c8840f716e1e91c44b89ed02", null ],
     [ "cached_valid_", "classIpopt_1_1Matrix.html#a831343d02d2ca02bf7e8f935670b364d", null ]

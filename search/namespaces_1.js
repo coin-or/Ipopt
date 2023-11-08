@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['coinor_4311',['coinor',['../namespaceorg_1_1coinor.html',1,'org']]],
-  ['org_4312',['org',['../namespaceorg.html',1,'']]]
+  ['org_3a_3acoinor_0',['coinor',['../namespaceorg_1_1coinor.html',1,'org']]]
 ];

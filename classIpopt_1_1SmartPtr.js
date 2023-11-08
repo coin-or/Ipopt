@@ -20,8 +20,8 @@ var classIpopt_1_1SmartPtr =
     [ "operator!=", "classIpopt_1_1SmartPtr.html#a184d462875e8cd414a1782b0b84189e3", null ],
     [ "operator!=", "classIpopt_1_1SmartPtr.html#a30fa32ae58fc32b425fc1c107621f909", null ],
     [ "operator<", "classIpopt_1_1SmartPtr.html#a58c42d838a008fd27fb70dd34a4c613f", null ],
-    [ "GetRawPtr", "classIpopt_1_1SmartPtr.html#a180b5cee7232bd9434217a44107e0861", null ],
-    [ "ConstPtr", "classIpopt_1_1SmartPtr.html#ac6d61ff0be07d9c05a67cadeb9a073f8", null ],
+    [ "GetRawPtr", "classIpopt_1_1SmartPtr.html#a27dc9e603f45c1c28bc3dec205583806", null ],
+    [ "ConstPtr", "classIpopt_1_1SmartPtr.html#a297f93258277e27bb09a1550f9332522", null ],
     [ "IsValid", "classIpopt_1_1SmartPtr.html#aac969d05f92a0038daf754ac1c5ab876", null ],
     [ "IsNull", "classIpopt_1_1SmartPtr.html#a4e3eb718ef30628e0c644bfdcdea989d", null ],
     [ "ptr_", "classIpopt_1_1SmartPtr.html#ae00d70e645c2cd368cfca0f94208f482", null ]

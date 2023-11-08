@@ -1,6 +1,6 @@
 var IpRestoPhase_8hpp =
 [
-    [ "RestorationPhase", "classIpopt_1_1RestorationPhase.html", "classIpopt_1_1RestorationPhase" ],
+    [ "Ipopt::RestorationPhase", "classIpopt_1_1RestorationPhase.html", "classIpopt_1_1RestorationPhase" ],
     [ "DECLARE_STD_EXCEPTION", "IpRestoPhase_8hpp.html#a1cff650b87260aa6d97c869ab13fd7d3", null ],
     [ "DECLARE_STD_EXCEPTION", "IpRestoPhase_8hpp.html#af8f7d564b073bfddf07eb949e6f05f6c", null ],
     [ "DECLARE_STD_EXCEPTION", "IpRestoPhase_8hpp.html#ade551cf98a40023f7d557225749d938f", null ],

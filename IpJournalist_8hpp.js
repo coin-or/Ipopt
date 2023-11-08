@@ -1,9 +1,9 @@
 var IpJournalist_8hpp =
 [
-    [ "Journalist", "classIpopt_1_1Journalist.html", "classIpopt_1_1Journalist" ],
-    [ "Journal", "classIpopt_1_1Journal.html", "classIpopt_1_1Journal" ],
-    [ "FileJournal", "classIpopt_1_1FileJournal.html", "classIpopt_1_1FileJournal" ],
-    [ "StreamJournal", "classIpopt_1_1StreamJournal.html", "classIpopt_1_1StreamJournal" ],
+    [ "Ipopt::Journalist", "classIpopt_1_1Journalist.html", "classIpopt_1_1Journalist" ],
+    [ "Ipopt::Journal", "classIpopt_1_1Journal.html", "classIpopt_1_1Journal" ],
+    [ "Ipopt::FileJournal", "classIpopt_1_1FileJournal.html", "classIpopt_1_1FileJournal" ],
+    [ "Ipopt::StreamJournal", "classIpopt_1_1StreamJournal.html", "classIpopt_1_1StreamJournal" ],
     [ "EJournalLevel", "IpJournalist_8hpp.html#a9a3bf04074c3113604067ee277e690ea", [
       [ "J_INSUPPRESSIBLE", "IpJournalist_8hpp.html#a9a3bf04074c3113604067ee277e690eaac99ec20fce7999d68a1a1dff7f37fea7", null ],
       [ "J_NONE", "IpJournalist_8hpp.html#a9a3bf04074c3113604067ee277e690eaa282b6bc6373da2063c0f88363b7b0209", null ],

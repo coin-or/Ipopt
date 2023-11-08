@@ -11,7 +11,7 @@ var classIpopt_1_1Ma86SolverInterface =
     [ "SetFunctions", "classIpopt_1_1Ma86SolverInterface.html#ae1f527cd9cb4ab80b9a83fbd2577b299", null ],
     [ "InitializeImpl", "classIpopt_1_1Ma86SolverInterface.html#a35479d2260dd4a24f267ff510e647f7e", null ],
     [ "InitializeStructure", "classIpopt_1_1Ma86SolverInterface.html#aba7c5f30fecb65caa4b948d0ab6ead84", null ],
-    [ "GetValuesArrayPtr", "classIpopt_1_1Ma86SolverInterface.html#af50d7550f5ae988e41eeda5e53d0229d", null ],
+    [ "GetValuesArrayPtr", "classIpopt_1_1Ma86SolverInterface.html#a6771e0f5fca00184cdc26e41c8c53f11", null ],
     [ "MultiSolve", "classIpopt_1_1Ma86SolverInterface.html#a7715cbcafe75c97e4305a5756b3c0352", null ],
     [ "NumberOfNegEVals", "classIpopt_1_1Ma86SolverInterface.html#a8a69649419a111e525e4316180858dc8", null ],
     [ "IncreaseQuality", "classIpopt_1_1Ma86SolverInterface.html#ae3bd8afa1de2eba07dbed8b1f28f1752", null ],

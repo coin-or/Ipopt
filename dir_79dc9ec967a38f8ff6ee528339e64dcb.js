@@ -1,42 +1,18 @@
 var dir_79dc9ec967a38f8ff6ee528339e64dcb =
 [
     [ "IpInexactAlgBuilder.hpp", "IpInexactAlgBuilder_8hpp.html", "IpInexactAlgBuilder_8hpp" ],
-    [ "IpInexactCq.hpp", "IpInexactCq_8hpp.html", [
-      [ "InexactCq", "classIpopt_1_1InexactCq.html", "classIpopt_1_1InexactCq" ]
-    ] ],
-    [ "IpInexactData.hpp", "IpInexactData_8hpp.html", [
-      [ "InexactData", "classIpopt_1_1InexactData.html", "classIpopt_1_1InexactData" ]
-    ] ],
-    [ "IpInexactDoglegNormal.hpp", "IpInexactDoglegNormal_8hpp.html", [
-      [ "InexactDoglegNormalStep", "classIpopt_1_1InexactDoglegNormalStep.html", "classIpopt_1_1InexactDoglegNormalStep" ]
-    ] ],
-    [ "IpInexactLSAcceptor.hpp", "IpInexactLSAcceptor_8hpp.html", [
-      [ "InexactLSAcceptor", "classIpopt_1_1InexactLSAcceptor.html", "classIpopt_1_1InexactLSAcceptor" ]
-    ] ],
-    [ "IpInexactNewtonNormal.hpp", "IpInexactNewtonNormal_8hpp.html", [
-      [ "InexactNewtonNormalStep", "classIpopt_1_1InexactNewtonNormalStep.html", "classIpopt_1_1InexactNewtonNormalStep" ]
-    ] ],
-    [ "IpInexactNormalStepCalc.hpp", "IpInexactNormalStepCalc_8hpp.html", [
-      [ "InexactNormalStepCalculator", "classIpopt_1_1InexactNormalStepCalculator.html", "classIpopt_1_1InexactNormalStepCalculator" ]
-    ] ],
-    [ "IpInexactNormalTerminationTester.hpp", "IpInexactNormalTerminationTester_8hpp.html", [
-      [ "InexactNormalTerminationTester", "classIpopt_1_1InexactNormalTerminationTester.html", "classIpopt_1_1InexactNormalTerminationTester" ]
-    ] ],
-    [ "IpInexactPDSolver.hpp", "IpInexactPDSolver_8hpp.html", [
-      [ "InexactPDSolver", "classIpopt_1_1InexactPDSolver.html", "classIpopt_1_1InexactPDSolver" ]
-    ] ],
-    [ "IpInexactPDTerminationTester.hpp", "IpInexactPDTerminationTester_8hpp.html", [
-      [ "InexactPDTerminationTester", "classIpopt_1_1InexactPDTerminationTester.html", "classIpopt_1_1InexactPDTerminationTester" ]
-    ] ],
+    [ "IpInexactCq.hpp", "IpInexactCq_8hpp.html", "IpInexactCq_8hpp" ],
+    [ "IpInexactData.hpp", "IpInexactData_8hpp.html", "IpInexactData_8hpp" ],
+    [ "IpInexactDoglegNormal.hpp", "IpInexactDoglegNormal_8hpp.html", "IpInexactDoglegNormal_8hpp" ],
+    [ "IpInexactLSAcceptor.hpp", "IpInexactLSAcceptor_8hpp.html", "IpInexactLSAcceptor_8hpp" ],
+    [ "IpInexactNewtonNormal.hpp", "IpInexactNewtonNormal_8hpp.html", "IpInexactNewtonNormal_8hpp" ],
+    [ "IpInexactNormalStepCalc.hpp", "IpInexactNormalStepCalc_8hpp.html", "IpInexactNormalStepCalc_8hpp" ],
+    [ "IpInexactNormalTerminationTester.hpp", "IpInexactNormalTerminationTester_8hpp.html", "IpInexactNormalTerminationTester_8hpp" ],
+    [ "IpInexactPDSolver.hpp", "IpInexactPDSolver_8hpp.html", "IpInexactPDSolver_8hpp" ],
+    [ "IpInexactPDTerminationTester.hpp", "IpInexactPDTerminationTester_8hpp.html", "IpInexactPDTerminationTester_8hpp" ],
     [ "IpInexactRegOp.hpp", "IpInexactRegOp_8hpp.html", "IpInexactRegOp_8hpp" ],
-    [ "IpInexactSearchDirCalc.hpp", "IpInexactSearchDirCalc_8hpp.html", [
-      [ "InexactSearchDirCalculator", "classIpopt_1_1InexactSearchDirCalculator.html", "classIpopt_1_1InexactSearchDirCalculator" ]
-    ] ],
-    [ "IpInexactTSymScalingMethod.hpp", "IpInexactTSymScalingMethod_8hpp.html", [
-      [ "InexactTSymScalingMethod", "classIpopt_1_1InexactTSymScalingMethod.html", "classIpopt_1_1InexactTSymScalingMethod" ]
-    ] ],
+    [ "IpInexactSearchDirCalc.hpp", "IpInexactSearchDirCalc_8hpp.html", "IpInexactSearchDirCalc_8hpp" ],
+    [ "IpInexactTSymScalingMethod.hpp", "IpInexactTSymScalingMethod_8hpp.html", "IpInexactTSymScalingMethod_8hpp" ],
     [ "IpIterativePardisoSolverInterface.hpp", "IpIterativePardisoSolverInterface_8hpp.html", "IpIterativePardisoSolverInterface_8hpp" ],
-    [ "IpIterativeSolverTerminationTester.hpp", "IpIterativeSolverTerminationTester_8hpp.html", [
-      [ "IterativeSolverTerminationTester", "classIpopt_1_1IterativeSolverTerminationTester.html", "classIpopt_1_1IterativeSolverTerminationTester" ]
-    ] ]
+    [ "IpIterativeSolverTerminationTester.hpp", "IpIterativeSolverTerminationTester_8hpp.html", "IpIterativeSolverTerminationTester_8hpp" ]
 ];

@@ -2,8 +2,8 @@ var classIpopt_1_1DenseVectorSpace =
 [
     [ "DenseVectorSpace", "classIpopt_1_1DenseVectorSpace.html#a64e523fd04c66333dfac8271a80cf947", null ],
     [ "~DenseVectorSpace", "classIpopt_1_1DenseVectorSpace.html#ae70b1acb438cc8c6049f9a4507384e29", null ],
-    [ "MakeNewDenseVector", "classIpopt_1_1DenseVectorSpace.html#afe637a62c06423e7ab5b5da7f0e61387", null ],
-    [ "MakeNew", "classIpopt_1_1DenseVectorSpace.html#a71ae7f12ab74d814346eb0a7aea6e532", null ],
+    [ "MakeNewDenseVector", "classIpopt_1_1DenseVectorSpace.html#af3bc9ab94371c5cd96b43c5104c8ce79", null ],
+    [ "MakeNew", "classIpopt_1_1DenseVectorSpace.html#afdc7d13e308f39cf442b6ec3a45bd770", null ],
     [ "AllocateInternalStorage", "classIpopt_1_1DenseVectorSpace.html#a2d38cbd31b1c31513c63ef405c52d870", null ],
     [ "FreeInternalStorage", "classIpopt_1_1DenseVectorSpace.html#ad9507dedd74540e964abc25355069786", null ],
     [ "HasStringMetaData", "classIpopt_1_1DenseVectorSpace.html#aacd1bfe546b93288fece2aa4e4321dd4", null ],

@@ -2,7 +2,7 @@ var classIpopt_1_1SchurData =
 [
     [ "SchurData", "classIpopt_1_1SchurData.html#aac84cd5bf980b5872b05f4a85386425e", null ],
     [ "~SchurData", "classIpopt_1_1SchurData.html#ad916596f3a15e89795cb66a88a882dfa", null ],
-    [ "MakeNewSchurDataCopy", "classIpopt_1_1SchurData.html#a08c1dd4143d6bec3b20685250e241cfc", null ],
+    [ "MakeNewSchurDataCopy", "classIpopt_1_1SchurData.html#a4b958b4fdc5132af484bf665d1bab882", null ],
     [ "SetData_Flag", "classIpopt_1_1SchurData.html#a160ce7c181842df3018fcc35624822ac", null ],
     [ "SetData_Flag", "classIpopt_1_1SchurData.html#a969c0adc417f04afbb9de2e94ff10397", null ],
     [ "SetData_Index", "classIpopt_1_1SchurData.html#af71eb05c8ad4b642a0b10b3719da6fce", null ],

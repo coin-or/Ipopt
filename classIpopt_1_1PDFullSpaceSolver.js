@@ -6,7 +6,7 @@ var classIpopt_1_1PDFullSpaceSolver =
     [ "InitializeImpl", "classIpopt_1_1PDFullSpaceSolver.html#a6b4a9a6ca82231501bc7920be254100c", null ],
     [ "Solve", "classIpopt_1_1PDFullSpaceSolver.html#ab87de2ed986909005e2acb1d1adddd72", null ],
     [ "RegisterOptions", "classIpopt_1_1PDFullSpaceSolver.html#a48ccadea2bef95f5f335830463a6c8e5", null ],
-    [ "operator=", "classIpopt_1_1PDFullSpaceSolver.html#a6b51c0fa4f8d8f8b97b93feed8190649", null ],
+    [ "operator=", "classIpopt_1_1PDFullSpaceSolver.html#a7f2e5124d3defe7f058b8d696efed230", null ],
     [ "SolveOnce", "classIpopt_1_1PDFullSpaceSolver.html#ad44de103480b180b297b7e6f8701aec2", null ],
     [ "ComputeResiduals", "classIpopt_1_1PDFullSpaceSolver.html#ac23723158d9e2fbefcf01705b060966a", null ],
     [ "ComputeResidualRatio", "classIpopt_1_1PDFullSpaceSolver.html#a19ef2f56268b22df56b0dffa5c0c330d", null ],
