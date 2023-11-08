@@ -55,7 +55,7 @@ void FilterLSAcceptor::RegisterOptions(SmartPtr<RegisteredOptions> roptions)
       1e-4,
       "The algorithmic parameter theta_min is determined as theta_min_fact "
       "times the maximum of 1 and the constraint violation at initial point. "
-      "The switching rules treats an iteration as an h-type iteration whenever "
+      "The switching rule treats an iteration as an h-type iteration whenever "
       "the current constraint violation is larger than theta_min (see "
       "paragraph before Eqn. (19) in the implementation paper).",
       true);

@@ -87,7 +87,7 @@ void DefaultIterateInitializer::RegisterOptions(
       "mu-based", "initialize to mu_init/x_slack",
       "This option defines how the iterates for the bound multipliers are initialized. "
       "If \"constant\" is chosen, then all bound multipliers are initialized to the value of \"bound_mult_init_val\". "
-      "If \"mu-based\" is chosen, the each value is initialized to the the value of \"mu_init\" "
+      "If \"mu-based\" is chosen, then each value is initialized to the the value of \"mu_init\" "
       "divided by the corresponding slack variable. "
       "This latter option might be useful if the starting point is close to the optimal solution.");
    reg_options->AddStringOption2(
