@@ -7,14 +7,14 @@ More detailed information about incremental changes can be found in the
 
 ## 3.14
 
-### 3.14.13 (2023-xx-yy)
+### 3.14.13 (2023-11-08)
 
 - Reduced priority for making Spral the default value for option linear_solver [#677].
 - Adapted to change of integer types in Spral interface. Minimal required Spral version is now v2023.03.29.
-- Fixed that return code from TNLP::eval_jac_g() was ignored at first call [#697, by
+- Fixed that return code from `TNLP::eval_jac_g()` was ignored at first call [#697, by
   Christoph Hansknecht].
-- Print additional messages when reallocation of MA27 working space failed
-  [#671, by Daniel Oliveira].
+- Print additional messages when reallocation of MA27 working space failed [#671, by
+  Daniel Oliveira].
 - Added option `file_append` to specify whether to append to `output_file` instead of
   truncating it. Added default argument `file_append` to `Journalist::AddFileJournal()`,
   added default argument `fappend` to `FileJournal::Open()`, and added default argument
