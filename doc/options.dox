@@ -193,6 +193,14 @@ Possible values:
  NOTE: This option only works when read from the ipopt.opt options file! Determines the verbosity level for the file specified by "output_file". By default it is the same as "print_level". The valid range for this integer option is 0 &le; file_print_level &le; 12 and its default value is 5.
 </blockquote>
 
+\anchor OPT_file_append
+<strong>file_append</strong>: Whether to append to output file, if set, instead of truncating.
+<blockquote>
+ NOTE: This option only works when read from the ipopt.opt options file! The default value for this string option is "no".
+
+Possible values: yes, no
+</blockquote>
+
 \anchor OPT_print_user_options
 <strong>print_user_options</strong>: Print all options set by the user.
 <blockquote>
