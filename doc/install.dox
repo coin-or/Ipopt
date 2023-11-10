@@ -230,17 +230,11 @@ You may either:
 \attention The build system of %Ipopt currently requires that MA27 is part
 of a HSL library, if a HSL library is provided.
 
-Next to the HSL source packages, also **prebuild libraries** of HSL are
-available in the LibHSL package from https://licences.stfc.ac.uk/product/libhsl.
-They can be used by %Ipopt when using the shared library loading mechanism
+Next to the HSL source packages, also **prebuild libraries** of HSL for macOS and Windows are
+available in the libHSL package from https://licences.stfc.ac.uk/product/libhsl
+and the Coin-HSL package from https://licences.stfc.ac.uk/product/coin-hsl.
+Both can be used by %Ipopt when using the shared library loading mechanism
 described \ref LINEARSOLVERLOADER "below".
-However, there are additional dependencies that need to be downloaded as well:
-[OpenBLAS32](https://github.com/JuliaBinaryWrappers/OpenBLAS32_jll.jl/releases),
-[METIS](https://github.com/JuliaBinaryWrappers/METIS_jll.jl/releases),
-[CompilerSupportLibraries](https://github.com/JuliaBinaryWrappers/CompilerSupportLibraries_jll.jl/releases).
-
-In addition, a package of prebuild libraries specially made for use by Ipopt
-is available together with the HSL source package at https://licences.stfc.ac.uk/product/coin-hsl.
 
 \note Whereas it is essential to have at least one linear solver, the
 package MC19 could be omitted (with the consequence that you cannot use
