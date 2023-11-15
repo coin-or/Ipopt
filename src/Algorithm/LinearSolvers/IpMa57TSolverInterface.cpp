@@ -580,8 +580,8 @@ ESymSolverStatus Ma57TSolverInterface::SymbolicFactorization(
 
    wd_lfact_ = 0;
    wd_lifact_ = 0;
-   ComputeMemIncrease(wd_lfact_, (Number)wd_info_[8] * ma57_pre_alloc_, 0, "double working space for MA57");
-   ComputeMemIncrease(wd_lifact_, (Number)wd_info_[9] * ma57_pre_alloc_, 0, "integer working space for MA57");
+   ComputeMemIncrease(wd_lfact_, (Number)wd_info_[8] * ma57_pre_alloc_, (ma57int)0, "double working space for MA57");
+   ComputeMemIncrease(wd_lifact_, (Number)wd_info_[9] * ma57_pre_alloc_, (ma57int)0, "integer working space for MA57");
 
    // XXX MH:  Why is this necessary?  Is `::Factorization' called more
    // than once per object lifetime?  Where should allocation take
@@ -652,7 +652,7 @@ ESymSolverStatus Ma57TSolverInterface::Factorization(
          Number* temp;
          ma57int ic = 0;
 
-         ComputeMemIncrease(wd_lfact_, (Number)wd_info_[16] * ma57_pre_alloc_, 0, "double working space for MA57");
+         ComputeMemIncrease(wd_lfact_, (Number)wd_info_[16] * ma57_pre_alloc_, (ma57int)0, "double working space for MA57");
          Jnlst().Printf(J_WARNING, J_LINEAR_ALGEBRA,
                         "Reallocating memory for MA57: lfact (%" IPOPT_INDEX_FORMAT ")\n", wd_lfact_);
 
@@ -684,7 +684,7 @@ ESymSolverStatus Ma57TSolverInterface::Factorization(
          ma57int* temp;
          ma57int ic = 1;
 
-         ComputeMemIncrease(wd_lifact_, (Number)wd_info_[17] * ma57_pre_alloc_, 0, "integer working space for MA57");
+         ComputeMemIncrease(wd_lifact_, (Number)wd_info_[17] * ma57_pre_alloc_, (ma57int)0, "integer working space for MA57");
          temp = new ma57int[wd_lifact_];
 
          Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,

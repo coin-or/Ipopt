@@ -9,6 +9,8 @@ More detailed information about incremental changes can be found in the
 
 ### 3.14.14 (202x-yy-zz)
 
+- Fixed build of MA57 interface when `FUNNY_MA57_FINT` is defined (MA57 with long integers).
+
 ### 3.14.13 (2023-11-08)
 
 - Reduced priority for making Spral the default value for option linear_solver [#677].
