@@ -355,7 +355,7 @@ SmartPtr<const Vector> AugRestoSystemSolver::Neg_Omega_c_plus_D_c(
          }
 
          neg_omega_c_plus_D_c_cache_.AddCachedResult3Dep(retVec, GetRawPtr(sigma_tilde_n_c_inv),
-               GetRawPtr(sigma_tilde_p_c_inv), D_c);
+                                    GetRawPtr(sigma_tilde_p_c_inv), D_c);
       }
    }
    return ConstPtr(retVec);

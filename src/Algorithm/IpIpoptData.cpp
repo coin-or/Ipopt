@@ -140,8 +140,8 @@ bool IpoptData::InitializeDataStructures(
    new_s = new_y_d->MakeNew(); // same dimension as d
 
    iterates_space_ = new IteratesVectorSpace(*(new_x->OwnerSpace()), *(new_s->OwnerSpace()), *(new_y_c->OwnerSpace()),
-         *(new_y_d->OwnerSpace()), *(new_z_L->OwnerSpace()), *(new_z_U->OwnerSpace()), *(new_v_L->OwnerSpace()),
-         *(new_v_U->OwnerSpace()));
+      *(new_y_d->OwnerSpace()), *(new_z_L->OwnerSpace()), *(new_z_U->OwnerSpace()), *(new_v_L->OwnerSpace()),
+      *(new_v_U->OwnerSpace()));
 
    curr_ = iterates_space_->MakeNewIteratesVector(*new_x, *new_s, *new_y_c, *new_y_d, *new_z_L, *new_z_U, *new_v_L,
            *new_v_U);

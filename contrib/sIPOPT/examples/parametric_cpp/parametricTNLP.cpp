@@ -308,7 +308,7 @@ void ParametricTNLP::finalize_solution(
 
    // Get access to the metadata, where the solutions are stored. The metadata is part of the DenseVectorSpace.
    SmartPtr<const DenseVectorSpace> x_owner_space = dynamic_cast<const DenseVectorSpace*>(GetRawPtr(
-            ip_data->curr()->x()->OwnerSpace()));
+         ip_data->curr()->x()->OwnerSpace()));
 
    if( !IsValid(x_owner_space) )
    {

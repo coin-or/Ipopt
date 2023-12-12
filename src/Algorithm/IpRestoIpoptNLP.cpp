@@ -298,10 +298,10 @@ bool RestoIpoptNLP::InitializeStructures(
    if( hessian_approximation_ == LIMITED_MEMORY )
    {
       const LowRankUpdateSymMatrixSpace* LR_h_space = static_cast<const LowRankUpdateSymMatrixSpace*>(GetRawPtr(
-               orig_h_space));
+            orig_h_space));
       DBG_ASSERT(LR_h_space);
       SmartPtr<LowRankUpdateSymMatrixSpace> new_orig_h_space = new LowRankUpdateSymMatrixSpace(LR_h_space->Dim(),
-            NULL, orig_x_space, false);
+         NULL, orig_x_space, false);
       h_space_->SetCompSpace(0, 0, *new_orig_h_space, true);
    }
    else

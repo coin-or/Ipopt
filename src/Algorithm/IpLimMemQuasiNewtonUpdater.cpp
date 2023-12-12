@@ -644,7 +644,7 @@ void LimMemQuasiNewtonUpdater::UpdateHessian()
             if( IsValid(Qminus) )
             {
                SmartPtr<MultiVectorMatrixSpace> U_space = new MultiVectorMatrixSpace(Qminus->NCols(),
-                     *s_new->OwnerSpace());
+                  *s_new->OwnerSpace());
                U_ = U_space->MakeNewMultiVectorMatrix();
                U_->AddRightMultMatrix(1., *Vtilde, *Qminus, 0.);
                DBG_PRINT_MATRIX(3, "U", *U_);
@@ -658,7 +658,7 @@ void LimMemQuasiNewtonUpdater::UpdateHessian()
             if( IsValid(Qplus) )
             {
                SmartPtr<MultiVectorMatrixSpace> V_space = new MultiVectorMatrixSpace(Qplus->NCols(),
-                     *s_new->OwnerSpace());
+                  *s_new->OwnerSpace());
                V_ = V_space->MakeNewMultiVectorMatrix();
                V_->AddRightMultMatrix(1., *Vtilde, *Qplus, 0.);
                DBG_PRINT_MATRIX(3, "V", *V_);

@@ -755,7 +755,7 @@ SmartPtr<IpoptAlgorithm> AlgorithmBuilder::BuildBasicAlgorithm(
    MuUpdate_ = BuildMuUpdate(jnlst, options, prefix);
 
    SmartPtr<IpoptAlgorithm> alg = new IpoptAlgorithm(SearchDirCalc_, LineSearch_, MuUpdate_, ConvCheck_,
-         IterInitializer_, IterOutput_, HessUpdater_, EqMultCalculator_, linear_solver);
+      IterInitializer_, IterOutput_, HessUpdater_, EqMultCalculator_, linear_solver);
 
    return alg;
 }
@@ -851,7 +851,7 @@ SmartPtr<IterateInitializer> AlgorithmBuilder::BuildIterateInitializer(
    SmartPtr<IterateInitializer> WarmStartInitializer = new WarmStartIterateInitializer();
 
    SmartPtr<IterateInitializer> IterInitializer = new DefaultIterateInitializer(EqMultCalculator_, WarmStartInitializer,
-         GetAugSystemSolver(jnlst, options, prefix));
+      GetAugSystemSolver(jnlst, options, prefix));
    return IterInitializer;
 }
 
@@ -911,7 +911,7 @@ SmartPtr<LineSearch> AlgorithmBuilder::BuildLineSearch(
          resto_LSacceptor = new PenaltyLSAcceptor(GetRawPtr(resto_PDSolver));
       }
       SmartPtr<LineSearch> resto_LineSearch = new BacktrackingLineSearch(resto_LSacceptor, GetRawPtr(resto_resto),
-            GetRawPtr(resto_convCheck));
+         GetRawPtr(resto_convCheck));
 
       // Create the mu update that will be used by the restoration phase
       // algorithm
@@ -1007,8 +1007,8 @@ SmartPtr<LineSearch> AlgorithmBuilder::BuildLineSearch(
       }
 
       SmartPtr<IpoptAlgorithm> resto_alg = new IpoptAlgorithm(resto_SearchDirCalc, GetRawPtr(resto_LineSearch),
-            GetRawPtr(resto_MuUpdate), GetRawPtr(resto_convCheck), resto_IterInitializer, resto_IterOutput,
-            resto_HessUpdater, resto_EqMultCalculator, linear_solver);
+         GetRawPtr(resto_MuUpdate), GetRawPtr(resto_convCheck), resto_IterInitializer, resto_IterOutput,
+         resto_HessUpdater, resto_EqMultCalculator, linear_solver);
 
       // Set the restoration phase
       resto_phase = new MinC_1NrmRestorationPhase(*resto_alg, EqMultCalculator_);

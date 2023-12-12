@@ -22,7 +22,7 @@ int main(
    app_ipopt->RethrowNonIpoptException(false);
 
    SmartPtr<SensApplication> app_sens = new SensApplication(app_ipopt->Jnlst(), app_ipopt->Options(),
-         app_ipopt->RegOptions());
+      app_ipopt->RegOptions());
 
    // Register sIPOPT options
    RegisterOptions_sIPOPT(app_ipopt->RegOptions());
@@ -124,7 +124,7 @@ int main(
 
    // create AmplSensTNLP from argc.
    SmartPtr<TNLP> sens_tnlp = new SensAmplTNLP(ConstPtr(app_ipopt->Jnlst()), app_ipopt->RegOptions(), app_ipopt->Options(), argc, suffix_handler,
-         false, ampl_options_list);
+      false, ampl_options_list);
 
    app_sens->Initialize();
 

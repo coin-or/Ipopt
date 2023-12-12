@@ -211,18 +211,18 @@ SmartPtr<IpoptAlgorithm> InexactAlgorithmBuilder::BuildBasicAlgorithm(
    SmartPtr<InexactNewtonNormalStep> NewtonNormalStep = new InexactNewtonNormalStep(AugSolver);
 
    SmartPtr<InexactNormalStepCalculator> normal_step_calculator = new InexactDoglegNormalStep(NewtonNormalStep,
-         NormalTester);
+      NormalTester);
 
    SmartPtr<PDPerturbationHandler> perturbHandler = new PDPerturbationHandler();
 
    SmartPtr<InexactPDSolver> inexact_pd_solver = new InexactPDSolver(*AugSolver, *perturbHandler);
 
    SmartPtr<SearchDirectionCalculator> SearchDirCalc = new InexactSearchDirCalculator(normal_step_calculator,
-         inexact_pd_solver);
+      inexact_pd_solver);
 
    // Create the main algorithm
    SmartPtr<IpoptAlgorithm> alg = new IpoptAlgorithm(SearchDirCalc, GetRawPtr(lineSearch), MuUpdate, convCheck,
-         IterInitializer, IterOutput, HessUpdater, NULL, linear_solver);
+      IterInitializer, IterOutput, HessUpdater, NULL, linear_solver);
 
    return alg;
 }

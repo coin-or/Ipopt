@@ -119,7 +119,7 @@ bool SensAlgorithm::InitializeImpl(
    statevalue = "sens_init_constr";
 
    SmartPtr<const DenseVectorSpace> x_owner_space_ = dynamic_cast<const DenseVectorSpace*>(
-            GetRawPtr(IpData().curr()->y_c()->OwnerSpace()));
+         GetRawPtr(IpData().curr()->y_c()->OwnerSpace()));
    const std::vector<Index> idx_ipopt = x_owner_space_->GetIntegerMetaData(state.c_str());
 
    np_ = 0;
@@ -220,7 +220,7 @@ SensAlgorithmExitStatus SensAlgorithm::ComputeSensitivityMatrix(void)
    statevalue = "sens_init_constr";
 
    SmartPtr<const DenseVectorSpace> x_owner_space_ = dynamic_cast<const DenseVectorSpace*>(
-            GetRawPtr(IpData().curr()->y_c()->OwnerSpace()));
+         GetRawPtr(IpData().curr()->y_c()->OwnerSpace()));
    //= dynamic_cast<const DenseVectorSpace*>(GetRawPtr(IpData().curr()->x()->OwnerSpace()));
 
    const std::vector<Index> idx_ipopt = x_owner_space_->GetIntegerMetaData(state.c_str());

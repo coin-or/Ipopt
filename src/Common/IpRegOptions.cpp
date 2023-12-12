@@ -863,7 +863,7 @@ void RegisteredOptions::AddNumberOption(
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++, advanced);
+      current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_Number);
    option->SetDefaultNumber(default_value);
    AddOption(option);
@@ -880,7 +880,7 @@ void RegisteredOptions::AddLowerBoundedNumberOption(
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++, advanced);
+      current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_Number);
    option->SetDefaultNumber(default_value);
    option->SetLowerNumber(lower, strict);
@@ -898,7 +898,7 @@ void RegisteredOptions::AddUpperBoundedNumberOption(
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++, advanced);
+      current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_Number);
    option->SetDefaultNumber(default_value);
    option->SetUpperNumber(upper, strict);
@@ -918,7 +918,7 @@ void RegisteredOptions::AddBoundedNumberOption(
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++, advanced);
+      current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_Number);
    option->SetDefaultNumber(default_value);
    option->SetLowerNumber(lower, lower_strict);
@@ -935,7 +935,7 @@ void RegisteredOptions::AddIntegerOption(
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++, advanced);
+      current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_Integer);
    option->SetDefaultInteger(default_value);
    AddOption(option);
@@ -951,7 +951,7 @@ void RegisteredOptions::AddLowerBoundedIntegerOption(
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++, advanced);
+      current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_Integer);
    option->SetDefaultInteger(default_value);
    option->SetLowerInteger(lower);
@@ -968,7 +968,7 @@ void RegisteredOptions::AddUpperBoundedIntegerOption(
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++, advanced);
+      current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_Integer);
    option->SetDefaultInteger(default_value);
    option->SetUpperInteger(upper);
@@ -986,7 +986,7 @@ void RegisteredOptions::AddBoundedIntegerOption(
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++, advanced);
+      current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_Integer);
    option->SetDefaultInteger(default_value);
    option->SetLowerInteger(lower);
@@ -1005,7 +1005,7 @@ void RegisteredOptions::AddStringOption(
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++, advanced);
+      current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_String);
    option->SetDefaultString(default_value);
    DBG_ASSERT(settings.size() == descriptions.size());
@@ -1027,7 +1027,7 @@ void RegisteredOptions::AddStringOption1(
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++, advanced);
+      current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_String);
    option->SetDefaultString(default_value);
    option->AddValidStringSetting(setting1, description1);
@@ -1047,7 +1047,7 @@ void RegisteredOptions::AddStringOption2(
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++, advanced);
+      current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_String);
    option->SetDefaultString(default_value);
    option->AddValidStringSetting(setting1, description1);
@@ -1070,7 +1070,7 @@ void RegisteredOptions::AddStringOption3(
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++, advanced);
+      current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_String);
    option->SetDefaultString(default_value);
    option->AddValidStringSetting(setting1, description1);
@@ -1096,7 +1096,7 @@ void RegisteredOptions::AddStringOption4(
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++, advanced);
+      current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_String);
    option->SetDefaultString(default_value);
    option->AddValidStringSetting(setting1, description1);
@@ -1125,7 +1125,7 @@ void RegisteredOptions::AddStringOption5(
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++, advanced);
+      current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_String);
    option->SetDefaultString(default_value);
    option->AddValidStringSetting(setting1, description1);
@@ -1157,7 +1157,7 @@ void RegisteredOptions::AddStringOption6(
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++, advanced);
+      current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_String);
    option->SetDefaultString(default_value);
    option->AddValidStringSetting(setting1, description1);
@@ -1192,7 +1192,7 @@ void RegisteredOptions::AddStringOption7(
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++, advanced);
+      current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_String);
    option->SetDefaultString(default_value);
    option->AddValidStringSetting(setting1, description1);
@@ -1230,7 +1230,7 @@ void RegisteredOptions::AddStringOption8(
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++, advanced);
+      current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_String);
    option->SetDefaultString(default_value);
    option->AddValidStringSetting(setting1, description1);
@@ -1271,7 +1271,7 @@ void RegisteredOptions::AddStringOption9(
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++, advanced);
+      current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_String);
    option->SetDefaultString(default_value);
    option->AddValidStringSetting(setting1, description1);
@@ -1315,7 +1315,7 @@ void RegisteredOptions::AddStringOption10(
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++, advanced);
+      current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_String);
    option->SetDefaultString(default_value);
    option->AddValidStringSetting(setting1, description1);
@@ -1341,7 +1341,7 @@ void RegisteredOptions::AddBoolOption(
 )
 {
    SmartPtr<RegisteredOption> option = new RegisteredOption(name, short_description, long_description,
-         current_registering_category_, next_counter_++, advanced);
+      current_registering_category_, next_counter_++, advanced);
    option->SetType(OT_String);
    option->SetDefaultString(default_value ? "yes" : "no");
    option->AddValidStringSetting("yes", "");

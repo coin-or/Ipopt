@@ -263,7 +263,7 @@ bool OrigIpoptNLP::InitializeStructures(
          {
             DBG_ASSERT(IsValid(P_approx));
             h_space_ = new LowRankUpdateSymMatrixSpace(x_space_->Dim(), ConstPtr(P_approx), ConstPtr(approx_vecspace),
-                  true);
+               true);
             jnlst_->Printf(J_DETAILED, J_INITIALIZATION,
                            "Hessian approximation will be done in smaller space of dimension %" IPOPT_INDEX_FORMAT " (instead of %" IPOPT_INDEX_FORMAT ")\n\n",
                            P_approx->NCols(), P_approx->NRows());

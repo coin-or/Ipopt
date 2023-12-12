@@ -248,13 +248,13 @@ ESymSolverStatus LowRankSSAugSystemSolver::UpdateExtendedData(
          DBG_ASSERT(dynamic_cast<const ExpansionMatrix*>(GetRawPtr(P_LM)));
       }
       SmartPtr<ExpandedMultiVectorMatrixSpace> expanded_vu_space = new ExpandedMultiVectorMatrixSpace(max_rank_,
-            *LR_VecSpace, exp_matrix);
+         *LR_VecSpace, exp_matrix);
       expanded_vu_ = expanded_vu_space->MakeNewExpandedMultiVectorMatrix();
 
       // Create extended y_c quantities to include the V and U matrices
       DBG_ASSERT(IsNull(J_c_ext_));
       SmartPtr<CompoundMatrixSpace> J_c_ext_space = new CompoundMatrixSpace(2, 1, proto_rhs_c.Dim() + max_rank_,
-            proto_rhs_x.Dim());
+         proto_rhs_x.Dim());
       J_c_ext_space->SetBlockRows(0, proto_rhs_c.Dim());
       J_c_ext_space->SetBlockRows(1, max_rank_);
       J_c_ext_space->SetBlockCols(0, proto_rhs_x.Dim());

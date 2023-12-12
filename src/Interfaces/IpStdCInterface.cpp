@@ -261,13 +261,13 @@ enum ApplicationReturnStatus IpoptSolve(
    {
       // Create the original nlp
       ipopt_problem->tnlp = new Ipopt::StdInterfaceTNLP(ipopt_problem->n, ipopt_problem->x_L, ipopt_problem->x_U,
-            ipopt_problem->m, ipopt_problem->g_L, ipopt_problem->g_U,
-            ipopt_problem->nele_jac, ipopt_problem->nele_hess, ipopt_problem->index_style,
-            start_x, start_lam, start_z_L, start_z_U,
-            ipopt_problem->eval_f, ipopt_problem->eval_g, ipopt_problem->eval_grad_f, ipopt_problem->eval_jac_g, ipopt_problem->eval_h,
-            ipopt_problem->intermediate_cb,
-            x, mult_x_L, mult_x_U, g, mult_g, obj_val, user_data,
-            ipopt_problem->obj_scaling, ipopt_problem->x_scaling, ipopt_problem->g_scaling);
+         ipopt_problem->m, ipopt_problem->g_L, ipopt_problem->g_U,
+         ipopt_problem->nele_jac, ipopt_problem->nele_hess, ipopt_problem->index_style,
+         start_x, start_lam, start_z_L, start_z_U,
+         ipopt_problem->eval_f, ipopt_problem->eval_g, ipopt_problem->eval_grad_f, ipopt_problem->eval_jac_g, ipopt_problem->eval_h,
+         ipopt_problem->intermediate_cb,
+         x, mult_x_L, mult_x_U, g, mult_g, obj_val, user_data,
+         ipopt_problem->obj_scaling, ipopt_problem->x_scaling, ipopt_problem->g_scaling);
       status = ipopt_problem->app->OptimizeTNLP(ipopt_problem->tnlp);
    }
    catch( Ipopt::INVALID_STDINTERFACE_NLP& exc )

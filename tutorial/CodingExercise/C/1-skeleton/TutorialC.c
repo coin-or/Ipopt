@@ -142,17 +142,17 @@ int main()
    /* Number of nonzeros in the Jacobian of the constraints
     * each constraint has three nonzeros
     */
-   nele_jac = FILLME
+   nele_jac = FILLME;
 
-              /* Number of nonzeros in the Hessian of the Lagrangian (lower or
-               * upper triangual part only)
-               * We have the full diagonal, and the first off-diagonal except for
-               * the first and last variable.
-               */
-              nele_hess = FILLME
+   /* Number of nonzeros in the Hessian of the Lagrangian (lower or
+    * upper triangual part only)
+    * We have the full diagonal, and the first off-diagonal except for
+    * the first and last variable.
+    */
+   nele_hess = FILLME;
 
-                          /* indexing style for matrices */
-                          index_style = FILLME; /* C-style; start counting of rows and column indices at 0 */
+   /* indexing style for matrices */
+   index_style = FILLME; /* C-style; start counting of rows and column indices at 0 */
 
    /* create the IpoptProblem */
    nlp = CreateIpoptProblem(n, x_L, x_U, m, g_L, g_U, nele_jac, nele_hess, index_style, &eval_f, &eval_g, &eval_grad_f,

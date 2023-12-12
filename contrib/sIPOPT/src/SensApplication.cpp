@@ -163,7 +163,7 @@ SensAlgorithmExitStatus SensApplication::Run()
       SmartPtr<SensBuilder> schur_builder = new SensBuilder();
       const std::string prefix = ""; // I should be getting this somewhere else...
       SmartPtr<ReducedHessianCalculator> red_hess_calc = schur_builder->BuildRedHessCalc(*jnlst_, *options_, prefix,
-            *ip_nlp_, *ip_data_, *ip_cq_, *pd_solver_);
+         *ip_nlp_, *ip_data_, *ip_cq_, *pd_solver_);
 
       red_hess_calc->ComputeReducedHessian();
    }
