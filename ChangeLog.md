@@ -10,6 +10,8 @@ More detailed information about incremental changes can be found in the
 ### 3.14.14 (202x-yy-zz)
 
 - Fixed build of MA57 interface when `FUNNY_MA57_FINT` is defined (MA57 with long integers).
+- Fixed that initial dual values for fixed variables (z_L, z_U) were ignored when doing a
+  warm start with fixed_variable_treatment = make_constraint [#728].
 
 ### 3.14.13 (2023-11-08)
 

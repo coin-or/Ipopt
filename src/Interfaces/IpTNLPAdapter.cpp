@@ -1570,7 +1570,7 @@ bool TNLPAdapter::GetStartingPoint(
    Number* full_z_u = new Number[n_full_x_];
    Number* full_lambda = new Number[n_full_g_];
    bool init_x = need_x;
-   bool init_z = need_z_L || need_z_U;
+   bool init_z = need_z_L || need_z_U || (fixed_variable_treatment_ == MAKE_CONSTRAINT && n_x_fixed_ > 0 && need_y_c);
    bool init_lambda = need_y_c || need_y_d;
 
    bool retvalue = tnlp_->get_starting_point(n_full_x_, init_x, full_x, init_z, full_z_l, full_z_u, n_full_g_,
@@ -1617,9 +1617,10 @@ bool TNLPAdapter::GetStartingPoint(
       }
       if( fixed_variable_treatment_ == MAKE_CONSTRAINT )
       {
-         // ToDo maybe use info from z_L and Z_U here?
-         const Number zero = 0.;
-         IpBlasCopy(n_x_fixed_, &zero, 0, &values[P_c_g_->NCols()], 1);
+         for( Index i = 0; i < n_x_fixed_; i++ )
+         {
+            values[P_c_g_->NCols() + i] = full_z_u[x_fixed_map_[i]] - full_z_l[x_fixed_map_[i]];
+         }
       }
    }
 
@@ -2386,7 +2387,7 @@ void TNLPAdapter::GetQuasiNewtonApproximationSpaces(
       else
       {
          SmartPtr<ExpansionMatrixSpace> ex_sp = new ExpansionMatrixSpace(n_x_free, nonfixed_nonlin_vars,
-               nonfixed_pos_nonlin_vars);
+            nonfixed_pos_nonlin_vars);
          P_approx = ex_sp->MakeNew();
          approx_space = new DenseVectorSpace(nonfixed_nonlin_vars);
       }
