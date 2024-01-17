@@ -7,17 +7,16 @@ Introduction
 Ipopt (Interior Point OPTimizer, pronounced eye-pea-Opt) is a software package for large-scale [nonlinear optimization](http://wiki.mcs.anl.gov/NEOS/index.php/Nonlinear_Programming_FAQ).
 It is designed to find (local) solutions of mathematical optimization problems of the form
 
-```
-   min     f(x)
-  x ∈ Rⁿ
+$$\begin{align}
+\min_{x \in R^n}\ & f(x), \\
+\text{s.t.}\ & g_L \le g(x) \le g_U, \\
+& x_L \le x \le x_U,
+\end{align}$$
 
-s.t.       g_L ≤ g(x) ≤ g_U
-           x_L ≤  x   ≤ x_U
-```
-where ```f(x): Rⁿ --> R``` is the objective function, and ```g(x): Rⁿ --> Rᵐ```
-are the constraint functions.  The vectors `g_L` and `g_U` denote the lower and upper bounds on the constraints, and the vectors `x_L` and `x_U` are the bounds on the variables `x`.
-The functions `f(x)` and `g(x)` can be nonlinear and nonconvex, but should be twice continuously differentiable.
-Note that equality constraints can be formulated in the above formulation by setting the corresponding components of `g_L` and `g_U` to the same value.
+where $f: R^n \rightarrow R$ is the objective function, 
+and $g: R^n \rightarrow R^m$ are the constraint functions.  The vectors $g_L$ and $g_U$ denote the lower and upper bounds on the constraints, and the vectors $x_L$ and $x_U$ are the bounds on the variables $x$.
+The functions $f(x)$ and $g(x)$ can be nonlinear and nonconvex, but should be twice continuously differentiable.
+Note that equality constraints can be formulated in the above formulation by setting the corresponding components of $g_L$ and $g_U$ to the same value.
 
 Ipopt is part of the [COIN-OR Initiative](http://www.coin-or.org).
 The Ipopt project webpage is <https://github.com/coin-or/Ipopt>.
