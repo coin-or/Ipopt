@@ -681,6 +681,7 @@ ESymSolverStatus Ma27TSolverInterface::Backsolve(
    Index N = dim_;
    Number* W = new Number[maxfrt_];
    Index* IW1 = new Index[nsteps_];
+   Index INFO[20];
 
    // For each right hand side, call MA27CX
    for( Index irhs = 0; irhs < nrhs; irhs++ )
@@ -692,7 +693,7 @@ ESymSolverStatus Ma27TSolverInterface::Backsolve(
             DBG_PRINT((2, "rhs[%5d] = %23.15e\n", i, rhs_vals[irhs * dim_ + i]));
          }
       }
-      ma27c(&N, a_, &la_, iw_, &liw_, W, &maxfrt_, &rhs_vals[irhs * dim_], IW1, &nsteps_, icntl_, cntl_);
+      ma27c(&N, a_, &la_, iw_, &liw_, W, &maxfrt_, &rhs_vals[irhs * dim_], IW1, &nsteps_, icntl_, INFO);
       if( DBG_VERBOSITY() >= 2 )
       {
          for( Index i = 0; i < dim_; i++ )

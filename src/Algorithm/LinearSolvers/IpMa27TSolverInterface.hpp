@@ -61,7 +61,7 @@
    ipindex*   IW1,    \
    ipindex*   NSTEPS, \
    ipindex*   ICNTL,  \
-   ipnumber*  CNTL    \
+   ipindex*   INFO    \
 )
 
 /// @since 3.14.0
