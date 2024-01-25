@@ -30,13 +30,14 @@
 
                 configureFlags = [
                   "--with-mumps-cflags=-I${inputs'.mumps.packages.mumps-32-seq}/include"
-                  "--with-mumps-lflags=-ldmumps"
+                  "--with-mumps-lflags=-L${inputs'.mumps.packages.mumps-32-seq}/lib"
                   "--disable-mpiinit"
                   "--without-hsl"
                   "--without-spral"
                   "--with-precision=double"
                   "--disable-java"
                   "--without-asl"
+                  #"--prefix=${inputs'.mumps.packages.mumps-32-seq}"
                   #"--with-intsize=64" # for MUMPS 64
                   # "--enable-inexact-solver"
 
