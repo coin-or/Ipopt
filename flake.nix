@@ -32,7 +32,7 @@
                 ];
 
                 nativeBuildInputs = [ pkg-config gfortran ];
-                buildInputs = [ blas lapack mpi inputs'.mumps.packages.mumps ];
+                buildInputs = [ blas lapack openmpi inputs'.mumps.packages.mumps ];
 
                 enableParallelBuilding = true;
               };
