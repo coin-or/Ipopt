@@ -24,11 +24,21 @@
                   "-D HAVE_CSTRING"
                   "-D HAVE_CSTDIO"
                 ];
+                LD_LIBRARY_PATH = with pkgs; lib.strings.makeLibraryPath [
+                  "${inputs'.mumps.packages.mumps-32-seq}/lib"
+                ];
 
                 configureFlags = [
                   "--with-mumps-cflags=-I${inputs'.mumps.packages.mumps-32-seq}/include"
-                  "--with-mumps-lflags=libdmumps"
+                  "--with-mumps-lflags=-lsmumps"
                   "--disable-mpiinit"
+                  "--without-hsl"
+                  "--without-spral"
+                  "--with-precision=double"
+                  "--disable-java"
+                  "--without-asl"
+                  #"--with-intsize=64" # for MUMPS 64
+                  # "--enable-inexact-solver"
 
                 ];
 
