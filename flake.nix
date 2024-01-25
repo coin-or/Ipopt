@@ -30,7 +30,7 @@
 
                 configureFlags = [
                   "--with-mumps-cflags=-I${inputs'.mumps.packages.mumps-32-seq}/include"
-                  "--with-mumps-lflags=-lsmumps"
+                  "--with-mumps-lflags=-ldmumps"
                   "--disable-mpiinit"
                   "--without-hsl"
                   "--without-spral"
