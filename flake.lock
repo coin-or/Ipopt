@@ -41,17 +41,17 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1706218948,
-        "narHash": "sha256-+znia+NaUvGEohqfwushTzBTRayG4Z6oyYzjWLFwX8Y=",
+        "lastModified": 1706223011,
+        "narHash": "sha256-7BuI5AMvb4zqMdkpyqM1m1EjAVMjORdo6DC7ARFs3GY=",
         "owner": "dzmitry-lahoda-forks",
         "repo": "mumps",
-        "rev": "e6df3ef20e00e6be5c5e0a859ac517bbfd28827b",
+        "rev": "1b56c9295f8cf23ddb20400c44255fa984526977",
         "type": "github"
       },
       "original": {
         "owner": "dzmitry-lahoda-forks",
         "repo": "mumps",
-        "rev": "e6df3ef20e00e6be5c5e0a859ac517bbfd28827b",
+        "rev": "1b56c9295f8cf23ddb20400c44255fa984526977",
         "type": "github"
       }
     },

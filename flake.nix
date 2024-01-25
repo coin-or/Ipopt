@@ -4,7 +4,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     mumps = {
-      url = "github:dzmitry-lahoda-forks/mumps/e6df3ef20e00e6be5c5e0a859ac517bbfd28827b";
+      url = "github:dzmitry-lahoda-forks/mumps/1b56c9295f8cf23ddb20400c44255fa984526977";
     };
   };
 
@@ -30,16 +30,16 @@
 
                 configureFlags = [
                   "--with-mumps-cflags=-I${inputs'.mumps.packages.mumps-32-seq}/include"
-                  "--with-mumps-lflags=-L${inputs'.mumps.packages.mumps-32-seq}/lib"
+                  "--with-mumps-lflags=-ldmumps"
                   "--disable-mpiinit"
                   "--without-hsl"
                   "--without-spral"
                   "--with-precision=double"
                   "--disable-java"
                   "--without-asl"
-                  #"--prefix=${inputs'.mumps.packages.mumps-32-seq}"
-                  #"--with-intsize=64" # for MUMPS 64
-                  # "--enable-inexact-solver"
+                  #"--prefix=."
+                  #"--with-intsize=64" # for MUMPS/METIS/LAPACK 64
+                  #"--enable-inexact-solver"
 
                 ];
 
