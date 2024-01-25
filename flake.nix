@@ -4,7 +4,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     mumps = {
-      url = "github:dzmitry-lahoda-forks/mumps/2adfc01cd0306b30379886cfc0746e5135488a92";
+      url = "github:dzmitry-lahoda-forks/mumps/e6df3ef20e00e6be5c5e0a859ac517bbfd28827b";
     };
   };
 
@@ -15,7 +15,7 @@
         {
           packages = with pkgs;
             rec {
-              ipopt = pkgs.stdenv.mkDerivation {
+              ipopt-mumps-seq = pkgs.stdenv.mkDerivation {
                 name = "ipopt";
                 version = "3.14.13";
                 src = ./.;
@@ -26,17 +26,18 @@
                 ];
 
                 configureFlags = [
-                  "--with-mumps-cflags=-I${inputs'.mumps.packages.mumps}/include"
+                  "--with-mumps-cflags=-I${inputs'.mumps.packages.mumps-32-seq}/include"
                   "--with-mumps-lflags=libdmumps"
+                  "--disable-mpiinit"
 
                 ];
 
                 nativeBuildInputs = [ pkg-config gfortran ];
-                buildInputs = [ blas lapack openmpi inputs'.mumps.packages.mumps ];
+                buildInputs = [ blas lapack inputs'.mumps.packages.mumps-32-seq ];
 
                 enableParallelBuilding = true;
               };
-              default = ipopt;
+              default = ipopt-mumps-seq;
 
             };
         };
