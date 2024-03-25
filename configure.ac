@@ -8,7 +8,7 @@
 #                       Names and other basic things                        #
 #############################################################################
 
-AC_INIT([Ipopt],[3.14.14],[https://github.com/coin-or/Ipopt/issues/new],[],[https://github.com/coin-or/Ipopt])
+AC_INIT([Ipopt],[3.14.15],[https://github.com/coin-or/Ipopt/issues/new],[],[https://github.com/coin-or/Ipopt])
 
 AC_COPYRIGHT([
 Copyright 2004, 2011 International Business Machines and others.

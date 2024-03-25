@@ -7,6 +7,11 @@ More detailed information about incremental changes can be found in the
 
 ## 3.14
 
+### 3.14.15 (2024-xx-yy)
+
+- Improved finding dependencies of linear solver libraries loaded at runtime on Windows
+  [#755, by Yue Yang].
+
 ### 3.14.14 (2024-01-18)
 
 - Fixed build of MA57 interface when `FUNNY_MA57_FINT` is defined (MA57 with long integers).
