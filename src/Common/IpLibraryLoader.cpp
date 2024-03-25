@@ -51,6 +51,12 @@ void LibraryLoader::loadLibrary()
 
 #ifdef HAVE_WINDOWS_H
    libhandle = (void*)LoadLibrary(libname.c_str());
+
+   if( libhandle == NULL )
+   {
+      libhandle = (void*)LoadLibraryExA(libname.c_str(), NULL, LOAD_LIBRARY_SEARCH_DEFAULT_DIRS | LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR);
+   }
+   
    if( libhandle == NULL )
    {
       std::stringstream s;
