@@ -50,22 +50,33 @@ void LibraryLoader::loadLibrary()
    }
 
 #ifdef HAVE_WINDOWS_H
-   /* if absolute path, then use LoadLibraryExA with LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR to find
-    * dependencies of library in same directory
-    * otherwise, use standard search paths (which includes PATH)
-    */
-   if( libname.length() > 2 && libname[1] == ':' )
-      libhandle = (void*)LoadLibraryExA(libname.c_str(), NULL, LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR);
-   else
-      libhandle = (void*)LoadLibraryA(libname.c_str());
+   libhandle = (void*)LoadLibraryA(libname.c_str());
 
-   if( libhandle == NULL )
+   if( libhandle != NULL )
+      return;
+
+   std::stringstream s;
+   s << "Error " << GetLastError() << " while loading DLL " << libname << " via LoadLibraryA: ";
+   addLastError(s);
+
+   /* try again with LoadLibraryExA
+    * due to the use of LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR, this will always fail with an invalid parameter error (87) if libname is a relative path
+    */
+   libhandle = (void*)LoadLibraryExA(libname.c_str(), NULL, LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR | LOAD_LIBRARY_SEARCH_DEFAULT_DIRS);
+
+   if( libhandle != NULL )
+      return;
+
+   /* skip message if LoadLibraryExA failed with invalid parameter error
+    * do not confuse user just because we were too lazy to check what kind of path libname is
+    */
+   if( GetLastError() != 87 )
    {
-      std::stringstream s;
-      s << "Error " << GetLastError() << " while loading DLL " << libname << ": ";
+      s << "Error " << GetLastError() << " while loading DLL " << libname << " via LoadLibraryExA: ";
       addLastError(s);
-      THROW_EXCEPTION(DYNAMIC_LIBRARY_FAILURE, s.str());
    }
+
+   THROW_EXCEPTION(DYNAMIC_LIBRARY_FAILURE, s.str());
 
 #elif defined(HAVE_DLFCN_H)
    // ToDo switch to RTLD_LAZY for performance?

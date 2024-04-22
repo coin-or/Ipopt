@@ -10,7 +10,7 @@ More detailed information about incremental changes can be found in the
 ### 3.14.16 (2024-04-22)
 
 - Fixed load of linear solver libraries at runtime on Windows, which got
-  broken for relative paths (the default) in 3.14.15 [#759].
+  broken for relative paths (the default) in 3.14.15 [#759, #760].
 
 ### 3.14.15 (2024-04-10)
 
