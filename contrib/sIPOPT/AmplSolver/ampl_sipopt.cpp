@@ -13,7 +13,7 @@
 
 int main(
    int    /*argc*/,
-   char** /*argv*/
+   char** argv
 )
 {
    using namespace Ipopt;
@@ -123,7 +123,7 @@ int main(
                                     "Number of sensitivity steps");
 
    // create AmplSensTNLP from argc.
-   SmartPtr<TNLP> sens_tnlp = new SensAmplTNLP(ConstPtr(app_ipopt->Jnlst()), app_ipopt->RegOptions(), app_ipopt->Options(), argc, suffix_handler,
+   SmartPtr<TNLP> sens_tnlp = new SensAmplTNLP(ConstPtr(app_ipopt->Jnlst()), app_ipopt->RegOptions(), app_ipopt->Options(), argv, suffix_handler,
       false, ampl_options_list);
 
    app_sens->Initialize();
