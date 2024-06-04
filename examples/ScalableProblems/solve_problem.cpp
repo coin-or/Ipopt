@@ -97,11 +97,11 @@ static void print_problems()
 }
 
 int main(
-   int   argv,
-   char* argc[]
+   int   argc,
+   char* argv[]
 )
 {
-   if( argv == 2 && !strcmp(argc[1], "list") )
+   if( argc == 2 && !strcmp(argv[1], "list") )
    {
       print_problems();
       return 0;
@@ -109,18 +109,18 @@ int main(
 
 #ifdef TIME_LIMIT
    int runtime;
-   if( argv == 4 )
+   if( argc == 4 )
    {
-      runtime = atoi(argc[3]);
+      runtime = atoi(argv[3]);
    }
    else
 #endif
-      if( argv != 3 && argv != 1 )
+      if( argc != 3 && argc != 1 )
       {
-         printf("Usage: %s (this will ask for problem name)\n", argc[0]);
-         printf("       %s ProblemName N\n", argc[0]);
+         printf("Usage: %s (this will ask for problem name)\n", argv[0]);
+         printf("       %s ProblemName N\n", argv[0]);
          printf("          where N is a positive parameter determining problem size\n");
-         printf("       %s list\n", argc[0]);
+         printf("       %s list\n", argv[0]);
          printf("          to list all registered problems.\n");
          return -1;
       }
@@ -128,18 +128,18 @@ int main(
    SmartPtr<RegisteredTNLP> tnlp;
    Index N;
 
-   if( argv != 1 )
+   if( argc != 1 )
    {
       // Create an instance of your nlp...
-      tnlp = RegisteredTNLPs::GetTNLP(argc[1]);
+      tnlp = RegisteredTNLPs::GetTNLP(argv[1]);
       if( !IsValid(tnlp) )
       {
-         printf("Problem with name \"%s\" not known.\n", argc[1]);
+         printf("Problem with name \"%s\" not known.\n", argv[1]);
          print_problems();
          return -2;
       }
 
-      N = atoi(argc[2]);
+      N = atoi(argv[2]);
    }
    else
    {

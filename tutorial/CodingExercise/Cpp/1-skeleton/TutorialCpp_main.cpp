@@ -28,8 +28,8 @@
 using namespace Ipopt;
 
 int main(
-   int   argv,
-   char* argc[]
+   int   /*argc*/,
+   char* /*argv[]*/
 )
 {
    // Set the data:
