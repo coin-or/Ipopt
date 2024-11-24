@@ -14,6 +14,13 @@
 
 #include <cstring>
 
+// strdup is named _strdup on Windows
+#ifdef _WIN32
+#define ipopt_strdup _strdup
+#else
+#define ipopt_strdup strdup
+#endif
+
 /* AMPL includes */
 #include "asl.h"
 #include "asl_pfgh.h"
@@ -1807,7 +1814,7 @@ void AmplSuffixHandler::PrepareAmplForSuffixes(
    suftab_ = new SufDecl[n];
    for( Index i = 0; i < n; i++ )
    {
-      suftab_[i].name = strdup(suffix_ids_[i].c_str());
+      suftab_[i].name = ipopt_strdup(suffix_ids_[i].c_str());
       suftab_[i].table = 0;
 
       if( suffix_sources_[i] == Variable_Source )
