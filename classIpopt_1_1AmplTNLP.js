@@ -1,6 +1,6 @@
 var classIpopt_1_1AmplTNLP =
 [
-    [ "AmplTNLP", "classIpopt_1_1AmplTNLP.html#aed410ab6bd273ede77050a36bd85c240", null ],
+    [ "AmplTNLP", "classIpopt_1_1AmplTNLP.html#a68f7a8e7314fc848ebdb190393121fe7", null ],
     [ "AmplTNLP", "classIpopt_1_1AmplTNLP.html#a5bf35981f12a6386e5f823fe3b99f299", null ],
     [ "~AmplTNLP", "classIpopt_1_1AmplTNLP.html#a9b8a0ff63aa5addfecbe7f54dff43acd", null ],
     [ "AmplTNLP", "classIpopt_1_1AmplTNLP.html#a5a577627e4c83061a05787930724620f", null ],
@@ -17,6 +17,7 @@ var classIpopt_1_1AmplTNLP =
     [ "eval_jac_g", "classIpopt_1_1AmplTNLP.html#a05342a7a193a9451c09837b3de387fb8", null ],
     [ "eval_h", "classIpopt_1_1AmplTNLP.html#a944ad51b4e14545324e0e4513e0c89ae", null ],
     [ "get_scaling_parameters", "classIpopt_1_1AmplTNLP.html#a60b0eb2bb08619261e4d0e292ad0e854", null ],
+    [ "intermediate_callback", "classIpopt_1_1AmplTNLP.html#a6f25c70227d6ddadf6f691781007c944", null ],
     [ "finalize_solution", "classIpopt_1_1AmplTNLP.html#a5f110edd912d943a85f3af2d7bb98bb3", null ],
     [ "get_number_of_nonlinear_variables", "classIpopt_1_1AmplTNLP.html#a2535706fb770ebda7b50219b11352c92", null ],
     [ "get_list_of_nonlinear_variables", "classIpopt_1_1AmplTNLP.html#a725d09f0beca55ea55a06df68f38d72a", null ],
@@ -57,6 +58,8 @@ var classIpopt_1_1AmplTNLP =
     [ "Oinfo_ptr_", "classIpopt_1_1AmplTNLP.html#a01a73e0fad4baf58f416adf5bb348dcc", null ],
     [ "nerror_", "classIpopt_1_1AmplTNLP.html#ace24d4a55485bb96b1763db1443f9abe", null ],
     [ "suffix_handler_", "classIpopt_1_1AmplTNLP.html#a09ae1a3052a19988433941e250151428", null ],
+    [ "checkinterrupt_", "classIpopt_1_1AmplTNLP.html#ad564603d07c46119004ef35c84fe8964", null ],
+    [ "interrupted_", "classIpopt_1_1AmplTNLP.html#a207103b08555ac8ebb38d0cf818e0a46", null ],
     [ "var_string_md_", "classIpopt_1_1AmplTNLP.html#a498921760ac6aded9abe4333a26ec459", null ],
     [ "var_integer_md_", "classIpopt_1_1AmplTNLP.html#a38037bb2d1b0204f809f24eb10066ae2", null ],
     [ "var_numeric_md_", "classIpopt_1_1AmplTNLP.html#a6d0b2f3e6d8d565b16d04484cd1efe56", null ],

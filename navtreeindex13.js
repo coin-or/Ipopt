@@ -1,5 +1,11 @@
 var NAVTREEINDEX13 =
 {
+"classIpopt_1_1LimMemQuasiNewtonUpdater.html#af91acff1d8121c05414463d5ff29c5a3":[1,0,0,86,39],
+"classIpopt_1_1LimMemQuasiNewtonUpdater.html#afc1b44ee463310533e3412c274d134ed":[1,0,0,86,70],
+"classIpopt_1_1LineSearch.html":[1,0,0,87],
+"classIpopt_1_1LineSearch.html#a129fe1f77e892e9baf6a1565280afa48":[1,0,0,87,6],
+"classIpopt_1_1LineSearch.html#a1be123a0287499a6dac6a9aec4d45cbf":[1,0,0,87,2],
+"classIpopt_1_1LineSearch.html#a6b2653f6e6a17c3d909b2868c772d752":[1,0,0,87,7],
 "classIpopt_1_1LineSearch.html#abe044f75d7c5d0ad79a58ddc3b4aab23":[1,0,0,87,5],
 "classIpopt_1_1LineSearch.html#ac6a0e809c63dd8585b30116605bcea91":[1,0,0,87,8],
 "classIpopt_1_1LineSearch.html#ad0913502718f88b85dc4af3c4e58eaf1":[1,0,0,87,3],
@@ -243,11 +249,5 @@ var NAVTREEINDEX13 =
 "classIpopt_1_1Ma77SolverInterface.html#a4f08314678cb62b218cd3a097be4ddc8":[1,0,0,96,16],
 "classIpopt_1_1Ma77SolverInterface.html#a58771654f41c5b4b59b4bb821f597d7e":[1,0,0,96,30],
 "classIpopt_1_1Ma77SolverInterface.html#a608ed094c6d761c31f3b7b7a39095d06":[1,0,0,96,1],
-"classIpopt_1_1Ma77SolverInterface.html#a66ce2f6b59bbff89f7c737afd45db241":[1,0,0,96,31],
-"classIpopt_1_1Ma77SolverInterface.html#a66d7f32db006941665c3397e0117e985":[1,0,0,96,18],
-"classIpopt_1_1Ma77SolverInterface.html#a701302f53e51d8537e2c218f777c255f":[1,0,0,96,40],
-"classIpopt_1_1Ma77SolverInterface.html#a72dfa2be8abe106045afddaa855d4925":[1,0,0,96,35],
-"classIpopt_1_1Ma77SolverInterface.html#a749f331bfb54de92a556c69894d03da2":[1,0,0,96,21],
-"classIpopt_1_1Ma77SolverInterface.html#a7be04c4a0e8f38d4425e24db24a1db4a":[1,0,0,96,38],
-"classIpopt_1_1Ma77SolverInterface.html#a7d501362bfe1feb4b6683d755951b4cf":[1,0,0,96,37]
+"classIpopt_1_1Ma77SolverInterface.html#a66ce2f6b59bbff89f7c737afd45db241":[1,0,0,96,31]
 };

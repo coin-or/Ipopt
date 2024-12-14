@@ -39,7 +39,7 @@ MathJax.Hub.Config({
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.14.15</span-->
+   &#160;<!--span id="projectnumber">3.14.17</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -1582,6 +1582,9 @@ Mumps Linear Solver</h2>
 </blockquote>
 <p><a class="anchor" id="OPT_mumps_dep_tol"></a><a href="#OPT_mumps_dep_tol">&#x25B8;&nbsp;</a><b>mumps_dep_tol</b> (<em>advanced</em>): Threshold to consider a pivot at zero in detection of linearly dependent constraints with MUMPS. </p><blockquote class="doxtable">
 <p>This is CNTL(3) in MUMPS. The valid range for this real option is unrestricted and its default value is 0. </p>
+</blockquote>
+<p><a class="anchor" id="OPT_mumps_mpi_communicator"></a><a href="#OPT_mumps_mpi_communicator">&#x25B8;&nbsp;</a><b>mumps_mpi_communicator</b> (<em>advanced</em>): MPI communicator used for matrix operations </p><blockquote class="doxtable">
+<p>This sets the MPI communicator. MPI_COMM_WORLD is the default. Any other value should be the return value from MPI_Comm_c2f. The valid range for this integer option is unrestricted and its default value is -987654. This option is only available if MUMPS's libseq/mpi.h is not used. </p>
 </blockquote>
 <h2><a class="anchor" id="OPT_MA28_Linear_Solver"></a>
 MA28 Linear Solver</h2>

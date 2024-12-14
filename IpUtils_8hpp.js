@@ -12,6 +12,8 @@ var IpUtils_8hpp =
     [ "CpuTime", "IpUtils_8hpp.html#a43215400b0003aefcf90d79f41a808c2", null ],
     [ "SysTime", "IpUtils_8hpp.html#a62d4e6e8a001e92805f1604fdb89acd8", null ],
     [ "WallclockTime", "IpUtils_8hpp.html#ac6fbf9279d6af95abd5cd59b8d4e4c6d", null ],
+    [ "RegisterInterruptHandler", "IpUtils_8hpp.html#a67b597ce79fdd866ca80f49e553439ea", null ],
+    [ "UnregisterInterruptHandler", "IpUtils_8hpp.html#abd79708db843db3ec1a195cf1e1d7f82", null ],
     [ "Compare_le", "IpUtils_8hpp.html#a744080523cc4ae02aa31f3b73804ca9c", null ],
     [ "Snprintf", "IpUtils_8hpp.html#ac43c90f593330c83645a501860780f46", null ],
     [ "ComputeMemIncrease", "IpUtils_8hpp.html#ada77edb2d8946eb154f298386514c6a3", null ]

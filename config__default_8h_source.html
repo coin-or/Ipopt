@@ -39,7 +39,7 @@ MathJax.Hub.Config({
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.14.15</span-->
+   &#160;<!--span id="projectnumber">3.14.17</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -166,11 +166,16 @@ $(document).ready(function(){initNavTree('config__default_8h_source.html',''); i
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno"><a class="line" href="config__default_8h.html#aec30f36872c5acb4dee3c14dfa531456">   57</a></span><span class="preprocessor">#define IPOPT_C_FINITE std::isfinite</span></div>
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno"><a class="line" href="config__default_8h.html#ab924fb02d467f6e4842c78bd87219a66">   60</a></span><span class="preprocessor">#define IPOPT_BLAS_FUNC(name,NAME)    F77_FUNC(name,NAME)</span></div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno"><a class="line" href="config__default_8h.html#af8ba164b2911f1ff6ac15a0453dbabba">   61</a></span><span class="preprocessor">#define IPOPT_LAPACK_FUNC(name,NAME)  F77_FUNC(name,NAME)</span></div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno"><a class="line" href="config__default_8h.html#afdd4f08c71f65f539cead88f16217a52">   62</a></span><span class="preprocessor">#define IPOPT_PARDISO_FUNC(name,NAME) F77_FUNC(name,NAME)</span></div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno"><a class="line" href="config__default_8h.html#a4648adf92cc2c04c0a61c44372f7654d">   63</a></span><span class="preprocessor">#define IPOPT_WSMP_FUNC(name,NAME)    F77_FUNC(name,NAME)</span></div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno"><a class="line" href="config__default_8h.html#a741bbd00c3ce862235fb0cf42deb2152">   64</a></span><span class="preprocessor">#define IPOPT_WSMP_FUNC_(name,NAME)   F77_FUNC_(name,NAME)</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="preprocessor">#ifdef _MSC_VER</span></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span><span class="preprocessor">#define IPOPT_HAS_RAND 1</span></div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span><span class="preprocessor">#define IPOPT_HAS_VA_COPY 1</span></div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span> </div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno"><a class="line" href="config__default_8h.html#ab924fb02d467f6e4842c78bd87219a66">   65</a></span><span class="preprocessor">#define IPOPT_BLAS_FUNC(name,NAME)    F77_FUNC(name,NAME)</span></div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno"><a class="line" href="config__default_8h.html#af8ba164b2911f1ff6ac15a0453dbabba">   66</a></span><span class="preprocessor">#define IPOPT_LAPACK_FUNC(name,NAME)  F77_FUNC(name,NAME)</span></div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno"><a class="line" href="config__default_8h.html#afdd4f08c71f65f539cead88f16217a52">   67</a></span><span class="preprocessor">#define IPOPT_PARDISO_FUNC(name,NAME) F77_FUNC(name,NAME)</span></div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno"><a class="line" href="config__default_8h.html#a4648adf92cc2c04c0a61c44372f7654d">   68</a></span><span class="preprocessor">#define IPOPT_WSMP_FUNC(name,NAME)    F77_FUNC(name,NAME)</span></div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno"><a class="line" href="config__default_8h.html#a741bbd00c3ce862235fb0cf42deb2152">   69</a></span><span class="preprocessor">#define IPOPT_WSMP_FUNC_(name,NAME)   F77_FUNC_(name,NAME)</span></div>
 <div class="ttc" id="aconfig__ipopt__default_8h_html"><div class="ttname"><a href="config__ipopt__default_8h.html">config_ipopt_default.h</a></div></div>
 <div class="ttc" id="aconfigall__system_8h_html"><div class="ttname"><a href="configall__system_8h.html">configall_system.h</a></div></div>
 </div><!-- fragment --></div><!-- contents -->

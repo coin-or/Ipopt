@@ -71,7 +71,7 @@ var searchData=
   ['sensalgorithm_68',['sensalgorithm',['../classIpopt_1_1SensAlgorithm.html#a9b109c8835fab74cc71d462bb0176078',1,'Ipopt::SensAlgorithm::SensAlgorithm()'],['../classIpopt_1_1SensAlgorithm.html',1,'Ipopt::SensAlgorithm']]],
   ['sensalgorithm_2ehpp_69',['SensAlgorithm.hpp',['../SensAlgorithm_8hpp.html',1,'']]],
   ['sensalgorithmexitstatus_70',['SensAlgorithmExitStatus',['../namespaceIpopt.html#add98abac06d6862395ef27d827938126',1,'Ipopt']]],
-  ['sensampltnlp_71',['sensampltnlp',['../classIpopt_1_1SensAmplTNLP.html#a322d3d3fc1a695924ba292b3f53e871f',1,'Ipopt::SensAmplTNLP::SensAmplTNLP()'],['../classIpopt_1_1SensAmplTNLP.html',1,'Ipopt::SensAmplTNLP']]],
+  ['sensampltnlp_71',['sensampltnlp',['../classIpopt_1_1SensAmplTNLP.html#a692a526e9a76b1737db34107d3c0d3ce',1,'Ipopt::SensAmplTNLP::SensAmplTNLP()'],['../classIpopt_1_1SensAmplTNLP.html',1,'Ipopt::SensAmplTNLP']]],
   ['sensampltnlp_2ehpp_72',['SensAmplTNLP.hpp',['../SensAmplTNLP_8hpp.html',1,'']]],
   ['sensapplication_73',['sensapplication',['../classIpopt_1_1SensApplication.html',1,'Ipopt::SensApplication'],['../classIpopt_1_1SensApplication.html#a7a3dbe67000effcb766bd9d441b37e8f',1,'Ipopt::SensApplication::SensApplication()']]],
   ['sensapplication_2ehpp_74',['SensApplication.hpp',['../SensApplication_8hpp.html',1,'']]],

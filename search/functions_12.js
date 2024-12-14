@@ -20,7 +20,7 @@ var searchData=
   ['searchdircalc_17',['SearchDirCalc',['../classIpopt_1_1IpoptAlgorithm.html#a3a94b5f9145ef45b1365da962c532eab',1,'Ipopt::IpoptAlgorithm']]],
   ['searchdirectioncalculator_18',['searchdirectioncalculator',['../classIpopt_1_1SearchDirectionCalculator.html#a438eda9e044a9e785aa22b68b02e66cf',1,'Ipopt::SearchDirectionCalculator::SearchDirectionCalculator()'],['../classIpopt_1_1SearchDirectionCalculator.html#ab742295ce0c8efa884e31311fc917408',1,'Ipopt::SearchDirectionCalculator::SearchDirectionCalculator(const SearchDirectionCalculator &amp;)']]],
   ['sensalgorithm_19',['SensAlgorithm',['../classIpopt_1_1SensAlgorithm.html#a9b109c8835fab74cc71d462bb0176078',1,'Ipopt::SensAlgorithm']]],
-  ['sensampltnlp_20',['SensAmplTNLP',['../classIpopt_1_1SensAmplTNLP.html#a322d3d3fc1a695924ba292b3f53e871f',1,'Ipopt::SensAmplTNLP']]],
+  ['sensampltnlp_20',['SensAmplTNLP',['../classIpopt_1_1SensAmplTNLP.html#a692a526e9a76b1737db34107d3c0d3ce',1,'Ipopt::SensAmplTNLP']]],
   ['sensapplication_21',['SensApplication',['../classIpopt_1_1SensApplication.html#a7a3dbe67000effcb766bd9d441b37e8f',1,'Ipopt::SensApplication']]],
   ['sensbacksolver_22',['SensBacksolver',['../classIpopt_1_1SensBacksolver.html#abd8a0b83f10195e748d3a90ebfb9e991',1,'Ipopt::SensBacksolver']]],
   ['sensbuilder_23',['SensBuilder',['../classIpopt_1_1SensBuilder.html#ac314c96662e24e694fd7b5aaad9be387',1,'Ipopt::SensBuilder']]],

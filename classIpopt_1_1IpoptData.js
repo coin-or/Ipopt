@@ -51,6 +51,7 @@ var classIpopt_1_1IpoptData =
     [ "Set_info_ls_count", "classIpopt_1_1IpoptData.html#a503123ed8338d530069f68d87bbd6b9f", null ],
     [ "info_skip_output", "classIpopt_1_1IpoptData.html#aa4b2090877fc8d0bdb98b670813754ef", null ],
     [ "Append_info_string", "classIpopt_1_1IpoptData.html#a1ad629fbc0f5fa6e76b49b310831241c", null ],
+    [ "Append_info_string", "classIpopt_1_1IpoptData.html#a480f5eb58d6048f6a9a2ce22e4d5790c", null ],
     [ "info_string", "classIpopt_1_1IpoptData.html#a181e51143d000979375e26847dd5b1ea", null ],
     [ "Set_info_skip_output", "classIpopt_1_1IpoptData.html#aa6e4197957a3f1304c988f926ea07bc5", null ],
     [ "info_last_output", "classIpopt_1_1IpoptData.html#ad41f4ee79658564a4d7291f92ef49c6b", null ],

@@ -39,7 +39,7 @@ MathJax.Hub.Config({
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.14.15</span-->
+   &#160;<!--span id="projectnumber">3.14.17</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -284,6 +284,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aa4b2090877fc8d0bdb98b670813754ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ad629fbc0f5fa6e76b49b310831241c" id="r_a1ad629fbc0f5fa6e76b49b310831241c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIpopt_1_1DependentResult.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptData.html#a1ad629fbc0f5fa6e76b49b310831241c">Append_info_string</a> (<a class="el" href="classIpopt_1_1DependentResult.html">const</a> std::string &amp;<a class="el" href="classIpopt_1_1DependentResult.html">add_str</a>)</td></tr>
 <tr class="separator:a1ad629fbc0f5fa6e76b49b310831241c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a480f5eb58d6048f6a9a2ce22e4d5790c" id="r_a480f5eb58d6048f6a9a2ce22e4d5790c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIpopt_1_1DependentResult.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptData.html#a480f5eb58d6048f6a9a2ce22e4d5790c">Append_info_string</a> (<a class="el" href="classIpopt_1_1DependentResult.html">const</a> std::string &amp;<a class="el" href="classIpopt_1_1DependentResult.html">add_str</a>, <a class="el" href="classIpopt_1_1DependentResult.html">double</a> <a class="el" href="classIpopt_1_1DependentResult.html">value</a>)</td></tr>
+<tr class="separator:a480f5eb58d6048f6a9a2ce22e4d5790c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a181e51143d000979375e26847dd5b1ea" id="r_a181e51143d000979375e26847dd5b1ea"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIpopt_1_1DependentResult.html">const</a> std::string &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptData.html#a181e51143d000979375e26847dd5b1ea">info_string</a> () <a class="el" href="classIpopt_1_1DependentResult.html">const</a></td></tr>
 <tr class="separator:a181e51143d000979375e26847dd5b1ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa6e4197957a3f1304c988f926ea07bc5" id="r_aa6e4197957a3f1304c988f926ea07bc5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIpopt_1_1DependentResult.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptData.html#aa6e4197957a3f1304c988f926ea07bc5">Set_info_skip_output</a> (<a class="el" href="classIpopt_1_1DependentResult.html">bool</a> <a class="el" href="classIpopt_1_1IpoptData.html#aa4b2090877fc8d0bdb98b670813754ef">info_skip_output</a>)</td></tr>
@@ -454,7 +456,7 @@ Private Attributes</h2></td></tr>
 <div class="textblock"><p>Class to organize all the data required by the algorithm. </p>
 <p>Internally, once this Data object has been initialized, all internal curr_ vectors must always be set (so that prototypes are available). The current values can only be set from the trial values. The trial values can be set by copying from a vector or by adding some fraction of a step to the current values. This object also stores steps, which allows to easily communicate the step from the step computation object to the line search object. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00097">97</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00100">100</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ada1c79e9529b534a5aa92d4893200e3b" name="ada1c79e9529b534a5aa92d4893200e3b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ada1c79e9529b534a5aa92d4893200e3b">&#9670;&#160;</a></span>IpoptData() <span class="overload">[1/2]</span></h2>
@@ -648,7 +650,7 @@ Private Attributes</h2></td></tr>
 
 <p>Current point. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00822">822</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00835">835</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -678,7 +680,7 @@ Private Attributes</h2></td></tr>
 <p>Get the current point in a copied container that is non-const. </p>
 <p>The entries in the container cannot be modified, but the container can be modified to point to new entries. Get Trial point </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00829">829</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00842">842</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -710,7 +712,7 @@ Private Attributes</h2></td></tr>
 <p>The entries in the container can not be modified, but the container can be modified to point to new entries. Set the trial point.</p>
 <p>This method copies the pointer for efficiency (no copy and to keep cache tags the same) so after you call set you cannot modify the data again. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00871">871</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00884">884</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -859,7 +861,7 @@ Private Attributes</h2></td></tr>
 
 <p>get the current delta </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00836">836</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00849">849</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -890,7 +892,7 @@ Private Attributes</h2></td></tr>
 <p>Set the current delta. </p>
 <p>Like the trial point, this method copies the pointer for efficiency (no copy and to keep cache tags the same) so after you call set, you cannot modify the data </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00896">896</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00909">909</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -921,7 +923,7 @@ Private Attributes</h2></td></tr>
 <p>Set the current delta. </p>
 <p>Like the trial point, this method copies the pointer for efficiency (no copy and to keep cache tags the same) so after you call set, you cannot modify the data. This is the version that is happy with a pointer to const <a class="el" href="classIpopt_1_1IteratesVector.html" title="Specialized CompoundVector class specifically for the algorithm iterates.">IteratesVector</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00919">919</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00932">932</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -950,7 +952,7 @@ Private Attributes</h2></td></tr>
 
 <p>Affine Delta. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00843">843</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00856">856</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -981,7 +983,7 @@ Private Attributes</h2></td></tr>
 <p>Set the affine delta. </p>
 <p>Like the trial point, this method copies the pointer for efficiency (no copy and to keep cache tags the same) so after you call set, you cannot modify the data </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00942">942</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00955">955</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -1010,7 +1012,7 @@ Private Attributes</h2></td></tr>
 
 <p>Hessian or Hessian approximation (do not hold on to it, it might be changed) </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00239">239</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00242">242</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -1040,7 +1042,7 @@ Private Attributes</h2></td></tr>
 
 <p>Set Hessian approximation. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00245">245</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00248">248</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -1070,7 +1072,7 @@ Private Attributes</h2></td></tr>
 <p>Returns true, if the primal-dual step have been already computed for the current iteration. </p>
 <p>This flag is reset after every call of <a class="el" href="classIpopt_1_1IpoptData.html#a5e23bd9a08df9b20b2150709e72cc9eb" title="Set the current iterate values from the trial values.">AcceptTrialPoint()</a>. If the search direction is computed during the computation of the barrier parameter, the method computing the barrier parameter should call <a class="el" href="classIpopt_1_1IpoptData.html#a38321d2eb62b5f850ba697fcb77e946c" title="Method for setting the HaveDeltas flag.">SetHaveDeltas(true)</a> to tell the <a class="el" href="classIpopt_1_1IpoptAlgorithm.html" title="The main ipopt algorithm class.">IpoptAlgorithm</a> object that it doesn't need to recompute the primal-dual step. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00271">271</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00274">274</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -1101,7 +1103,7 @@ Private Attributes</h2></td></tr>
 <p>Method for setting the HaveDeltas flag. </p>
 <p>This method should be called if some method computes the primal-dual step (and stores it in the delta_ fields of <a class="el" href="classIpopt_1_1IpoptData.html" title="Class to organize all the data required by the algorithm.">IpoptData</a>) at an early part of the iteration. If that flag is set to true, the <a class="el" href="classIpopt_1_1IpoptAlgorithm.html" title="The main ipopt algorithm class.">IpoptAlgorithm</a> object will not recompute the step. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00284">284</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00287">287</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -1131,7 +1133,7 @@ Private Attributes</h2></td></tr>
 <p>Returns true, if the affine-scaling step have been already computed for the current iteration. </p>
 <p>This flag is reset after every call of <a class="el" href="classIpopt_1_1IpoptData.html#a5e23bd9a08df9b20b2150709e72cc9eb" title="Set the current iterate values from the trial values.">AcceptTrialPoint()</a>. If the search direction is computed during the computation of the barrier parameter, the method computing the barrier parameter should call <a class="el" href="classIpopt_1_1IpoptData.html#a38321d2eb62b5f850ba697fcb77e946c" title="Method for setting the HaveDeltas flag.">SetHaveDeltas(true)</a> to tell the line search does not have to recompute them in case it wants to do a corrector step. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00311">311</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00314">314</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -1162,7 +1164,7 @@ Private Attributes</h2></td></tr>
 <p>Method for setting the HaveDeltas flag. </p>
 <p>This method should be called if some method computes the primal-dual step (and stores it in the delta_ fields of <a class="el" href="classIpopt_1_1IpoptData.html" title="Class to organize all the data required by the algorithm.">IpoptData</a>) at an early part of the iteration. If that flag is set to true, the <a class="el" href="classIpopt_1_1IpoptAlgorithm.html" title="The main ipopt algorithm class.">IpoptAlgorithm</a> object will not recompute the step. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00324">324</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00327">327</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -1191,7 +1193,7 @@ Private Attributes</h2></td></tr>
 
 <p>Copy the trial values to the current values. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00851">851</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00864">864</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -1237,7 +1239,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00344">344</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00347">347</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -1265,7 +1267,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00348">348</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00351">351</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -1292,7 +1294,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00355">355</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00358">358</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -1320,7 +1322,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00360">360</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00363">363</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -1347,7 +1349,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00367">367</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00370">370</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -1374,7 +1376,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00372">372</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00375">375</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -1402,7 +1404,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00377">377</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00380">380</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -1429,7 +1431,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00384">384</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00387">387</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -1457,7 +1459,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00389">389</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00392">392</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -1484,7 +1486,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00395">395</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00398">398</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -1514,7 +1516,7 @@ Private Attributes</h2></td></tr>
 
 <p>Setting the flag that indicates if a tiny step (below machine precision) has been detected. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00403">403</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00406">406</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -1541,7 +1543,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00409">409</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00412">412</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -1571,7 +1573,7 @@ Private Attributes</h2></td></tr>
 <p>Overall convergence tolerance. </p>
 <p>It is used in the convergence test, but also in some other parts of the algorithm that depend on the specified tolerance, such as the minimum value for the barrier parameter. Obtain the tolerance. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00424">424</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00427">427</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -1602,7 +1604,7 @@ Private Attributes</h2></td></tr>
 <p>Set a new value for the tolerance. </p>
 <p>One should be very careful when using this, since changing the predefined tolerance might have unexpected consequences. This method is for example used in the restoration convergence checker to tighten the restoration phase convergence tolerance, if the restoration phase converged to a point that has not a large value for the constraint violation. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00439">439</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00442">442</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -1633,7 +1635,7 @@ Private Attributes</h2></td></tr>
 <p>This is useful to see how much CPU time has been spent in this optimization run.</p>
 <p>Can only be called after beginning of optimization. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00455">455</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00458">458</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -1660,7 +1662,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00462">462</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00465">465</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -1688,7 +1690,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00466">466</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00469">469</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -1715,7 +1717,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00472">472</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00475">475</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -1743,7 +1745,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00476">476</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00479">479</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -1770,7 +1772,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00482">482</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00485">485</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -1798,7 +1800,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00486">486</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00489">489</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -1825,7 +1827,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00492">492</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00495">495</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -1853,7 +1855,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00496">496</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00499">499</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -1880,7 +1882,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00502">502</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00505">505</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -1908,7 +1910,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00506">506</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00509">509</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -1935,12 +1937,12 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00512">512</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00515">515</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
 <a id="a1ad629fbc0f5fa6e76b49b310831241c" name="a1ad629fbc0f5fa6e76b49b310831241c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1ad629fbc0f5fa6e76b49b310831241c">&#9670;&#160;</a></span>Append_info_string()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ad629fbc0f5fa6e76b49b310831241c">&#9670;&#160;</a></span>Append_info_string() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1963,7 +1965,46 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00516">516</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00519">519</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a480f5eb58d6048f6a9a2ce22e4d5790c" name="a480f5eb58d6048f6a9a2ce22e4d5790c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a480f5eb58d6048f6a9a2ce22e4d5790c">&#9670;&#160;</a></span>Append_info_string() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classIpopt_1_1DependentResult.html">void</a> Ipopt::IpoptData::Append_info_string </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classIpopt_1_1DependentResult.html">const</a> std::string &amp;&#160;</td>
+          <td class="paramname"><em>add_str</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classIpopt_1_1DependentResult.html">double</a>&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section since"><dt>Since</dt><dd>3.14.17 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00526">526</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -1990,7 +2031,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00522">522</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00535">535</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -2020,7 +2061,7 @@ Private Attributes</h2></td></tr>
 
 <p>Set this to true, if the next time when output is written, the summary line should not be printed. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00529">529</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00542">542</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -2049,7 +2090,7 @@ Private Attributes</h2></td></tr>
 
 <p>gives time when the last summary output line was printed </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00537">537</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00550">550</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -2079,7 +2120,7 @@ Private Attributes</h2></td></tr>
 
 <p>sets time when the last summary output line was printed </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00542">542</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00555">555</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -2108,7 +2149,7 @@ Private Attributes</h2></td></tr>
 
 <p>gives number of iteration summaries actually printed since last summary header was printed </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00552">552</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00565">565</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -2137,7 +2178,7 @@ Private Attributes</h2></td></tr>
 
 <p>increases number of iteration summaries actually printed since last summary header was printed </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00559">559</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00572">572</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -2167,7 +2208,7 @@ Private Attributes</h2></td></tr>
 
 <p>sets number of iteration summaries actually printed since last summary header was printed </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00566">566</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00579">579</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -2196,7 +2237,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reset all info fields. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00574">574</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00587">587</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -2225,7 +2266,7 @@ Private Attributes</h2></td></tr>
 
 <p>Return Timing Statistics Object. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00586">586</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00599">599</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -2255,7 +2296,7 @@ Private Attributes</h2></td></tr>
 <p>Return Timing Statistics Object. </p>
 <dl class="section since"><dt>Since</dt><dd>3.14.11 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00595">595</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00608">608</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -2284,7 +2325,7 @@ Private Attributes</h2></td></tr>
 
 <p>Check if additional data has been set. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00601">601</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00614">614</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -2313,7 +2354,7 @@ Private Attributes</h2></td></tr>
 
 <p>Get access to additional data object. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00607">607</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00620">620</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -2343,7 +2384,7 @@ Private Attributes</h2></td></tr>
 
 <p>Set a new pointer for additional <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> data. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00613">613</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00626">626</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -2395,7 +2436,7 @@ Private Attributes</h2></td></tr>
 
 <p>Set the perturbation of the primal-dual system. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00623">623</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00636">636</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -2447,7 +2488,7 @@ Private Attributes</h2></td></tr>
 
 <p>Get the current perturbation of the primal-dual system. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00637">637</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00650">650</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -2528,7 +2569,7 @@ Private Attributes</h2></td></tr>
 
 <p>Main iteration variables (current iteration) </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00658">658</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00671">671</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -2554,7 +2595,7 @@ Private Attributes</h2></td></tr>
 
 <p>Main iteration variables (trial calculations) </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00661">661</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00674">674</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -2580,7 +2621,7 @@ Private Attributes</h2></td></tr>
 
 <p>Hessian (approximation) - might be changed elsewhere! </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00664">664</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00677">677</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -2604,7 +2645,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00668">668</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00681">681</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -2631,7 +2672,7 @@ Private Attributes</h2></td></tr>
 <p>The following flag is set to true, if some other part of the algorithm (like the method for computing the barrier parameter) has already computed the primal-dual search direction. </p>
 <p>This flag is reset when the AcceptTrialPoint method is called. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00677">677</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00690">690</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -2655,7 +2696,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00688">688</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00701">701</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -2682,7 +2723,7 @@ Private Attributes</h2></td></tr>
 <p>The following flag is set to true, if some other part of the algorithm (like the method for computing the barrier parameter) has already computed the affine-scaling step. </p>
 <p>This flag is reset when the AcceptTrialPoint method is called. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00696">696</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00709">709</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -2708,7 +2749,7 @@ Private Attributes</h2></td></tr>
 
 <p>iteration count </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00700">700</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00713">713</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -2734,7 +2775,7 @@ Private Attributes</h2></td></tr>
 
 <p>current barrier parameter </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00703">703</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00716">716</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -2758,7 +2799,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00704">704</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00717">717</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -2784,7 +2825,7 @@ Private Attributes</h2></td></tr>
 
 <p>current fraction to the boundary parameter </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00707">707</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00720">720</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -2808,7 +2849,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00708">708</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00721">721</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -2834,7 +2875,7 @@ Private Attributes</h2></td></tr>
 
 <p>flag indicating if Initialize method has been called (for debugging) </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00711">711</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00724">724</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -2860,7 +2901,7 @@ Private Attributes</h2></td></tr>
 
 <p>flag for debugging whether we have already curr_ values available (from which new Vectors can be generated </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00716">716</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00729">729</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -2886,7 +2927,7 @@ Private Attributes</h2></td></tr>
 
 <p>Overall convergence tolerance. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00727">727</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00740">740</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -2912,7 +2953,7 @@ Private Attributes</h2></td></tr>
 
 <p>flag indicating whether the algorithm is in the free mu mode </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00733">733</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00746">746</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -2938,7 +2979,7 @@ Private Attributes</h2></td></tr>
 
 <p>flag indicating if a tiny step has been detected </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00735">735</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00748">748</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -2964,7 +3005,7 @@ Private Attributes</h2></td></tr>
 
 <p>Size of regularization for the Hessian. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00741">741</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00754">754</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -2990,7 +3031,7 @@ Private Attributes</h2></td></tr>
 
 <p>Primal step size. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00743">743</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00756">756</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -3016,7 +3057,7 @@ Private Attributes</h2></td></tr>
 
 <p>Info character for primal step size. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00745">745</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00758">758</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -3042,7 +3083,7 @@ Private Attributes</h2></td></tr>
 
 <p>Dual step size. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00747">747</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00760">760</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -3068,7 +3109,7 @@ Private Attributes</h2></td></tr>
 
 <p>Number of backtracking trial steps. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00749">749</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00762">762</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -3094,7 +3135,7 @@ Private Attributes</h2></td></tr>
 
 <p>true, if next summary output line should not be printed (eg after restoration phase). </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00753">753</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00766">766</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -3120,7 +3161,7 @@ Private Attributes</h2></td></tr>
 
 <p>any string of characters for the end of the output line </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00755">755</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00768">768</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -3146,7 +3187,7 @@ Private Attributes</h2></td></tr>
 
 <p>time when the last summary output line was printed </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00757">757</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00770">770</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -3172,7 +3213,7 @@ Private Attributes</h2></td></tr>
 
 <p>number of iteration summaries actually printed since last summary header was printed </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00761">761</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00774">774</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -3198,7 +3239,7 @@ Private Attributes</h2></td></tr>
 
 <p><a class="el" href="classIpopt_1_1VectorSpace.html" title="VectorSpace base class, corresponding to the Vector base class.">VectorSpace</a> for all the iterates. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00765">765</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00778">778</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -3224,7 +3265,7 @@ Private Attributes</h2></td></tr>
 
 <p><a class="el" href="classIpopt_1_1TimingStatistics.html" title="This class collects all timing statistics for Ipopt.">TimingStatistics</a> object collecting all <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> timing statistics. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00768">768</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00781">781</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -3250,7 +3291,7 @@ Private Attributes</h2></td></tr>
 
 <p>Object for the data specific for the Chen-Goldfarb penalty method algorithm. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00773">773</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00786">786</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -3274,7 +3315,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00777">777</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00790">790</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -3298,7 +3339,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00778">778</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00791">791</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -3322,7 +3363,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00779">779</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00792">792</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
@@ -3346,7 +3387,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00780">780</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00793">793</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
 </div>
 </div>
