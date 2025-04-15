@@ -395,6 +395,11 @@ public class HS071 extends Ipopt
       // Create the problem
       HS071 hs071 = new HS071();
 
+      // Get and print the Ipopt version
+      int version[] = new int[3];
+      hs071.getVersion(version);
+      System.out.println("Ipopt version: " + version[0] + "." + version[1] + "." + version[2]);
+
       // Set some options
       // hs071.setNumericOption("tol",1E-7);
       // hs071.setStringOption("nlp_scaling_method","user-scaling");

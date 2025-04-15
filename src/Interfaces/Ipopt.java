@@ -124,6 +124,11 @@ public abstract class Ipopt
       double   compl_g[]
    );
 
+   /* Native function should not be used directly */
+   private native void GetVersion(
+      int version[]
+   );
+
    /** Use C index style for iRow and jCol vectors */
    public final static int C_STYLE = 0;
 
@@ -850,5 +855,20 @@ public abstract class Ipopt
       int[] pos_nonlin_vars)
    {
       return false;
+   }
+
+   /** Get version of Ipopt library.
+    *
+    * Gives the value of IPOPT_VERSION_MAJOR, IPOPT_VERSION_MINOR, and IPOPT_VERSION_RELEASE
+    * that were used when the Ipopt library was build.
+    *
+    * @param version int[3] to store major, minor, and release version number
+    * @since 3.14.18
+    */
+   public void getVersion(
+      int[] version
+   )
+   {
+      GetVersion(version);
    }
 }
