@@ -421,6 +421,19 @@ IPOPTLIB_EXPORT bool IPOPT_CALLCONV GetIpoptCurrentViolations(
    ipnumber*     compl_g
 );
 
+/** Return version of Ipopt library.
+ *
+ * Gives the value of IPOPT_VERSION_MAJOR, IPOPT_VERSION_MINOR, and IPOPT_VERSION_RELEASE
+ * that were used when the Ipopt library was build.
+ *
+ * @since 3.14.18
+ */
+IPOPTLIB_EXPORT void IPOPT_CALLCONV GetIpoptVersion(
+   int* major,   /**< buffer to store major version number of Ipopt */
+   int* minor,   /**< buffer to store minor version number of Ipopt */
+   int* release  /**< buffer to store release version number of Ipopt */
+);
+
 #ifdef __cplusplus
 } /* extern "C" { */
 #endif

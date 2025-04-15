@@ -14,6 +14,8 @@ More detailed information about incremental changes can be found in the
 - Fixed that Jipopt::finalize_solution did not store final objective value correctly
   [#820, by Kevin Kofler]. Instead, the value of the last iterate evaluation was returned,
   which was often the same.
+- Added IpoptApplication::Version() (C++ interface) and GetIpoptVersion (C interface) to
+  retrieve version of Ipopt library [#824].
 
 ### 3.14.17 (2024-12-14)
 

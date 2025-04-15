@@ -1047,4 +1047,15 @@ void IpoptApplication::PrintCopyrightMessage()
    IpoptAlgorithm::print_copyright_message(*jnlst_);
 }
 
+void IpoptApplication::Version(
+   int& major,
+   int& minor,
+   int& release
+)
+{
+   major = IPOPT_VERSION_MAJOR;
+   minor = IPOPT_VERSION_MINOR;
+   release = IPOPT_VERSION_RELEASE;
+}
+
 } // namespace Ipopt

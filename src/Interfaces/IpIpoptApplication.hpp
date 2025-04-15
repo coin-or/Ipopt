@@ -265,9 +265,21 @@ public:
    );
 
    /** Method to register all Ipopt options. */
-   static void
-   RegisterAllIpoptOptions(
+   static void RegisterAllIpoptOptions(
       const SmartPtr<RegisteredOptions>& roptions
+   );
+
+   /** Return version of Ipopt library.
+    *
+    * Gives the value of IPOPT_VERSION_MAJOR, IPOPT_VERSION_MINOR, and IPOPT_VERSION_RELEASE
+    * that were used when the Ipopt library was build.
+    *
+    * @since 3.14.18
+    */
+   static void Version(
+      int& major,   /**< set to major version number of Ipopt */
+      int& minor,   /**< set to minor version number of Ipopt */
+      int& release  /**< set to release version number of Ipopt */
    );
 
 private:

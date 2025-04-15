@@ -11,6 +11,8 @@
 #include "IpBlas.hpp"
 #include "IpSmartPtr.hpp"
 
+#include <cassert>
+
 struct IpoptProblemInfo
 {
    Ipopt::SmartPtr<Ipopt::IpoptApplication> app;
@@ -330,4 +332,17 @@ bool GetIpoptCurrentViolations(
    }
 
    return ipopt_problem->tnlp->get_curr_violations(scaled != 0, n, x_L_violation, x_U_violation, compl_x_L, compl_x_U, grad_lag_x, m, nlp_constraint_violation, compl_g);
+}
+
+void GetIpoptVersion(
+   int* major,   /**< buffer to store major version number of Ipopt */
+   int* minor,   /**< buffer to store minor version number of Ipopt */
+   int* release  /**< buffer to store release version number of Ipopt */
+)
+{
+   assert(major != NULL);
+   assert(minor != NULL);
+   assert(release != NULL);
+
+   Ipopt::IpoptApplication::Version(*major, *minor, *release);
 }
