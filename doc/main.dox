@@ -280,7 +280,7 @@ maintained by other people, among them are:
 
     Modern, light-weight (~1k loc), **Eigen**-based <strong>C++</strong> interface to %Ipopt and Snopt.
 
--   [IPyOpt](https://gitlab.com/g-braeunlich/ipyopt)
+-   [ipyopt](https://gitlab.com/ipyopt-devs/ipyopt)
 
     Interfacing %Ipopt from **Python**.
 
