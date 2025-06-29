@@ -18,6 +18,7 @@ More detailed information about incremental changes can be found in the
   Ipopt::GetVersion() (Java interface) to retrieve version of Ipopt library [#824].
 - Fixed possible missing initialization of delta_x and delta_s in PDPerturbationHandler
   in case ConsiderNewSystem failed [#834].
+- Undefine `max` if defined after include of windows.h in IpUtils.cpp [#834].
 
 ### 3.14.17 (2024-12-14)
 

@@ -51,6 +51,9 @@
    '#define small char' */
 #undef small
 #endif
+#ifdef max
+#undef max
+#endif
 #define TWO_TO_THE_THIRTYTWO 4294967296.0
 #define DELTA_EPOCH_IN_SECS  11644473600.0
 inline double IpCoinGetTimeOfDay()
