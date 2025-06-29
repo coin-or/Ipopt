@@ -216,6 +216,9 @@ bool PDPerturbationHandler::ConsiderNewSystem(
    }
    delta_d = delta_d_curr_ = delta_c;
 
+   delta_x = 0.;
+   delta_s = 0.;
+
    if( hess_degenerate_ == DEGENERATE )
    {
       delta_x_curr_ = 0.;
@@ -225,11 +228,6 @@ bool PDPerturbationHandler::ConsiderNewSystem(
       {
          return false;
       }
-   }
-   else
-   {
-      delta_x = 0.;
-      delta_s = delta_x;
    }
 
    delta_x_curr_ = delta_x;
