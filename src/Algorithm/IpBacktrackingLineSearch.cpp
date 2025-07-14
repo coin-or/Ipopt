@@ -324,10 +324,14 @@ void BacktrackingLineSearch::FindAcceptableTrialPoint()
    }
    else
    {
-      // Initialize the acceptor for this backtracking line search
-      acceptor_->InitThisLineSearch(in_watchdog_);
       actual_delta = IpData().delta()->MakeNewContainer();
    }
+   // Initialize the acceptor for this backtracking line search
+   // this was originally only done if fallback_activated_ was not true, i.e., if we were not going into restoration phase
+   // however, if the fallback is activated, we may go to the restoration phase below, which calls acceptor_->PrepareRestoPhaseStart()
+   // below, which calls FilterLSAcceptor::AugmentFilter(), which needs to have reference_barr_ and reference_theta_ initialized
+   // so we call InitThisLineSearch also in this case now
+   acceptor_->InitThisLineSearch(in_watchdog_);
 
    if( start_with_resto_ )
    {

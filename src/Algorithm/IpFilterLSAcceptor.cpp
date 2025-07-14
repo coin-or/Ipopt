@@ -23,6 +23,7 @@ static const Index dbg_verbosity = 0;
 
 FilterLSAcceptor::FilterLSAcceptor(const SmartPtr<PDSystemSolver>& pd_solver)
    :
+   reference_initialized_(false),
    filter_(2),
    pd_solver_(pd_solver)
 {
@@ -265,6 +266,7 @@ void FilterLSAcceptor::InitThisLineSearch(bool in_watchdog)
       reference_barr_ = watchdog_barr_;
       reference_gradBarrTDelta_ = watchdog_gradBarrTDelta_;
    }
+   reference_initialized_ = true;
    filter_.Print(Jnlst());
 }
 
@@ -296,6 +298,8 @@ void FilterLSAcceptor::AugmentFilter()
 {
    DBG_START_METH("FilterLSAcceptor::AugmentFilter",
                   dbg_verbosity);
+
+   DBG_ASSERT(reference_initialized_);
 
    Number phi_add = reference_barr_ - gamma_phi_ * reference_theta_;
    Number theta_add = (1. - gamma_theta_) * reference_theta_;

@@ -290,6 +290,10 @@ private:
     *  respect to which progress is to be made
     */
    Number reference_gradBarrTDelta_;
+   /** Whether reference_theta_, reference_barr_, reference_gradBarrTDelta_
+    *  have been initialized by a call to InitThisLineSearch().
+    */
+   bool reference_initialized_;
    /** Constraint violation at reference point */
    Number watchdog_theta_;
    /** Barrier objective function at reference point */

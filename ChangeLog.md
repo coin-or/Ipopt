@@ -19,6 +19,9 @@ More detailed information about incremental changes can be found in the
 - Fixed possible missing initialization of delta_x and delta_s in PDPerturbationHandler
   in case ConsiderNewSystem failed [#834].
 - Undefine `max` if defined after include of windows.h in IpUtils.cpp [#834].
+- Added missing initialization of Filter Acceptor in case restoration phase is called
+  when the fallback mechanism of BacktrackingLinearSearch has been activated [#834].
+  If this happened in the first iteration, it lead to the use of uninitialized values.
 
 ### 3.14.17 (2024-12-14)
 
