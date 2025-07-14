@@ -576,6 +576,7 @@ ESymSolverStatus Ma57TSolverInterface::SymbolicFactorization(
    {
       Jnlst().Printf(J_ERROR, J_LINEAR_ALGEBRA,
                      "*** Error from MA57AD *** INFO(0) = %" IPOPT_INDEX_FORMAT "\n", wd_info_[0]);
+      return SYMSOLVER_FATAL_ERROR;
    }
 
    wd_lfact_ = 0;
