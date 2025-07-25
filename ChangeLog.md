@@ -20,7 +20,7 @@ More detailed information about incremental changes can be found in the
   in case ConsiderNewSystem failed [#834].
 - Undefine `max` if defined after include of windows.h in IpUtils.cpp [#834].
 - Added missing initialization of Filter Acceptor in case restoration phase is called
-  when the fallback mechanism of BacktrackingLinearSearch has been activated [#834].
+  when the fallback mechanism of BacktrackingLinearSearch has been activated [#834,#837].
   If this happened in the first iteration, it lead to the use of uninitialized values.
 - Added missing return if symbolic factorization with MA57 (ma57ad, ma57as) failed [#834].
 - Fixed application of scaling when computing violations of inequality constraints in

@@ -321,6 +321,12 @@ void BacktrackingLineSearch::FindAcceptableTrialPoint()
                          "We are in an emergency mode, but no restoration phase or other fall back is available.");
       }
       fallback_activated_ = false; // reset the flag
+
+      // in order to init the line search for the acceptor next, we need a delta to calculate reference_gradBarrTDelta_
+      // since likely we are here because this has failed in PDSearchDirCalculator::ComputeSearchDirection(), we set a new delta now
+      SmartPtr<IteratesVector> delta = IpData().curr()->MakeNewIteratesVector(true);
+      delta->Set(0.0);
+      IpData().set_delta(delta);
    }
    else
    {
