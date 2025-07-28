@@ -31,10 +31,11 @@ var searchData=
   ['vectors_5fvalid_5f_28',['vectors_valid_',['../classIpopt_1_1CompoundVector.html#a10ce2480047e1d8bb2ab317747f28fe2',1,'Ipopt::CompoundVector']]],
   ['vectorspace_29',['vectorspace',['../classIpopt_1_1VectorSpace.html',1,'Ipopt::VectorSpace'],['../classIpopt_1_1VectorSpace.html#a63502d4a6312d6ab48fc816a1ee4295d',1,'Ipopt::VectorSpace::VectorSpace(const VectorSpace &amp;)'],['../classIpopt_1_1VectorSpace.html#aa24a1817b4979f57537d9a89bd637f52',1,'Ipopt::VectorSpace::VectorSpace()'],['../classIpopt_1_1VectorSpace.html#abbfdcde37dc4787de2ec5d7278c9df37',1,'Ipopt::VectorSpace::VectorSpace(Index dim)']]],
   ['vectorsvalid_30',['VectorsValid',['../classIpopt_1_1CompoundVector.html#a3048057b020cf29c024afa7acccca441',1,'Ipopt::CompoundVector']]],
-  ['version_20and_20the_20c_20version_31',['What is the difference between the Fortran version and the C++ version?',['../FAQ.html#autotoc_md8',1,'']]],
-  ['via_20ampl_32',['Warm-Starting Capabilities via AMPL',['../SPECIALS.html#AMPL_WARMSTART',1,'']]],
-  ['via_20git_33',['Getting the Ipopt code via git',['../INSTALL.html#GETIPOPT_GIT',1,'']]],
-  ['vprintf_34',['VPrintf',['../classIpopt_1_1Journalist.html#a285d9cb38484f5dbb5812c351888d5a7',1,'Ipopt::Journalist']]],
-  ['vprintfindented_35',['VPrintfIndented',['../classIpopt_1_1Journalist.html#a7cefc39d5044f70b5d7f091e1b0e395f',1,'Ipopt::Journalist']]],
-  ['vtilde1_5f_36',['Vtilde1_',['../classIpopt_1_1LowRankAugSystemSolver.html#a77b6cea8618b8b189c119d251fba1342',1,'Ipopt::LowRankAugSystemSolver']]]
+  ['version_31',['Version',['../classIpopt_1_1IpoptApplication.html#a21a7604e32f394a3d3c51961c82bb375',1,'Ipopt::IpoptApplication']]],
+  ['version_20and_20the_20c_20version_32',['What is the difference between the Fortran version and the C++ version?',['../FAQ.html#autotoc_md8',1,'']]],
+  ['via_20ampl_33',['Warm-Starting Capabilities via AMPL',['../SPECIALS.html#AMPL_WARMSTART',1,'']]],
+  ['via_20git_34',['Getting the Ipopt code via git',['../INSTALL.html#GETIPOPT_GIT',1,'']]],
+  ['vprintf_35',['VPrintf',['../classIpopt_1_1Journalist.html#a285d9cb38484f5dbb5812c351888d5a7',1,'Ipopt::Journalist']]],
+  ['vprintfindented_36',['VPrintfIndented',['../classIpopt_1_1Journalist.html#a7cefc39d5044f70b5d7f091e1b0e395f',1,'Ipopt::Journalist']]],
+  ['vtilde1_5f_37',['Vtilde1_',['../classIpopt_1_1LowRankAugSystemSolver.html#a77b6cea8618b8b189c119d251fba1342',1,'Ipopt::LowRankAugSystemSolver']]]
 ];

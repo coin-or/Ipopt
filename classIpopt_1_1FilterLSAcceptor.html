@@ -39,7 +39,7 @@ MathJax.Hub.Config({
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.14.17</span-->
+   &#160;<!--span id="projectnumber">3.14.18</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -290,6 +290,9 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a45cb621b188d3ba82f9d16a0f81c5f22" id="r_a45cb621b188d3ba82f9d16a0f81c5f22"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1FilterLSAcceptor.html#a45cb621b188d3ba82f9d16a0f81c5f22">reference_gradBarrTDelta_</a></td></tr>
 <tr class="memdesc:a45cb621b188d3ba82f9d16a0f81c5f22"><td class="mdescLeft">&#160;</td><td class="mdescRight">Barrier gradient transpose search direction at the point with respect to which progress is to be made.  <br /></td></tr>
 <tr class="separator:a45cb621b188d3ba82f9d16a0f81c5f22"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0f645c1e6e0100f69d75f7bbc44edeb" id="r_ab0f645c1e6e0100f69d75f7bbc44edeb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIpopt_1_1DependentResult.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1FilterLSAcceptor.html#ab0f645c1e6e0100f69d75f7bbc44edeb">reference_initialized_</a></td></tr>
+<tr class="memdesc:ab0f645c1e6e0100f69d75f7bbc44edeb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether reference_theta_, reference_barr_, reference_gradBarrTDelta_ have been initialized by a call to <a class="el" href="classIpopt_1_1FilterLSAcceptor.html#a446775d73606c17c8fdb62205b97b6fe" title="Initialization for the next line search.">InitThisLineSearch()</a>.  <br /></td></tr>
+<tr class="separator:ab0f645c1e6e0100f69d75f7bbc44edeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5a5eb681493d78fc5aaea713903953f7" id="r_a5a5eb681493d78fc5aaea713903953f7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1FilterLSAcceptor.html#a5a5eb681493d78fc5aaea713903953f7">watchdog_theta_</a></td></tr>
 <tr class="memdesc:a5a5eb681493d78fc5aaea713903953f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constraint violation at reference point.  <br /></td></tr>
 <tr class="separator:a5a5eb681493d78fc5aaea713903953f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1707,6 +1710,32 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="ab0f645c1e6e0100f69d75f7bbc44edeb" name="ab0f645c1e6e0100f69d75f7bbc44edeb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0f645c1e6e0100f69d75f7bbc44edeb">&#9670;&#160;</a></span>reference_initialized_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classIpopt_1_1DependentResult.html">bool</a> Ipopt::FilterLSAcceptor::reference_initialized_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Whether reference_theta_, reference_barr_, reference_gradBarrTDelta_ have been initialized by a call to <a class="el" href="classIpopt_1_1FilterLSAcceptor.html#a446775d73606c17c8fdb62205b97b6fe" title="Initialization for the next line search.">InitThisLineSearch()</a>. </p>
+
+<p class="definition">Definition at line <a class="el" href="IpFilterLSAcceptor_8hpp_source.html#l00296">296</a> of file <a class="el" href="IpFilterLSAcceptor_8hpp_source.html">IpFilterLSAcceptor.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a5a5eb681493d78fc5aaea713903953f7" name="a5a5eb681493d78fc5aaea713903953f7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5a5eb681493d78fc5aaea713903953f7">&#9670;&#160;</a></span>watchdog_theta_</h2>
 
@@ -1729,7 +1758,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Constraint violation at reference point. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpFilterLSAcceptor_8hpp_source.html#l00294">294</a> of file <a class="el" href="IpFilterLSAcceptor_8hpp_source.html">IpFilterLSAcceptor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpFilterLSAcceptor_8hpp_source.html#l00298">298</a> of file <a class="el" href="IpFilterLSAcceptor_8hpp_source.html">IpFilterLSAcceptor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1755,7 +1784,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Barrier objective function at reference point. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpFilterLSAcceptor_8hpp_source.html#l00296">296</a> of file <a class="el" href="IpFilterLSAcceptor_8hpp_source.html">IpFilterLSAcceptor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpFilterLSAcceptor_8hpp_source.html#l00300">300</a> of file <a class="el" href="IpFilterLSAcceptor_8hpp_source.html">IpFilterLSAcceptor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1781,7 +1810,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Barrier gradient transpose search direction at reference point. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpFilterLSAcceptor_8hpp_source.html#l00298">298</a> of file <a class="el" href="IpFilterLSAcceptor_8hpp_source.html">IpFilterLSAcceptor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpFilterLSAcceptor_8hpp_source.html#l00302">302</a> of file <a class="el" href="IpFilterLSAcceptor_8hpp_source.html">IpFilterLSAcceptor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1807,7 +1836,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p><a class="el" href="classIpopt_1_1Filter.html" title="Class for the filter.">Filter</a> with entries. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpFilterLSAcceptor_8hpp_source.html#l00302">302</a> of file <a class="el" href="IpFilterLSAcceptor_8hpp_source.html">IpFilterLSAcceptor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpFilterLSAcceptor_8hpp_source.html#l00306">306</a> of file <a class="el" href="IpFilterLSAcceptor_8hpp_source.html">IpFilterLSAcceptor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1833,7 +1862,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>True, if last rejected was due to the filter. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpFilterLSAcceptor_8hpp_source.html#l00307">307</a> of file <a class="el" href="IpFilterLSAcceptor_8hpp_source.html">IpFilterLSAcceptor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpFilterLSAcceptor_8hpp_source.html#l00311">311</a> of file <a class="el" href="IpFilterLSAcceptor_8hpp_source.html">IpFilterLSAcceptor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1859,7 +1888,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Counter of successive iterations in which filter was reason for last rejection. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpFilterLSAcceptor_8hpp_source.html#l00311">311</a> of file <a class="el" href="IpFilterLSAcceptor_8hpp_source.html">IpFilterLSAcceptor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpFilterLSAcceptor_8hpp_source.html#l00315">315</a> of file <a class="el" href="IpFilterLSAcceptor_8hpp_source.html">IpFilterLSAcceptor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1885,7 +1914,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Counter for the filter resets done so far. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpFilterLSAcceptor_8hpp_source.html#l00313">313</a> of file <a class="el" href="IpFilterLSAcceptor_8hpp_source.html">IpFilterLSAcceptor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpFilterLSAcceptor_8hpp_source.html#l00317">317</a> of file <a class="el" href="IpFilterLSAcceptor_8hpp_source.html">IpFilterLSAcceptor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1909,7 +1938,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="IpFilterLSAcceptor_8hpp_source.html#l00318">318</a> of file <a class="el" href="IpFilterLSAcceptor_8hpp_source.html">IpFilterLSAcceptor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpFilterLSAcceptor_8hpp_source.html#l00322">322</a> of file <a class="el" href="IpFilterLSAcceptor_8hpp_source.html">IpFilterLSAcceptor.hpp</a>.</p>
 
 </div>
 </div>

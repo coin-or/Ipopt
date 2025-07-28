@@ -1,5 +1,6 @@
 var NAVTREEINDEX6 =
 {
+"classIpopt_1_1CompoundVector.html#a3048057b020cf29c024afa7acccca441":[1,0,0,20,39],
 "classIpopt_1_1CompoundVector.html#a308940d62e1c1cdc134db818653f85eb":[1,0,0,20,29],
 "classIpopt_1_1CompoundVector.html#a32b3b120dbd1df95d32c45fae7b61d92":[1,0,0,20,41],
 "classIpopt_1_1CompoundVector.html#a34d64b170354f531723ef2b5dec0ce1b":[1,0,0,20,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX6 =
 "classIpopt_1_1DenseVectorSpace.html#ae403b5d3d36b21ae87d17f67be50bb01":[1,0,0,30,8],
 "classIpopt_1_1DenseVectorSpace.html#ae41977efc786dd75b303841c8732a039":[1,0,0,30,7],
 "classIpopt_1_1DenseVectorSpace.html#ae70b1acb438cc8c6049f9a4507384e29":[1,0,0,30,1],
-"classIpopt_1_1DenseVectorSpace.html#af3bc9ab94371c5cd96b43c5104c8ce79":[1,0,0,30,2],
-"classIpopt_1_1DenseVectorSpace.html#af4180a406b5325d6c008cdcba990ce13":[1,0,0,30,16]
+"classIpopt_1_1DenseVectorSpace.html#af3bc9ab94371c5cd96b43c5104c8ce79":[1,0,0,30,2]
 };

@@ -32,6 +32,7 @@ var classIpopt_1_1OrigIpoptNLP =
     [ "orig_d_U", "classIpopt_1_1OrigIpoptNLP.html#a8428fe0772803b1b2b95e336161d1cad", null ],
     [ "HessianMatrixSpace", "classIpopt_1_1OrigIpoptNLP.html#a7e64d03cccacd0247aab9cf4a1c5366d", null ],
     [ "x_space", "classIpopt_1_1OrigIpoptNLP.html#af9f83fc5a0c1e2568fc403bbab6546a3", null ],
+    [ "d_space", "classIpopt_1_1OrigIpoptNLP.html#a6879033110c4351ca86905c0259d46c6", null ],
     [ "GetSpaces", "classIpopt_1_1OrigIpoptNLP.html#a579f0399b8a1dec9a5bd25e4c9cd9adc", null ],
     [ "AdjustVariableBounds", "classIpopt_1_1OrigIpoptNLP.html#a69a5274b61994b0200f5b35b7256dbb8", null ],
     [ "f_evals", "classIpopt_1_1OrigIpoptNLP.html#acf90f9551fde97b75797b073a2a5cfa1", null ],

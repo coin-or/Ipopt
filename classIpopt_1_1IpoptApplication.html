@@ -39,7 +39,7 @@ MathJax.Hub.Config({
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.14.17</span-->
+   &#160;<!--span id="projectnumber">3.14.18</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -227,6 +227,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a3443b7f853306eb53e2eacfda4b5ea5b" id="r_a3443b7f853306eb53e2eacfda4b5ea5b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIpopt_1_1DependentResult.html">static</a> <a class="el" href="classIpopt_1_1DependentResult.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptApplication.html#a3443b7f853306eb53e2eacfda4b5ea5b">RegisterAllIpoptOptions</a> (<a class="el" href="classIpopt_1_1DependentResult.html">const</a> <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1RegisteredOptions.html">RegisteredOptions</a> &gt; &amp;<a class="el" href="classIpopt_1_1DependentResult.html">roptions</a>)</td></tr>
 <tr class="memdesc:a3443b7f853306eb53e2eacfda4b5ea5b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method to register all <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> options.  <br /></td></tr>
 <tr class="separator:a3443b7f853306eb53e2eacfda4b5ea5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21a7604e32f394a3d3c51961c82bb375" id="r_a21a7604e32f394a3d3c51961c82bb375"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIpopt_1_1DependentResult.html">static</a> <a class="el" href="classIpopt_1_1DependentResult.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptApplication.html#a21a7604e32f394a3d3c51961c82bb375">Version</a> (<a class="el" href="classIpopt_1_1DependentResult.html">int</a> &amp;<a class="el" href="classIpopt_1_1DependentResult.html">major</a>, <a class="el" href="classIpopt_1_1DependentResult.html">int</a> &amp;<a class="el" href="classIpopt_1_1DependentResult.html">minor</a>, <a class="el" href="classIpopt_1_1DependentResult.html">int</a> &amp;<a class="el" href="classIpopt_1_1DependentResult.html">release</a>)</td></tr>
+<tr class="memdesc:a21a7604e32f394a3d3c51961c82bb375"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return version of <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> library.  <br /></td></tr>
+<tr class="separator:a21a7604e32f394a3d3c51961c82bb375"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-methods" name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -1146,6 +1149,60 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a21a7604e32f394a3d3c51961c82bb375" name="a21a7604e32f394a3d3c51961c82bb375"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a21a7604e32f394a3d3c51961c82bb375">&#9670;&#160;</a></span>Version()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classIpopt_1_1DependentResult.html">static</a> <a class="el" href="classIpopt_1_1DependentResult.html">void</a> Ipopt::IpoptApplication::Version </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classIpopt_1_1DependentResult.html">int</a> &amp;&#160;</td>
+          <td class="paramname"><em>major</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classIpopt_1_1DependentResult.html">int</a> &amp;&#160;</td>
+          <td class="paramname"><em>minor</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classIpopt_1_1DependentResult.html">int</a> &amp;&#160;</td>
+          <td class="paramname"><em>release</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return version of <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> library. </p>
+<p>Gives the value of IPOPT_VERSION_MAJOR, IPOPT_VERSION_MINOR, and IPOPT_VERSION_RELEASE that were used when the <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> library was build.</p>
+<dl class="section since"><dt>Since</dt><dd>3.14.18 </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">major</td><td>set to major version number of <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a>  </td></tr>
+    <tr><td class="paramname">minor</td><td>set to minor version number of <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a>  </td></tr>
+    <tr><td class="paramname">release</td><td>set to release version number of <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a033490380981d0d044d7de3d002ae8ac" name="a033490380981d0d044d7de3d002ae8ac"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a033490380981d0d044d7de3d002ae8ac">&#9670;&#160;</a></span>operator=()</h2>
 
@@ -1225,7 +1282,7 @@ Private Attributes</h2></td></tr>
 
 <p>Decide whether or not the ipopt.opt file should be read. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptApplication_8hpp_source.html#l00302">302</a> of file <a class="el" href="IpIpoptApplication_8hpp_source.html">IpIpoptApplication.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptApplication_8hpp_source.html#l00314">314</a> of file <a class="el" href="IpIpoptApplication_8hpp_source.html">IpIpoptApplication.hpp</a>.</p>
 
 </div>
 </div>
@@ -1251,7 +1308,7 @@ Private Attributes</h2></td></tr>
 
 <p>Decide whether non-ipopt non-bad_alloc non-overflow_error exceptions should be rethrown. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptApplication_8hpp_source.html#l00305">305</a> of file <a class="el" href="IpIpoptApplication_8hpp_source.html">IpIpoptApplication.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptApplication_8hpp_source.html#l00317">317</a> of file <a class="el" href="IpIpoptApplication_8hpp_source.html">IpIpoptApplication.hpp</a>.</p>
 
 </div>
 </div>
@@ -1277,7 +1334,7 @@ Private Attributes</h2></td></tr>
 
 <p><a class="el" href="classIpopt_1_1Journalist.html" title="Class responsible for all message output.">Journalist</a> for reporting output. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptApplication_8hpp_source.html#l00309">309</a> of file <a class="el" href="IpIpoptApplication_8hpp_source.html">IpIpoptApplication.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptApplication_8hpp_source.html#l00321">321</a> of file <a class="el" href="IpIpoptApplication_8hpp_source.html">IpIpoptApplication.hpp</a>.</p>
 
 </div>
 </div>
@@ -1303,7 +1360,7 @@ Private Attributes</h2></td></tr>
 
 <p><a class="el" href="classIpopt_1_1RegisteredOptions.html" title="Class for storing registered options.">RegisteredOptions</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptApplication_8hpp_source.html#l00312">312</a> of file <a class="el" href="IpIpoptApplication_8hpp_source.html">IpIpoptApplication.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptApplication_8hpp_source.html#l00324">324</a> of file <a class="el" href="IpIpoptApplication_8hpp_source.html">IpIpoptApplication.hpp</a>.</p>
 
 </div>
 </div>
@@ -1329,7 +1386,7 @@ Private Attributes</h2></td></tr>
 
 <p><a class="el" href="classIpopt_1_1OptionsList.html" title="This class stores a list of user set options.">OptionsList</a> used for the application. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptApplication_8hpp_source.html#l00315">315</a> of file <a class="el" href="IpIpoptApplication_8hpp_source.html">IpIpoptApplication.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptApplication_8hpp_source.html#l00327">327</a> of file <a class="el" href="IpIpoptApplication_8hpp_source.html">IpIpoptApplication.hpp</a>.</p>
 
 </div>
 </div>
@@ -1355,7 +1412,7 @@ Private Attributes</h2></td></tr>
 
 <p>Object for storing statistics about the most recent optimization run. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptApplication_8hpp_source.html#l00320">320</a> of file <a class="el" href="IpIpoptApplication_8hpp_source.html">IpIpoptApplication.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptApplication_8hpp_source.html#l00332">332</a> of file <a class="el" href="IpIpoptApplication_8hpp_source.html">IpIpoptApplication.hpp</a>.</p>
 
 </div>
 </div>
@@ -1381,7 +1438,7 @@ Private Attributes</h2></td></tr>
 
 <p>Object with the algorithm skeleton. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptApplication_8hpp_source.html#l00324">324</a> of file <a class="el" href="IpIpoptApplication_8hpp_source.html">IpIpoptApplication.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptApplication_8hpp_source.html#l00336">336</a> of file <a class="el" href="IpIpoptApplication_8hpp_source.html">IpIpoptApplication.hpp</a>.</p>
 
 </div>
 </div>
@@ -1408,7 +1465,7 @@ Private Attributes</h2></td></tr>
 <p><a class="el" href="classIpopt_1_1IpoptNLP.html" title="This is the abstract base class for classes that map the traditional NLP into something that is more ...">IpoptNLP</a> Object for the <a class="el" href="classIpopt_1_1NLP.html" title="Traditional NLP.">NLP</a>. </p>
 <p>We keep this around for a ReOptimize warm start. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptApplication_8hpp_source.html#l00330">330</a> of file <a class="el" href="IpIpoptApplication_8hpp_source.html">IpIpoptApplication.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptApplication_8hpp_source.html#l00342">342</a> of file <a class="el" href="IpIpoptApplication_8hpp_source.html">IpIpoptApplication.hpp</a>.</p>
 
 </div>
 </div>
@@ -1435,7 +1492,7 @@ Private Attributes</h2></td></tr>
 <p><a class="el" href="classIpopt_1_1IpoptData.html" title="Class to organize all the data required by the algorithm.">IpoptData</a> Object for the <a class="el" href="classIpopt_1_1NLP.html" title="Traditional NLP.">NLP</a>. </p>
 <p>We keep this around for a ReOptimize warm start. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptApplication_8hpp_source.html#l00336">336</a> of file <a class="el" href="IpIpoptApplication_8hpp_source.html">IpIpoptApplication.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptApplication_8hpp_source.html#l00348">348</a> of file <a class="el" href="IpIpoptApplication_8hpp_source.html">IpIpoptApplication.hpp</a>.</p>
 
 </div>
 </div>
@@ -1462,7 +1519,7 @@ Private Attributes</h2></td></tr>
 <p><a class="el" href="classIpopt_1_1IpoptCalculatedQuantities.html" title="Class for all IPOPT specific calculated quantities.">IpoptCalculatedQuantities</a> Object for the <a class="el" href="classIpopt_1_1NLP.html" title="Traditional NLP.">NLP</a>. </p>
 <p>We keep this around for a ReOptimize warm start. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptApplication_8hpp_source.html#l00342">342</a> of file <a class="el" href="IpIpoptApplication_8hpp_source.html">IpIpoptApplication.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptApplication_8hpp_source.html#l00354">354</a> of file <a class="el" href="IpIpoptApplication_8hpp_source.html">IpIpoptApplication.hpp</a>.</p>
 
 </div>
 </div>
@@ -1489,7 +1546,7 @@ Private Attributes</h2></td></tr>
 <p>Pointer to the <a class="el" href="classIpopt_1_1TNLPAdapter.html" title="This class adapts the TNLP interface so it looks like an NLP interface.">TNLPAdapter</a> used to convert the <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> to an <a class="el" href="classIpopt_1_1NLP.html" title="Traditional NLP.">NLP</a>. </p>
 <p>We keep this around for the ReOptimizerTNLP call. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptApplication_8hpp_source.html#l00348">348</a> of file <a class="el" href="IpIpoptApplication_8hpp_source.html">IpIpoptApplication.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptApplication_8hpp_source.html#l00360">360</a> of file <a class="el" href="IpIpoptApplication_8hpp_source.html">IpIpoptApplication.hpp</a>.</p>
 
 </div>
 </div>
@@ -1515,7 +1572,7 @@ Private Attributes</h2></td></tr>
 
 <p>Flag indicating if we are to use the inexact linear solver option. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptApplication_8hpp_source.html#l00353">353</a> of file <a class="el" href="IpIpoptApplication_8hpp_source.html">IpIpoptApplication.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptApplication_8hpp_source.html#l00365">365</a> of file <a class="el" href="IpIpoptApplication_8hpp_source.html">IpIpoptApplication.hpp</a>.</p>
 
 </div>
 </div>
@@ -1542,7 +1599,7 @@ Private Attributes</h2></td></tr>
 <p>Flag indicating if all bounds should be replaced by inequality constraints. </p>
 <p>This is necessary for the inexact algorithm. </p>
 
-<p class="definition">Definition at line <a class="el" href="IpIpoptApplication_8hpp_source.html#l00360">360</a> of file <a class="el" href="IpIpoptApplication_8hpp_source.html">IpIpoptApplication.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="IpIpoptApplication_8hpp_source.html#l00372">372</a> of file <a class="el" href="IpIpoptApplication_8hpp_source.html">IpIpoptApplication.hpp</a>.</p>
 
 </div>
 </div>

@@ -39,7 +39,7 @@ MathJax.Hub.Config({
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.14.17</span-->
+   &#160;<!--span id="projectnumber">3.14.18</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -191,6 +191,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ae505cff0e907b9049062f665dadd8be9" id="r_ae505cff0e907b9049062f665dadd8be9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> bool <a class="el" href="IpTypes_8h.html#ae7eaa5fbc2133bb2a78973a87cc7bb5b">IPOPT_CALLCONV</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#ae505cff0e907b9049062f665dadd8be9">GetIpoptCurrentViolations</a> (<a class="el" href="IpStdCInterface_8h.html#ae32712b8d014ab2144fee84432e4a347">IpoptProblem</a> ipopt_problem, bool scaled, <a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> n, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *x_L_violation, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *x_U_violation, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *compl_x_L, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *compl_x_U, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *grad_lag_x, <a class="el" href="IpTypes_8h.html#ad45d5b046bfaf56789665c747d5a8cb9">ipindex</a> m, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *nlp_constraint_violation, <a class="el" href="IpTypes_8h.html#a5db07e705790a30d1c9081e6910c8b27">ipnumber</a> *compl_g)</td></tr>
 <tr class="memdesc:ae505cff0e907b9049062f665dadd8be9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get primal and dual infeasibility of the current iterate.  <br /></td></tr>
 <tr class="separator:ae505cff0e907b9049062f665dadd8be9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a363c40077cb78d1637967f7459fb77" id="r_a4a363c40077cb78d1637967f7459fb77"><td class="memItemLeft" align="right" valign="top"><a class="el" href="config__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> void <a class="el" href="IpTypes_8h.html#ae7eaa5fbc2133bb2a78973a87cc7bb5b">IPOPT_CALLCONV</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="IpStdCInterface_8h.html#a4a363c40077cb78d1637967f7459fb77">GetIpoptVersion</a> (int *major, int *minor, int *release)</td></tr>
+<tr class="memdesc:a4a363c40077cb78d1637967f7459fb77"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return version of <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> library.  <br /></td></tr>
+<tr class="separator:a4a363c40077cb78d1637967f7459fb77"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
@@ -1099,6 +1102,52 @@ Variables</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Whether <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> has successfully filled the given arrays </dd></dl>
 <dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
+
+</div>
+</div>
+<a id="a4a363c40077cb78d1637967f7459fb77" name="a4a363c40077cb78d1637967f7459fb77"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a363c40077cb78d1637967f7459fb77">&#9670;&#160;</a></span>GetIpoptVersion()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="config__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b">IPOPTLIB_EXPORT</a> void <a class="el" href="IpTypes_8h.html#ae7eaa5fbc2133bb2a78973a87cc7bb5b">IPOPT_CALLCONV</a> GetIpoptVersion </td>
+          <td>(</td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>major</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>minor</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>release</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return version of <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> library. </p>
+<p>Gives the value of IPOPT_VERSION_MAJOR, IPOPT_VERSION_MINOR, and IPOPT_VERSION_RELEASE that were used when the <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> library was build.</p>
+<dl class="section since"><dt>Since</dt><dd>3.14.18 </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">major</td><td>buffer to store major version number of <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a>  </td></tr>
+    <tr><td class="paramname">minor</td><td>buffer to store minor version number of <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a>  </td></tr>
+    <tr><td class="paramname">release</td><td>buffer to store release version number of <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

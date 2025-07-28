@@ -36,7 +36,6 @@ var classIpopt_1_1PardisoMKLSolverInterface =
     [ "MNUM_", "classIpopt_1_1PardisoMKLSolverInterface.html#a335a5ba0366a8780fbe1fb86fd0a602b", null ],
     [ "MTYPE_", "classIpopt_1_1PardisoMKLSolverInterface.html#a0dec5f4fb385b6cfa396cca7f361e128", null ],
     [ "IPARM_", "classIpopt_1_1PardisoMKLSolverInterface.html#a89e489b526dfa9a63271c541799fd184", null ],
-    [ "DPARM_", "classIpopt_1_1PardisoMKLSolverInterface.html#a996adf94dc1812484d04653665aef920", null ],
     [ "MSGLVL_", "classIpopt_1_1PardisoMKLSolverInterface.html#ac0b9e9b088066441fbc07938897f276b", null ],
     [ "debug_last_iter_", "classIpopt_1_1PardisoMKLSolverInterface.html#a0763b8b0c26428f98dcac9ac33433a86", null ],
     [ "debug_cnt_", "classIpopt_1_1PardisoMKLSolverInterface.html#af241ddd1dc69cc28683de898785e067c", null ]

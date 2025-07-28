@@ -50,6 +50,7 @@ var classIpopt_1_1FilterLSAcceptor =
     [ "reference_theta_", "classIpopt_1_1FilterLSAcceptor.html#aa84d577246a9d5ace1c4ec9593525917", null ],
     [ "reference_barr_", "classIpopt_1_1FilterLSAcceptor.html#abcbd71f2d20304904f107a78c91c7546", null ],
     [ "reference_gradBarrTDelta_", "classIpopt_1_1FilterLSAcceptor.html#a45cb621b188d3ba82f9d16a0f81c5f22", null ],
+    [ "reference_initialized_", "classIpopt_1_1FilterLSAcceptor.html#ab0f645c1e6e0100f69d75f7bbc44edeb", null ],
     [ "watchdog_theta_", "classIpopt_1_1FilterLSAcceptor.html#a5a5eb681493d78fc5aaea713903953f7", null ],
     [ "watchdog_barr_", "classIpopt_1_1FilterLSAcceptor.html#abfe9c306944a494348bb93295e9eabad", null ],
     [ "watchdog_gradBarrTDelta_", "classIpopt_1_1FilterLSAcceptor.html#a3430a4835d477467a49875ca4f68ce57", null ],

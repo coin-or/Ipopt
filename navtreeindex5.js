@@ -1,5 +1,6 @@
 var NAVTREEINDEX5 =
 {
+"classIpopt_1_1CGPenaltyData.html#ac5754c87ea201489f94bc3de5b1fe7d5":[1,0,0,12,47],
 "classIpopt_1_1CGPenaltyData.html#ac5e7498173de1c11129713647d80cdae":[1,0,0,12,40],
 "classIpopt_1_1CGPenaltyData.html#acc9a6f88285d4f7dee774029e35a1f3d":[1,0,0,12,13],
 "classIpopt_1_1CGPenaltyData.html#ad6b1bc2be8e81526a72b4f8cf5b37fe2":[1,0,0,12,15],
@@ -248,6 +249,5 @@ var NAVTREEINDEX5 =
 "classIpopt_1_1CompoundVector.html#a0f84e3ffcd9659dcd4ecb4038b365947":[1,0,0,20,21],
 "classIpopt_1_1CompoundVector.html#a10ce2480047e1d8bb2ab317747f28fe2":[1,0,0,20,45],
 "classIpopt_1_1CompoundVector.html#a23fe9f85d94a98f3de2d9d618a5c140d":[1,0,0,20,13],
-"classIpopt_1_1CompoundVector.html#a2fccf227bb3be59d7eae4453fbabc905":[1,0,0,20,1],
-"classIpopt_1_1CompoundVector.html#a3048057b020cf29c024afa7acccca441":[1,0,0,20,39]
+"classIpopt_1_1CompoundVector.html#a2fccf227bb3be59d7eae4453fbabc905":[1,0,0,20,1]
 };

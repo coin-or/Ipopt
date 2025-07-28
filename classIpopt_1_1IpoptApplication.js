@@ -28,6 +28,7 @@ var classIpopt_1_1IpoptApplication =
     [ "RethrowNonIpoptException", "classIpopt_1_1IpoptApplication.html#a83e1b7a32982852aee98f8a43e3e77a6", null ],
     [ "RegisterOptions", "classIpopt_1_1IpoptApplication.html#afa9569b07b3cec161c3d998e0fc520ba", null ],
     [ "RegisterAllIpoptOptions", "classIpopt_1_1IpoptApplication.html#a3443b7f853306eb53e2eacfda4b5ea5b", null ],
+    [ "Version", "classIpopt_1_1IpoptApplication.html#a21a7604e32f394a3d3c51961c82bb375", null ],
     [ "operator=", "classIpopt_1_1IpoptApplication.html#a033490380981d0d044d7de3d002ae8ac", null ],
     [ "call_optimize", "classIpopt_1_1IpoptApplication.html#a2b3fcfc4161373089bef48e6e623e29a", null ],
     [ "read_params_dat_", "classIpopt_1_1IpoptApplication.html#a9c834ca864a8b3e1a50de000dd4e3332", null ],

@@ -39,7 +39,7 @@ MathJax.Hub.Config({
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.14.17</span-->
+   &#160;<!--span id="projectnumber">3.14.18</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -1839,6 +1839,11 @@ The Java Interface JIpopt</h2>
 <div class="line">   {</div>
 <div class="line">      <span class="comment">// Create the problem</span></div>
 <div class="line">      HS071 hs071 = <span class="keyword">new</span> HS071();</div>
+<div class="line"> </div>
+<div class="line">      <span class="comment">// Get and print the Ipopt version</span></div>
+<div class="line">      <span class="keywordtype">int</span> version[] = <span class="keyword">new</span> <span class="keywordtype">int</span>[3];</div>
+<div class="line">      hs071.getVersion(version);</div>
+<div class="line">      System.out.println(<span class="stringliteral">&quot;Ipopt version: &quot;</span> + version[0] + <span class="stringliteral">&quot;.&quot;</span> + version[1] + <span class="stringliteral">&quot;.&quot;</span> + version[2]);</div>
 <div class="line"> </div>
 <div class="line">      <span class="comment">// Set some options</span></div>
 <div class="line">      <span class="comment">// hs071.setNumericOption(&quot;tol&quot;,1E-7);</span></div>

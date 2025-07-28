@@ -1,5 +1,7 @@
 var NAVTREEINDEX8 =
 {
+"classIpopt_1_1GenKKTSolverInterface.html#a11e8b46a72275fc25f870e924db3ff3a":[1,0,0,46,3],
+"classIpopt_1_1GenKKTSolverInterface.html#a3f9c2a063357bb95a66fbee6607e7640":[1,0,0,46,4],
 "classIpopt_1_1GenKKTSolverInterface.html#a4e40b8f8046b588ef3f9c703dd0a35f9":[1,0,0,46,2],
 "classIpopt_1_1GenKKTSolverInterface.html#a84938b57266632f66530b67b86b9015f":[1,0,0,46,5],
 "classIpopt_1_1GenKKTSolverInterface.html#aa96d7e87f2b0eb54015a8a5ef44ed002":[1,0,0,46,6],
@@ -247,7 +249,5 @@ var NAVTREEINDEX8 =
 "classIpopt_1_1InexactLSAcceptor.html#ad1ce568deada87cf3aee277b2cbbfe23":[1,0,0,59,25],
 "classIpopt_1_1InexactLSAcceptor.html#ad62c9f3d376c24e4496f1a712346d941":[1,0,0,59,1],
 "classIpopt_1_1InexactLSAcceptor.html#add7635a0c6b4acfd1180f576ffc904ca":[1,0,0,59,21],
-"classIpopt_1_1InexactLSAcceptor.html#ae398c0c8b111df00695aaf9ccc24cecd":[1,0,0,59,23],
-"classIpopt_1_1InexactLSAcceptor.html#aeb39c5823cf2a05f9c939efc23ece6c2":[1,0,0,59,29],
-"classIpopt_1_1InexactLSAcceptor.html#aed27ed7f9098f2cdaecfcf78c57a946a":[1,0,0,59,45]
+"classIpopt_1_1InexactLSAcceptor.html#ae398c0c8b111df00695aaf9ccc24cecd":[1,0,0,59,23]
 };

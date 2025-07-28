@@ -22,6 +22,7 @@ var IpStdCInterface_8h =
     [ "IpoptSolve", "IpStdCInterface_8h.html#a5a68928c505f008c1245088bca5b7b16", null ],
     [ "GetIpoptCurrentIterate", "IpStdCInterface_8h.html#acf68350650b7a893061e110ab0e9264f", null ],
     [ "GetIpoptCurrentViolations", "IpStdCInterface_8h.html#ae505cff0e907b9049062f665dadd8be9", null ],
+    [ "GetIpoptVersion", "IpStdCInterface_8h.html#a4a363c40077cb78d1637967f7459fb77", null ],
     [ "Number", "IpStdCInterface_8h.html#ab974f23c40ccaad0dacd611e3f4885e9", null ],
     [ "Index", "IpStdCInterface_8h.html#ac3aa63858b3377c5aaf789a43e5b47b5", null ],
     [ "Int", "IpStdCInterface_8h.html#a981fcddf5a1e9bbdc3d71ef0f994259b", null ]

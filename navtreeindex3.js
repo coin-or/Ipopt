@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"SensBacksolver_8hpp.html":[2,0,0,0,1,2],
 "SensBacksolver_8hpp_source.html":[2,0,0,0,1,2],
 "SensBuilder_8hpp.html":[2,0,0,0,1,3],
 "SensBuilder_8hpp.html#ad00d34c37128c8a05abc0561539594e4":[2,0,0,0,1,3,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "classIpopt_1_1AmplTNLP.html#a5bf35981f12a6386e5f823fe3b99f299":[1,0,0,5,1],
 "classIpopt_1_1AmplTNLP.html#a5cfa70d32b5ddfb565347f8c479462b1":[1,0,0,5,41],
 "classIpopt_1_1AmplTNLP.html#a5f110edd912d943a85f3af2d7bb98bb3":[1,0,0,5,18],
-"classIpopt_1_1AmplTNLP.html#a5f4d2007a55884bb21643cfb82988ce0":[1,0,0,5,45],
-"classIpopt_1_1AmplTNLP.html#a60b0eb2bb08619261e4d0e292ad0e854":[1,0,0,5,16]
+"classIpopt_1_1AmplTNLP.html#a5f4d2007a55884bb21643cfb82988ce0":[1,0,0,5,45]
 };

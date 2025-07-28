@@ -39,7 +39,7 @@ MathJax.Hub.Config({
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.14.17</span-->
+   &#160;<!--span id="projectnumber">3.14.18</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -186,6 +186,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9c67cda248766e9f66d749fa99f432a7" id="r_a9c67cda248766e9f66d749fa99f432a7"><td class="memItemLeft" align="right" valign="top">boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classorg_1_1coinor_1_1Ipopt.html#a9c67cda248766e9f66d749fa99f432a7">get_list_of_nonlinear_variables</a> (int num_nonlin_vars, int[] pos_nonlin_vars)</td></tr>
 <tr class="memdesc:a9c67cda248766e9f66d749fa99f432a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">When LBFGS hessian approximation is used, this method should be overloaded.  <br /></td></tr>
 <tr class="separator:a9c67cda248766e9f66d749fa99f432a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa88021b950e3db97639ebbe1d1bf80f1" id="r_aa88021b950e3db97639ebbe1d1bf80f1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classorg_1_1coinor_1_1Ipopt.html#aa88021b950e3db97639ebbe1d1bf80f1">getVersion</a> (int[] version)</td></tr>
+<tr class="memdesc:aa88021b950e3db97639ebbe1d1bf80f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get version of <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> library.  <br /></td></tr>
+<tr class="separator:aa88021b950e3db97639ebbe1d1bf80f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -282,6 +285,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a1e0e0ec4d50fee0fb749a9005449a6ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac63a8698afbd446181712bfd86e08f9c" id="r_ac63a8698afbd446181712bfd86e08f9c"><td class="memItemLeft" align="right" valign="top">native boolean&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classorg_1_1coinor_1_1Ipopt.html#ac63a8698afbd446181712bfd86e08f9c">GetCurrViolations</a> (long <a class="el" href="classorg_1_1coinor_1_1Ipopt.html#aaccf6965122e89d86f4ac57d950787e7">ipopt</a>, long ip_data, long ip_cq, boolean scaled, int n, double x_L_violation[], double x_U_violation[], double compl_x_L[], double compl_x_U[], double grad_lag_x[], int m, double nlp_constraint_violation[], double compl_g[])</td></tr>
 <tr class="separator:ac63a8698afbd446181712bfd86e08f9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a865f459efcc923bbdb0895f5863854" id="r_a0a865f459efcc923bbdb0895f5863854"><td class="memItemLeft" align="right" valign="top">native void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classorg_1_1coinor_1_1Ipopt.html#a0a865f459efcc923bbdb0895f5863854">GetVersion</a> (int version[])</td></tr>
+<tr class="separator:a0a865f459efcc923bbdb0895f5863854"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -359,7 +364,7 @@ Tong Kewei, BeiHang University </dd></dl>
 <p>Creates a new NLP Solver using a default as the DLL name. </p>
 <p>This expects the the <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> DLL can somehow be found and that it has the canoncial name "ipopt" (on Unix, et.al.) or "ipopt-3" or "ipopt-0" (on Windows). </p>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00193">193</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00198">198</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -396,7 +401,7 @@ Tong Kewei, BeiHang University </dd></dl>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00239">239</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00244">244</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -444,7 +449,7 @@ Tong Kewei, BeiHang University </dd></dl>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00252">252</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00257">257</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -920,6 +925,32 @@ Tong Kewei, BeiHang University </dd></dl>
           <td></td>
           <td>)</td>
           <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0a865f459efcc923bbdb0895f5863854" name="a0a865f459efcc923bbdb0895f5863854"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a865f459efcc923bbdb0895f5863854">&#9670;&#160;</a></span>GetVersion()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">native void org.coinor.Ipopt.GetVersion </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>version</em>[]</td><td>)</td>
+          <td></td>
         </tr>
       </table>
   </td>
@@ -1519,7 +1550,7 @@ Tong Kewei, BeiHang University </dd></dl>
 <p>Programmers must call the dispose method when finished using a <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> object.</p>
 <p>An JIpopt object can be reused to solve different problems by calling again <code><a class="el" href="">create(int, int, int, int, int)</a></code>. In this case, you should call the dispose method only when you finished with the object and it is not needed anymore. </p>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00475">475</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00480">480</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -1546,7 +1577,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00486">486</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00491">491</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -1616,7 +1647,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true on success, otherwise false </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00503">503</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00508">508</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -1665,7 +1696,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>false if the option could not be set (e.g., if keyword is unknown) </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00541">541</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00546">546</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -1714,7 +1745,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>false if the option could not be set (e.g., if keyword is unknown) </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00561">561</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00566">566</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -1763,7 +1794,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>false if the option could not be set (e.g., if keyword is unknown) </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00581">581</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00586">586</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -1795,7 +1826,7 @@ Tong Kewei, BeiHang University </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>the solve status</dd></dl>
 <dl class="section see"><dt>See also</dt><dd>getStatus() </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00603">603</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00608">608</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -1903,7 +1934,7 @@ Tong Kewei, BeiHang University </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>Whether <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> has successfully filled the given arrays </dd></dl>
 <dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00640">640</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00645">645</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2027,7 +2058,7 @@ Tong Kewei, BeiHang University </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>Whether <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> has successfully filled the given arrays </dd></dl>
 <dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00689">689</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00694">694</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2057,7 +2088,7 @@ Tong Kewei, BeiHang University </dd></dl>
 <p>Gives primal variable values at final point. </p>
 <dl class="section return"><dt>Returns</dt><dd>the primal variable values at the final point. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00710">710</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00715">715</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2087,7 +2118,7 @@ Tong Kewei, BeiHang University </dd></dl>
 <p>Gives objective function value at final point. </p>
 <dl class="section return"><dt>Returns</dt><dd>the final value of the objective function. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00718">718</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00723">723</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2118,7 +2149,7 @@ Tong Kewei, BeiHang University </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>the status of the solver.</dd></dl>
 <dl class="section see"><dt>See also</dt><dd>OptimizeNLP() </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00728">728</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00733">733</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2148,7 +2179,7 @@ Tong Kewei, BeiHang University </dd></dl>
 <p>Gives constraint function values at final point. </p>
 <dl class="section return"><dt>Returns</dt><dd>Returns the final values for the constraints functions. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00736">736</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00741">741</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2178,7 +2209,7 @@ Tong Kewei, BeiHang University </dd></dl>
 <p>Gives constraint dual multipliers in final point. </p>
 <dl class="section return"><dt>Returns</dt><dd>Returns the final multipliers for the constraints. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00744">744</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00749">749</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2208,7 +2239,7 @@ Tong Kewei, BeiHang University </dd></dl>
 <p>Gives dual multipliers for variable lower bounds in final point. </p>
 <dl class="section return"><dt>Returns</dt><dd>Returns the final multipliers for the variable lower bounds. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00752">752</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00757">757</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2238,7 +2269,7 @@ Tong Kewei, BeiHang University </dd></dl>
 <p>Gives dual multipliers for variable upper bounds in final point. </p>
 <dl class="section return"><dt>Returns</dt><dd>Returns the final multipliers for the variable upper bounds. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00760">760</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00765">765</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2349,7 +2380,7 @@ Tong Kewei, BeiHang University </dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>If this method returns false, Ipopt will terminate with the User_Requested_Stop status.</dd></dl>
 <p>It is not required to implement (overload) this method. The default implementation always returns true. </p><dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00789">789</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00794">794</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2426,7 +2457,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true on success, otherwise false </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00821">821</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00826">826</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2456,7 +2487,7 @@ Tong Kewei, BeiHang University </dd></dl>
 <p>When LBFGS hessian approximation is used, this method should be overloaded. </p>
 <dl class="section return"><dt>Returns</dt><dd>number of nonlinear variables, a negative value indicates that all variables are negative </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00836">836</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00841">841</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2504,7 +2535,45 @@ Tong Kewei, BeiHang University </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true on success, otherwise false </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00848">848</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00853">853</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+
+</div>
+</div>
+<a id="aa88021b950e3db97639ebbe1d1bf80f1" name="aa88021b950e3db97639ebbe1d1bf80f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa88021b950e3db97639ebbe1d1bf80f1">&#9670;&#160;</a></span>getVersion()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void org.coinor.Ipopt.getVersion </td>
+          <td>(</td>
+          <td class="paramtype">int[]&#160;</td>
+          <td class="paramname"><em>version</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get version of <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> library. </p>
+<p>Gives the value of IPOPT_VERSION_MAJOR, IPOPT_VERSION_MINOR, and IPOPT_VERSION_RELEASE that were used when the <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> library was build.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">version</td><td>int[3] to store major, minor, and release version number </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section since"><dt>Since</dt><dd>3.14.18 </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00868">868</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2531,7 +2600,7 @@ Tong Kewei, BeiHang University </dd></dl>
 
 <p>Use C index style for iRow and jCol vectors. </p>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00128">128</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00133">133</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2557,7 +2626,7 @@ Tong Kewei, BeiHang University </dd></dl>
 
 <p>Use FORTRAN index style for iRow and jCol vectors. </p>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00131">131</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00136">136</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2581,7 +2650,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00134">134</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00139">139</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2605,7 +2674,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00135">135</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00140">140</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2629,7 +2698,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00136">136</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00141">141</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2653,7 +2722,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00137">137</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00142">142</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2677,7 +2746,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00138">138</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00143">143</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2701,7 +2770,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00139">139</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00144">144</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2725,7 +2794,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00140">140</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00145">145</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2749,7 +2818,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00141">141</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00146">146</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2773,7 +2842,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00142">142</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00147">147</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2797,7 +2866,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00143">143</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00148">148</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2822,7 +2891,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </div><div class="memdoc">
 <dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00144">144</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00149">149</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2846,7 +2915,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00145">145</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00150">150</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2870,7 +2939,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00146">146</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00151">151</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2894,7 +2963,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00147">147</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00152">152</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2918,7 +2987,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00148">148</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00153">153</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2942,7 +3011,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00149">149</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00154">154</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2966,7 +3035,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00150">150</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00155">155</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -2990,7 +3059,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00151">151</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00156">156</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -3014,7 +3083,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00152">152</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00157">157</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -3039,7 +3108,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </div><div class="memdoc">
 <dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00155">155</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00160">160</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -3064,7 +3133,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </div><div class="memdoc">
 <dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00156">156</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00161">161</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -3090,7 +3159,7 @@ Tong Kewei, BeiHang University </dd></dl>
 
 <p>Pointer to the native optimization object. </p>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00159">159</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00164">164</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -3116,7 +3185,7 @@ Tong Kewei, BeiHang University </dd></dl>
 
 <p>Callback arguments. </p>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00162">162</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00167">167</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -3140,7 +3209,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00163">163</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00168">168</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -3164,7 +3233,7 @@ Tong Kewei, BeiHang University </dd></dl>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00164">164</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00169">169</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -3190,7 +3259,7 @@ Tong Kewei, BeiHang University </dd></dl>
 
 <p>Final value of variable values. </p>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00167">167</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00172">172</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -3216,7 +3285,7 @@ Tong Kewei, BeiHang University </dd></dl>
 
 <p>Final value of objective function. </p>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00170">170</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00175">175</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -3242,7 +3311,7 @@ Tong Kewei, BeiHang University </dd></dl>
 
 <p>Values of constraint at final point. </p>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00173">173</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00178">178</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -3268,7 +3337,7 @@ Tong Kewei, BeiHang University </dd></dl>
 
 <p>Final multipliers for lower variable bounds. </p>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00176">176</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00181">181</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -3294,7 +3363,7 @@ Tong Kewei, BeiHang University </dd></dl>
 
 <p>Final multipliers for upper variable bounds. </p>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00179">179</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00184">184</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -3320,7 +3389,7 @@ Tong Kewei, BeiHang University </dd></dl>
 
 <p>Final multipliers for constraints. </p>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00182">182</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00187">187</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
@@ -3346,7 +3415,7 @@ Tong Kewei, BeiHang University </dd></dl>
 
 <p>Status returned by the solver. </p>
 
-<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00185">185</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Ipopt_8java_source.html#l00190">190</a> of file <a class="el" href="Ipopt_8java_source.html">Ipopt.java</a>.</p>
 
 </div>
 </div>
