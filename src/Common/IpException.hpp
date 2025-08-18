@@ -14,6 +14,17 @@
 #include "IpUtils.hpp"
 #include "IpJournalist.hpp"
 
+/* for the exception classes, __attribute__((__visibility__("default"))) needs to be used
+ * also by libraries that link against an Ipopt shared library on macOS/clang,
+ * since otherwise the exceptions cannot be recognized by a catch() in the user code
+ * (https://stackoverflow.com/questions/11913151/catching-derived-exceptions-types-fails-on-clang-macos-x)
+ */
+#if defined(__GNUC__) && __GNUC__ >= 4
+#define IPOPTEXCEPTION_EXPORT __attribute__((__visibility__("default")))
+#else
+#define IPOPTEXCEPTION_EXPORT IPOPTLIB_EXPORT
+#endif
+
 namespace Ipopt
 {
 
@@ -54,7 +65,7 @@ namespace Ipopt
  * Journalist, using the level J_ERROR and the category J_MAIN.
  *
  */
-class IPOPTLIB_EXPORT IpoptException
+class IPOPTEXCEPTION_EXPORT IpoptException
 {
 public:
    /**@name Constructors/Destructors */
@@ -141,7 +152,7 @@ private:
   }
 
 #define DECLARE_STD_EXCEPTION(__except_type) \
-    class IPOPTLIB_EXPORT  __except_type : public Ipopt::IpoptException \
+    class IPOPTEXCEPTION_EXPORT  __except_type : public Ipopt::IpoptException \
     { \
     public: \
       __except_type(const std::string& msg, const std::string& fname, Ipopt::Index line) \
