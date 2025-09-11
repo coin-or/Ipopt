@@ -63,9 +63,7 @@ static void MPIinit(void)
    MPI_Initialized(&mpi_initialized);
    if( !mpi_initialized )
    {
-      int argc = 1;
-      char** argv = NULL;
-      MPI_Init(&argc, &argv);
+      MPI_Init(NULL, NULL);
    }
 }
 
