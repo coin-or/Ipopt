@@ -532,6 +532,10 @@ ESymSolverStatus SpralSolverInterface::MultiSolve(
 
       if( control_.ordering == 2 && control_.scaling == 3 && rescale_ )
       {
+         // Fully invalidate the previous factorization. Otherwise, spral_ssids_analyse_ptr32 is going to
+         // free only the old akeep_, but does not see the old fkeep_ that shares some of its data.
+         spral_ssids_free(&akeep_, &fkeep_);
+
          if( HaveIpData() )
          {
             IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
@@ -675,6 +679,13 @@ ESymSolverStatus SpralSolverInterface::MultiSolve(
    }
    else
    {
+      if( !fkeep_ )
+      {
+         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "In SpralSolverInterface::Factorization: "
+                                                      "Attempting to solve again after failed factorization of singular system\n");
+         return SYMSOLVER_SINGULAR;
+      }
+
       if( HaveIpData() )
       {
          IpData().TimingStats().LinearSystemBackSolve().Start();

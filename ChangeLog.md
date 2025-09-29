@@ -13,6 +13,9 @@ More detailed information about incremental changes can be found in the
   on macOS with clang when Ipopt or the other library was build with `-fvisibility=hidden`.
 - Call MPI_Init() with NULL instead of dummy arguments to fix SIGSEGV with MPICH >= 4.3.1
   [#846, by Shengqi Chen].
+- Fixed a use-after-free in Spral interface where attempting to solve a second system with
+  the same structurally singular matrix would end up trying to use an old numeric factorization
+  using data from an already freed symbolic factorization [#848, by Kevin Kofler].
 
 ### 3.14.19 (2025-07-30)
 
