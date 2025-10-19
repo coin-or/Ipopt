@@ -72,6 +72,9 @@
 #ifdef IPOPT_HAS_MUMPS
 # include "IpMumpsSolverInterface.hpp"
 #endif
+#ifdef IPOPT_HAS_CUDSS
+# include "IpCuDSSSolverInterface.hpp"
+#endif
 
 namespace Ipopt
 {
