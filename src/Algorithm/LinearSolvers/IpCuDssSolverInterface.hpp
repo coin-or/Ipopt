@@ -90,7 +90,7 @@ class cuDSSSolverInterface : public SparseSymLinearSolverInterface
     int nThreads_ = -1;
 
     /** Hybrid execute mode. */
-    int hybridMode_ = 0;
+    const int hybridMode_ = 0;
 
     /** Minimum number of levels for the nested dissection reordering. */
     int ndNLevels_ = 10;
@@ -108,7 +108,7 @@ class cuDSSSolverInterface : public SparseSymLinearSolverInterface
     const int nGPUs = 1;
 
     /** Device list (MG or MGMN) */
-    int* listGPUs_ = NULL;
+    const int* listGPUs_ = NULL;
 
     /** Schur complement mode. */
     int schurMode_ = 0;
