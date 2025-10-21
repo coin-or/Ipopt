@@ -30,176 +30,197 @@ namespace Ipopt
  */
 class cuDSSSolverInterface : public SparseSymLinearSolverInterface 
 {
-    private:
+  private:
 
-    /** @name Information about cuDSS solver */
-    ///@{
-    /** cuDSS status */
-    cudssStatus_t status_;
-    ///@}
+      /** @name Information about cuDSS solver */
+      ///@{
+      /** cuDSS status */
+      cudssStatus_t status_;
 
-    /** @name Information about cuDSS algorithms */
-    ///@{
-    /** Algorithm for the Reordering phase */
-    cudssAlgType_t algReorder_ = CUDSS_ALG_DEFAULT;
+      /** cuDSS handle */
+      cudssHandle_t handle_;
 
-    /** Algorithm for the Factorization phase */
-    cudssAlgType_t algFactor_ = CUDSS_ALG_DEFAULT;
+      /** CUDA/cuDSS stream */
+      cudaStream_t stream_;
 
-    /** Algorithm for the Solve phase */
-    const cudssAlgType_t algSolve_ = CUDSS_ALG_DEFAULT;
+      /** cuDSS solver configuration */
+      cudssConfig_t config_;
 
-    /** Algorithm for the Pivot Epsilon calculation */
-    cudssAlgType_t algPivotEps_ = CUDSS_ALG_DEFAULT;
+      /** cuDSS data */
+      cudssData_t data_;
+      ///@}
 
-    /** Use Matching Algorithm */
-    int useMatching_ = 0;
+      /** @name Information about cuDSS algorithms */
+      ///@{
+      /** Algorithm for the Reordering phase */
+      cudssAlgType_t algReorder_ = CUDSS_ALG_DEFAULT;
 
-    /** Algorithm for Matching calculation */
-    cudssAlgType_t algMatching_ = CUDSS_ALG_DEFAULT;
+      /** Algorithm for the Factorization phase */
+      cudssAlgType_t algFactor_ = CUDSS_ALG_DEFAULT;
 
-    /** Potential modificator on the system matrix (e.g. transpose or conjugate transpose) */
-    const int solveMode_ = 0;
+      /** Algorithm for the Solve phase */
+      const cudssAlgType_t algSolve_ = CUDSS_ALG_DEFAULT;
 
-    /** Number of steps during the iterative refinement */
-    int nIterSteps_ = 0;
+      /** Algorithm for the Pivot Epsilon calculation */
+      cudssAlgType_t algPivotEps_ = CUDSS_ALG_DEFAULT;
 
-    /** Pivoting type definition */
-    cudssPivotType_t pivotType_ = CUDSS_PIVOT_COL;
+      /** Use Matching Algorithm */
+      int useMatching_ = 0;
 
-    /** Pivoting threshold */
-    double pivotThr_ = 1.0f;
+      /** Algorithm for Matching calculation */
+      cudssAlgType_t algMatching_ = CUDSS_ALG_DEFAULT;
 
-    /** Pivoting epsilon */
-    #ifdef IPOPT_SINGLE
-    double pivotEps_ = 1e-5;
-    #else
-    double pivotEps_ = 1e-13;
-    #endif
+      /** Potential modificator on the system matrix (e.g. transpose or conjugate transpose) */
+      const int solveMode_ = 0;
 
-    /** Upper limit on the number of nonzero entries in LU factors. */
-    Index maxLUnnz_ = -1;
+      /** Number of steps during the iterative refinement */
+      int nIterSteps_ = 0;
 
-    /** Hybrid mode memory. */
-    const int memMode_ = 0;
+      /** Pivoting type definition */
+      cudssPivotType_t pivotType_ = CUDSS_PIVOT_COL;
 
-    /** Enable or disable usage of cudaHostRegister() by cuDSS hybrid memory mode. */
-    const int useCUDAregMem_ = 1;
+      /** Pivoting threshold */
+      double pivotThr_ = 1.0f;
 
-    /** Number of threads to be used by cuDSS in MT mode. */
-    int nThreads_ = -1;
+      /** Pivoting epsilon */
+      #ifdef IPOPT_SINGLE
+      double pivotEps_ = 1e-5;
+      #else
+      double pivotEps_ = 1e-13;
+      #endif
 
-    /** Hybrid execute mode. */
-    const int hybridMode_ = 0;
+      /** Upper limit on the number of nonzero entries in LU factors. */
+      Index maxLUnnz_ = -1;
 
-    /** Minimum number of levels for the nested dissection reordering. */
-    int ndNLevels_ = 10;
+      /** Hybrid mode memory. */
+      const int memMode_ = 0;
 
-    /** The number of matrices in a uniform batch of systems to be processed by cuDSS. */
-    const int uBatchSize_ = 1;
+      /** Enable or disable usage of cudaHostRegister() by cuDSS hybrid memory mode. */
+      const int useCUDAregMem_ = 1;
 
-    /** -1 or a 0-based index of matrix in a uniform batch which will be processed during factorization or solve phase. */
-    const int uBatchIdx = -1;
+      /** Number of threads to be used by cuDSS in MT mode. */
+      int nThreads_ = -1;
 
-    /** Use superpanel optimization */
-    int useSP_ = 1;
+      /** Hybrid execute mode. */
+      const int hybridMode_ = 0;
 
-    /** Number of devices (MG or MGMN) */
-    const int nGPUs = 1;
+      /** Minimum number of levels for the nested dissection reordering. */
+      int ndNLevels_ = 10;
 
-    /** Device list (MG or MGMN) */
-    const int* listGPUs_ = NULL;
+      /** The number of matrices in a uniform batch of systems to be processed by cuDSS. */
+      const int uBatchSize_ = 1;
 
-    /** Schur complement mode. */
-    int schurMode_ = 0;
+      /** -1 or a 0-based index of matrix in a uniform batch which will be processed during factorization or solve phase. */
+      const int uBatchIdx = -1;
 
-    /** Deterministic mode. */
-    int deterministic_ = 0;
-    ///@}
+      /** Use superpanel optimization */
+      int useSP_ = 1;
 
-    /** @name Information about the matrix */
-    ///@{
-    /** Number of rows and columns of the matrix */
-    Index dim_;
+      /** Number of devices (MG or MGMN) */
+      const int nGPUs = 1;
 
-    /** Number of nonzeros of the matrix in triplet representation. */
-    Index nonzeros_;
+      /** Device list (MG or MGMN) */
+      const int* listGPUs_ = NULL;
 
-    /** Array for storing the values of the matrix. */
-    Number* a_;
+      /** Schur complement mode. */
+      int schurMode_ = 0;
 
-    /** Matrix format definition */
-    const cudssMatrixFormat_t matFormat_ = CUDSS_MFORMAT_CSR;
+      /** Deterministic mode. */
+      int deterministic_ = 0;
+      ///@}
 
-    /** Matrix type definition */
-    const cudssMatrixType_t matType_ = CUDSS_MTYPE_GENERAL;
+      /** @name Information about the matrix */
+      ///@{
+      /** Number of rows and columns of the matrix */
+      Index dim_;
 
-    /** Matrix view type definition */
-    const cudssMatrixViewType_t matViewType_ = CUDSS_MVIEW_UPPER;
+      /** Number of nonzeros of the matrix in triplet representation. */
+      Index nonzeros_;
 
-    /** Indexing base definition */
-    const cudssIndexBase_t matType_ = CUDSS_BASE_ZERO;
-    ///@}
+      /** Array for storing the values of the matrix on the host. */
+      Number* aH_;
 
-    public:
+      /** Array for storing the values of the matrix on the device. */
+      Number* aD_;
 
-    /** @name Constructor/Destructor */
-    ///@{
-    /** Constructor */
-    cuDSSSolverInterface();
+      /** Matrix format definition */
+      const cudssMatrixFormat_t matFormat_ = CUDSS_MFORMAT_CSR;
 
-    /** Destructor */
-    ~cuDSSSolverInterface();
-    ///@}
+      /** Matrix type definition */
+      const cudssMatrixType_t matType_ = CUDSS_MTYPE_GENERAL;
 
-    bool InitializeImpl(
-      const OptionsList& options,
-      const std::string& prefix
-    );
+      /** Matrix view type definition */
+      const cudssMatrixViewType_t matViewType_ = CUDSS_MVIEW_UPPER;
 
-    ESymSolverStatus InitializeStructure(
-      Index        dim,
-      Index        nonzeros,
-      const Index* ia,
-      const Index* ja
-    );
+      /** Indexing base definition */
+      const cudssIndexBase_t matType_ = CUDSS_BASE_ZERO;
+      ///@}
 
-    Number* GetValuesArrayPtr();
+  public:
 
-    ESymSolverStatus MultiSolve(
-      bool         new_matrix,
-      const Index* ia,
-      const Index* ja,
-      Index        nrhs,
-      Number*      rhs_vals,
-      bool         check_NegEVals,
-      Index        numberOfNegEVals
-    );
+      /** @name Constructor/Destructor */
+      ///@{
+      /** Constructor */
+      cuDSSSolverInterface();
 
-    Index NumberOfNegEVals() const;
+      /** Destructor */
+      ~cuDSSSolverInterface();
+      ///@}
 
-    bool IncreaseQuality();
+      bool InitializeImpl(
+        const OptionsList& options,
+        const std::string& prefix
+      );
 
-    bool ProvidesInertia() const;
+      ESymSolverStatus InitializeStructure(
+        Index        dim,
+        Index        nonzeros,
+        const Index* ia,
+        const Index* ja
+      );
 
-    EMatrixFormat MatrixFormat() const
-    {
-      return CSR_Format_0_Offset;
-    }
+      Number* GetValuesArrayPtr();
 
-    bool ProvidesDegeneracyDetection() const;
+      ESymSolverStatus MultiSolve(
+        bool         new_matrix,
+        const Index* ia,
+        const Index* ja,
+        Index        nrhs,
+        Number*      rhs_vals,
+        bool         check_NegEVals,
+        Index        numberOfNegEVals
+      );
 
-    ESymSolverStatus DetermineDependentRows(
-      const Index*      /*ia*/,
-      const Index*      /*ja*/,
-      std::list<Index>& /*c_deps*/
-    );
+      Index NumberOfNegEVals() const;
 
-    static void RegisterOptions(
-      SmartPtr<RegisteredOptions> roptions
-    );
+      virtual bool IncreaseQuality()
+      {
+        return false;
+      }
 
-}
+      virtual bool ProvidesInertia() const
+      {
+        return true;
+      }
+
+      EMatrixFormat MatrixFormat() const
+      {
+        return CSR_Format_0_Offset;
+      }
+
+      bool ProvidesDegeneracyDetection() const;
+
+      ESymSolverStatus DetermineDependentRows(
+        const Index*      /*ia*/,
+        const Index*      /*ja*/,
+        std::list<Index>& /*c_deps*/
+      );
+
+      static void RegisterOptions(
+        SmartPtr<RegisteredOptions> roptions
+      );
+
+};
 
 }
 
