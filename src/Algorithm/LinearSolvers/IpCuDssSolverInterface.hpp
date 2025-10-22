@@ -137,11 +137,23 @@ class cuDSSSolverInterface : public SparseSymLinearSolverInterface
       /** Number of nonzeros of the matrix in triplet representation. */
       Index nonzeros_;
 
-      /** Array for storing the values of the matrix on the host. */
-      Number* aH_;
-
       /** Array for storing the values of the matrix on the device. */
       Number* aD_;
+
+      /** Pointer to the row indexes of the matrix on the device. */
+      Index* ia_;
+
+      /** Pointer to the column indexes of the matrix on the device. */
+      Index* ja_;
+
+      /** cuDSS Array for representing the matrix on the device. */
+      cudssMatrix_t a_;
+
+      /** cuDSS Array for representing the rhs on the device. */
+      cudssMatrix_t b_;
+
+      /** cuDSS Array for representing the solution on the device. */
+      cudssMatrix_t sol_;
 
       /** Matrix format definition */
       const cudssMatrixFormat_t matFormat_ = CUDSS_MFORMAT_CSR;
@@ -153,7 +165,7 @@ class cuDSSSolverInterface : public SparseSymLinearSolverInterface
       const cudssMatrixViewType_t matViewType_ = CUDSS_MVIEW_UPPER;
 
       /** Indexing base definition */
-      const cudssIndexBase_t matType_ = CUDSS_BASE_ZERO;
+      const cudssIndexBase_t matIndex_ = CUDSS_BASE_ZERO;
       ///@}
 
   public:
