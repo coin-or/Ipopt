@@ -27920,14 +27920,6 @@ fi
          esac
        fi
      fi
-
-
-      fi
-    else
-      { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: Check for cudss via pkg-config could not be performed as there is no pkg-config available. Consider installing pkg-config or provide appropriate values for --with-cudss-lflags." >&5
-printf "%s\n" "$as_me: WARNING: Check for cudss via pkg-config could not be performed as there is no pkg-config available. Consider installing pkg-config or provide appropriate values for --with-mumps-lflags." >&2;}
-      coin_has_cudss=no
-    fi
   fi
 
 
@@ -27943,10 +27935,6 @@ printf "%s\n" "$as_me: cudss_lflags is \"$cudss_lflags\"" >&6;}
 
     { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $coin_has_cudss" >&5
 printf "%s\n" "$coin_has_cudss" >&6; }
-  else
-    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $coin_has_cudss (COIN_SKIP_PROJECTS)" >&5
-printf "%s\n" "$coin_has_cudss (COIN_SKIP_PROJECTS)" >&6; }
-  fi
 
 
   if test "$coin_has_cudss" != yes ; then
