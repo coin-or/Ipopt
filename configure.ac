@@ -267,27 +267,20 @@ AM_CONDITIONAL([HAVE_WSMP],[test $have_wsmp = yes])
 # CUDSS #
 #########
 
-if test $intsize = 32 ; then
 AC_ARG_WITH([cudss],
-  [AS_HELP_STRING([--with-cudss],[specify cuDSS library (== 0.7.0) from developer.nvidia.com/cudss])],
-  [case "$withval" in
-     no)  have_cudss=no ;;  # so with_cudss=no
-     yes) AC_MSG_ERROR(["expected filename as argument for --with-cudss"]) ;;
-     *)   AC_DEFINE_UNQUOTED([PARDISO_LIB],["$withval"],[Name of Pardiso library from pardiso-project.org])
-          AC_MSG_NOTICE([Pardiso from pardiso-project.org specified as $withval])
-          have_cudss=yes
-          ;;
-   esac],
-   [have_cudss=no])
+            AS_HELP_STRING([--with-cudss],[specify cuDSS library]),
+            [have_cudss=yes; cudss_lflags=$withval],
+            [have_cudss=no])
+
+if test $have_cudss$precision$intsize = yesdouble32 ; then
+  AC_COIN_TRY_LINK([cudss],[$cudss_lflags],[],
+    [IPOPTLIB_LFLAGS="$cudss_lflags $IPOPTLIB_LFLAGS"
+     AC_DEFINE(IPOPT_HAS_CUDSS,1,[Define to 1 if cuDSS is available])
+    ],
+    [AC_MSG_ERROR([Symbol cuDSS not found with cuDSS flags $cuDSS_lflags. See config.log for details on failed checks.])])
 fi
 
-if test $have_cudss = yes ; then
-  AC_COIN_TRY_LINK([cudss],[$lapack_lflags],[$lapack_pcfiles],
-    [have_cudss=yes
-     AC_DEFINE(IPOPT_HAS_CUDSS,1,[Define to 1 if cuDSS is available])
-    ])
-fi
-AM_CONDITIONAL([HAVE_CUDSS],[test "$have_cudss" = yes])
+AM_CONDITIONAL([HAVE_CUDSS],[test $have_cudss = yes])
 
 #############################################################################
 #                             Stuff for examples                            #

@@ -2,7 +2,7 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// Authors: Antonio Cioffi                          2025-10-19
+// Authors: Antonio Cioffi  McLaren Automotive Ltd. 2025-10-19
 //          Carl Laird, Andreas Waechter     IBM    2004-03-17
 
 /* some useful links:
@@ -14,10 +14,10 @@
 
 #include "IpSparseSymLinearSolverInterface.hpp"
 #include "IpLibraryLoader.hpp"
-#include "IpTypes.h"
+#include "IpTypes.hpp"
 
-// NVIDIA CUDA and cuDSS libraries
-#include "cudss.h"
+// External library definitions for NVIDIA cuDSS for Ipopt
+#include "cuDSS_wrapper.h"
 
 namespace Ipopt 
 {
@@ -32,140 +32,10 @@ class cuDSSSolverInterface : public SparseSymLinearSolverInterface
 {
   private:
 
-      /** @name Information about cuDSS solver */
+      /** @name cuDSS structure containing configuration settings */
       ///@{
-      /** cuDSS status */
-      cudssStatus_t status_;
-
-      /** cuDSS handle */
-      cudssHandle_t handle_;
-
-      /** CUDA/cuDSS stream */
-      cudaStream_t stream_;
-
-      /** cuDSS solver configuration */
-      cudssConfig_t config_;
-
-      /** cuDSS data */
-      cudssData_t data_;
-      ///@}
-
-      /** @name Information about cuDSS algorithms */
-      ///@{
-      /** Algorithm for the Reordering phase */
-      cudssAlgType_t algReorder_ = CUDSS_ALG_DEFAULT;
-
-      /** Algorithm for the Factorization phase */
-      cudssAlgType_t algFactor_ = CUDSS_ALG_DEFAULT;
-
-      /** Algorithm for the Solve phase */
-      const cudssAlgType_t algSolve_ = CUDSS_ALG_DEFAULT;
-
-      /** Algorithm for the Pivot Epsilon calculation */
-      cudssAlgType_t algPivotEps_ = CUDSS_ALG_DEFAULT;
-
-      /** Use Matching Algorithm */
-      int useMatching_ = 0;
-
-      /** Algorithm for Matching calculation */
-      cudssAlgType_t algMatching_ = CUDSS_ALG_DEFAULT;
-
-      /** Potential modificator on the system matrix (e.g. transpose or conjugate transpose) */
-      const int solveMode_ = 0;
-
-      /** Number of steps during the iterative refinement */
-      int nIterSteps_ = 0;
-
-      /** Pivoting type definition */
-      cudssPivotType_t pivotType_ = CUDSS_PIVOT_COL;
-
-      /** Pivoting threshold */
-      double pivotThr_ = 1.0f;
-
-      /** Pivoting epsilon */
-      #ifdef IPOPT_SINGLE
-      double pivotEps_ = 1e-5;
-      #else
-      double pivotEps_ = 1e-13;
-      #endif
-
-      /** Upper limit on the number of nonzero entries in LU factors. */
-      Index maxLUnnz_ = -1;
-
-      /** Hybrid mode memory. */
-      const int memMode_ = 0;
-
-      /** Enable or disable usage of cudaHostRegister() by cuDSS hybrid memory mode. */
-      const int useCUDAregMem_ = 1;
-
-      /** Number of threads to be used by cuDSS in MT mode. */
-      int nThreads_ = -1;
-
-      /** Hybrid execute mode. */
-      const int hybridMode_ = 0;
-
-      /** Minimum number of levels for the nested dissection reordering. */
-      int ndNLevels_ = 10;
-
-      /** The number of matrices in a uniform batch of systems to be processed by cuDSS. */
-      const int uBatchSize_ = 1;
-
-      /** -1 or a 0-based index of matrix in a uniform batch which will be processed during factorization or solve phase. */
-      const int uBatchIdx = -1;
-
-      /** Use superpanel optimization */
-      int useSP_ = 1;
-
-      /** Number of devices (MG or MGMN) */
-      const int nGPUs = 1;
-
-      /** Device list (MG or MGMN) */
-      const int* listGPUs_ = NULL;
-
-      /** Schur complement mode. */
-      int schurMode_ = 0;
-
-      /** Deterministic mode. */
-      int deterministic_ = 0;
-      ///@}
-
-      /** @name Information about the matrix */
-      ///@{
-      /** Number of rows and columns of the matrix */
-      Index dim_;
-
-      /** Number of nonzeros of the matrix in triplet representation. */
-      Index nonzeros_;
-
-      /** Array for storing the values of the matrix on the device. */
-      Number* aD_;
-
-      /** Pointer to the row indexes of the matrix on the device. */
-      Index* ia_;
-
-      /** Pointer to the column indexes of the matrix on the device. */
-      Index* ja_;
-
-      /** cuDSS Array for representing the matrix on the device. */
-      cudssMatrix_t a_;
-
-      /** cuDSS Array for representing the rhs on the device. */
-      cudssMatrix_t b_;
-
-      /** cuDSS Array for representing the solution on the device. */
-      cudssMatrix_t sol_;
-
-      /** Matrix format definition */
-      const cudssMatrixFormat_t matFormat_ = CUDSS_MFORMAT_CSR;
-
-      /** Matrix type definition */
-      const cudssMatrixType_t matType_ = CUDSS_MTYPE_GENERAL;
-
-      /** Matrix view type definition */
-      const cudssMatrixViewType_t matViewType_ = CUDSS_MVIEW_UPPER;
-
-      /** Indexing base definition */
-      const cudssIndexBase_t matIndex_ = CUDSS_BASE_ZERO;
+      /** cuDSS Configuration Settings */
+      cuDSS_config_settings settings_;
       ///@}
 
   public:
