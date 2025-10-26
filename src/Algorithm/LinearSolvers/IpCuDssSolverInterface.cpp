@@ -13,7 +13,7 @@ namespace Ipopt
 static const Index dbg_verbosity = 0;
 #endif
 
-cuDSSSolverInterface::cuDSSSolverInterface()
+cuDSSSolverInterface::cuDSSSolverInterface() : negevals_(-1)
 {
     cuDSS_initialize();
 }
@@ -188,9 +188,13 @@ ESymSolverStatus cuDSSSolverInterface::InitializeStructure(
 {
     DBG_START_METH("cuDSSSolverInterface::InitializeStructure", dbg_verbosity);
     
-    // Do the symbolic factorization
-    if( static_cast<ESymSolverStatus>(cuDSS_reordering()) != SYMSOLVER_SUCCESS ) return SYMSOLVER_FATAL_ERROR;
-    if( static_cast<ESymSolverStatus>(cuDSS_symbolic_factorization()) != SYMSOLVER_SUCCESS ) return SYMSOLVER_FATAL_ERROR;
+    cuDSS_initialize_structure(dim, nonzeros, ia, ja);
+
+    if (HaveIpData()) IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
+    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "cuDSS Symbolic Factorization.\n");
+    if ( static_cast<ESymSolverStatus>(cuDSS_reordering()) != SYMSOLVER_SUCCESS ) return SYMSOLVER_FATAL_ERROR;
+    if ( static_cast<ESymSolverStatus>(cuDSS_symbolic_factorization()) != SYMSOLVER_SUCCESS ) return SYMSOLVER_FATAL_ERROR;
+    if (HaveIpData()) IpData().TimingStats().LinearSystemSymbolicFactorization().End();
 
     return SYMSOLVER_SUCCESS;
 }
@@ -199,6 +203,76 @@ Number *cuDSSSolverInterface::GetValuesArrayPtr()
 {
     DBG_START_METH("cuDSSSolverInterface::GetValuesArrayPtr", dbg_verbosity);
     return cuDSS_get_matrix_values();
+}
+
+ESymSolverStatus cuDSSSolverInterface::MultiSolve(
+    bool new_matrix, 
+    const Index *ia, 
+    const Index *ja, 
+    Index nrhs, 
+    Number *rhs_vals, 
+    bool check_NegEVals, 
+    Index numberOfNegEVals
+)
+{
+    DBG_START_METH("cuDSSSolverInterface::MultiSolve", dbg_verbosity);
+    DBG_ASSERT(!check_NegEVals || ProvidesInertia());
+
+    if (new_matrix) {
+        // Upload new values on GPU
+        ESymSolverStatus retval = Factorization(ia, ja, check_NegEVals, numberOfNegEVals);
+        if ( retval != SYMSOLVER_SUCCESS ) return retval;
+    }
+
+    return Solve(ia, ja, nrhs, rhs_vals);
+}
+
+Index cuDSSSolverInterface::NumberOfNegEVals() const
+{
+    DBG_START_METH("cuDSSSolverInterface::NumberOfNegEVals", dbg_verbosity);
+    DBG_ASSERT(negevals_ >= 0);
+    
+    return negevals_;
+}
+
+ESymSolverStatus cuDSSSolverInterface::Factorization(
+    const Index *ia, 
+    const Index *ja, 
+    bool check_NegEVals, 
+    Index numberOfNegEVals
+)
+{
+    DBG_START_METH("cuDSSSolverInterface::Factorization", dbg_verbosity);
+
+    if (HaveIpData()) IpData().TimingStats().LinearSystemFactorization().Start();
+    if ( static_cast<ESymSolverStatus>(cuDSS_factorization()) != SYMSOLVER_SUCCESS ) return SYMSOLVER_FATAL_ERROR;
+    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "cuDSS Numerical Factorization.\n");
+    if (HaveIpData()) IpData().TimingStats().LinearSystemFactorization().End();
+
+    negevals_ = Max(cuDSS_get_inertia(), numberOfNegEVals);
+    if( check_NegEVals && (numberOfNegEVals != negevals_) ) {
+        Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
+                     "Wrong inertia: required are %" IPOPT_INDEX_FORMAT ", but we got %" IPOPT_INDEX_FORMAT ".\n", numberOfNegEVals, negevals_);
+        return SYMSOLVER_WRONG_INERTIA;
+    }
+
+    return SYMSOLVER_SUCCESS;
+}
+
+ESymSolverStatus cuDSSSolverInterface::Solve(
+    const Index *ia, 
+    const Index *ja, 
+    Index nrhs, 
+    Number *rhs_vals
+)
+{
+    DBG_START_METH("cuDSSSolverInterface::Solve", dbg_verbosity);
+
+    if (HaveIpData()) IpData().TimingStats().LinearSystemBackSolve().Start();
+    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "cuDSS Solve System.\n");
+    if (HaveIpData()) IpData().TimingStats().LinearSystemBackSolve().End();
+
+    return SYMSOLVER_SUCCESS;
 }
 
 } // namespace Ipopt

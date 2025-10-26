@@ -39,5 +39,9 @@ void    cuDSS_initialize_structure(Index, Index, const Index*, const Index*);
 int     cuDSS_reordering();
 int     cuDSS_symbolic_factorization();
 Number* cuDSS_get_matrix_values();
+int     cuDSS_factorization();
+int     cuDSS_refactorization();
+int     cuDSS_solve(Index, Number*);
+int     cuDSS_get_inertia();
 
 #endif

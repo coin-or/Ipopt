@@ -38,6 +38,22 @@ class cuDSSSolverInterface : public SparseSymLinearSolverInterface
       cuDSS_config_settings settings_;
       ///@}
 
+      Index negevals_;
+
+      ESymSolverStatus Factorization(
+        const Index* ia,
+        const Index* ja,
+        bool         check_NegEVals,
+        Index        numberOfNegEVals
+      );
+
+      ESymSolverStatus Solve(
+        const Index* ia,
+        const Index* ja,
+        Index        nrhs,
+        Number*      rhs_vals
+      );
+
   public:
 
       /** @name Constructor/Destructor */
@@ -89,14 +105,6 @@ class cuDSSSolverInterface : public SparseSymLinearSolverInterface
       {
         return CSR_Format_0_Offset;
       }
-
-      bool ProvidesDegeneracyDetection() const;
-
-      ESymSolverStatus DetermineDependentRows(
-        const Index*      /*ia*/,
-        const Index*      /*ja*/,
-        std::list<Index>& /*c_deps*/
-      );
 
       static void RegisterOptions(
         SmartPtr<RegisteredOptions> roptions

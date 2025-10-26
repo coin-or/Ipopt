@@ -47,6 +47,8 @@ static Index nonzeros_;
 static Number* aD_;
 static Index* ia_;
 static Index* ja_;
+static Number* bD_;
+static Number* solD_;
 static cudssMatrix_t a_;
 static cudssMatrix_t b_;
 static cudssMatrix_t sol_;
@@ -76,7 +78,6 @@ void cuDSS_terminate() {
 }
 
 bool cuDSS_config_create_and_set(cuDSS_config_settings settings) {
-    // Creating cuDSS solver configuration
     status_ = cudssConfigCreate(&config_);
 
     algReorder_ = static_cast<cudssAlgType_t>(settings.algReorder);
@@ -112,7 +113,6 @@ bool cuDSS_config_create_and_set(cuDSS_config_settings settings) {
     status_ = cudssConfigSet(config_, CUDSS_CONFIG_SCHUR_MODE, &schurMode_, sizeof(int));
     status_ = cudssConfigSet(config_, CUDSS_CONFIG_DETERMINISTIC_MODE, &deterministic_, sizeof(int));
 
-    // Creating cuDSS data container
     status_ = cudssDataCreate(handle_, &data_);
 
     if (status_ != CUDSS_STATUS_SUCCESS) return false;
@@ -139,10 +139,28 @@ void cuDSS_initialize_structure(Index dim, Index nonzeros, const Index* ia, cons
     aD_ = NULL;
     cudaMalloc(&aD_, nonzeros_ * sizeof(Number));
     cudaMemcpy(aD_, aH, nonzeros_ * sizeof(Number), cudaMemcpyHostToDevice);
-    status_ = cudssMatrixCreateCsr(&a_, dim_, dim_, nonzeros_, ia_, NULL,
+    status_ = cudssMatrixCreateCsr( &a_, dim_, dim_, nonzeros_, ia_, NULL,
                                     ja_, aD_, CUDA_R_32I, CUDA_R_64F, matType_, 
                                     matViewType_, matIndex_);
     delete[] aH;
+
+    // Storing the right hand side elements on Device and Host
+    Number* bH = NULL;
+    bH = new Number[dim_];
+    bD_ = NULL;
+    cudaMalloc(&bD_, dim_ * sizeof(Number));
+    cudaMemcpy(bD_, bH, dim_ * sizeof(Number), cudaMemcpyHostToDevice);
+    status_ = cudssMatrixCreateDn(&b_, dim_, (Index)1, dim_, bD_, CUDA_R_64F, CUDSS_LAYOUT_COL_MAJOR);
+    delete[] bH;
+
+    // Storing the solution elements on Device and Host
+    Number* solH = NULL;
+    solH = new Number[dim_];
+    solD_ = NULL;
+    cudaMalloc(&solD_, dim_ * sizeof(Number));
+    cudaMemcpy(solD_, solH, dim_ * sizeof(Number), cudaMemcpyHostToDevice);
+    status_ = cudssMatrixCreateDn(&sol_, dim_, (Index)1, dim_, solD_, CUDA_R_64F, CUDSS_LAYOUT_COL_MAJOR);
+    delete[] solH;
 }
 
 int cuDSS_reordering()
@@ -162,4 +180,37 @@ int cuDSS_symbolic_factorization()
 Number* cuDSS_get_matrix_values()
 {
     return aD_;
+}
+
+int cuDSS_factorization()
+{
+    status_ = cudssExecute(handle_, CUDSS_PHASE_FACTORIZATION, config_, data_, a_, sol_, b_);
+    if (status_ != CUDSS_STATUS_SUCCESS) return 4;
+    return 0;
+}
+
+int cuDSS_refactorization()
+{
+    status_ = cudssExecute(handle_, CUDSS_PHASE_REFACTORIZATION, config_, data_, a_, sol_, b_);
+    if (status_ != CUDSS_STATUS_SUCCESS) return 4;
+    return 0;
+}
+
+int cuDSS_solve(Index nrhs, Number* rhs_vals)
+{
+    for (Index i = 0; i < nrhs; i++) {
+        cudaMemcpy(bD_, &rhs_vals[i * dim_], dim_ * sizeof(Number), cudaMemcpyHostToDevice);
+        status_ = cudssExecute(handle_, CUDSS_PHASE_SOLVE, config_, data_, a_, sol_, b_);
+        if (status_ != CUDSS_STATUS_SUCCESS) return 4;
+        cudaMemcpy(&rhs_vals[i * dim_], solD_, dim_ * sizeof(Number), cudaMemcpyDeviceToHost);
+    }
+    return 0;
+}
+
+int cuDSS_get_inertia()
+{   
+    size_t sizeWritten;
+    int inertia[2];
+    status_ = cudssDataGet(handle_, data_, CUDSS_DATA_INERTIA, &inertia, sizeof(inertia), &sizeWritten);
+    return inertia[1];
 }
