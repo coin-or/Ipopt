@@ -187,6 +187,7 @@ Number* cuDSS_get_matrix_values()
 
 int cuDSS_factorization()
 {
+    cudaMemcpy(aD_, aH_, nonzeros_ * sizeof(Number), cudaMemcpyHostToDevice);
     status_ = cudssExecute(handle_, CUDSS_PHASE_FACTORIZATION, config_, data_, a_, sol_, b_);
     if (status_ != CUDSS_STATUS_SUCCESS) return 4;
     return 0;
@@ -218,7 +219,7 @@ int cuDSS_get_inertia()
     return inertia[1];
 }
 
-void cuDSS_update_matrix() 
-{
-    cudaMemcpy(aD_, aH_, nonzeros_ * sizeof(Number), cudaMemcpyHostToDevice);
-}
+// void cuDSS_update_matrix() 
+// {
+//     cudaMemcpy(aD_, aH_, nonzeros_ * sizeof(Number), cudaMemcpyHostToDevice);
+// }

@@ -260,7 +260,7 @@ ESymSolverStatus cuDSSSolverInterface::MultiSolve(
     DBG_ASSERT(!check_NegEVals || ProvidesInertia());
 
     if (new_matrix) {
-        // Upload new values on GPU
+        //cuDSS_update_matrix();
         ESymSolverStatus retval = Factorization(ia, ja, check_NegEVals, numberOfNegEVals);
         if ( retval != SYMSOLVER_SUCCESS ) return retval;
     }

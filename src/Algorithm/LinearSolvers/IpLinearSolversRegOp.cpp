@@ -119,13 +119,13 @@ void RegisterOptions_LinearSolvers(
    }
 #endif
 
-//#ifdef IPOPT_HAS_CUDSS
+#ifdef IPOPT_HAS_CUDSS
    if( availablesolvers & IPOPTLINEARSOLVER_CUDSS )
    {
       roptions->SetRegisteringCategory("cuDSS Linear Solver");
       cuDSSSolverInterface::RegisterOptions(roptions);
    }
-//#endif
+#endif
 
 #if ((defined(COINHSL_HAS_MA28) && !defined(IPOPT_SINGLE)) || (defined(COINHSL_HAS_MA28S) && defined(IPOPT_SINGLE))) && defined(F77_FUNC)
    roptions->SetRegisteringCategory("MA28 Linear Solver");
