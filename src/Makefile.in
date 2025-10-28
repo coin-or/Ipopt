@@ -99,6 +99,7 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 @HAVE_PARDISO_MKL_TRUE@am__append_1 = Algorithm/LinearSolvers/IpPardisoMKLSolverInterface.cpp
+@HAVE_CUDSS_TRUE@am__append_1 = Algorithm/LinearSolvers/IpCuDssSolverInterface.cpp
 @IPOPT_INT64_FALSE@am__append_2 = \
 @IPOPT_INT64_FALSE@  Algorithm/LinearSolvers/IpMc19TSymScalingMethod.cpp \
 @IPOPT_INT64_FALSE@  Algorithm/LinearSolvers/IpMa27TSolverInterface.cpp \
@@ -175,6 +176,7 @@ am__DEPENDENCIES_1 =
 libipopt_la_DEPENDENCIES = $(am__DEPENDENCIES_1)
 am__dirstamp = $(am__leading_dot)dirstamp
 @HAVE_PARDISO_MKL_TRUE@am__objects_1 = Algorithm/LinearSolvers/IpPardisoMKLSolverInterface.lo
+@HAVE_CUDSS_TRUE@am__objects_1 = Algorithm/LinearSolvers/IpCuDssSolverInterface.lo
 @IPOPT_INT64_FALSE@am__objects_2 = Algorithm/LinearSolvers/IpMc19TSymScalingMethod.lo \
 @IPOPT_INT64_FALSE@	Algorithm/LinearSolvers/IpMa27TSolverInterface.lo \
 @IPOPT_INT64_FALSE@	Algorithm/LinearSolvers/IpMa57TSolverInterface.lo \

@@ -13,9 +13,19 @@ namespace Ipopt
 static const Index dbg_verbosity = 0;
 #endif
 
+#define IPOPT_CUDSS_DEBUG 0
+
 cuDSSSolverInterface::cuDSSSolverInterface() : negevals_(-1)
 {
+    #if IPOPT_CUDSS_DEBUG == 1
+    printf("cuDSS_initialize START\n");
+    #endif
+
     cuDSS_initialize();
+
+    #if IPOPT_CUDSS_DEBUG == 1
+    printf("cuDSS_initialize END\n");
+    #endif
 }
 
 cuDSSSolverInterface::~cuDSSSolverInterface()
@@ -169,7 +179,15 @@ bool cuDSSSolverInterface::InitializeImpl(
     options.GetBoolValue("cuDSS_determ_mode", deterministic, prefix);
     settings_.deterministic = static_cast<int>(deterministic);
 
+    #if IPOPT_CUDSS_DEBUG == 1
+    printf("cuDSS_config_create_and_set START\n");
+    #endif
+
     bool status = cuDSS_config_create_and_set(settings_);
+
+    #if IPOPT_CUDSS_DEBUG == 1
+    printf("cuDSS_config_create_and_set END\n");
+    #endif
 
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                   "cuDSS matrix ordering CUDSS_CONFIG_REORDERING_ALG: %d\n", settings_.algReorder);
@@ -188,7 +206,17 @@ ESymSolverStatus cuDSSSolverInterface::InitializeStructure(
 {
     DBG_START_METH("cuDSSSolverInterface::InitializeStructure", dbg_verbosity);
     
+    #if IPOPT_CUDSS_DEBUG == 1
+    printf("cuDSS_initialize_structure START\n");
+    #endif
+
     cuDSS_initialize_structure(dim, nonzeros, ia, ja);
+
+    #if IPOPT_CUDSS_DEBUG == 1
+    printf("cuDSS_initialize_structure END\n");
+    
+    printf("cuDSS_symbolic_factorization START\n");
+    #endif
 
     if (HaveIpData()) IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "cuDSS Symbolic Factorization.\n");
@@ -196,13 +224,26 @@ ESymSolverStatus cuDSSSolverInterface::InitializeStructure(
     if ( static_cast<ESymSolverStatus>(cuDSS_symbolic_factorization()) != SYMSOLVER_SUCCESS ) return SYMSOLVER_FATAL_ERROR;
     if (HaveIpData()) IpData().TimingStats().LinearSystemSymbolicFactorization().End();
 
+    #if IPOPT_CUDSS_DEBUG == 1
+    printf("cuDSS_symbolic_factorization END\n");
+    #endif
+
     return SYMSOLVER_SUCCESS;
 }
 
 Number *cuDSSSolverInterface::GetValuesArrayPtr()
 {
     DBG_START_METH("cuDSSSolverInterface::GetValuesArrayPtr", dbg_verbosity);
+
+    #if IPOPT_CUDSS_DEBUG == 1
+    printf("cuDSS_get_matrix_values START\n");
+    #endif
+
     return cuDSS_get_matrix_values();
+
+    #if IPOPT_CUDSS_DEBUG == 1
+    printf("cuDSS_get_matrix_values END\n");
+    #endif
 }
 
 ESymSolverStatus cuDSSSolverInterface::MultiSolve(
@@ -244,12 +285,27 @@ ESymSolverStatus cuDSSSolverInterface::Factorization(
 {
     DBG_START_METH("cuDSSSolverInterface::Factorization", dbg_verbosity);
 
+    #if IPOPT_CUDSS_DEBUG == 1
+    printf("cuDSS_factorization START\n");
+    #endif
+
     if (HaveIpData()) IpData().TimingStats().LinearSystemFactorization().Start();
     if ( static_cast<ESymSolverStatus>(cuDSS_factorization()) != SYMSOLVER_SUCCESS ) return SYMSOLVER_FATAL_ERROR;
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "cuDSS Numerical Factorization.\n");
     if (HaveIpData()) IpData().TimingStats().LinearSystemFactorization().End();
 
+    #if IPOPT_CUDSS_DEBUG == 1
+    printf("cuDSS_factorization END\n");
+
+    printf("cuDSS_get_inertia START\n");
+    #endif
+
     negevals_ = Max(cuDSS_get_inertia(), numberOfNegEVals);
+
+    #if IPOPT_CUDSS_DEBUG == 1
+    printf("cuDSS_get_inertia END\n");
+    #endif
+
     if( check_NegEVals && (numberOfNegEVals != negevals_) ) {
         Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                      "Wrong inertia: required are %" IPOPT_INDEX_FORMAT ", but we got %" IPOPT_INDEX_FORMAT ".\n", numberOfNegEVals, negevals_);
@@ -268,9 +324,18 @@ ESymSolverStatus cuDSSSolverInterface::Solve(
 {
     DBG_START_METH("cuDSSSolverInterface::Solve", dbg_verbosity);
 
+    #if IPOPT_CUDSS_DEBUG == 1
+    printf("cuDSS_solve START\n");
+    #endif
+
     if (HaveIpData()) IpData().TimingStats().LinearSystemBackSolve().Start();
+    if ( static_cast<ESymSolverStatus>(cuDSS_solve(nrhs, rhs_vals)) != SYMSOLVER_SUCCESS ) return SYMSOLVER_FATAL_ERROR;
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "cuDSS Solve System.\n");
     if (HaveIpData()) IpData().TimingStats().LinearSystemBackSolve().End();
+
+    #if IPOPT_CUDSS_DEBUG == 1
+    printf("cuDSS_solve END\n");
+    #endif
 
     return SYMSOLVER_SUCCESS;
 }

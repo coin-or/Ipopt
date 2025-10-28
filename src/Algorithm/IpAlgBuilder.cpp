@@ -73,7 +73,7 @@
 # include "IpMumpsSolverInterface.hpp"
 #endif
 #ifdef IPOPT_HAS_CUDSS
-# include "IpCuDSSSolverInterface.hpp"
+# include "IpCuDssSolverInterface.hpp"
 #endif
 
 namespace Ipopt
@@ -204,6 +204,12 @@ void AlgorithmBuilder::RegisterOptions(
       descrs.push_back("use the Mumps package");
    }
 
+   if( availablesolvers & IPOPTLINEARSOLVER_CUDSS )
+   {
+      options.push_back("cudss");
+      descrs.push_back("use the cuDSS package");
+   }
+
    options.push_back("custom");
    descrs.push_back("use custom linear solver (expert use)");
 
@@ -251,6 +257,10 @@ void AlgorithmBuilder::RegisterOptions(
    else if( availablesolvers & IPOPTLINEARSOLVER_MA27 )
    {
       defaultsolver = "ma27";
+   }
+   else if( availablesolvers & IPOPTLINEARSOLVER_CUDSS )
+   {
+      defaultsolver = "cudss";
    }
    else
    {
@@ -514,6 +524,13 @@ SmartPtr<SymLinearSolver> AlgorithmBuilder::SymLinearSolverFactory(
    {
       SolverInterface = new MumpsSolverInterface();
       linear_solver = MumpsSolverInterface::GetName();
+   }
+#endif
+
+#ifdef IPOPT_HAS_CUDSS
+   else if( linear_solver == "cudss" )
+   {
+      SolverInterface = new cuDSSSolverInterface();
    }
 #endif
 

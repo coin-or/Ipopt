@@ -333,6 +333,8 @@ bool runEmpty(
       return false;
    }
 
+   app->Options()->SetStringValue("linear_solver", "cudss", true, true);
+
    status = app->OptimizeTNLP(nlp);
 
    assert((status == Solve_Succeeded) == (!infeasbounds && !infeascons));

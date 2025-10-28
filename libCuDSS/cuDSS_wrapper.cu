@@ -49,11 +49,14 @@ static Index* ia_;
 static Index* ja_;
 static Number* bD_;
 static Number* solD_;
+static Number* aH_;
+static Number* bH_;
+static Number* solH_;
 static cudssMatrix_t a_;
 static cudssMatrix_t b_;
 static cudssMatrix_t sol_;
 // static const cudssMatrixFormat_t matFormat_ = CUDSS_MFORMAT_CSR;
-static const cudssMatrixType_t matType_ = CUDSS_MTYPE_GENERAL;
+static const cudssMatrixType_t matType_ = CUDSS_MTYPE_SYMMETRIC;
 static const cudssMatrixViewType_t matViewType_ = CUDSS_MVIEW_UPPER;
 static const cudssIndexBase_t matIndex_ = CUDSS_BASE_ZERO;
 
@@ -75,6 +78,9 @@ void cuDSS_terminate() {
     cudaFree(aD_);
     cudaFree(ia_);
     cudaFree(ja_);
+    delete[] aH_;
+    delete[] bH_;
+    delete[] solH_;
 }
 
 bool cuDSS_config_create_and_set(cuDSS_config_settings settings) {
@@ -134,33 +140,30 @@ void cuDSS_initialize_structure(Index dim, Index nonzeros, const Index* ia, cons
     cudaMemcpy(ja_, ja, nonzeros_ * sizeof(Index), cudaMemcpyHostToDevice);
 
     // Storing the matrix elements on Device and Host
-    Number* aH = NULL;
-    aH = new Number[nonzeros_];
+    aH_ = NULL;
+    aH_ = new Number[nonzeros_];
     aD_ = NULL;
     cudaMalloc(&aD_, nonzeros_ * sizeof(Number));
-    cudaMemcpy(aD_, aH, nonzeros_ * sizeof(Number), cudaMemcpyHostToDevice);
+    cudaMemcpy(aD_, aH_, nonzeros_ * sizeof(Number), cudaMemcpyHostToDevice);
     status_ = cudssMatrixCreateCsr( &a_, dim_, dim_, nonzeros_, ia_, NULL,
                                     ja_, aD_, CUDA_R_32I, CUDA_R_64F, matType_, 
                                     matViewType_, matIndex_);
-    delete[] aH;
 
     // Storing the right hand side elements on Device and Host
-    Number* bH = NULL;
-    bH = new Number[dim_];
+    bH_ = NULL;
+    bH_ = new Number[dim_];
     bD_ = NULL;
     cudaMalloc(&bD_, dim_ * sizeof(Number));
-    cudaMemcpy(bD_, bH, dim_ * sizeof(Number), cudaMemcpyHostToDevice);
+    cudaMemcpy(bD_, bH_, dim_ * sizeof(Number), cudaMemcpyHostToDevice);
     status_ = cudssMatrixCreateDn(&b_, dim_, (Index)1, dim_, bD_, CUDA_R_64F, CUDSS_LAYOUT_COL_MAJOR);
-    delete[] bH;
 
     // Storing the solution elements on Device and Host
-    Number* solH = NULL;
-    solH = new Number[dim_];
+    solH_ = NULL;
+    solH_ = new Number[dim_];
     solD_ = NULL;
     cudaMalloc(&solD_, dim_ * sizeof(Number));
-    cudaMemcpy(solD_, solH, dim_ * sizeof(Number), cudaMemcpyHostToDevice);
+    cudaMemcpy(solD_, solH_, dim_ * sizeof(Number), cudaMemcpyHostToDevice);
     status_ = cudssMatrixCreateDn(&sol_, dim_, (Index)1, dim_, solD_, CUDA_R_64F, CUDSS_LAYOUT_COL_MAJOR);
-    delete[] solH;
 }
 
 int cuDSS_reordering()
@@ -179,7 +182,7 @@ int cuDSS_symbolic_factorization()
 
 Number* cuDSS_get_matrix_values()
 {
-    return aD_;
+    return aH_;
 }
 
 int cuDSS_factorization()
@@ -213,4 +216,9 @@ int cuDSS_get_inertia()
     int inertia[2];
     status_ = cudssDataGet(handle_, data_, CUDSS_DATA_INERTIA, &inertia, sizeof(inertia), &sizeWritten);
     return inertia[1];
+}
+
+void cuDSS_update_matrix() 
+{
+    cudaMemcpy(aD_, aH_, nonzeros_ * sizeof(Number), cudaMemcpyHostToDevice);
 }
