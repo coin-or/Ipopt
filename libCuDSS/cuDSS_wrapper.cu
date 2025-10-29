@@ -74,13 +74,16 @@ void cuDSS_terminate() {
     status_ = cudssDataDestroy(handle_, data_);
     status_ = cudssConfigDestroy(config_);
     status_ = cudssDestroy(handle_);
-    cudaStreamSynchronize(stream_);
     cudaFree(aD_);
+    cudaFree(bD_);
+    cudaFree(solD_);
     cudaFree(ia_);
     cudaFree(ja_);
     delete[] aH_;
     delete[] bH_;
     delete[] solH_;
+    cudaStreamSynchronize(stream_);
+    cudaStreamDestroy(stream_);
 }
 
 bool cuDSS_config_create_and_set(cuDSS_config_settings settings) {
@@ -169,14 +172,20 @@ void cuDSS_initialize_structure(Index dim, Index nonzeros, const Index* ia, cons
 int cuDSS_reordering()
 {
     status_ = cudssExecute(handle_, CUDSS_PHASE_REORDERING, config_, data_, a_, sol_, b_);
-    if (status_ != CUDSS_STATUS_SUCCESS) return 4;
+    if (status_ != CUDSS_STATUS_SUCCESS) {
+        printf("Example FAILED: CUDSS call ended unsuccessfully with status = %d, details: REORDERING\n", status_);
+        return 4;
+    }
     return 0;
 }
 
 int cuDSS_symbolic_factorization()
 {
     status_ = cudssExecute(handle_, CUDSS_PHASE_SYMBOLIC_FACTORIZATION, config_, data_, a_, sol_, b_);
-    if (status_ != CUDSS_STATUS_SUCCESS) return 4;
+    if (status_ != CUDSS_STATUS_SUCCESS) {
+        printf("Example FAILED: CUDSS call ended unsuccessfully with status = %d, details: SYM FACTORING\n", status_);
+        return 4;
+    }
     return 0;
 }
 
@@ -187,16 +196,21 @@ Number* cuDSS_get_matrix_values()
 
 int cuDSS_factorization()
 {
-    cudaMemcpy(aD_, aH_, nonzeros_ * sizeof(Number), cudaMemcpyHostToDevice);
     status_ = cudssExecute(handle_, CUDSS_PHASE_FACTORIZATION, config_, data_, a_, sol_, b_);
-    if (status_ != CUDSS_STATUS_SUCCESS) return 4;
+    if (status_ != CUDSS_STATUS_SUCCESS) {
+        printf("Example FAILED: CUDSS call ended unsuccessfully with status = %d, details: FACTORING\n", status_);
+        return 4;
+    }
     return 0;
 }
 
 int cuDSS_refactorization()
 {
     status_ = cudssExecute(handle_, CUDSS_PHASE_REFACTORIZATION, config_, data_, a_, sol_, b_);
-    if (status_ != CUDSS_STATUS_SUCCESS) return 4;
+    if (status_ != CUDSS_STATUS_SUCCESS) {
+        printf("Example FAILED: CUDSS call ended unsuccessfully with status = %d, details: REFACTOR\n", status_);
+        return 4;
+    }
     return 0;
 }
 
@@ -205,7 +219,10 @@ int cuDSS_solve(Index nrhs, Number* rhs_vals)
     for (Index i = 0; i < nrhs; i++) {
         cudaMemcpy(bD_, &rhs_vals[i * dim_], dim_ * sizeof(Number), cudaMemcpyHostToDevice);
         status_ = cudssExecute(handle_, CUDSS_PHASE_SOLVE, config_, data_, a_, sol_, b_);
-        if (status_ != CUDSS_STATUS_SUCCESS) return 4;
+        if (status_ != CUDSS_STATUS_SUCCESS) {
+            printf("Example FAILED: CUDSS call ended unsuccessfully with status = %d, details: SOLVE\n", status_);
+            return 4;
+        }
         cudaMemcpy(&rhs_vals[i * dim_], solD_, dim_ * sizeof(Number), cudaMemcpyDeviceToHost);
     }
     return 0;
@@ -219,7 +236,8 @@ int cuDSS_get_inertia()
     return inertia[1];
 }
 
-// void cuDSS_update_matrix() 
-// {
-//     cudaMemcpy(aD_, aH_, nonzeros_ * sizeof(Number), cudaMemcpyHostToDevice);
-// }
+bool cuDSS_update_matrix() 
+{
+    cudaMemcpy(aD_, aH_, nonzeros_ * sizeof(Number), cudaMemcpyHostToDevice);
+    return true;
+}

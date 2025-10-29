@@ -15,7 +15,10 @@ static const Index dbg_verbosity = 0;
 
 #define IPOPT_CUDSS_DEBUG 0
 
-cuDSSSolverInterface::cuDSSSolverInterface() : negevals_(-1)
+cuDSSSolverInterface::cuDSSSolverInterface() : 
+negevals_(-1),
+initialized_(false),
+configured_(false)
 {
     #if IPOPT_CUDSS_DEBUG == 1
     printf("cuDSS_initialize START\n");
@@ -30,7 +33,15 @@ cuDSSSolverInterface::cuDSSSolverInterface() : negevals_(-1)
 
 cuDSSSolverInterface::~cuDSSSolverInterface()
 {
+    #if IPOPT_CUDSS_DEBUG == 1
+    printf("cuDSS_terminate START\n");
+    #endif
+
     cuDSS_terminate();
+
+    #if IPOPT_CUDSS_DEBUG == 1
+    printf("cuDSS_terminate END\n");
+    #endif
 }
 
 void cuDSSSolverInterface::RegisterOptions(
@@ -178,23 +189,31 @@ bool cuDSSSolverInterface::InitializeImpl(
     bool deterministic;
     options.GetBoolValue("cuDSS_determ_mode", deterministic, prefix);
     settings_.deterministic = static_cast<int>(deterministic);
+    
+    // if (initialized_) {
+    //     cuDSS_terminate();
+    // }
+    initialized_ = false;
 
-    #if IPOPT_CUDSS_DEBUG == 1
-    printf("cuDSS_config_create_and_set START\n");
-    #endif
+    if (!configured_) {
+        #if IPOPT_CUDSS_DEBUG == 1
+        printf("cuDSS_config_create_and_set START\n");
+        #endif
 
-    bool status = cuDSS_config_create_and_set(settings_);
+        bool status = cuDSS_config_create_and_set(settings_);
+        configured_ = true;
 
-    #if IPOPT_CUDSS_DEBUG == 1
-    printf("cuDSS_config_create_and_set END\n");
-    #endif
+        #if IPOPT_CUDSS_DEBUG == 1
+        printf("cuDSS_config_create_and_set END\n");
+        #endif
+    }
 
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                   "cuDSS matrix ordering CUDSS_CONFIG_REORDERING_ALG: %d\n", settings_.algReorder);
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                   "cuDSS matrix ordering CUDSS_CONFIG_FACTORIZATION_ALG: %d\n", settings_.algFactor);
 
-    return status;
+    return true;//status;
 }
 
 ESymSolverStatus cuDSSSolverInterface::InitializeStructure(
@@ -210,23 +229,27 @@ ESymSolverStatus cuDSSSolverInterface::InitializeStructure(
     printf("cuDSS_initialize_structure START\n");
     #endif
 
-    cuDSS_initialize_structure(dim, nonzeros, ia, ja);
+    if (!initialized_) {
+        cuDSS_initialize_structure(dim, nonzeros, ia, ja);
 
-    #if IPOPT_CUDSS_DEBUG == 1
-    printf("cuDSS_initialize_structure END\n");
-    
-    printf("cuDSS_symbolic_factorization START\n");
-    #endif
+        #if IPOPT_CUDSS_DEBUG == 1
+        printf("cuDSS_initialize_structure END\n");
+        
+        printf("cuDSS_symbolic_factorization START\n");
+        #endif
 
-    if (HaveIpData()) IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
-    Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "cuDSS Symbolic Factorization.\n");
-    if ( static_cast<ESymSolverStatus>(cuDSS_reordering()) != SYMSOLVER_SUCCESS ) return SYMSOLVER_FATAL_ERROR;
-    if ( static_cast<ESymSolverStatus>(cuDSS_symbolic_factorization()) != SYMSOLVER_SUCCESS ) return SYMSOLVER_FATAL_ERROR;
-    if (HaveIpData()) IpData().TimingStats().LinearSystemSymbolicFactorization().End();
+        if (HaveIpData()) IpData().TimingStats().LinearSystemSymbolicFactorization().Start();
+        Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA, "cuDSS Symbolic Factorization.\n");
+        if ( static_cast<ESymSolverStatus>(cuDSS_reordering()) != SYMSOLVER_SUCCESS ) return SYMSOLVER_FATAL_ERROR;
+        if ( static_cast<ESymSolverStatus>(cuDSS_symbolic_factorization()) != SYMSOLVER_SUCCESS ) return SYMSOLVER_FATAL_ERROR;
+        if (HaveIpData()) IpData().TimingStats().LinearSystemSymbolicFactorization().End();
 
-    #if IPOPT_CUDSS_DEBUG == 1
-    printf("cuDSS_symbolic_factorization END\n");
-    #endif
+        #if IPOPT_CUDSS_DEBUG == 1
+        printf("cuDSS_symbolic_factorization END\n");
+        #endif
+    }
+
+    initialized_ = true;
 
     return SYMSOLVER_SUCCESS;
 }
@@ -236,14 +259,10 @@ Number *cuDSSSolverInterface::GetValuesArrayPtr()
     DBG_START_METH("cuDSSSolverInterface::GetValuesArrayPtr", dbg_verbosity);
 
     #if IPOPT_CUDSS_DEBUG == 1
-    printf("cuDSS_get_matrix_values START\n");
+    printf("cuDSS_get_matrix_values\n");
     #endif
 
     return cuDSS_get_matrix_values();
-
-    #if IPOPT_CUDSS_DEBUG == 1
-    printf("cuDSS_get_matrix_values END\n");
-    #endif
 }
 
 ESymSolverStatus cuDSSSolverInterface::MultiSolve(
@@ -260,7 +279,7 @@ ESymSolverStatus cuDSSSolverInterface::MultiSolve(
     DBG_ASSERT(!check_NegEVals || ProvidesInertia());
 
     if (new_matrix) {
-        //cuDSS_update_matrix();
+        bool updated = cuDSS_update_matrix();
         ESymSolverStatus retval = Factorization(ia, ja, check_NegEVals, numberOfNegEVals);
         if ( retval != SYMSOLVER_SUCCESS ) return retval;
     }

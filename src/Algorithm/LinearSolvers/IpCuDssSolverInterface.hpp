@@ -40,6 +40,10 @@ class cuDSSSolverInterface : public SparseSymLinearSolverInterface
 
       Index negevals_;
 
+      bool initialized_;
+
+      bool configured_;
+
       ESymSolverStatus Factorization(
         const Index* ia,
         const Index* ja,

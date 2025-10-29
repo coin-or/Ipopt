@@ -43,6 +43,6 @@ int     cuDSS_factorization();
 int     cuDSS_refactorization();
 int     cuDSS_solve(Index, Number*);
 int     cuDSS_get_inertia();
-// void    cuDSS_update_matrix();
+bool    cuDSS_update_matrix();
 
 #endif
