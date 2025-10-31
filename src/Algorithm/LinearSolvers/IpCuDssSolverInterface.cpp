@@ -189,31 +189,26 @@ bool cuDSSSolverInterface::InitializeImpl(
     bool deterministic;
     options.GetBoolValue("cuDSS_determ_mode", deterministic, prefix);
     settings_.deterministic = static_cast<int>(deterministic);
-    
-    // if (initialized_) {
-    //     cuDSS_terminate();
-    // }
-    initialized_ = false;
 
-    if (!configured_) {
-        #if IPOPT_CUDSS_DEBUG == 1
-        printf("cuDSS_config_create_and_set START\n");
-        #endif
+    if (configured_) return true;
 
-        bool status = cuDSS_config_create_and_set(settings_);
-        configured_ = true;
+    #if IPOPT_CUDSS_DEBUG == 1
+    printf("cuDSS_config_create_and_set START\n");
+    #endif
 
-        #if IPOPT_CUDSS_DEBUG == 1
-        printf("cuDSS_config_create_and_set END\n");
-        #endif
-    }
+    bool status = cuDSS_config_create_and_set(settings_);
+    configured_ = true;
+
+    #if IPOPT_CUDSS_DEBUG == 1
+    printf("cuDSS_config_create_and_set END\n");
+    #endif
 
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                   "cuDSS matrix ordering CUDSS_CONFIG_REORDERING_ALG: %d\n", settings_.algReorder);
     Jnlst().Printf(J_DETAILED, J_LINEAR_ALGEBRA,
                   "cuDSS matrix ordering CUDSS_CONFIG_FACTORIZATION_ALG: %d\n", settings_.algFactor);
 
-    return true;//status;
+    return status;
 }
 
 ESymSolverStatus cuDSSSolverInterface::InitializeStructure(

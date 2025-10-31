@@ -89,22 +89,67 @@ void cuDSS_terminate() {
 bool cuDSS_config_create_and_set(cuDSS_config_settings settings) {
     status_ = cudssConfigCreate(&config_);
 
+    // Error checking as documented in https://docs.nvidia.com/cuda/cudss/types.html
     algReorder_ = static_cast<cudssAlgType_t>(settings.algReorder);
+    if (algReorder_ >= CUDSS_ALG_4) {
+        printf("CUDSS_ALG_4 and CUDSS_ALG_5 are invalid choices for CUDSS_CONFIG_REORDERING_ALG.\n");
+        return false;
+    }
+    if ((algReorder_ == CUDSS_ALG_1) || (algReorder_ == CUDSS_ALG_2)) { // Matrix set as symmetric
+        printf("CUDSS_ALG_1 and CUDSS_ALG_2 are only supported for general (non-symmetric or non-hermitian) matrices.\n");
+        return false;
+    }
+
     algFactor_ = static_cast<cudssAlgType_t>(settings.algFactor);
+    if (algFactor_ >= CUDSS_ALG_2) {
+        printf("CUDSS_ALG_2, CUDSS_ALG_3, CUDSS_ALG_4 and CUDSS_ALG_5 are invalid choices for CUDSS_CONFIG_FACTORIZATION_ALG.\n");
+        return false;
+    }
+
     algPivotEps_ = static_cast<cudssAlgType_t>(settings.algPivotEps);
+    if (algPivotEps_ >= CUDSS_ALG_2) {
+        printf("CUDSS_ALG_2, CUDSS_ALG_3, CUDSS_ALG_4 and CUDSS_ALG_5 are invalid choices for CUDSS_CONFIG_PIVOT_EPSILON_ALG.\n");
+        return false;
+    }
+    if ((algPivotEps_ == CUDSS_ALG_1) && ((algReorder_ == CUDSS_ALG_1) || (algReorder_ == CUDSS_ALG_2))) {
+        printf("CUDSS_ALG_1 for CUDSS_CONFIG_PIVOT_EPSILON_ALG is not supported when CUDSS_CONFIG_REORDERING_ALG is set to CUDSS_ALG_1 or CUDSS_ALG_2.\n");
+        return false;
+    }
+
     algMatching_ = static_cast<cudssAlgType_t>(settings.algMatching);
+    if ((algMatching_ == CUDSS_ALG_1) && ((algReorder_ == CUDSS_ALG_1) || (algReorder_ == CUDSS_ALG_2))) {
+        printf("Matching is not supported for CUDSS_ALG_1 and CUDSS_ALG_2 reordering algorithms (which use global pivoting to make the solution more accurate) or distributed matrices.\n");
+        return false;
+    }
+
     pivotType_ = static_cast<cudssPivotType_t>(settings.pivotType);
 
     useMatching_ = settings.useMatching;
     nIterSteps_ = settings.nIterSteps;
     pivotThr_ = settings.pivotThr;
+    if (algReorder_ == CUDSS_ALG_DEFAULT) {
+        printf("This parameter is only supported when reordering algorithm is set to CUDSS_ALG_1 or CUDSS_ALG_2.\n");
+        return false;
+    }
+
     pivotEps_ = settings.pivotEps;
     maxLUnnz_ = settings.maxLUnnz;
-    nThreads_ = settings.nThreads;
+    nThreads_ = settings.nThreads; // To check when implementing MT mode.
     ndNLevels_ = settings.ndNLevels;
+    if (algReorder_ != CUDSS_ALG_DEFAULT) {
+        printf("This setting only works when reordering algorithm is CUDSS_ALG_DEFAULT.\n");
+        return false;
+    }
+
     useSP_ = settings.useSP;
-    schurMode_ = settings.schurMode;
+    schurMode_ = settings.schurMode; // To recheck when implementing MGMN, or MG mode.
+    if ((algReorder_ != CUDSS_ALG_DEFAULT) || (algFactor_ == CUDSS_ALG_1) || useMatching_) {
+        printf("Currently not supported when CUDSS_ALG_1 or CUDSS_ALG_2 is used for reordering, when MGMN mode or multi-GPU mode is used, or, when CUDSS_ALG_1 is used for the factorization. It is also not supported when a user permutation is set, for uniform and non-uniform batches, or when matching is enabled.\n");
+        return false;
+    }
+
     deterministic_ = settings.deterministic;
+    if (deterministic_) printf("Currently the feature is supported only for single-gpu, single rhs and with hybrid memory mode (CUDSS_CONFIG_HYBRID_MODE) and hybrid execute mode (CUDSS_CONFIG_HYBRID_EXECUTE_MODE) disabled.\n");
 
     status_ = cudssConfigSet(config_, CUDSS_CONFIG_REORDERING_ALG, &algReorder_, sizeof(cudssAlgType_t));
     status_ = cudssConfigSet(config_, CUDSS_CONFIG_FACTORIZATION_ALG, &algFactor_, sizeof(cudssAlgType_t));
