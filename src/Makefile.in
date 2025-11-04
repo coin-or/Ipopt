@@ -99,7 +99,7 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 @HAVE_PARDISO_MKL_TRUE@am__append_1 = Algorithm/LinearSolvers/IpPardisoMKLSolverInterface.cpp
-@HAVE_CUDSS_TRUE@am__append_1 = Algorithm/LinearSolvers/IpCuDssSolverInterface.cpp
+@HAVE_CUDSS_TRUE@@IPOPT_INT64_TRUE@am__append_1 = Algorithm/LinearSolvers/IpCuDssSolverInterface.cpp
 @IPOPT_INT64_FALSE@am__append_2 = \
 @IPOPT_INT64_FALSE@  Algorithm/LinearSolvers/IpMc19TSymScalingMethod.cpp \
 @IPOPT_INT64_FALSE@  Algorithm/LinearSolvers/IpMa27TSolverInterface.cpp \

@@ -1684,12 +1684,14 @@ Optional Packages:
                           --with-cuDSS, then 'yes' is equivalent
                           to --with-cuDSS, 'no' is equivalent to
                           --without-cuDSS and any other argument is applied as
-                          for --with-cuDSS-lflags.
+                          for --with-cuDSS-lflags. Requires --with-intsize=64
   --with-cudss-lflags     Linker flags for cuDSS appropriate for your
                           environment. (Most often, -l specs for libraries.)
+                          Requires --with-intsize=64
   --with-cudss-cflags     Compiler flags for cuDSS appropriate for your
                           environment. (Most often, -I specs for header file
                           directories.)
+                          Requires --with-intsize=64
   --with-wsmp             specify WSMP library
 
 Some influential environment variables:
@@ -27839,8 +27841,8 @@ fi
 # CUDSS #
 #########
 
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for package cuDSS" >&5
-printf %s "checking for package cuDSS... " >&6; }
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for package cuDSS (Requires --with-intsize=64)" >&5
+printf %s "checking for package cuDSS (Requires --with-intsize=64)... " >&6; }
 
 
 
@@ -27863,7 +27865,7 @@ printf %s "checking for package cuDSS... " >&6; }
 
 
 
-
+if test $intsize = 64 ; then
 # Check whether --with-cudss was given.
 if test ${with_cudss+y}
 then :
@@ -27960,6 +27962,8 @@ printf "%s\n" "#define IPOPT_HAS_CUDSS 1" >>confdefs.h
 
 
   fi
+
+fi
 
 #############################################################################
 #                             Stuff for examples                            #

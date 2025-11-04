@@ -314,7 +314,7 @@ ESymSolverStatus cuDSSSolverInterface::Factorization(
     printf("cuDSS_get_inertia START\n");
     #endif
 
-    negevals_ = Max(cuDSS_get_inertia(), numberOfNegEVals);
+    negevals_ = Max(static_cast<Index>(cuDSS_get_inertia()), numberOfNegEVals);
 
     #if IPOPT_CUDSS_DEBUG == 1
     printf("cuDSS_get_inertia END\n");

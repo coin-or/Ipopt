@@ -14,11 +14,7 @@ typedef float Number;
 typedef double Number;
 #endif
 
-#ifdef CUDSS_INT64
 typedef int64_t Index;
-#else
-typedef int Index;
-#endif
 
 struct cuDSS_config_settings
 {
@@ -49,7 +45,7 @@ Number* cuDSS_get_matrix_values();
 int     cuDSS_factorization();
 int     cuDSS_refactorization();
 int     cuDSS_solve(Index, Number*);
-int     cuDSS_get_inertia();
+Index   cuDSS_get_inertia();
 bool    cuDSS_update_matrix();
 
 #endif

@@ -134,11 +134,11 @@ bool cuDSS_config_create_and_set(cuDSS_config_settings settings) {
 
     useMatching_ = settings.useMatching;
     nIterSteps_ = settings.nIterSteps;
-    pivotThr_ = settings.pivotThr;
-    if (algReorder_ == CUDSS_ALG_DEFAULT) {
-        printf("This parameter is only supported when reordering algorithm is set to CUDSS_ALG_1 or CUDSS_ALG_2.\n");
-        return false;
-    }
+    // pivotThr_ = settings.pivotThr; // FOR NOW DISABLED, WILL BE REINTRODUCED WHEN ADDING USER OPTION
+    // if (algReorder_ == CUDSS_ALG_DEFAULT) {
+    //     printf("This parameter is only supported when reordering algorithm is set to CUDSS_ALG_1 or CUDSS_ALG_2.\n");
+    //     return false;
+    // }
 
     pivotEps_ = settings.pivotEps;
     maxLUnnz_ = settings.maxLUnnz;
@@ -166,7 +166,7 @@ bool cuDSS_config_create_and_set(cuDSS_config_settings settings) {
     status_ = cudssConfigSet(config_, CUDSS_CONFIG_MATCHING_ALG, &algMatching_, sizeof(cudssAlgType_t));
     status_ = cudssConfigSet(config_, CUDSS_CONFIG_IR_N_STEPS, &nIterSteps_, sizeof(int));
     status_ = cudssConfigSet(config_, CUDSS_CONFIG_PIVOT_TYPE, &pivotType_, sizeof(cudssPivotType_t));
-    status_ = cudssConfigSet(config_, CUDSS_CONFIG_PIVOT_THRESHOLD, &pivotThr_, sizeof(double));
+    //status_ = cudssConfigSet(config_, CUDSS_CONFIG_PIVOT_THRESHOLD, &pivotThr_, sizeof(double));
     status_ = cudssConfigSet(config_, CUDSS_CONFIG_PIVOT_EPSILON, &pivotEps_, sizeof(double));
     status_ = cudssConfigSet(config_, CUDSS_CONFIG_MAX_LU_NNZ, &maxLUnnz_, sizeof(Index));
     status_ = cudssConfigSet(config_, CUDSS_CONFIG_HOST_NTHREADS, &nThreads_, sizeof(int));
@@ -201,9 +201,15 @@ void cuDSS_initialize_structure(Index dim, Index nonzeros, const Index* ia, cons
     aD_ = NULL;
     cudaMalloc(&aD_, nonzeros_ * sizeof(Number));
     cudaMemcpy(aD_, aH_, nonzeros_ * sizeof(Number), cudaMemcpyHostToDevice);
+    #ifdef CUDSS_SINGLE
     status_ = cudssMatrixCreateCsr( &a_, dim_, dim_, nonzeros_, ia_, NULL,
-                                    ja_, aD_, CUDA_R_32I, CUDA_R_64F, matType_, 
+                                    ja_, aD_, CUDA_R_64I, CUDA_R_32F, matType_, 
                                     matViewType_, matIndex_);
+    #else
+    status_ = cudssMatrixCreateCsr( &a_, dim_, dim_, nonzeros_, ia_, NULL,
+                                    ja_, aD_, CUDA_R_64I, CUDA_R_64F, matType_, 
+                                    matViewType_, matIndex_);
+    #endif
 
     // Storing the right hand side elements on Device and Host
     bH_ = NULL;
@@ -211,7 +217,11 @@ void cuDSS_initialize_structure(Index dim, Index nonzeros, const Index* ia, cons
     bD_ = NULL;
     cudaMalloc(&bD_, dim_ * sizeof(Number));
     cudaMemcpy(bD_, bH_, dim_ * sizeof(Number), cudaMemcpyHostToDevice);
+    #ifdef CUDSS_SINGLE
+    status_ = cudssMatrixCreateDn(&b_, dim_, (Index)1, dim_, bD_, CUDA_R_32F, CUDSS_LAYOUT_COL_MAJOR);
+    #else
     status_ = cudssMatrixCreateDn(&b_, dim_, (Index)1, dim_, bD_, CUDA_R_64F, CUDSS_LAYOUT_COL_MAJOR);
+    #endif
 
     // Storing the solution elements on Device and Host
     solH_ = NULL;
@@ -219,7 +229,11 @@ void cuDSS_initialize_structure(Index dim, Index nonzeros, const Index* ia, cons
     solD_ = NULL;
     cudaMalloc(&solD_, dim_ * sizeof(Number));
     cudaMemcpy(solD_, solH_, dim_ * sizeof(Number), cudaMemcpyHostToDevice);
+    #ifdef CUDSS_SINGLE
+    status_ = cudssMatrixCreateDn(&sol_, dim_, (Index)1, dim_, solD_, CUDA_R_32F, CUDSS_LAYOUT_COL_MAJOR);
+    #else
     status_ = cudssMatrixCreateDn(&sol_, dim_, (Index)1, dim_, solD_, CUDA_R_64F, CUDSS_LAYOUT_COL_MAJOR);
+    #endif
 }
 
 int cuDSS_reordering()
@@ -281,10 +295,10 @@ int cuDSS_solve(Index nrhs, Number* rhs_vals)
     return 0;
 }
 
-int cuDSS_get_inertia()
+Index cuDSS_get_inertia()
 {   
     size_t sizeWritten;
-    int inertia[2];
+    Index inertia[2];
     status_ = cudssDataGet(handle_, data_, CUDSS_DATA_INERTIA, &inertia, sizeof(inertia), &sizeWritten);
     return inertia[1];
 }
