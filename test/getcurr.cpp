@@ -602,7 +602,6 @@ bool run(
    app->Options()->SetIntegerValue("print_level", 2, true, true);
    // allow only very little relaxation of variable bounds, since the asserts on compl_x_L/U use the original bounds, not the relaxed one that Ipopt uses
    app->Options()->SetNumericValue("constr_viol_tol", 1e-3 * TESTTOL, true, true);
-   app->Options()->SetStringValue("linear_solver", "cudss", true, true);
 
    if( fixedvar_makeconstr )
    {

@@ -138,8 +138,6 @@ C
       IERR = IPADDSTROPTION(IPROBLEM, 'mu_strategy', 'adaptive')
       if (IERR.ne.0 ) goto 9990
 
-      IERR = IPADDSTROPTION(IPROBLEM, 'linear_solver', 'cudss')
-      if (IERR.ne.0 ) goto 9990
 C
 C     Set an integer option
 C

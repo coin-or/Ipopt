@@ -35,8 +35,6 @@ int main(
       return (int) status;
    }
 
-   app->Options()->SetStringValue("linear_solver", "cudss");
-
    status = app->OptimizeTNLP(mynlp);
 
    if( status == Solve_Succeeded )

@@ -273,7 +273,6 @@ int main(int argc, char** argv)
 
    app->Options()->SetStringValue("derivative_test", "first-order");
    app->Options()->SetStringValue("hessian_approximation", "limited-memory");
-   app->Options()->SetStringValue("linear_solver", "cudss");
 
    SmartPtr<recursive_nlp> nlp = new recursive_nlp();
    status = app->OptimizeTNLP(nlp);

@@ -1,3 +1,9 @@
+// Copyright (C) 2004, 2007 International Business Machines and others.
+// All Rights Reserved.
+// This code is published under the Eclipse Public License.
+//
+// Authors: Antonio Cioffi                          2025-10-19
+//          Carl Laird, Andreas Waechter     IBM    2004-03-17
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,6 +14,8 @@
 #include "cudss.h"
 
 #include "cuDSS_wrapper.h"
+
+// ADD SUPPORT FOR MGMN, MG, MT, HYBRID MODE and IPOPT_SINGLE
 
 static cudssStatus_t status_;
 static cudssHandle_t handle_;

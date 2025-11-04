@@ -2,7 +2,7 @@
 // All Rights Reserved.
 // This code is published under the Eclipse Public License.
 //
-// Authors: Antonio Cioffi  McLaren Automotive Ltd. 2025-10-19
+// Authors: Antonio Cioffi                          2025-10-19
 //          Carl Laird, Andreas Waechter     IBM    2004-03-17
 
 /* some useful links:

@@ -476,7 +476,6 @@ int main()
        */
       AddIpoptNumOption(nlp, "bound_push", 1e-5);
       AddIpoptNumOption(nlp, "bound_frac", 1e-5);
-      AddIpoptStrOption(nlp, "linear_solver", "cudss");
       status = IpoptSolve(nlp, x, NULL, &obj, mult_g, mult_x_L, mult_x_U, &user_data);
 
       if( status == Solve_Succeeded )

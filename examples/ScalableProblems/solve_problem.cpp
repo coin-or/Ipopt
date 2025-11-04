@@ -188,7 +188,6 @@ int main(
    // We are using the factory, since this allows us to compile this
    // example with an Ipopt Windows DLL
    SmartPtr<IpoptApplication> app = IpoptApplicationFactory();
-   app->Options()->SetStringValue("linear_solver", "cudss");
    ApplicationReturnStatus status;
    status = app->Initialize();
    if( status != Solve_Succeeded )

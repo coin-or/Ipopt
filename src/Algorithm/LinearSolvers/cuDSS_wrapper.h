@@ -1,3 +1,10 @@
+// Copyright (C) 2004, 2007 International Business Machines and others.
+// All Rights Reserved.
+// This code is published under the Eclipse Public License.
+//
+// Authors: Antonio Cioffi                          2025-10-19
+//          Carl Laird, Andreas Waechter     IBM    2004-03-17
+
 #ifndef __CUDSS_WRAPPER_HPP__
 #define __CUDSS_WRAPPER_HPP__
 
