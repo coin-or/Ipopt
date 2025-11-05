@@ -16,7 +16,27 @@
 #include "cuDSS_wrapper.h"
 
 // ADD SUPPORT FOR MGMN, MG, MT, HYBRID MODE and IPOPT_SINGLE
+// FIX cudaMALLOC and FREE ERROR, add support for generic matrix (and transform from symm to general in Ipopt)
 
+// Error checking as in: https://github.com/NVIDIA/CUDALibrarySamples/blob/master/cuDSS/simple/simple.cpp
+#define CUDA_CALL_AND_CHECK(call, msg) \
+    do { \
+        cuda_error_ = call; \
+        if (cuda_error_ != cudaSuccess) { \
+            printf("Example FAILED: CUDA API returned error = %d, details: " #msg "\n", cuda_error_); \
+        } \
+    } while(0);
+
+
+#define CUDSS_CALL_AND_CHECK(call, status, msg) \
+    do { \
+        status = call; \
+        if (status != CUDSS_STATUS_SUCCESS) { \
+            printf("Example FAILED: CUDSS call ended unsuccessfully with status = %d, details: " #msg "\n", status); \
+        } \
+    } while(0);
+
+static cudaError_t cuda_error_;
 static cudssStatus_t status_;
 static cudssHandle_t handle_;
 static cudaStream_t stream_;
@@ -70,28 +90,33 @@ static const cudssIndexBase_t matIndex_ = CUDSS_BASE_ZERO;
 
 void cuDSS_initialize() {
     // ADD ERROR CHECKING EVERYWHERE FOR CUDA AND CUDSS
-    cudaStreamCreate(&stream_);
+    CUDA_CALL_AND_CHECK(cudaStreamCreate(&stream_), "stream create");
     status_ = cudssCreate(&handle_);
     status_ = cudssSetStream(handle_, stream_);
 }
 
 void cuDSS_terminate() {
-    status_ = cudssMatrixDestroy(a_);
-    status_ = cudssMatrixDestroy(b_);
-    status_ = cudssMatrixDestroy(sol_);
-    status_ = cudssDataDestroy(handle_, data_);
-    status_ = cudssConfigDestroy(config_);
-    status_ = cudssDestroy(handle_);
-    cudaFree(aD_);
-    cudaFree(bD_);
-    cudaFree(solD_);
-    cudaFree(ia_);
-    cudaFree(ja_);
+    // Checked with NVIDIA compute-sanitizer --tool memcheck ./test/hs071_c
+    // It seems better not to deallocate anything on GPU in case of a double IpoptSolve execution
+    // Otherwise segfault... 
+    
+    // status_ = cudssMatrixDestroy(a_);
+    // status_ = cudssMatrixDestroy(b_);
+    // status_ = cudssMatrixDestroy(sol_);
+    // status_ = cudssDataDestroy(handle_, data_);
+    // status_ = cudssConfigDestroy(config_);
+    // status_ = cudssDestroy(handle_);
+    // CUDA_CALL_AND_CHECK(cudaFree(aD_), "free aD_");
+    // CUDA_CALL_AND_CHECK(cudaFree(bD_), "free bD_");
+    // CUDA_CALL_AND_CHECK(cudaFree(solD_), "free solD_");
+    // CUDA_CALL_AND_CHECK(cudaFree(ia_), "free ia_");
+    // CUDA_CALL_AND_CHECK(cudaFree(ja_), "free ja_");
     delete[] aH_;
     delete[] bH_;
     delete[] solH_;
-    cudaStreamSynchronize(stream_);
-    cudaStreamDestroy(stream_);
+    // CUDA_CALL_AND_CHECK(cudaStreamSynchronize(stream_), "stream sync");
+    // CUDA_CALL_AND_CHECK(cudaStreamDestroy(stream_), "stream destroy");
+    // CUDA_CALL_AND_CHECK(cudaDeviceSynchronize(), "Device sync");
 }
 
 bool cuDSS_config_create_and_set(cuDSS_config_settings settings) {
@@ -189,18 +214,18 @@ void cuDSS_initialize_structure(Index dim, Index nonzeros, const Index* ia, cons
 
     // Storing the row and column indexes on Device
     ia_ = NULL;
-    cudaMalloc(&ia_, (dim_ + 1) * sizeof(Index));
-    cudaMemcpy(ia_, ia, (dim_ + 1) * sizeof(Index), cudaMemcpyHostToDevice);
+    CUDA_CALL_AND_CHECK(cudaMalloc(&ia_, (dim_ + 1) * sizeof(Index)), "cudaMalloc ia_");
+    CUDA_CALL_AND_CHECK(cudaMemcpy(ia_, ia, (dim_ + 1) * sizeof(Index), cudaMemcpyHostToDevice), "cudaMemcpy ia_");
     ja_ = NULL;
-    cudaMalloc(&ja_, nonzeros_ * sizeof(Index));
-    cudaMemcpy(ja_, ja, nonzeros_ * sizeof(Index), cudaMemcpyHostToDevice);
+    CUDA_CALL_AND_CHECK(cudaMalloc(&ja_, nonzeros_ * sizeof(Index)), "cudaMalloc ja_");
+    CUDA_CALL_AND_CHECK(cudaMemcpy(ja_, ja, nonzeros_ * sizeof(Index), cudaMemcpyHostToDevice), "cudaMemcpy ja_");
 
     // Storing the matrix elements on Device and Host
     aH_ = NULL;
     aH_ = new Number[nonzeros_];
     aD_ = NULL;
-    cudaMalloc(&aD_, nonzeros_ * sizeof(Number));
-    cudaMemcpy(aD_, aH_, nonzeros_ * sizeof(Number), cudaMemcpyHostToDevice);
+    CUDA_CALL_AND_CHECK(cudaMalloc(&aD_, nonzeros_ * sizeof(Number)), "cudaMalloc aD_");
+    CUDA_CALL_AND_CHECK(cudaMemcpy(aD_, aH_, nonzeros_ * sizeof(Number), cudaMemcpyHostToDevice), "cudaMalloc aD_");
     #ifdef CUDSS_SINGLE
     status_ = cudssMatrixCreateCsr( &a_, dim_, dim_, nonzeros_, ia_, NULL,
                                     ja_, aD_, CUDA_R_64I, CUDA_R_32F, matType_, 
@@ -215,8 +240,8 @@ void cuDSS_initialize_structure(Index dim, Index nonzeros, const Index* ia, cons
     bH_ = NULL;
     bH_ = new Number[dim_];
     bD_ = NULL;
-    cudaMalloc(&bD_, dim_ * sizeof(Number));
-    cudaMemcpy(bD_, bH_, dim_ * sizeof(Number), cudaMemcpyHostToDevice);
+    CUDA_CALL_AND_CHECK(cudaMalloc(&bD_, dim_ * sizeof(Number)), "cudaMalloc bD_");
+    CUDA_CALL_AND_CHECK(cudaMemcpy(bD_, bH_, dim_ * sizeof(Number), cudaMemcpyHostToDevice), "cudaMalloc bD_");
     #ifdef CUDSS_SINGLE
     status_ = cudssMatrixCreateDn(&b_, dim_, (Index)1, dim_, bD_, CUDA_R_32F, CUDSS_LAYOUT_COL_MAJOR);
     #else
@@ -227,8 +252,8 @@ void cuDSS_initialize_structure(Index dim, Index nonzeros, const Index* ia, cons
     solH_ = NULL;
     solH_ = new Number[dim_];
     solD_ = NULL;
-    cudaMalloc(&solD_, dim_ * sizeof(Number));
-    cudaMemcpy(solD_, solH_, dim_ * sizeof(Number), cudaMemcpyHostToDevice);
+    CUDA_CALL_AND_CHECK(cudaMalloc(&solD_, dim_ * sizeof(Number)), "cudaMalloc solD_");
+    CUDA_CALL_AND_CHECK(cudaMemcpy(solD_, solH_, dim_ * sizeof(Number), cudaMemcpyHostToDevice), "cudaMalloc solD_");
     #ifdef CUDSS_SINGLE
     status_ = cudssMatrixCreateDn(&sol_, dim_, (Index)1, dim_, solD_, CUDA_R_32F, CUDSS_LAYOUT_COL_MAJOR);
     #else
@@ -284,13 +309,13 @@ int cuDSS_refactorization()
 int cuDSS_solve(Index nrhs, Number* rhs_vals)
 {
     for (Index i = 0; i < nrhs; i++) {
-        cudaMemcpy(bD_, &rhs_vals[i * dim_], dim_ * sizeof(Number), cudaMemcpyHostToDevice);
+        CUDA_CALL_AND_CHECK(cudaMemcpy(bD_, &rhs_vals[i * dim_], dim_ * sizeof(Number), cudaMemcpyHostToDevice), "cudaMemcpy bD_ to Device");
         status_ = cudssExecute(handle_, CUDSS_PHASE_SOLVE, config_, data_, a_, sol_, b_);
         if (status_ != CUDSS_STATUS_SUCCESS) {
             printf("Example FAILED: CUDSS call ended unsuccessfully with status = %d, details: SOLVE\n", status_);
             return 4;
         }
-        cudaMemcpy(&rhs_vals[i * dim_], solD_, dim_ * sizeof(Number), cudaMemcpyDeviceToHost);
+        CUDA_CALL_AND_CHECK(cudaMemcpy(&rhs_vals[i * dim_], solD_, dim_ * sizeof(Number), cudaMemcpyDeviceToHost), "cudaMemcpy sol_ to Host");
     }
     return 0;
 }
@@ -305,6 +330,6 @@ Index cuDSS_get_inertia()
 
 bool cuDSS_update_matrix() 
 {
-    cudaMemcpy(aD_, aH_, nonzeros_ * sizeof(Number), cudaMemcpyHostToDevice);
+    CUDA_CALL_AND_CHECK(cudaMemcpy(aD_, aH_, nonzeros_ * sizeof(Number), cudaMemcpyHostToDevice), "cudaMemcpy aH_ to Device");
     return true;
 }

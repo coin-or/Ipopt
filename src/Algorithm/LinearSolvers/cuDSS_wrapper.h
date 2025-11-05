@@ -8,6 +8,8 @@
 #ifndef __CUDSS_WRAPPER_HPP__
 #define __CUDSS_WRAPPER_HPP__
 
+//#define CUDSS_SINGLE
+
 #ifdef CUDSS_SINGLE
 typedef float Number;
 #else
