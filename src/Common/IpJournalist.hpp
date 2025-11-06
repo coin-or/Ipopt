@@ -444,22 +444,22 @@ protected:
     */
    ///@{
    /** Print to the designated output location */
-   virtual void PrintImpl(
+   void PrintImpl(
       EJournalCategory /*category*/,
       EJournalLevel    /*level*/,
       const char*      str
-   );
+   ) override;
 
    /** Printf to the designated output location */
-   virtual void PrintfImpl(
+   void PrintfImpl(
       EJournalCategory /*category*/,
       EJournalLevel    /*level*/,
       const char*      pformat,
       va_list          ap
-   );
+   ) override;
 
    /** Flush output buffer.*/
-   virtual void FlushBufferImpl();
+   void FlushBufferImpl() override;
    ///@}
 
 private:
@@ -520,22 +520,22 @@ protected:
     */
    ///@{
    /** Print to the designated output location */
-   virtual void PrintImpl(
+   void PrintImpl(
       EJournalCategory /*category*/,
       EJournalLevel    /*level*/,
       const char*      str
-   );
+   ) override;
 
    /** Printf to the designated output location */
-   virtual void PrintfImpl(
+   void PrintfImpl(
       EJournalCategory /*category*/,
       EJournalLevel    /*level*/,
       const char*      pformat,
       va_list          ap
-   );
+   ) override;
 
    /** Flush output buffer.*/
-   virtual void FlushBufferImpl();
+   void FlushBufferImpl() override;
    ///@}
 
 private:
