@@ -50,12 +50,12 @@ protected:
     *  MultVectorImpl method in a class that inherits from this base
     *  class.
     */
-   virtual void TransMultVectorImpl(
+   void TransMultVectorImpl(
       Number        alpha,
       const Vector& x,
       Number        beta,
       Vector&       y
-   ) const
+   ) const override
    {
       // Since this matrix is symmetric, this is the same operation as MultVector
       MultVector(alpha, x, beta, y);
@@ -65,10 +65,10 @@ protected:
     *
     * Since the matrix is symmetric, the row and column max norms are identical.
     */
-   virtual void ComputeColAMaxImpl(
+   void ComputeColAMaxImpl(
       Vector& cols_norms,
       bool    init
-   ) const
+   ) const override
    {
       ComputeRowAMaxImpl(cols_norms, init);
    }
@@ -104,7 +104,7 @@ public:
    /** Pure virtual method for creating a new matrix of this specific type. */
    virtual SymMatrix* MakeNewSymMatrix() const = 0;
 
-   virtual Matrix* MakeNew() const
+   Matrix* MakeNew() const override
    {
       return MakeNewSymMatrix();
    }
