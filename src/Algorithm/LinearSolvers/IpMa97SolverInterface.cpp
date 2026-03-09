@@ -11,7 +11,6 @@
 #include "IpoptConfig.h"
 #include "IpMa97SolverInterface.hpp"
 
-#include <iostream>
 #include <cstdio>
 #include <cmath>
 #include <cassert>

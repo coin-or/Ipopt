@@ -12,7 +12,7 @@
 #include "IpException.hpp"
 #include "IpRegOptions.hpp"
 
-#include <iostream>
+#include <istream>
 #include <map>
 
 namespace Ipopt

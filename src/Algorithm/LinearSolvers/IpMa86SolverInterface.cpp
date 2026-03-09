@@ -11,7 +11,6 @@
 #include "IpoptConfig.h"
 #include "IpMa86SolverInterface.hpp"
 
-#include <iostream>
 #include <cmath>
 
 #ifdef IPOPT_HAS_HSL
