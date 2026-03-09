@@ -7,6 +7,7 @@
 #include "IpoptConfig.h"
 #include "IpUtils.hpp"
 
+#include <atomic>
 #include <cstdlib>
 #include <cmath>
 #include <cfloat>
@@ -142,7 +143,7 @@ void IpResetRandom01()
 #endif
 }
 
-static double Wallclock_firstCall_ = -1.;
+static std::atomic<double> Wallclock_firstCall_{-1.0};
 
 // The following function were taken from CoinTime.hpp in COIN/Coin
 Number CpuTime()
@@ -185,10 +186,8 @@ Number SysTime()
 Number WallclockTime()
 {
    double callTime = IpCoinGetTimeOfDay();
-   if( Wallclock_firstCall_ == -1. )
-   {
-      Wallclock_firstCall_ = callTime;
-   }
+   double first_call_sentinel = -1.0;
+   Wallclock_firstCall_.compare_exchange_strong(first_call_sentinel, callTime, std::memory_order_seq_cst, std::memory_order_seq_cst);
    return callTime - Wallclock_firstCall_;
 }
 

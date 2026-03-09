@@ -4,6 +4,8 @@
 //
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
+#include <atomic>
+
 #include "IpoptConfig.h"
 #include "IpIpoptAlg.hpp"
 #include "IpJournalist.hpp"
@@ -116,7 +118,7 @@ void IpoptAlgorithm::RegisterOptions(
       "The overall algorithm time is unaffected by this option.");
 }
 
-static bool copyright_message_printed = false;
+static std::atomic_bool copyright_message_printed{false};
 
 bool IpoptAlgorithm::InitializeImpl(
    const OptionsList& options,
