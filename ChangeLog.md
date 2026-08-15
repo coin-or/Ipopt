@@ -16,6 +16,8 @@ More detailed information about incremental changes can be found in the
 - Fixed a use-after-free in Spral interface where attempting to solve a second system with
   the same structurally singular matrix would end up trying to use an old numeric factorization
   using data from an already freed symbolic factorization [#848, by Kevin Kofler].
+- Fixed that the limit on filter resets was not effective [#860, #862, by Lander Vanroye and
+  Julien Schueller]. To restore previous behavior, set option max_filter_resets to a high value.
 
 ### 3.14.19 (2025-07-30)
 

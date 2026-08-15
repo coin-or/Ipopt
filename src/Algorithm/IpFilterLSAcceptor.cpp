@@ -417,6 +417,7 @@ FilterLSAcceptor::CheckAcceptabilityOfTrialPoint(
                               "Resetting filter because in %" IPOPT_INDEX_FORMAT " iterations last rejection was due to filter", count_successive_filter_rejections_);
                IpData().Append_info_string("F+");
                Reset();
+               ++n_filter_resets_;
             }
          }
          else
