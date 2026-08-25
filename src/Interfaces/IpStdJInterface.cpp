@@ -11,7 +11,6 @@
 #include "IpIpoptApplication.hpp"
 #include "org_coinor_Ipopt.h"
 
-using namespace std;
 using namespace Ipopt;
 
 #ifdef IPOPT_SINGLE
@@ -1079,7 +1078,7 @@ extern "C"
       Jipopt* problem = GetRawPtr(*(SmartPtr<Jipopt>*) pipopt);
 
       const char* pparameterName = env->GetStringUTFChars(jparname, 0);
-      string parameterName = pparameterName;
+      std::string parameterName = pparameterName;
 
       // Try to apply the integer option
       jboolean ret = problem->application->Options()->SetIntegerValue(parameterName, jparvalue);
@@ -1100,7 +1099,7 @@ extern "C"
       Jipopt* problem = GetRawPtr(*(SmartPtr<Jipopt>*) pipopt);
 
       const char* pparameterName = env->GetStringUTFChars(jparname, 0);
-      string parameterName = pparameterName;
+      std::string parameterName = pparameterName;
 
       // Try to set the real option
       jboolean ret = problem->application->Options()->SetNumericValue(parameterName, jparvalue);
@@ -1121,9 +1120,9 @@ extern "C"
       Jipopt* problem = GetRawPtr(*(SmartPtr<Jipopt>*) pipopt);
 
       const char* pparameterName = env->GetStringUTFChars(jparname, NULL);
-      string parameterName = pparameterName;
+      std::string parameterName = pparameterName;
       const char* pparameterValue = env->GetStringUTFChars(jparvalue, NULL);
-      string parameterValue = pparameterValue;
+      std::string parameterValue = pparameterValue;
 
       // parameterValue has been changed to LowerCase in Java!
       if( parameterName == "hessian_approximation" && parameterValue == "limited-memory" )

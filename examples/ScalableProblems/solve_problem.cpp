@@ -20,7 +20,6 @@
 //**********************************************************************
 
 using namespace Ipopt;
-using namespace std;
 
 // This could probably be done more elegant and automatically, but I
 // can't get it to work right now.  For now, list explicitly the
@@ -147,9 +146,9 @@ int main(
       bool done = false;
       while( !done )
       {
-         string inputword;
-         cout << "Enter problem name (or \"list\" for all available names):\n";
-         cin >> inputword;
+         std::string inputword;
+         std::cout << "Enter problem name (or \"list\" for all available names):\n";
+         std::cin >> inputword;
          if( inputword == "list" )
          {
             print_problems();
@@ -167,8 +166,8 @@ int main(
             }
          }
       }
-      cout << "Enter problem size:\n";
-      cin >> N;
+      std::cout << "Enter problem size:\n";
+      std::cin >> N;
    }
 
    if( N <= 0 )
