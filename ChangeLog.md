@@ -18,6 +18,7 @@ More detailed information about incremental changes can be found in the
   using data from an already freed symbolic factorization [#848, by Kevin Kofler].
 - Fixed that the limit on filter resets was not effective [#860, #862, by Lander Vanroye and
   Julien Schueller]. To restore previous behavior, set option max_filter_resets to a high value.
+- Removed unnecessary include of iostream header [#856 by Jeremy Nimmer, #863].
 
 ### 3.14.19 (2025-07-30)
 

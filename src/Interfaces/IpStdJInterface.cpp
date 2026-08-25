@@ -5,6 +5,7 @@
  */
 
 #include <cassert>
+#include <cstdio>
 #include <jni.h>
 #include "IpTNLP.hpp"
 #include "IpIpoptApplication.hpp"
@@ -293,7 +294,7 @@ Jipopt::Jipopt(
        || get_scaling_parameters_ == 0 || get_number_of_nonlinear_variables_ == 0
        || get_list_of_nonlinear_variables_ == 0 )
    {
-      std::cerr << "Expected callback methods missing on JIpopt.java" << std::endl;
+      printf("\n\n*** Expected callback methods missing on JIpopt.java!\n");
    }
 
    assert(get_bounds_info_    != 0);
