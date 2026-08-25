@@ -11,7 +11,6 @@
 #include "IpoptConfig.h"
 #include "IpMa97SolverInterface.hpp"
 
-#include <iostream>
 #include <cstdio>
 #include <cmath>
 #include <cassert>
@@ -43,8 +42,6 @@ extern "C"
    );
 }
 #endif
-
-using namespace std;
 
 namespace Ipopt
 {
@@ -370,7 +367,7 @@ bool Ma97SolverInterface::InitializeImpl(
    if( scaling_method == "dynamic" )
    {
       scaling_type_ = 0;
-      string switch_val[3], scale_val[3];
+      std::string switch_val[3], scale_val[3];
       options.GetStringValue("ma97_switch1", switch_val[0], prefix);
       options.GetStringValue("ma97_scaling1", scale_val[0], prefix);
       options.GetStringValue("ma97_switch2", switch_val[1], prefix);

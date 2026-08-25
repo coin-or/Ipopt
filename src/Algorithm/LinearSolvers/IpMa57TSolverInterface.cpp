@@ -9,7 +9,6 @@
 #include "IpMa57TSolverInterface.hpp"
 
 #include <cmath>
-#include <iostream>
 
 #ifdef IPOPT_HAS_HSL
 #include "CoinHslConfig.h"
