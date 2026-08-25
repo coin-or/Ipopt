@@ -11,14 +11,11 @@
 #include "IpoptConfig.h"
 #include "IpMa77SolverInterface.hpp"
 
-#include <iostream>
 #include <cmath>
 
 #ifdef IPOPT_HAS_HSL
 #include "CoinHslConfig.h"
 #endif
-
-using namespace std;
 
 namespace Ipopt
 {

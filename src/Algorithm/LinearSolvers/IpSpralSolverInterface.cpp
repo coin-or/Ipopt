@@ -16,8 +16,6 @@
 #include <cmath>
 #include <cinttypes>
 
-using namespace std;
-
 namespace Ipopt
 {
 

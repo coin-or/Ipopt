@@ -5,12 +5,12 @@
  */
 
 #include <cassert>
+#include <cstdio>
 #include <jni.h>
 #include "IpTNLP.hpp"
 #include "IpIpoptApplication.hpp"
 #include "org_coinor_Ipopt.h"
 
-using namespace std;
 using namespace Ipopt;
 
 #ifdef IPOPT_SINGLE
@@ -293,7 +293,7 @@ Jipopt::Jipopt(
        || get_scaling_parameters_ == 0 || get_number_of_nonlinear_variables_ == 0
        || get_list_of_nonlinear_variables_ == 0 )
    {
-      std::cerr << "Expected callback methods missing on JIpopt.java" << std::endl;
+      printf("\n\n*** Expected callback methods missing on JIpopt.java!\n");
    }
 
    assert(get_bounds_info_    != 0);
@@ -1078,7 +1078,7 @@ extern "C"
       Jipopt* problem = GetRawPtr(*(SmartPtr<Jipopt>*) pipopt);
 
       const char* pparameterName = env->GetStringUTFChars(jparname, 0);
-      string parameterName = pparameterName;
+      std::string parameterName = pparameterName;
 
       // Try to apply the integer option
       jboolean ret = problem->application->Options()->SetIntegerValue(parameterName, jparvalue);
@@ -1099,7 +1099,7 @@ extern "C"
       Jipopt* problem = GetRawPtr(*(SmartPtr<Jipopt>*) pipopt);
 
       const char* pparameterName = env->GetStringUTFChars(jparname, 0);
-      string parameterName = pparameterName;
+      std::string parameterName = pparameterName;
 
       // Try to set the real option
       jboolean ret = problem->application->Options()->SetNumericValue(parameterName, jparvalue);
@@ -1120,9 +1120,9 @@ extern "C"
       Jipopt* problem = GetRawPtr(*(SmartPtr<Jipopt>*) pipopt);
 
       const char* pparameterName = env->GetStringUTFChars(jparname, NULL);
-      string parameterName = pparameterName;
+      std::string parameterName = pparameterName;
       const char* pparameterValue = env->GetStringUTFChars(jparvalue, NULL);
-      string parameterValue = pparameterValue;
+      std::string parameterValue = pparameterValue;
 
       // parameterValue has been changed to LowerCase in Java!
       if( parameterName == "hessian_approximation" && parameterValue == "limited-memory" )

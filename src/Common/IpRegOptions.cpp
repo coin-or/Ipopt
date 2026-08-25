@@ -776,15 +776,13 @@ bool RegisteredOption::string_equal_insensitive(
    const std::string& s2
 ) const
 {
-   using namespace std;
-
    if( s1.size() != s2.size() )
    {
       return false;
    }
 
-   string::const_iterator i1 = s1.begin();
-   string::const_iterator i2 = s2.begin();
+   std::string::const_iterator i1 = s1.begin();
+   std::string::const_iterator i2 = s2.begin();
 
    while( i1 != s1.end() )
    {

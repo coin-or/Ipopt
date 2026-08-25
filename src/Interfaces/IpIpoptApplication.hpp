@@ -7,7 +7,7 @@
 #ifndef __IPIPOPTAPPLICATION_HPP__
 #define __IPIPOPTAPPLICATION_HPP__
 
-#include <iostream>
+#include <istream>
 
 #include "IpJournalist.hpp"
 #include "IpTNLP.hpp"

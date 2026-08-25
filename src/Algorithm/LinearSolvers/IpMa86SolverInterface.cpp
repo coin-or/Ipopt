@@ -11,14 +11,11 @@
 #include "IpoptConfig.h"
 #include "IpMa86SolverInterface.hpp"
 
-#include <iostream>
 #include <cmath>
 
 #ifdef IPOPT_HAS_HSL
 #include "CoinHslConfig.h"
 #endif
-
-using namespace std;
 
 namespace Ipopt
 {
@@ -307,7 +304,6 @@ ESymSolverStatus Ma86SolverInterface::InitializeStructure(
       if( info.num_flops > info2.num_flops )
       {
          // Use AMD
-         //cout << "Choose AMD\n";
          order_ = order_amd;
          keep_ = keep_amd;
          delete[] order_metis;
@@ -316,7 +312,6 @@ ESymSolverStatus Ma86SolverInterface::InitializeStructure(
       else
       {
          // Use MeTiS
-         //cout << "Choose MeTiS\n";
          order_ = order_metis;
          keep_ = keep_metis;
          delete[] order_amd;
