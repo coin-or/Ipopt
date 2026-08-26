@@ -97,7 +97,7 @@ IPOPTLIB_EXPORT Number CpuTime();
 /** method determining system time */
 IPOPTLIB_EXPORT Number SysTime();
 
-/** method determining wallclock time since first call */
+/** method determining wallclock time since Epoch */
 IPOPTLIB_EXPORT Number WallclockTime();
 
 /** register handler for interrupt signals

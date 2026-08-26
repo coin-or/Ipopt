@@ -142,8 +142,6 @@ void IpResetRandom01()
 #endif
 }
 
-static double Wallclock_firstCall_ = -1.;
-
 // The following function were taken from CoinTime.hpp in COIN/Coin
 Number CpuTime()
 {
@@ -184,12 +182,7 @@ Number SysTime()
 
 Number WallclockTime()
 {
-   double callTime = IpCoinGetTimeOfDay();
-   if( Wallclock_firstCall_ == -1. )
-   {
-      Wallclock_firstCall_ = callTime;
-   }
-   return callTime - Wallclock_firstCall_;
+   return IpCoinGetTimeOfDay();
 }
 
 static bool registered_handler = false;

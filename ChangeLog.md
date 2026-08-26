@@ -19,6 +19,8 @@ More detailed information about incremental changes can be found in the
 - Fixed that the limit on filter resets was not effective [#860, #862, by Lander Vanroye and
   Julien Schueller]. To restore previous behavior, set option max_filter_resets to a high value.
 - Removed unnecessary include of iostream header [#856 by Jeremy Nimmer, #863].
+- Removed global variable `Wallclock_firstCall_` (for #857); WallclockTime() now returns time
+  since the Epoch instead of the first call
 
 ### 3.14.19 (2025-07-30)
 
