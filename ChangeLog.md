@@ -21,6 +21,8 @@ More detailed information about incremental changes can be found in the
 - Removed unnecessary include of iostream header [#856 by Jeremy Nimmer, #863].
 - Removed global variable `Wallclock_firstCall_` (for #857); WallclockTime() now returns time
   since the Epoch instead of the first call
+- Global variable `copyright_message_printed` is now thread-local (for #857).
+  The copyright message will be printed once per thread now.
 
 ### 3.14.19 (2025-07-30)
 

@@ -19,6 +19,19 @@
 #include <cfenv>
 #endif
 
+// copied from IpTaggedObject.cpp
+#ifndef IPOPT_THREAD_LOCAL
+#if __cplusplus >= 201103L
+#define IPOPT_THREAD_LOCAL thread_local
+#elif defined(_MSC_VER)
+#define IPOPT_THREAD_LOCAL __declspec(thread)
+#elif defined(__APPLE__) && ((defined(__GNUC__) && (__GNUC__ * 100 + __GNUC_MINOR__ < 405)) || defined(__INTEL_COMPILER))
+#define IPOPT_THREAD_LOCAL
+#else
+#define IPOPT_THREAD_LOCAL __thread
+#endif
+#endif
+
 namespace Ipopt
 {
 #if IPOPT_VERBOSITY > 0
@@ -116,7 +129,7 @@ void IpoptAlgorithm::RegisterOptions(
       "The overall algorithm time is unaffected by this option.");
 }
 
-static bool copyright_message_printed = false;
+static IPOPT_THREAD_LOCAL bool copyright_message_printed = false;
 
 bool IpoptAlgorithm::InitializeImpl(
    const OptionsList& options,
