@@ -3,10 +3,8 @@
 // This code is published under the Eclipse Public License.
 //
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
-
-/**  This file contains a base class for all exceptions
- *  and a set of macros to help with exceptions.
- */
+//
+// This file contains a base class for all exceptions and a set of macros to help with exceptions.
 
 #ifndef __IPEXCEPTION_HPP__
 #define __IPEXCEPTION_HPP__
