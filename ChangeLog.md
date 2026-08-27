@@ -7,7 +7,7 @@ More detailed information about incremental changes can be found in the
 
 ## 3.14
 
-### 3.14.20 (2025-xx-yy)
+### 3.14.20 (2026-08-27)
 
 - Fixed issue where Ipopt exceptions could not been caught from other libraries
   on macOS with clang when Ipopt or the other library was build with `-fvisibility=hidden`.
