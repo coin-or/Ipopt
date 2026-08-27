@@ -189,6 +189,12 @@ if HAVE_PARDISO_MKL
   libipopt_la_SOURCES += Algorithm/LinearSolvers/IpPardisoMKLSolverInterface.cpp
 endif
 
+if IPOPT_INT64
+if HAVE_CUDSS
+  libipopt_la_SOURCES += Algorithm/LinearSolvers/IpCuDSSSolverInterface.cpp
+#endif # HAVE_CUDSS
+#endif # IPOPT_INT64
+
 if !IPOPT_INT64
 libipopt_la_SOURCES += \
   Algorithm/LinearSolvers/IpMc19TSymScalingMethod.cpp \

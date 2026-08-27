@@ -60,6 +60,10 @@ IpoptLinearSolver IpoptGetAvailableLinearSolvers(
    solvers |= IPOPTLINEARSOLVER_MUMPS;
 #endif
 
+#if (defined(IPOPT_SINGLE) && defined(IPOPT_HAS_CUDSS)) || (!defined(IPOPT_SINGLE) && defined(IPOPT_HAS_CUDSS))
+   solvers |= IPOPTLINEARSOLVER_CUDSS;
+#endif
+
 #if defined(IPOPT_HAS_LINEARSOLVERLOADER)
    if( !buildinonly )
    {
