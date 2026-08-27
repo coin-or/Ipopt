@@ -129,6 +129,11 @@ protected:
       bool    init
    ) const;
 
+   virtual void ComputeRowA1Impl(
+      Vector& rows_norms,
+      bool    init
+   ) const;
+
    virtual void PrintImpl(
       const Journalist&  jnlst,
       EJournalLevel      level,

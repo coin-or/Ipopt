@@ -136,6 +136,22 @@ void SumMatrix::ComputeColAMaxImpl(
    THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "SumMatrix::ComputeColAMaxImpl not implemented");
 }
 
+void SumMatrix::ComputeRowA1Impl(
+   Vector& /*rows_norms*/,
+   bool    /*init*/
+) const
+{
+   THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "SumMatrix::ComputeRowA1Impl not implemented");
+}
+
+void SumMatrix::ComputeColA1Impl(
+   Vector& /*cols_norms*/,
+   bool    /*init*/
+) const
+{
+   THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "SumMatrix::ComputeColA1Impl not implemented");
+}
+
 void SumMatrix::PrintImpl(
    const Journalist&  jnlst,
    EJournalLevel      level,

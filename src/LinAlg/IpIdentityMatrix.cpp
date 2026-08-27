@@ -62,6 +62,21 @@ void IdentityMatrix::ComputeRowAMaxImpl(
    }
 }
 
+void IdentityMatrix::ComputeRowA1Impl(
+   Vector& rows_norms,
+   bool    init
+) const
+{
+   if( init )
+   {
+      rows_norms.Set(1.);
+   }
+   else
+   {
+      rows_norms.AddScalar(Number(1.));
+   }
+}
+
 void IdentityMatrix::PrintImpl(
    const Journalist&  jnlst,
    EJournalLevel      level,

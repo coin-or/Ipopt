@@ -108,6 +108,30 @@ void SumSymMatrix::ComputeColAMaxImpl(
    THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "SumSymMatrix::ComputeColAMaxImpl not implemented");
 }
 
+void SumSymMatrix::ComputeRowA1Impl(
+   Vector& rows_norms,
+   bool    /*init*/
+) const
+{
+   for( Index iterm = 0; iterm < NTerms(); iterm++ )
+   {
+      DBG_ASSERT(IsValid(matrices_[iterm]));
+      matrices_[iterm]->ComputeRowA1(rows_norms, false);
+   }
+}
+
+void SumSymMatrix::ComputeColA1Impl(
+   Vector& cols_norms,
+   bool    /*init*/
+) const
+{
+   for( Index iterm = 0; iterm < NTerms(); iterm++ )
+   {
+      DBG_ASSERT(IsValid(matrices_[iterm]));
+      matrices_[iterm]->ComputeColA1(cols_norms, false);
+   }
+}
+
 void SumSymMatrix::PrintImpl(
    const Journalist&  jnlst,
    EJournalLevel      level,

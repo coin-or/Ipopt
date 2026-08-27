@@ -715,6 +715,118 @@ void CompoundMatrix::ComputeColAMaxImpl(
    }
 }
 
+void CompoundMatrix::ComputeRowA1Impl(
+   Vector& rows_norms,
+   bool    /*init*/
+) const
+{
+   if( !matrices_valid_ )
+   {
+      matrices_valid_ = MatricesValid();
+   }
+   DBG_ASSERT(matrices_valid_);
+
+   // The vector is assumed to be compound Vectors as well except if
+   // there is only one component
+   CompoundVector* comp_vec = dynamic_cast<CompoundVector*>(&rows_norms);
+
+#ifndef ALLOW_NESTED
+   //  A few sanity checks
+   if (comp_vec)
+   {
+      DBG_ASSERT(NComps_Rows() == comp_vec->NComps());
+   }
+   else
+   {
+      DBG_ASSERT(NComps_Rows() == 1);
+   }
+#endif
+   if( comp_vec )
+   {
+      if( NComps_Rows() != comp_vec->NComps() )
+      {
+         comp_vec = NULL;
+      }
+   }
+
+   for( Index jcol = 0; jcol < NComps_Cols(); jcol++ )
+   {
+      for( Index irow = 0; irow < NComps_Rows(); irow++ )
+      {
+         if( ConstComp(irow, jcol) )
+         {
+            SmartPtr<Vector> vec_i;
+            if( comp_vec )
+            {
+               vec_i = comp_vec->GetCompNonConst(irow);
+            }
+            else
+            {
+               vec_i = &rows_norms;
+            }
+            DBG_ASSERT(IsValid(vec_i));
+            ConstComp(irow, jcol)->ComputeRowA1(*vec_i, false);
+         }
+      }
+   }
+}
+
+void CompoundMatrix::ComputeColA1Impl(
+   Vector& cols_norms,
+   bool    /*init*/
+) const
+{
+   if( !matrices_valid_ )
+   {
+      matrices_valid_ = MatricesValid();
+   }
+   DBG_ASSERT(matrices_valid_);
+
+   // The vector is assumed to be compound Vectors as well except if
+   // there is only one component
+   CompoundVector* comp_vec = dynamic_cast<CompoundVector*>(&cols_norms);
+
+#ifndef ALLOW_NESTED
+   //  A few sanity checks
+   if (comp_vec)
+   {
+      DBG_ASSERT(NComps_Cols() == comp_vec->NComps());
+   }
+   else
+   {
+      DBG_ASSERT(NComps_Cols() == 1);
+   }
+#endif
+   if( comp_vec )
+   {
+      if( NComps_Cols() != comp_vec->NComps() )
+      {
+         comp_vec = NULL;
+      }
+   }
+
+   for( Index irow = 0; irow < NComps_Rows(); irow++ )
+   {
+      for( Index jcol = 0; jcol < NComps_Cols(); jcol++ )
+      {
+         if( ConstComp(irow, jcol) )
+         {
+            SmartPtr<Vector> vec_j;
+            if( comp_vec )
+            {
+               vec_j = comp_vec->GetCompNonConst(jcol);
+            }
+            else
+            {
+               vec_j = &cols_norms;
+            }
+            DBG_ASSERT(IsValid(vec_j));
+            ConstComp(irow, jcol)->ComputeColA1(*vec_j, false);
+         }
+      }
+   }
+}
+
 void CompoundMatrix::PrintImpl(
    const Journalist&  jnlst,
    EJournalLevel      level,

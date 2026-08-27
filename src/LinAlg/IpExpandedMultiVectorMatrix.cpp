@@ -192,6 +192,22 @@ void ExpandedMultiVectorMatrix::ComputeColAMaxImpl(
    THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "ExpandedMultiVectorMatrix::ComputeColAMaxImpl not implemented");
 }
 
+void ExpandedMultiVectorMatrix::ComputeRowA1Impl(
+   Vector& /*rows_norms*/,
+   bool    /*init*/
+) const
+{
+   THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "ExpandedMultiVectorMatrix::ComputeRowA1Impl not implemented");
+}
+
+void ExpandedMultiVectorMatrix::ComputeColA1Impl(
+   Vector& /*cols_norms*/,
+   bool    /*init*/
+) const
+{
+   THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "ExpandedMultiVectorMatrix::ComputeColA1Impl not implemented");
+}
+
 void ExpandedMultiVectorMatrix::PrintImpl(
    const Journalist&  jnlst,
    EJournalLevel      level,

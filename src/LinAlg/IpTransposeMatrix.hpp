@@ -85,6 +85,22 @@ protected:
       orig_matrix_->ComputeRowAMax(rows_norms, init);
    }
 
+   virtual void ComputeRowA1Impl(
+      Vector& rows_norms,
+      bool    init
+   ) const {
+      DBG_ASSERT(IsValid(orig_matrix_));
+      orig_matrix_->ComputeColA1(rows_norms, init);
+   }
+
+   virtual void ComputeColA1Impl(
+      Vector& cols_norms,
+      bool    init
+   ) const {
+      DBG_ASSERT(IsValid(orig_matrix_));
+      orig_matrix_->ComputeRowA1(cols_norms, init);
+   }
+
    virtual void PrintImpl(
       const Journalist&  jnlst,
       EJournalLevel      level,

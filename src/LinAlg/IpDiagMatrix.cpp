@@ -71,6 +71,25 @@ void DiagMatrix::ComputeRowAMaxImpl(
    }
 }
 
+void DiagMatrix::ComputeRowA1Impl(
+   Vector& rows_norms,
+   bool    init
+) const
+{
+   DBG_ASSERT(IsValid(diag_));
+   if( init )
+   {
+      rows_norms.Copy(*diag_);
+      rows_norms.ElementWiseAbs();
+   }
+   else
+   {
+      SmartPtr<Vector> v = diag_->MakeNewCopy();
+      v->ElementWiseAbs();
+      rows_norms.Axpy(Number(1.), *v);
+   }
+}
+
 void DiagMatrix::PrintImpl(
    const Journalist&  jnlst,
    EJournalLevel      level,

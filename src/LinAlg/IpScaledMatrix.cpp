@@ -5,6 +5,11 @@
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #include "IpScaledMatrix.hpp"
+#include "IpGenTMatrix.hpp"
+#include "IpDenseVector.hpp"
+
+#include <iostream>
+#include <typeinfo>
 
 namespace Ipopt
 {
@@ -115,6 +120,80 @@ void ScaledMatrix::ComputeColAMaxImpl(
 ) const
 {
    THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "ScaledMatrix::ComputeColAMaxImpl not implemented");
+}
+
+void ScaledMatrix::ComputeRowA1Impl(
+   Vector& rows_norms,
+   bool    init
+) const
+{
+   DBG_ASSERT(IsValid(matrix_));
+
+   if( IsValid(owner_space_->ColumnScaling()) )
+   {
+      const GenTMatrix* mt = dynamic_cast<const GenTMatrix*>(GetRawPtr(matrix_));
+      if ( mt )
+      {
+         const DenseVector* Dc = dynamic_cast<const DenseVector*>(GetRawPtr(owner_space_->ColumnScaling()));
+         DenseVector* rn = dynamic_cast<DenseVector*>(&rows_norms);
+         DBG_ASSERT(Dc);
+         DBG_ASSERT(rn);
+         for ( Index i = 0; i < mt->Nonzeros(); i++ )
+         {
+            rn->Values()[mt->Irows()[i] - 1] += std::abs(mt->Values()[i] * Dc->Values()[mt->Jcols()[i] - 1]);
+         }
+      }
+      else
+      {
+         THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "ScaledMatrix::ComputeRowA1Impl not implemented");
+      }
+   }
+   else
+   {
+      matrix_->ComputeRowA1(rows_norms, init);
+   }
+   if( IsValid(owner_space_->RowScaling()) )
+   {
+      rows_norms.ElementWiseMultiply(*owner_space_->RowScaling());
+      rows_norms.ElementWiseAbs();
+   }
+}
+
+void ScaledMatrix::ComputeColA1Impl(
+   Vector& cols_norms,
+   bool    init
+) const
+{
+   DBG_ASSERT(IsValid(matrix_));
+
+   if( IsValid(owner_space_->RowScaling()) )
+   {
+      const GenTMatrix* mt = dynamic_cast<const GenTMatrix*>(GetRawPtr(matrix_));
+      if ( mt )
+      {
+         const DenseVector* Dr = dynamic_cast<const DenseVector*>(GetRawPtr(owner_space_->RowScaling()));
+         DenseVector* cn = dynamic_cast<DenseVector*>(&cols_norms);
+         DBG_ASSERT(Dr);
+         DBG_ASSERT(cn);
+         for ( Index i = 0; i < mt->Nonzeros(); i++ )
+         {
+             cn->Values()[mt->Jcols()[i] - 1] += std::abs(mt->Values()[i] * Dr->Values()[mt->Irows()[i] - 1]);
+         }
+      }
+      else
+      {
+         THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "ScaledMatrix::ComputeColA1Impl not implemented");
+      }
+   }
+   else
+   {
+      matrix_->ComputeColA1(cols_norms, init);
+   }
+   if( IsValid(owner_space_->ColumnScaling()) )
+   {
+      cols_norms.ElementWiseMultiply(*owner_space_->ColumnScaling());
+      cols_norms.ElementWiseAbs();
+   }
 }
 
 void ScaledMatrix::PrintImpl(
