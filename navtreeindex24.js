@@ -1,5 +1,6 @@
 var NAVTREEINDEX24 =
 {
+"classIpopt_1_1Vector.html#a4efbd79b97f301baea0407b1d3124d05":[1,0,0,199,10],
 "classIpopt_1_1Vector.html#a51fd4d1a2d0b5f94b805c45ca1ea82be":[1,0,0,199,58],
 "classIpopt_1_1Vector.html#a52f4f77b4d13b98da067b9295cd044bf":[1,0,0,199,78],
 "classIpopt_1_1Vector.html#a58b6c7f23482564891829dbba30d0fae":[1,0,0,199,44],
@@ -248,6 +249,5 @@ var NAVTREEINDEX24 =
 "config__default_8h_source.html":[2,0,2,2,0],
 "config__ipopt__default_8h.html":[2,0,2,2,1],
 "config__ipopt__default_8h.html#a1c9883b0dbf1bf8994f95598ca98420a":[2,0,2,2,1,1],
-"config__ipopt__default_8h.html#a28cc129767c9fd377d1a449b433c4190":[2,0,2,2,1,4],
-"config__ipopt__default_8h.html#a58bb5c104ee5ff44b7175fc992d89b0b":[2,0,2,2,1,5]
+"config__ipopt__default_8h.html#a28cc129767c9fd377d1a449b433c4190":[2,0,2,2,1,4]
 };

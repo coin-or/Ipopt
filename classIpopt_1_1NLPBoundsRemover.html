@@ -39,7 +39,7 @@ MathJax.Hub.Config({
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.14.19</span-->
+   &#160;<!--span id="projectnumber">3.14.20</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -121,15 +121,13 @@ $(document).ready(function(){initNavTree('classIpopt_1_1NLPBoundsRemover.html','
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="classIpopt_1_1NLPBoundsRemover__inherit__graph.png" border="0" usemap="#aIpopt_1_1NLPBoundsRemover_inherit__map" alt="Inheritance graph"/></div>
-<map name="aIpopt_1_1NLPBoundsRemover_inherit__map" id="aIpopt_1_1NLPBoundsRemover_inherit__map">
-<area shape="rect" title="This is an adapter for an NLP that converts variable bound constraints to inequality constraints." alt="" coords="5,157,200,184"/>
-<area shape="rect" href="classIpopt_1_1NLP.html" title="Traditional NLP." alt="" coords="59,81,146,109"/>
-<area shape="poly" title=" " alt="" coords="105,124,105,156,100,156,100,124"/>
-<area shape="rect" href="classIpopt_1_1ReferencedObject.html" title="Storing the reference count of all the smart pointers that currently reference it." alt="" coords="13,5,192,33"/>
-<area shape="poly" title=" " alt="" coords="105,49,105,81,100,81,100,49"/>
-</map>
-<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+ <div class="center">
+  <img src="classIpopt_1_1NLPBoundsRemover.png" usemap="#Ipopt::NLPBoundsRemover_map" alt=""/>
+  <map id="Ipopt::NLPBoundsRemover_map" name="Ipopt::NLPBoundsRemover_map">
+<area href="classIpopt_1_1NLP.html" title="Traditional NLP." alt="Ipopt::NLP" shape="rect" coords="0,56,161,80"/>
+<area href="classIpopt_1_1ReferencedObject.html" title="Storing the reference count of all the smart pointers that currently reference it." alt="Ipopt::ReferencedObject" shape="rect" coords="0,0,161,24"/>
+  </map>
+</div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -248,7 +246,7 @@ Private Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This is an adapter for an <a class="el" href="classIpopt_1_1NLP.html" title="Traditional NLP.">NLP</a> that converts variable bound constraints to inequality constraints. </p>
-<p>This is necessary for the version of <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> that uses iterative linear solvers. At this point, none of the original inequality constraints is allowed to have both lower and upper bounds. The <a class="el" href="classIpopt_1_1NLP.html" title="Traditional NLP.">NLP</a> visible to <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> via this adapter will not have any bounds on variables, but have equivalent inequality constraints. </p>
+<p>This is necessary for the version of <a class="el" href="namespaceIpopt.html">Ipopt</a> that uses iterative linear solvers. At this point, none of the original inequality constraints is allowed to have both lower and upper bounds. The <a class="el" href="classIpopt_1_1NLP.html" title="Traditional NLP.">NLP</a> visible to <a class="el" href="namespaceIpopt.html">Ipopt</a> via this adapter will not have any bounds on variables, but have equivalent inequality constraints. </p>
 
 <p class="definition">Definition at line <a class="el" href="IpNLPBoundsRemover_8hpp_source.html#l00023">23</a> of file <a class="el" href="IpNLPBoundsRemover_8hpp_source.html">IpNLPBoundsRemover.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
@@ -1208,7 +1206,7 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>This method is called once per iteration, after the iteration summary output has been printed. </p>
-<p>It provides the current information to the user to do with it anything she wants. It also allows the user to ask for a premature termination of the optimization by returning false, in which case <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> will terminate with a corresponding return status. The basic information provided in the argument list has the quantities values printed in the iteration summary line. If more information is required, a user can obtain it from the IpData and IpCalculatedQuantities objects. However, note that the provided quantities are all for the problem that <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> sees, i.e., the quantities might be scaled, fixed variables might be sorted out, etc. The status indicates things like whether the algorithm is in the restoration phase... In the restoration phase, the dual variables are probably not not changing. </p>
+<p>It provides the current information to the user to do with it anything she wants. It also allows the user to ask for a premature termination of the optimization by returning false, in which case <a class="el" href="namespaceIpopt.html">Ipopt</a> will terminate with a corresponding return status. The basic information provided in the argument list has the quantities values printed in the iteration summary line. If more information is required, a user can obtain it from the IpData and IpCalculatedQuantities objects. However, note that the provided quantities are all for the problem that <a class="el" href="namespaceIpopt.html">Ipopt</a> sees, i.e., the quantities might be scaled, fixed variables might be sorted out, etc. The status indicates things like whether the algorithm is in the restoration phase... In the restoration phase, the dual variables are probably not not changing. </p>
 
 <p>Reimplemented from <a class="el" href="classIpopt_1_1NLP.html#a9cf00e4fc7ad13c810a6d1e238221fee">Ipopt::NLP</a>.</p>
 

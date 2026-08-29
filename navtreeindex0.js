@@ -178,9 +178,10 @@ var NAVTREEINDEX0 =
 "IpExactHessianUpdater_8hpp.html":[2,0,2,0,14],
 "IpExactHessianUpdater_8hpp_source.html":[2,0,2,0,14],
 "IpException_8hpp.html":[2,0,2,2,6],
-"IpException_8hpp.html#a0e889682908e30249e108a82d5f976fe":[2,0,2,2,6,2],
-"IpException_8hpp.html#a4f11527a606c9f58fd2cfe870f0d45e1":[2,0,2,2,6,3],
-"IpException_8hpp.html#acd72e9234b79904aa8ee38708a115172":[2,0,2,2,6,1],
+"IpException_8hpp.html#a0e889682908e30249e108a82d5f976fe":[2,0,2,2,6,3],
+"IpException_8hpp.html#a2537901e7cd0410ad102935722360f62":[2,0,2,2,6,1],
+"IpException_8hpp.html#a4f11527a606c9f58fd2cfe870f0d45e1":[2,0,2,2,6,4],
+"IpException_8hpp.html#acd72e9234b79904aa8ee38708a115172":[2,0,2,2,6,2],
 "IpException_8hpp_source.html":[2,0,2,2,6],
 "IpExpandedMultiVectorMatrix_8hpp.html":[2,0,2,5,9],
 "IpExpandedMultiVectorMatrix_8hpp_source.html":[2,0,2,5,9],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "IpIpoptData_8hpp.html":[2,0,2,0,22],
 "IpIpoptData_8hpp_source.html":[2,0,2,0,22],
 "IpIpoptNLP_8hpp.html":[2,0,2,0,23],
-"IpIpoptNLP_8hpp_source.html":[2,0,2,0,23],
-"IpIterateInitializer_8hpp.html":[2,0,2,0,24]
+"IpIpoptNLP_8hpp_source.html":[2,0,2,0,23]
 };

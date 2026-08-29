@@ -1,5 +1,6 @@
 var NAVTREEINDEX1 =
 {
+"IpIterateInitializer_8hpp.html":[2,0,2,0,24],
 "IpIterateInitializer_8hpp_source.html":[2,0,2,0,24],
 "IpIteratesVector_8hpp.html":[2,0,2,0,25],
 "IpIteratesVector_8hpp_source.html":[2,0,2,0,25],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "IpRestoIpoptNLP_8hpp.html":[2,0,2,0,50],
 "IpRestoIpoptNLP_8hpp_source.html":[2,0,2,0,50],
 "IpRestoIterateInitializer_8hpp.html":[2,0,2,0,51],
-"IpRestoIterateInitializer_8hpp_source.html":[2,0,2,0,51],
-"IpRestoIterationOutput_8hpp.html":[2,0,2,0,52]
+"IpRestoIterateInitializer_8hpp_source.html":[2,0,2,0,51]
 };

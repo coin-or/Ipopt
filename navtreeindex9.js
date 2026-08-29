@@ -1,5 +1,6 @@
 var NAVTREEINDEX9 =
 {
+"classIpopt_1_1InexactLSAcceptor.html#ae398c0c8b111df00695aaf9ccc24cecd":[1,0,0,59,23],
 "classIpopt_1_1InexactLSAcceptor.html#aeb39c5823cf2a05f9c939efc23ece6c2":[1,0,0,59,29],
 "classIpopt_1_1InexactLSAcceptor.html#aed27ed7f9098f2cdaecfcf78c57a946a":[1,0,0,59,45],
 "classIpopt_1_1InexactLSAcceptor.html#aedc2a4b7b5d5dad97bb8ed35f41543d6":[1,0,0,59,39],
@@ -248,6 +249,5 @@ var NAVTREEINDEX9 =
 "classIpopt_1_1IpoptCalculatedQuantities.html#a0e42cb890e246699c7229e34a77c30d5":[1,0,0,71,102],
 "classIpopt_1_1IpoptCalculatedQuantities.html#a0e901bcb2743a9841a001252d5c4bc56":[1,0,0,71,243],
 "classIpopt_1_1IpoptCalculatedQuantities.html#a0ecbb6515fe4c1f648629ba01b2b935f":[1,0,0,71,127],
-"classIpopt_1_1IpoptCalculatedQuantities.html#a0f5f60f3e328078378b36029da7a4cca":[1,0,0,71,168],
-"classIpopt_1_1IpoptCalculatedQuantities.html#a106a8fa8780188ac17ed54d423212431":[1,0,0,71,54]
+"classIpopt_1_1IpoptCalculatedQuantities.html#a0f5f60f3e328078378b36029da7a4cca":[1,0,0,71,168]
 };

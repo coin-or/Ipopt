@@ -39,7 +39,7 @@ MathJax.Hub.Config({
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.14.19</span-->
+   &#160;<!--span id="projectnumber">3.14.20</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -121,17 +121,14 @@ $(document).ready(function(){initNavTree('classIpopt_1_1IpoptNLP.html',''); init
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="classIpopt_1_1IpoptNLP__inherit__graph.png" border="0" usemap="#aIpopt_1_1IpoptNLP_inherit__map" alt="Inheritance graph"/></div>
-<map name="aIpopt_1_1IpoptNLP_inherit__map" id="aIpopt_1_1IpoptNLP_inherit__map">
-<area shape="rect" title="This is the abstract base class for classes that map the traditional NLP into something that is more ..." alt="" coords="107,81,227,109"/>
-<area shape="rect" href="classIpopt_1_1OrigIpoptNLP.html" title="This class maps the traditional NLP into something that is more useful for Ipopt." alt="" coords="5,157,153,184"/>
-<area shape="poly" title=" " alt="" coords="141,121,96,158,93,154,138,117"/>
-<area shape="rect" href="classIpopt_1_1RestoIpoptNLP.html" title="This class maps a IpoptNLP into one that is used for the restoration phase of Ipopt." alt="" coords="176,157,334,184"/>
-<area shape="poly" title=" " alt="" coords="196,117,241,154,238,158,193,121"/>
-<area shape="rect" href="classIpopt_1_1ReferencedObject.html" title="Storing the reference count of all the smart pointers that currently reference it." alt="" coords="78,5,256,33"/>
-<area shape="poly" title=" " alt="" coords="170,49,170,81,164,81,164,49"/>
-</map>
-<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+ <div class="center">
+  <img src="classIpopt_1_1IpoptNLP.png" usemap="#Ipopt::IpoptNLP_map" alt=""/>
+  <map id="Ipopt::IpoptNLP_map" name="Ipopt::IpoptNLP_map">
+<area href="classIpopt_1_1ReferencedObject.html" title="Storing the reference count of all the smart pointers that currently reference it." alt="Ipopt::ReferencedObject" shape="rect" coords="79,0,227,24"/>
+<area href="classIpopt_1_1OrigIpoptNLP.html" title="This class maps the traditional NLP into something that is more useful for Ipopt." alt="Ipopt::OrigIpoptNLP" shape="rect" coords="0,112,148,136"/>
+<area href="classIpopt_1_1RestoIpoptNLP.html" title="This class maps a IpoptNLP into one that is used for the restoration phase of Ipopt." alt="Ipopt::RestoIpoptNLP" shape="rect" coords="158,112,306,136"/>
+  </map>
+</div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -195,7 +192,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a40790d18d6cdfcdc8228d7e168c59f02"><td class="mdescLeft">&#160;</td><td class="mdescRight">Upper bounds on x.  <br /></td></tr>
 <tr class="separator:a40790d18d6cdfcdc8228d7e168c59f02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0e5d61e082151e6a37d88f2e82ae812c" id="r_a0e5d61e082151e6a37d88f2e82ae812c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIpopt_1_1DependentResult.html">virtual</a> <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1DependentResult.html">const</a> <a class="el" href="classIpopt_1_1Matrix.html">Matrix</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptNLP.html#a0e5d61e082151e6a37d88f2e82ae812c">Px_U</a> () <a class="el" href="classIpopt_1_1DependentResult.html">const</a> =0</td></tr>
-<tr class="memdesc:a0e5d61e082151e6a37d88f2e82ae812c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Permutation matrix (x_U_ -&gt; x.  <br /></td></tr>
+<tr class="memdesc:a0e5d61e082151e6a37d88f2e82ae812c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Permutation matrix (x_U_ -&gt; x)  <br /></td></tr>
 <tr class="separator:a0e5d61e082151e6a37d88f2e82ae812c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a72feeb5b4ee27297ddf523714631be99" id="r_a72feeb5b4ee27297ddf523714631be99"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIpopt_1_1DependentResult.html">virtual</a> <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1DependentResult.html">const</a> <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptNLP.html#a72feeb5b4ee27297ddf523714631be99">d_L</a> () <a class="el" href="classIpopt_1_1DependentResult.html">const</a> =0</td></tr>
 <tr class="memdesc:a72feeb5b4ee27297ddf523714631be99"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lower bounds on d.  <br /></td></tr>
@@ -926,7 +923,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Permutation matrix (x_U_ -&gt; x. </p>
+<p>Permutation matrix (x_U_ -&gt; x) </p>
 
 <p>Implemented in <a class="el" href="classIpopt_1_1OrigIpoptNLP.html#a72b497968857212859c40380028621a7">Ipopt::OrigIpoptNLP</a>, and <a class="el" href="classIpopt_1_1RestoIpoptNLP.html#aad88906fa0573f1b159779d5c937bfeb">Ipopt::RestoIpoptNLP</a>.</p>
 

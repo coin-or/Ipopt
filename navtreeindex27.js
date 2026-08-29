@@ -1,5 +1,7 @@
 var NAVTREEINDEX27 =
 {
+"structIpopt_1_1PiecewisePenEntry.html#a46b78857039e80f477b434980dd78d75":[1,0,0,130,2],
+"structIpopt_1_1PiecewisePenEntry.html#af6de57fc6de1309173c835a60dcb1756":[1,0,0,130,1],
 "structma77__control__d.html":[1,0,2],
 "structma77__control__d.html#a01da5e9df38252991c5340a323c8e5cb":[1,0,2,12],
 "structma77__control__d.html#a031192727e706012ed4e7394836553aa":[1,0,2,27],
@@ -247,7 +249,5 @@ var NAVTREEINDEX27 =
 "structma97__info__d.html#a55bd876fffdf836539fa91f7227fa5e9":[1,0,12,15],
 "structma97__info__d.html#a68dd0557423376f9dd8c4a6f00bd4b5b":[1,0,12,12],
 "structma97__info__d.html#a899d3739940e61a42f6854784cbc583c":[1,0,12,4],
-"structma97__info__d.html#a97542bd15be0bf4e13d0a1476ea88c85":[1,0,12,11],
-"structma97__info__d.html#aa7e06ba8bba894dc10c21aba7750f9b9":[1,0,12,8],
-"structma97__info__d.html#ab816b6f08d38672b448e8207a4c74e01":[1,0,12,3]
+"structma97__info__d.html#a97542bd15be0bf4e13d0a1476ea88c85":[1,0,12,11]
 };

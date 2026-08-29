@@ -39,7 +39,7 @@ MathJax.Hub.Config({
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.14.19</span-->
+   &#160;<!--span id="projectnumber">3.14.20</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -122,13 +122,12 @@ $(document).ready(function(){initNavTree('classIpopt_1_1IpoptData.html',''); ini
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="classIpopt_1_1IpoptData__inherit__graph.png" border="0" usemap="#aIpopt_1_1IpoptData_inherit__map" alt="Inheritance graph"/></div>
-<map name="aIpopt_1_1IpoptData_inherit__map" id="aIpopt_1_1IpoptData_inherit__map">
-<area shape="rect" title="Class to organize all the data required by the algorithm." alt="" coords="31,81,158,109"/>
-<area shape="rect" href="classIpopt_1_1ReferencedObject.html" title="Storing the reference count of all the smart pointers that currently reference it." alt="" coords="5,5,184,33"/>
-<area shape="poly" title=" " alt="" coords="97,49,97,81,92,81,92,49"/>
-</map>
-<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+ <div class="center">
+  <img src="classIpopt_1_1IpoptData.png" usemap="#Ipopt::IpoptData_map" alt=""/>
+  <map id="Ipopt::IpoptData_map" name="Ipopt::IpoptData_map">
+<area href="classIpopt_1_1ReferencedObject.html" title="Storing the reference count of all the smart pointers that currently reference it." alt="Ipopt::ReferencedObject" shape="rect" coords="0,0,148,24"/>
+  </map>
+</div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -154,7 +153,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a5bcb215bd8125f44308f48b441dd372f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get access to additional data object.  <br /></td></tr>
 <tr class="separator:a5bcb215bd8125f44308f48b441dd372f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afdf738c0b7cf2bba1e4584ed850f200f" id="r_afdf738c0b7cf2bba1e4584ed850f200f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIpopt_1_1DependentResult.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptData.html#afdf738c0b7cf2bba1e4584ed850f200f">SetAddData</a> (<a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1IpoptAdditionalData.html">IpoptAdditionalData</a> &gt; <a class="el" href="classIpopt_1_1DependentResult.html">add_data</a>)</td></tr>
-<tr class="memdesc:afdf738c0b7cf2bba1e4584ed850f200f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a new pointer for additional <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> data.  <br /></td></tr>
+<tr class="memdesc:afdf738c0b7cf2bba1e4584ed850f200f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a new pointer for additional <a class="el" href="namespaceIpopt.html">Ipopt</a> data.  <br /></td></tr>
 <tr class="separator:afdf738c0b7cf2bba1e4584ed850f200f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1b90d0d95e20e4d8f831d57d1004ffbb" id="r_a1b90d0d95e20e4d8f831d57d1004ffbb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIpopt_1_1DependentResult.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptData.html#a1b90d0d95e20e4d8f831d57d1004ffbb">setPDPert</a> (<a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> <a class="el" href="classIpopt_1_1DependentResult.html">pd_pert_x</a>, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> <a class="el" href="classIpopt_1_1DependentResult.html">pd_pert_s</a>, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> <a class="el" href="classIpopt_1_1DependentResult.html">pd_pert_c</a>, <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> <a class="el" href="classIpopt_1_1DependentResult.html">pd_pert_d</a>)</td></tr>
 <tr class="memdesc:a1b90d0d95e20e4d8f831d57d1004ffbb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the perturbation of the primal-dual system.  <br /></td></tr>
@@ -364,7 +363,7 @@ Private Attributes</h2></td></tr>
 <tr class="memdesc:a9ca143d0ba9a1023a613cae517a1513d"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classIpopt_1_1VectorSpace.html" title="VectorSpace base class, corresponding to the Vector base class.">VectorSpace</a> for all the iterates.  <br /></td></tr>
 <tr class="separator:a9ca143d0ba9a1023a613cae517a1513d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a017c5c0f6ed6f6f3e733b4ab6deba7a0" id="r_a017c5c0f6ed6f6f3e733b4ab6deba7a0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIpopt_1_1TimingStatistics.html">TimingStatistics</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptData.html#a017c5c0f6ed6f6f3e733b4ab6deba7a0">timing_statistics_</a></td></tr>
-<tr class="memdesc:a017c5c0f6ed6f6f3e733b4ab6deba7a0"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classIpopt_1_1TimingStatistics.html" title="This class collects all timing statistics for Ipopt.">TimingStatistics</a> object collecting all <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> timing statistics.  <br /></td></tr>
+<tr class="memdesc:a017c5c0f6ed6f6f3e733b4ab6deba7a0"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classIpopt_1_1TimingStatistics.html" title="This class collects all timing statistics for Ipopt.">TimingStatistics</a> object collecting all <a class="el" href="namespaceIpopt.html">Ipopt</a> timing statistics.  <br /></td></tr>
 <tr class="separator:a017c5c0f6ed6f6f3e733b4ab6deba7a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a54fc7e29cf181623469c2b3e2c9a4143" id="r_a54fc7e29cf181623469c2b3e2c9a4143"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1IpoptAdditionalData.html">IpoptAdditionalData</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IpoptData.html#a54fc7e29cf181623469c2b3e2c9a4143">add_data_</a></td></tr>
 <tr class="memdesc:a54fc7e29cf181623469c2b3e2c9a4143"><td class="mdescLeft">&#160;</td><td class="mdescRight">Object for the data specific for the Chen-Goldfarb penalty method algorithm.  <br /></td></tr>
@@ -2382,7 +2381,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Set a new pointer for additional <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> data. </p>
+<p>Set a new pointer for additional <a class="el" href="namespaceIpopt.html">Ipopt</a> data. </p>
 
 <p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00626">626</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 
@@ -3263,7 +3262,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="classIpopt_1_1TimingStatistics.html" title="This class collects all timing statistics for Ipopt.">TimingStatistics</a> object collecting all <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> timing statistics. </p>
+<p><a class="el" href="classIpopt_1_1TimingStatistics.html" title="This class collects all timing statistics for Ipopt.">TimingStatistics</a> object collecting all <a class="el" href="namespaceIpopt.html">Ipopt</a> timing statistics. </p>
 
 <p class="definition">Definition at line <a class="el" href="IpIpoptData_8hpp_source.html#l00781">781</a> of file <a class="el" href="IpIpoptData_8hpp_source.html">IpIpoptData.hpp</a>.</p>
 

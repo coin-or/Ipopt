@@ -39,7 +39,7 @@ MathJax.Hub.Config({
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.14.19</span-->
+   &#160;<!--span id="projectnumber">3.14.20</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -121,21 +121,16 @@ $(document).ready(function(){initNavTree('classIpopt_1_1IteratesVector.html','')
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="classIpopt_1_1IteratesVector__inherit__graph.png" border="0" usemap="#aIpopt_1_1IteratesVector_inherit__map" alt="Inheritance graph"/></div>
-<map name="aIpopt_1_1IteratesVector_inherit__map" id="aIpopt_1_1IteratesVector_inherit__map">
-<area shape="rect" title="Specialized CompoundVector class specifically for the algorithm iterates." alt="" coords="102,308,255,336"/>
-<area shape="rect" href="classIpopt_1_1CompoundVector.html" title="Class of Vectors consisting of other vectors." alt="" coords="92,232,265,260"/>
-<area shape="poly" title=" " alt="" coords="181,276,181,308,176,308,176,276"/>
-<area shape="rect" href="classIpopt_1_1Vector.html" title="Vector Base Class." alt="" coords="127,157,230,184"/>
-<area shape="poly" title=" " alt="" coords="181,200,181,232,176,232,176,200"/>
-<area shape="rect" href="classIpopt_1_1TaggedObject.html" title="TaggedObject class." alt="" coords="103,81,254,109"/>
-<area shape="poly" title=" " alt="" coords="181,124,181,156,176,156,176,124"/>
-<area shape="rect" href="classIpopt_1_1ReferencedObject.html" title="Storing the reference count of all the smart pointers that currently reference it." alt="" coords="5,5,184,33"/>
-<area shape="poly" title=" " alt="" coords="123,42,165,79,162,83,119,46"/>
-<area shape="rect" href="classIpopt_1_1Subject.html" title="Slight Variation of the Observer Design Pattern (Subject part)." alt="" coords="207,5,318,33"/>
-<area shape="poly" title=" " alt="" coords="238,46,195,83,192,79,234,42"/>
-</map>
-<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+ <div class="center">
+  <img src="classIpopt_1_1IteratesVector.png" usemap="#Ipopt::IteratesVector_map" alt=""/>
+  <map id="Ipopt::IteratesVector_map" name="Ipopt::IteratesVector_map">
+<area href="classIpopt_1_1CompoundVector.html" title="Class of Vectors consisting of other vectors." alt="Ipopt::CompoundVector" shape="rect" coords="79,168,227,192"/>
+<area href="classIpopt_1_1Vector.html" title="Vector Base Class." alt="Ipopt::Vector" shape="rect" coords="79,112,227,136"/>
+<area href="classIpopt_1_1TaggedObject.html" title="TaggedObject class." alt="Ipopt::TaggedObject" shape="rect" coords="79,56,227,80"/>
+<area href="classIpopt_1_1ReferencedObject.html" title="Storing the reference count of all the smart pointers that currently reference it." alt="Ipopt::ReferencedObject" shape="rect" coords="0,0,148,24"/>
+<area href="classIpopt_1_1Subject.html" title="Slight Variation of the Observer Design Pattern (Subject part)." alt="Ipopt::Subject" shape="rect" coords="158,0,306,24"/>
+  </map>
+</div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -617,7 +612,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Specialized <a class="el" href="classIpopt_1_1CompoundVector.html" title="Class of Vectors consisting of other vectors.">CompoundVector</a> class specifically for the algorithm iterates. </p>
-<p>This class inherits from <a class="el" href="classIpopt_1_1CompoundVector.html" title="Class of Vectors consisting of other vectors.">CompoundVector</a> and is a specialized class for handling the iterates of the <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> Algorithm, that is, x, s, y_c, y_d, z_L, z_U, v_L, and v_U. It inherits from <a class="el" href="classIpopt_1_1CompoundVector.html" title="Class of Vectors consisting of other vectors.">CompoundVector</a> so it can behave like a CV in most calculations, but it has fixed dimensions and cannot be customized </p>
+<p>This class inherits from <a class="el" href="classIpopt_1_1CompoundVector.html" title="Class of Vectors consisting of other vectors.">CompoundVector</a> and is a specialized class for handling the iterates of the <a class="el" href="namespaceIpopt.html">Ipopt</a> Algorithm, that is, x, s, y_c, y_d, z_L, z_U, v_L, and v_U. It inherits from <a class="el" href="classIpopt_1_1CompoundVector.html" title="Class of Vectors consisting of other vectors.">CompoundVector</a> so it can behave like a CV in most calculations, but it has fixed dimensions and cannot be customized </p>
 
 <p class="definition">Definition at line <a class="el" href="IpIteratesVector_8hpp_source.html#l00025">25</a> of file <a class="el" href="IpIteratesVector_8hpp_source.html">IpIteratesVector.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>

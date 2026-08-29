@@ -39,7 +39,7 @@ MathJax.Hub.Config({
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.14.19</span-->
+   &#160;<!--span id="projectnumber">3.14.20</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -121,21 +121,16 @@ $(document).ready(function(){initNavTree('classIpopt_1_1TNLP.html',''); initResi
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="classIpopt_1_1TNLP__inherit__graph.png" border="0" usemap="#aIpopt_1_1TNLP_inherit__map" alt="Inheritance graph"/></div>
-<map name="aIpopt_1_1TNLP_inherit__map" id="aIpopt_1_1TNLP_inherit__map">
-<area shape="rect" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors." alt="" coords="214,81,309,109"/>
-<area shape="rect" href="classIpopt_1_1AmplTNLP.html" title="Ampl Interface, implemented as a TNLP." alt="" coords="21,157,150,184"/>
-<area shape="poly" title=" " alt="" coords="217,117,118,159,116,154,215,113"/>
-<area shape="rect" href="classIpopt_1_1StdInterfaceTNLP.html" title="Implementation of a TNLP for the Standard C interface." alt="" coords="174,157,349,184"/>
-<area shape="poly" title=" " alt="" coords="264,124,264,156,259,156,259,124"/>
-<area shape="rect" href="classIpopt_1_1TNLPReducer.html" title="This is a wrapper around a given TNLP class that takes out a list of constraints that are given to th..." alt="" coords="373,157,521,184"/>
-<area shape="poly" title=" " alt="" coords="309,112,415,154,413,159,308,117"/>
-<area shape="rect" href="classIpopt_1_1ReferencedObject.html" title="Storing the reference count of all the smart pointers that currently reference it." alt="" coords="172,5,351,33"/>
-<area shape="poly" title=" " alt="" coords="264,49,264,81,259,81,259,49"/>
-<area shape="rect" href="classIpopt_1_1SensAmplTNLP.html" title=" " alt="" coords="5,232,166,260"/>
-<area shape="poly" title=" " alt="" coords="88,200,88,232,83,232,83,200"/>
-</map>
-<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+ <div class="center">
+  <img src="classIpopt_1_1TNLP.png" usemap="#Ipopt::TNLP_map" alt=""/>
+  <map id="Ipopt::TNLP_map" name="Ipopt::TNLP_map">
+<area href="classIpopt_1_1ReferencedObject.html" title="Storing the reference count of all the smart pointers that currently reference it." alt="Ipopt::ReferencedObject" shape="rect" coords="158,0,306,24"/>
+<area href="classIpopt_1_1AmplTNLP.html" title="Ampl Interface, implemented as a TNLP." alt="Ipopt::AmplTNLP" shape="rect" coords="0,112,148,136"/>
+<area href="classIpopt_1_1StdInterfaceTNLP.html" title="Implementation of a TNLP for the Standard C interface." alt="Ipopt::StdInterfaceTNLP" shape="rect" coords="158,112,306,136"/>
+<area href="classIpopt_1_1TNLPReducer.html" title="This is a wrapper around a given TNLP class that takes out a list of constraints that are given to th..." alt="Ipopt::TNLPReducer" shape="rect" coords="316,112,464,136"/>
+<area href="classIpopt_1_1SensAmplTNLP.html" alt="Ipopt::SensAmplTNLP" shape="rect" coords="0,168,148,192"/>
+  </map>
+</div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
@@ -1873,8 +1868,8 @@ Private Member Functions</h2></td></tr>
 <p>If there are fixed variables and fixed_variable_treatment=make_parameter, then requesting z_L and z_U can trigger a reevaluation of the Gradient of the objective function and the Jacobian of the constraint functions.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">ip_data</td><td>(in) <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> Data </td></tr>
-    <tr><td class="paramname">ip_cq</td><td>(in) <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> Calculated Quantities </td></tr>
+    <tr><td class="paramname">ip_data</td><td>(in) <a class="el" href="namespaceIpopt.html">Ipopt</a> Data </td></tr>
+    <tr><td class="paramname">ip_cq</td><td>(in) <a class="el" href="namespaceIpopt.html">Ipopt</a> Calculated Quantities </td></tr>
     <tr><td class="paramname">scaled</td><td>(in) whether to retrieve scaled or unscaled iterate </td></tr>
     <tr><td class="paramname">n</td><td>(in) the number of variables \(x\) in the problem; can be arbitrary if skipping x, z_L, and z_U </td></tr>
     <tr><td class="paramname">x</td><td>(out) buffer to store value of primal variables \(x\), must have length at least n; pass NULL to skip retrieving x </td></tr>
@@ -1886,7 +1881,7 @@ Private Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Whether <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> has successfully filled the given arrays </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether <a class="el" href="namespaceIpopt.html">Ipopt</a> has successfully filled the given arrays </dd></dl>
 <dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
 </div>
@@ -1982,11 +1977,11 @@ Private Member Functions</h2></td></tr>
 <p>The method makes the vectors behind (unscaled_)curr_orig_bounds_violation(), (unscaled_)curr_nlp_constraint_violation(), (unscaled_)curr_dual_infeasibility(), (unscaled_)curr_complementarity() from <a class="el" href="classIpopt_1_1IpoptCalculatedQuantities.html" title="Class for all IPOPT specific calculated quantities.">IpoptCalculatedQuantities</a> of the internal NLP representation available into the form used by the <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a>. If Ipopt is in restoration mode, it maps the current iterate of restoration NLP (see <a class="el" href="classIpopt_1_1RestoIpoptNLP.html" title="This class maps a IpoptNLP into one that is used for the restoration phase of Ipopt.">RestoIpoptNLP</a>) back to the original <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a>.</p>
 <dl class="section note"><dt>Note</dt><dd>If in restoration phase, then requesting grad_lag_x can trigger a call to <a class="el" href="classIpopt_1_1TNLP.html#a52698f1861ffef271d5e317c0e168652" title="Method to request the gradient of the objective function.">eval_grad_f()</a>.</dd>
 <dd>
-<a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> by default relaxes variable bounds (option bound_relax_factor &gt; 0.0). x_L_violation and x_U_violation report the violation of a solution w.r.t. the original unrelaxed bounds. However, compl_x_L and compl_x_U use the relaxed variable bounds to calculate the complementarity.</dd></dl>
+<a class="el" href="namespaceIpopt.html">Ipopt</a> by default relaxes variable bounds (option bound_relax_factor &gt; 0.0). x_L_violation and x_U_violation report the violation of a solution w.r.t. the original unrelaxed bounds. However, compl_x_L and compl_x_U use the relaxed variable bounds to calculate the complementarity.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">ip_data</td><td>(in) <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> Data </td></tr>
-    <tr><td class="paramname">ip_cq</td><td>(in) <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> Calculated Quantities </td></tr>
+    <tr><td class="paramname">ip_data</td><td>(in) <a class="el" href="namespaceIpopt.html">Ipopt</a> Data </td></tr>
+    <tr><td class="paramname">ip_cq</td><td>(in) <a class="el" href="namespaceIpopt.html">Ipopt</a> Calculated Quantities </td></tr>
     <tr><td class="paramname">scaled</td><td>(in) whether to retrieve scaled or unscaled violations </td></tr>
     <tr><td class="paramname">n</td><td>(in) the number of variables \(x\) in the problem; can be arbitrary if skipping compl_x_L, compl_x_U, and grad_lag_x </td></tr>
     <tr><td class="paramname">x_L_violation</td><td>(out) buffer to store violation of original lower bounds on variables (max(orig_x_L-x,0)), must have length at least n; pass NULL to skip retrieving orig_x_L </td></tr>
@@ -2000,7 +1995,7 @@ Private Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Whether <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> has successfully filled the given arrays </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether <a class="el" href="namespaceIpopt.html">Ipopt</a> has successfully filled the given arrays </dd></dl>
 <dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 
 </div>

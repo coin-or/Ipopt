@@ -39,7 +39,7 @@ MathJax.Hub.Config({
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.14.19</span-->
+   &#160;<!--span id="projectnumber">3.14.20</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -122,19 +122,15 @@ $(document).ready(function(){initNavTree('classIpopt_1_1DenseVector.html',''); i
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="classIpopt_1_1DenseVector__inherit__graph.png" border="0" usemap="#aIpopt_1_1DenseVector_inherit__map" alt="Inheritance graph"/></div>
-<map name="aIpopt_1_1DenseVector_inherit__map" id="aIpopt_1_1DenseVector_inherit__map">
-<area shape="rect" title="Dense Vector Implementation." alt="" coords="106,232,251,260"/>
-<area shape="rect" href="classIpopt_1_1Vector.html" title="Vector Base Class." alt="" coords="127,157,230,184"/>
-<area shape="poly" title=" " alt="" coords="181,200,181,232,176,232,176,200"/>
-<area shape="rect" href="classIpopt_1_1TaggedObject.html" title="TaggedObject class." alt="" coords="103,81,254,109"/>
-<area shape="poly" title=" " alt="" coords="181,124,181,156,176,156,176,124"/>
-<area shape="rect" href="classIpopt_1_1ReferencedObject.html" title="Storing the reference count of all the smart pointers that currently reference it." alt="" coords="5,5,184,33"/>
-<area shape="poly" title=" " alt="" coords="123,42,165,79,162,83,119,46"/>
-<area shape="rect" href="classIpopt_1_1Subject.html" title="Slight Variation of the Observer Design Pattern (Subject part)." alt="" coords="207,5,318,33"/>
-<area shape="poly" title=" " alt="" coords="238,46,195,83,192,79,234,42"/>
-</map>
-<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+ <div class="center">
+  <img src="classIpopt_1_1DenseVector.png" usemap="#Ipopt::DenseVector_map" alt=""/>
+  <map id="Ipopt::DenseVector_map" name="Ipopt::DenseVector_map">
+<area href="classIpopt_1_1Vector.html" title="Vector Base Class." alt="Ipopt::Vector" shape="rect" coords="79,112,227,136"/>
+<area href="classIpopt_1_1TaggedObject.html" title="TaggedObject class." alt="Ipopt::TaggedObject" shape="rect" coords="79,56,227,80"/>
+<area href="classIpopt_1_1ReferencedObject.html" title="Storing the reference count of all the smart pointers that currently reference it." alt="Ipopt::ReferencedObject" shape="rect" coords="0,0,148,24"/>
+<area href="classIpopt_1_1Subject.html" title="Slight Variation of the Observer Design Pattern (Subject part)." alt="Ipopt::Subject" shape="rect" coords="158,0,306,24"/>
+  </map>
+</div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -474,7 +470,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Dense <a class="el" href="classIpopt_1_1Vector.html" title="Vector Base Class.">Vector</a> Implementation. </p>
-<p>This is the default <a class="el" href="classIpopt_1_1Vector.html" title="Vector Base Class.">Vector</a> class in <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a>. It stores vectors in contiguous Number arrays, unless the vector has the same value in all entires. In the latter case, we call the vector "homogeneous", and we store only the values that is repeated in all elements. If you want to obtain the values of vector, use the <a class="el" href="classIpopt_1_1DenseVector.html#a23ac6bcd7d67dda1a6aaea8d531ae0cf" title="Indicates if the vector is homogeneous (i.e., all entries have the value Scalar().">IsHomogeneous()</a> method to find out what status the vector is in, and then use either <a class="el" href="classIpopt_1_1DenseVector.html#a2e781ab4aa3a11507f6946bc658922d4" title="Obtain pointer to the internal Number array with vector elements without the intention to change the ...">Values() const</a> or <a class="el" href="classIpopt_1_1DenseVector.html#adc084d318ff5d2cb87c7fa0e199ba495" title="Scalar value of all entries in a homogeneous vector.">Scalar() const </a>methods to get the values. To set the values of a homogeneous method, use the Set method. To set the values of a non-homogeneous vector, use the SetValues method, or use the non-const Values method to get an array that you can overwrite. In the latter case, storage is ensured. </p>
+<p>This is the default <a class="el" href="classIpopt_1_1Vector.html" title="Vector Base Class.">Vector</a> class in <a class="el" href="namespaceIpopt.html">Ipopt</a>. It stores vectors in contiguous Number arrays, unless the vector has the same value in all entires. In the latter case, we call the vector "homogeneous", and we store only the values that is repeated in all elements. If you want to obtain the values of vector, use the <a class="el" href="classIpopt_1_1DenseVector.html#a23ac6bcd7d67dda1a6aaea8d531ae0cf" title="Indicates if the vector is homogeneous (i.e., all entries have the value Scalar().">IsHomogeneous()</a> method to find out what status the vector is in, and then use either <a class="el" href="classIpopt_1_1DenseVector.html#a2e781ab4aa3a11507f6946bc658922d4" title="Obtain pointer to the internal Number array with vector elements without the intention to change the ...">Values() const</a> or <a class="el" href="classIpopt_1_1DenseVector.html#adc084d318ff5d2cb87c7fa0e199ba495" title="Scalar value of all entries in a homogeneous vector.">Scalar() const </a>methods to get the values. To set the values of a homogeneous method, use the Set method. To set the values of a non-homogeneous vector, use the SetValues method, or use the non-const Values method to get an array that you can overwrite. In the latter case, storage is ensured. </p>
 
 <p class="definition">Definition at line <a class="el" href="IpDenseVector_8hpp_source.html#l00040">40</a> of file <a class="el" href="IpDenseVector_8hpp_source.html">IpDenseVector.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>

@@ -39,7 +39,7 @@ MathJax.Hub.Config({
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.14.19</span-->
+   &#160;<!--span id="projectnumber">3.14.20</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -208,7 +208,7 @@ $(document).ready(function(){initNavTree('OUTPUT.html',''); initResizable(); });
 <p class="startli">Console Output: <code>EXIT: Error in step computation!</code></p>
 <p class="startli">This message is printed if Ipopt is unable to compute a step towards a new iterate and the current iterate is not acceptable for the specified tolerances.</p>
 <p class="startli">A possible reason is that a search direction could not be computed despite several attempts to modify the iteration matrix. Usually, the value of the regularization parameter then becomes too large. One situation where this can happen is when values in the Hessian are invalid (NaN or Inf). You can check whether this is true by using the option <a class="el" href="OPTIONS.html#OPT_check_derivatives_for_naninf">check_derivatives_for_naninf</a>.</p>
-<p class="startli">Another reason is that the feasibility restoration phase could not be activated because the current iterate is not infeasible. Reasons for this again include that the problem is highly degenerate, badly scaled, does not satisfy the constraint qualification, or that your NLP code provides incorrect derivative information. Before <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> 3.14, this resulted in a Restoration_Failed status code with message "Restoration phase is called at almost feasible point..."</p>
+<p class="startli">Another reason is that the feasibility restoration phase could not be activated because the current iterate is not infeasible. Reasons for this again include that the problem is highly degenerate, badly scaled, does not satisfy the constraint qualification, or that your NLP code provides incorrect derivative information. Before <a class="el" href="namespaceIpopt.html">Ipopt</a> 3.14, this resulted in a Restoration_Failed status code with message "Restoration phase is called at almost feasible point..."</p>
 </li>
 <li><p class="startli"><code>Invalid_Option</code>:</p>
 <p class="startli">Console Message: (details about the particular error will be output to the console)</p>

@@ -39,7 +39,7 @@ MathJax.Hub.Config({
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.14.19</span-->
+   &#160;<!--span id="projectnumber">3.14.20</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -113,7 +113,7 @@ $(document).ready(function(){initNavTree('classIpopt_1_1IterativeSolverTerminati
 </div><!--header-->
 <div class="contents">
 
-<p>This base class is for the termination tests for the iterative linear solver in the inexact version of <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a>.  
+<p>This base class is for the termination tests for the iterative linear solver in the inexact version of <a class="el" href="namespaceIpopt.html">Ipopt</a>.  
  <a href="classIpopt_1_1IterativeSolverTerminationTester.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="IpIterativeSolverTerminationTester_8hpp_source.html">IpIterativeSolverTerminationTester.hpp</a>&gt;</code></p>
@@ -122,19 +122,15 @@ $(document).ready(function(){initNavTree('classIpopt_1_1IterativeSolverTerminati
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="classIpopt_1_1IterativeSolverTerminationTester__inherit__graph.png" border="0" usemap="#aIpopt_1_1IterativeSolverTerminationTester_inherit__map" alt="Inheritance graph"/></div>
-<map name="aIpopt_1_1IterativeSolverTerminationTester_inherit__map" id="aIpopt_1_1IterativeSolverTerminationTester_inherit__map">
-<area shape="rect" title="This base class is for the termination tests for the iterative linear solver in the inexact version o..." alt="" coords="127,174,362,218"/>
-<area shape="rect" href="classIpopt_1_1InexactNormalTerminationTester.html" title="This class implements the termination tests for the primal&#45;dual system." alt="" coords="5,266,241,311"/>
-<area shape="poly" title=" " alt="" coords="205,230,154,268,150,264,202,225"/>
-<area shape="rect" href="classIpopt_1_1InexactPDTerminationTester.html" title="This class implements the termination tests for the primal&#45;dual system." alt="" coords="264,266,470,311"/>
-<area shape="poly" title=" " alt="" coords="287,225,339,264,336,268,284,230"/>
-<area shape="rect" href="classIpopt_1_1AlgorithmStrategyObject.html" title="This is the base class for all algorithm strategy objects." alt="" coords="154,81,335,126"/>
-<area shape="poly" title=" " alt="" coords="247,141,247,173,242,173,242,141"/>
-<area shape="rect" href="classIpopt_1_1ReferencedObject.html" title="Storing the reference count of all the smart pointers that currently reference it." alt="" coords="155,5,334,33"/>
-<area shape="poly" title=" " alt="" coords="247,49,247,80,242,80,242,49"/>
-</map>
-<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+ <div class="center">
+  <img src="classIpopt_1_1IterativeSolverTerminationTester.png" usemap="#Ipopt::IterativeSolverTerminationTester_map" alt=""/>
+  <map id="Ipopt::IterativeSolverTerminationTester_map" name="Ipopt::IterativeSolverTerminationTester_map">
+<area href="classIpopt_1_1AlgorithmStrategyObject.html" title="This is the base class for all algorithm strategy objects." alt="Ipopt::AlgorithmStrategyObject" shape="rect" coords="118,56,345,80"/>
+<area href="classIpopt_1_1ReferencedObject.html" title="Storing the reference count of all the smart pointers that currently reference it." alt="Ipopt::ReferencedObject" shape="rect" coords="118,0,345,24"/>
+<area href="classIpopt_1_1InexactNormalTerminationTester.html" title="This class implements the termination tests for the primal-dual system." alt="Ipopt::InexactNormalTerminationTester" shape="rect" coords="0,168,227,192"/>
+<area href="classIpopt_1_1InexactPDTerminationTester.html" title="This class implements the termination tests for the primal-dual system." alt="Ipopt::InexactPDTerminationTester" shape="rect" coords="237,168,464,192"/>
+  </map>
+</div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
@@ -183,7 +179,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:aa2cb1ac4ea5b97c9283bc0fdb71da1d1 inherit pub_methods_classIpopt_1_1AlgorithmStrategyObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method is called every time the algorithm starts again - it is used to reset any internal state.  <br /></td></tr>
 <tr class="separator:aa2cb1ac4ea5b97c9283bc0fdb71da1d1 inherit pub_methods_classIpopt_1_1AlgorithmStrategyObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac624e5a883f5c655cb0abbaa24eafcf9 inherit pub_methods_classIpopt_1_1AlgorithmStrategyObject" id="r_ac624e5a883f5c655cb0abbaa24eafcf9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIpopt_1_1DependentResult.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1AlgorithmStrategyObject.html#ac624e5a883f5c655cb0abbaa24eafcf9">ReducedInitialize</a> (<a class="el" href="classIpopt_1_1DependentResult.html">const</a> <a class="el" href="classIpopt_1_1Journalist.html">Journalist</a> &amp;<a class="el" href="classIpopt_1_1DependentResult.html">jnlst</a>, <a class="el" href="classIpopt_1_1DependentResult.html">const</a> <a class="el" href="classIpopt_1_1OptionsList.html">OptionsList</a> &amp;<a class="el" href="classIpopt_1_1DependentResult.html">options</a>, <a class="el" href="classIpopt_1_1DependentResult.html">const</a> std::string &amp;<a class="el" href="classIpopt_1_1DependentResult.html">prefix</a>)</td></tr>
-<tr class="memdesc:ac624e5a883f5c655cb0abbaa24eafcf9 inherit pub_methods_classIpopt_1_1AlgorithmStrategyObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reduced version of the Initialize method, which does not require special <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> information.  <br /></td></tr>
+<tr class="memdesc:ac624e5a883f5c655cb0abbaa24eafcf9 inherit pub_methods_classIpopt_1_1AlgorithmStrategyObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reduced version of the Initialize method, which does not require special <a class="el" href="namespaceIpopt.html">Ipopt</a> information.  <br /></td></tr>
 <tr class="separator:ac624e5a883f5c655cb0abbaa24eafcf9 inherit pub_methods_classIpopt_1_1AlgorithmStrategyObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af2d972f86eec83a96682bd6741a1d265 inherit pub_methods_classIpopt_1_1AlgorithmStrategyObject" id="r_af2d972f86eec83a96682bd6741a1d265"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1AlgorithmStrategyObject.html#af2d972f86eec83a96682bd6741a1d265">AlgorithmStrategyObject</a> ()</td></tr>
 <tr class="memdesc:af2d972f86eec83a96682bd6741a1d265 inherit pub_methods_classIpopt_1_1AlgorithmStrategyObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default Constructor.  <br /></td></tr>
@@ -206,7 +202,7 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:ac0783069a6d4c5bc4df419be56c9a853" id="r_ac0783069a6d4c5bc4df419be56c9a853"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIpopt_1_1DependentResult.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeSolverTerminationTester.html#ac0783069a6d4c5bc4df419be56c9a853">GetVectors</a> (<a class="el" href="namespaceIpopt.html#a5a4a27f325033a0e5d85a4ebc4038b57">Index</a> <a class="el" href="classIpopt_1_1DependentResult.html">ndim</a>, <a class="el" href="classIpopt_1_1DependentResult.html">const</a> <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *<a class="el" href="classIpopt_1_1DependentResult.html">array</a>, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1DependentResult.html">const</a> <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &gt; &amp;<a class="el" href="classIpopt_1_1DependentResult.html">comp_x</a>, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1DependentResult.html">const</a> <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &gt; &amp;<a class="el" href="classIpopt_1_1DependentResult.html">comp_s</a>, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1DependentResult.html">const</a> <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &gt; &amp;<a class="el" href="classIpopt_1_1DependentResult.html">comp_c</a>, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1DependentResult.html">const</a> <a class="el" href="classIpopt_1_1Vector.html">Vector</a> &gt; &amp;<a class="el" href="classIpopt_1_1DependentResult.html">comp_d</a>)</td></tr>
-<tr class="memdesc:ac0783069a6d4c5bc4df419be56c9a853"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method for copying a long augmented system array into Vectors in <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> notation.  <br /></td></tr>
+<tr class="memdesc:ac0783069a6d4c5bc4df419be56c9a853"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method for copying a long augmented system array into Vectors in <a class="el" href="namespaceIpopt.html">Ipopt</a> notation.  <br /></td></tr>
 <tr class="separator:ac0783069a6d4c5bc4df419be56c9a853"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a781b0d95e93c3fa55a186ee470dcb214" id="r_a781b0d95e93c3fa55a186ee470dcb214"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIpopt_1_1InexactData.html">InexactData</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1IterativeSolverTerminationTester.html#a781b0d95e93c3fa55a186ee470dcb214">InexData</a> ()</td></tr>
 <tr class="memdesc:a781b0d95e93c3fa55a186ee470dcb214"><td class="mdescLeft">&#160;</td><td class="mdescRight">Method to easily access Inexact data.  <br /></td></tr>
@@ -237,7 +233,7 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a7aae5be6d18eeb8f0aea988b09256595"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>This base class is for the termination tests for the iterative linear solver in the inexact version of <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a>. </p>
+<div class="textblock"><p>This base class is for the termination tests for the iterative linear solver in the inexact version of <a class="el" href="namespaceIpopt.html">Ipopt</a>. </p>
 
 <p class="definition">Definition at line <a class="el" href="IpIterativeSolverTerminationTester_8hpp_source.html#l00019">19</a> of file <a class="el" href="IpIterativeSolverTerminationTester_8hpp_source.html">IpIterativeSolverTerminationTester.hpp</a>.</p>
 </div><h2 class="groupheader">Member Enumeration Documentation</h2>
@@ -609,7 +605,7 @@ Private Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Method for copying a long augmented system array into Vectors in <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> notation. </p>
+<p>Method for copying a long augmented system array into Vectors in <a class="el" href="namespaceIpopt.html">Ipopt</a> notation. </p>
 
 </div>
 </div>

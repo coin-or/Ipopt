@@ -39,7 +39,7 @@ MathJax.Hub.Config({
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.14.19</span-->
+   &#160;<!--span id="projectnumber">3.14.20</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -120,17 +120,14 @@ $(document).ready(function(){initNavTree('classIpopt_1_1NLP.html',''); initResiz
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="classIpopt_1_1NLP__inherit__graph.png" border="0" usemap="#aIpopt_1_1NLP_inherit__map" alt="Inheritance graph"/></div>
-<map name="aIpopt_1_1NLP_inherit__map" id="aIpopt_1_1NLP_inherit__map">
-<area shape="rect" title="Traditional NLP." alt="" coords="155,81,242,109"/>
-<area shape="rect" href="classIpopt_1_1NLPBoundsRemover.html" title="This is an adapter for an NLP that converts variable bound constraints to inequality constraints." alt="" coords="5,157,200,184"/>
-<area shape="poly" title=" " alt="" coords="171,121,121,158,118,154,168,116"/>
-<area shape="rect" href="classIpopt_1_1TNLPAdapter.html" title="This class adapts the TNLP interface so it looks like an NLP interface." alt="" coords="223,157,368,184"/>
-<area shape="poly" title=" " alt="" coords="229,116,280,154,277,158,226,120"/>
-<area shape="rect" href="classIpopt_1_1ReferencedObject.html" title="Storing the reference count of all the smart pointers that currently reference it." alt="" coords="109,5,288,33"/>
-<area shape="poly" title=" " alt="" coords="201,49,201,81,196,81,196,49"/>
-</map>
-<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+ <div class="center">
+  <img src="classIpopt_1_1NLP.png" usemap="#Ipopt::NLP_map" alt=""/>
+  <map id="Ipopt::NLP_map" name="Ipopt::NLP_map">
+<area href="classIpopt_1_1ReferencedObject.html" title="Storing the reference count of all the smart pointers that currently reference it." alt="Ipopt::ReferencedObject" shape="rect" coords="85,0,246,24"/>
+<area href="classIpopt_1_1NLPBoundsRemover.html" title="This is an adapter for an NLP that converts variable bound constraints to inequality constraints." alt="Ipopt::NLPBoundsRemover" shape="rect" coords="0,112,161,136"/>
+<area href="classIpopt_1_1TNLPAdapter.html" title="This class adapts the TNLP interface so it looks like an NLP interface." alt="Ipopt::TNLPAdapter" shape="rect" coords="171,112,332,136"/>
+  </map>
+</div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -1195,7 +1192,7 @@ Private Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>This method is called once per iteration, after the iteration summary output has been printed. </p>
-<p>It provides the current information to the user to do with it anything she wants. It also allows the user to ask for a premature termination of the optimization by returning false, in which case <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> will terminate with a corresponding return status. The basic information provided in the argument list has the quantities values printed in the iteration summary line. If more information is required, a user can obtain it from the IpData and IpCalculatedQuantities objects. However, note that the provided quantities are all for the problem that <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> sees, i.e., the quantities might be scaled, fixed variables might be sorted out, etc. The status indicates things like whether the algorithm is in the restoration phase... In the restoration phase, the dual variables are probably not not changing. </p>
+<p>It provides the current information to the user to do with it anything she wants. It also allows the user to ask for a premature termination of the optimization by returning false, in which case <a class="el" href="namespaceIpopt.html">Ipopt</a> will terminate with a corresponding return status. The basic information provided in the argument list has the quantities values printed in the iteration summary line. If more information is required, a user can obtain it from the IpData and IpCalculatedQuantities objects. However, note that the provided quantities are all for the problem that <a class="el" href="namespaceIpopt.html">Ipopt</a> sees, i.e., the quantities might be scaled, fixed variables might be sorted out, etc. The status indicates things like whether the algorithm is in the restoration phase... In the restoration phase, the dual variables are probably not not changing. </p>
 
 <p>Reimplemented in <a class="el" href="classIpopt_1_1NLPBoundsRemover.html#ac2cca4d97a274734535fad204f64fdc9">Ipopt::NLPBoundsRemover</a>, and <a class="el" href="classIpopt_1_1TNLPAdapter.html#aa7d7c5e4706688897b2cd6579168f3af">Ipopt::TNLPAdapter</a>.</p>
 

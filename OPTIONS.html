@@ -39,7 +39,7 @@ MathJax.Hub.Config({
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.14.19</span-->
+   &#160;<!--span id="projectnumber">3.14.20</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -186,16 +186,16 @@ Termination</h2>
 <p>The algorithm terminates with a message if the number of iterations exceeded this number. The valid range for this integer option is 0 &le; max_iter and its default value is 3000. </p>
 </blockquote>
 <p><a class="anchor" id="OPT_max_wall_time"></a><a href="#OPT_max_wall_time">&#x25B8;&nbsp;</a><b>max_wall_time</b>: Maximum number of walltime clock seconds. </p><blockquote class="doxtable">
-<p>A limit on walltime clock seconds that <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> can use to solve one problem. If during the convergence check this limit is exceeded, <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> will terminate with a corresponding message. The valid range for this real option is 0 &lt; max_wall_time and its default value is 10<sup>+20</sup>. </p>
+<p>A limit on walltime clock seconds that <a class="el" href="namespaceIpopt.html">Ipopt</a> can use to solve one problem. If during the convergence check this limit is exceeded, <a class="el" href="namespaceIpopt.html">Ipopt</a> will terminate with a corresponding message. The valid range for this real option is 0 &lt; max_wall_time and its default value is 10<sup>+20</sup>. </p>
 </blockquote>
 <p><a class="anchor" id="OPT_max_cpu_time"></a><a href="#OPT_max_cpu_time">&#x25B8;&nbsp;</a><b>max_cpu_time</b>: Maximum number of CPU seconds. </p><blockquote class="doxtable">
-<p>A limit on CPU seconds that <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> can use to solve one problem. If during the convergence check this limit is exceeded, <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> will terminate with a corresponding message. The valid range for this real option is 0 &lt; max_cpu_time and its default value is 10<sup>+20</sup>. </p>
+<p>A limit on CPU seconds that <a class="el" href="namespaceIpopt.html">Ipopt</a> can use to solve one problem. If during the convergence check this limit is exceeded, <a class="el" href="namespaceIpopt.html">Ipopt</a> will terminate with a corresponding message. The valid range for this real option is 0 &lt; max_cpu_time and its default value is 10<sup>+20</sup>. </p>
 </blockquote>
 <p><a class="anchor" id="OPT_dual_inf_tol"></a><a href="#OPT_dual_inf_tol">&#x25B8;&nbsp;</a><b>dual_inf_tol</b>: Desired threshold for the dual infeasibility. </p><blockquote class="doxtable">
 <p>Absolute tolerance on the dual infeasibility. Successful termination requires that the max-norm of the (unscaled) dual infeasibility is less than this threshold. The valid range for this real option is 0 &lt; dual_inf_tol and its default value is 1. </p>
 </blockquote>
 <p><a class="anchor" id="OPT_constr_viol_tol"></a><a href="#OPT_constr_viol_tol">&#x25B8;&nbsp;</a><b>constr_viol_tol</b>: Desired threshold for the constraint and variable bound violation. </p><blockquote class="doxtable">
-<p>Absolute tolerance on the constraint and variable bound violation. Successful termination requires that the max-norm of the (unscaled) constraint violation is less than this threshold. If option bound_relax_factor is not zero 0, then <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> relaxes given variable bounds. The value of constr_viol_tol is used to restrict the absolute amount of this bound relaxation. The valid range for this real option is 0 &lt; constr_viol_tol and its default value is 0.0001. </p>
+<p>Absolute tolerance on the constraint and variable bound violation. Successful termination requires that the max-norm of the (unscaled) constraint violation is less than this threshold. If option bound_relax_factor is not zero 0, then <a class="el" href="namespaceIpopt.html">Ipopt</a> relaxes given variable bounds. The value of constr_viol_tol is used to restrict the absolute amount of this bound relaxation. The valid range for this real option is 0 &lt; constr_viol_tol and its default value is 0.0001. </p>
 </blockquote>
 <p><a class="anchor" id="OPT_compl_inf_tol"></a><a href="#OPT_compl_inf_tol">&#x25B8;&nbsp;</a><b>compl_inf_tol</b>: Desired threshold for the complementarity conditions. </p><blockquote class="doxtable">
 <p>Absolute tolerance on the complementarity. Successful termination requires that the max-norm of the (unscaled) complementarity is less than this threshold. The valid range for this real option is 0 &lt; compl_inf_tol and its default value is 0.0001. </p>
@@ -222,7 +222,7 @@ Termination</h2>
 <p>If any component of the primal iterates exceeded this value (in absolute terms), the optimization is aborted with the exit message that the iterates seem to be diverging. The valid range for this real option is 0 &lt; diverging_iterates_tol and its default value is 10<sup>+20</sup>. </p>
 </blockquote>
 <p><a class="anchor" id="OPT_mu_target"></a><a href="#OPT_mu_target">&#x25B8;&nbsp;</a><b>mu_target</b>: Desired value of complementarity. </p><blockquote class="doxtable">
-<p>Usually, the barrier parameter is driven to zero and the termination test for complementarity is measured with respect to zero complementarity. However, in some cases it might be desired to have <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> solve barrier problem for strictly positive value of the barrier parameter. In this case, the value of "mu_target" specifies the final value of the barrier parameter, and the termination tests are then defined with respect to the barrier problem for this value of the barrier parameter. The valid range for this real option is 0 &le; mu_target and its default value is 0. </p>
+<p>Usually, the barrier parameter is driven to zero and the termination test for complementarity is measured with respect to zero complementarity. However, in some cases it might be desired to have <a class="el" href="namespaceIpopt.html">Ipopt</a> solve barrier problem for strictly positive value of the barrier parameter. In this case, the value of "mu_target" specifies the final value of the barrier parameter, and the termination tests are then defined with respect to the barrier problem for this value of the barrier parameter. The valid range for this real option is 0 &le; mu_target and its default value is 0. </p>
 </blockquote>
 <h2><a class="anchor" id="OPT_Output"></a>
 Output</h2>
@@ -267,11 +267,11 @@ Output</h2>
 <p>Possible values: yes, no </p>
 </blockquote>
 <p><a class="anchor" id="OPT_print_info_string"></a><a href="#OPT_print_info_string">&#x25B8;&nbsp;</a><b>print_info_string</b>: Enables printing of additional info string at end of iteration output. </p><blockquote class="doxtable">
-<p>This string contains some insider information about the current iteration. For details, look for "Diagnostic Tags" in the <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> documentation. The default value for this string option is "no".</p>
+<p>This string contains some insider information about the current iteration. For details, look for "Diagnostic Tags" in the <a class="el" href="namespaceIpopt.html">Ipopt</a> documentation. The default value for this string option is "no".</p>
 <p>Possible values: yes, no </p>
 </blockquote>
 <p><a class="anchor" id="OPT_inf_pr_output"></a><a href="#OPT_inf_pr_output">&#x25B8;&nbsp;</a><b>inf_pr_output</b>: Determines what value is printed in the "inf_pr" output column. </p><blockquote class="doxtable">
-<p><a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> works with a reformulation of the original problem, where slacks are introduced and the problem might have been scaled. The choice "internal" prints out the constraint violation of this formulation. With "original" the true constraint violation in the original NLP is printed. The default value for this string option is "original".</p>
+<p><a class="el" href="namespaceIpopt.html">Ipopt</a> works with a reformulation of the original problem, where slacks are introduced and the problem might have been scaled. The choice "internal" prints out the constraint violation of this formulation. With "original" the true constraint violation in the original NLP is printed. The default value for this string option is "original".</p>
 <p>Possible values:</p><ul>
 <li>internal: max-norm of violation of internal equality constraints</li>
 <li>original: maximal constraint violation in original NLP </li>
@@ -337,10 +337,10 @@ NLP</h2>
 <p>See Section 3.7 in implementation paper. The valid range for this real option is 0 &le; kappa_d and its default value is 10<sup>-05</sup>. </p>
 </blockquote>
 <p><a class="anchor" id="OPT_bound_relax_factor"></a><a href="#OPT_bound_relax_factor">&#x25B8;&nbsp;</a><b>bound_relax_factor</b>: Factor for initial relaxation of the bounds. </p><blockquote class="doxtable">
-<p>Before start of the optimization, the bounds given by the user are relaxed. This option sets the factor for this relaxation. Additional, the constraint violation tolerance constr_viol_tol is used to bound the relaxation by an absolute value. If it is set to zero, then then bounds relaxation is disabled. See Eqn.(35) in implementation paper. Note that the constraint violation reported by <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> at the end of the solution process does not include violations of the original (non-relaxed) variable bounds. See also option honor_original_bounds. The valid range for this real option is 0 &le; bound_relax_factor and its default value is 10<sup>-08</sup>. </p>
+<p>Before start of the optimization, the bounds given by the user are relaxed. This option sets the factor for this relaxation. Additional, the constraint violation tolerance constr_viol_tol is used to bound the relaxation by an absolute value. If it is set to zero, then then bounds relaxation is disabled. See Eqn.(35) in implementation paper. Note that the constraint violation reported by <a class="el" href="namespaceIpopt.html">Ipopt</a> at the end of the solution process does not include violations of the original (non-relaxed) variable bounds. See also option honor_original_bounds. The valid range for this real option is 0 &le; bound_relax_factor and its default value is 10<sup>-08</sup>. </p>
 </blockquote>
 <p><a class="anchor" id="OPT_honor_original_bounds"></a><a href="#OPT_honor_original_bounds">&#x25B8;&nbsp;</a><b>honor_original_bounds</b>: Indicates whether final points should be projected into original bounds. </p><blockquote class="doxtable">
-<p><a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> might relax the bounds during the optimization (see, e.g., option "bound_relax_factor"). This option determines whether the final point should be projected back into the user-provide original bounds after the optimization. Note that violations of constraints and complementarity reported by <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> at the end of the solution process are for the non-projected point. The default value for this string option is "no".</p>
+<p><a class="el" href="namespaceIpopt.html">Ipopt</a> might relax the bounds during the optimization (see, e.g., option "bound_relax_factor"). This option determines whether the final point should be projected back into the user-provide original bounds after the optimization. Note that violations of constraints and complementarity reported by <a class="el" href="namespaceIpopt.html">Ipopt</a> at the end of the solution process are for the non-projected point. The default value for this string option is "no".</p>
 <p>Possible values: yes, no </p>
 </blockquote>
 <p><a class="anchor" id="OPT_check_derivatives_for_naninf"></a><a href="#OPT_check_derivatives_for_naninf">&#x25B8;&nbsp;</a><b>check_derivatives_for_naninf</b>: Indicates whether it is desired to check for Nan/Inf in derivative matrices </p><blockquote class="doxtable">
@@ -348,19 +348,19 @@ NLP</h2>
 <p>Possible values: yes, no </p>
 </blockquote>
 <p><a class="anchor" id="OPT_grad_f_constant"></a><a href="#OPT_grad_f_constant">&#x25B8;&nbsp;</a><b>grad_f_constant</b>: Indicates whether to assume that the objective function is linear </p><blockquote class="doxtable">
-<p>Activating this option will cause <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> to ask for the Gradient of the objective function only once from the NLP and reuse this information later. The default value for this string option is "no".</p>
+<p>Activating this option will cause <a class="el" href="namespaceIpopt.html">Ipopt</a> to ask for the Gradient of the objective function only once from the NLP and reuse this information later. The default value for this string option is "no".</p>
 <p>Possible values: yes, no </p>
 </blockquote>
 <p><a class="anchor" id="OPT_jac_c_constant"></a><a href="#OPT_jac_c_constant">&#x25B8;&nbsp;</a><b>jac_c_constant</b>: Indicates whether to assume that all equality constraints are linear </p><blockquote class="doxtable">
-<p>Activating this option will cause <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> to ask for the Jacobian of the equality constraints only once from the NLP and reuse this information later. The default value for this string option is "no".</p>
+<p>Activating this option will cause <a class="el" href="namespaceIpopt.html">Ipopt</a> to ask for the Jacobian of the equality constraints only once from the NLP and reuse this information later. The default value for this string option is "no".</p>
 <p>Possible values: yes, no </p>
 </blockquote>
 <p><a class="anchor" id="OPT_jac_d_constant"></a><a href="#OPT_jac_d_constant">&#x25B8;&nbsp;</a><b>jac_d_constant</b>: Indicates whether to assume that all inequality constraints are linear </p><blockquote class="doxtable">
-<p>Activating this option will cause <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> to ask for the Jacobian of the inequality constraints only once from the NLP and reuse this information later. The default value for this string option is "no".</p>
+<p>Activating this option will cause <a class="el" href="namespaceIpopt.html">Ipopt</a> to ask for the Jacobian of the inequality constraints only once from the NLP and reuse this information later. The default value for this string option is "no".</p>
 <p>Possible values: yes, no </p>
 </blockquote>
 <p><a class="anchor" id="OPT_hessian_constant"></a><a href="#OPT_hessian_constant">&#x25B8;&nbsp;</a><b>hessian_constant</b>: Indicates whether to assume the problem is a QP (quadratic objective, linear constraints) </p><blockquote class="doxtable">
-<p>Activating this option will cause <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> to ask for the Hessian of the Lagrangian function only once from the NLP and reuse this information later. The default value for this string option is "no".</p>
+<p>Activating this option will cause <a class="el" href="namespaceIpopt.html">Ipopt</a> to ask for the Hessian of the Lagrangian function only once from the NLP and reuse this information later. The default value for this string option is "no".</p>
 <p>Possible values: yes, no </p>
 </blockquote>
 <h2><a class="anchor" id="OPT_NLP_Scaling"></a>
@@ -375,7 +375,7 @@ NLP Scaling</h2>
 </ul>
 </blockquote>
 <p><a class="anchor" id="OPT_obj_scaling_factor"></a><a href="#OPT_obj_scaling_factor">&#x25B8;&nbsp;</a><b>obj_scaling_factor</b>: Scaling factor for the objective function. </p><blockquote class="doxtable">
-<p>This option sets a scaling factor for the objective function. The scaling is seen internally by <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> but the unscaled objective is reported in the console output. If additional scaling parameters are computed (e.g. user-scaling or gradient-based), both factors are multiplied. If this value is chosen to be negative, <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> will maximize the objective function instead of minimizing it. The valid range for this real option is unrestricted and its default value is 1. </p>
+<p>This option sets a scaling factor for the objective function. The scaling is seen internally by <a class="el" href="namespaceIpopt.html">Ipopt</a> but the unscaled objective is reported in the console output. If additional scaling parameters are computed (e.g. user-scaling or gradient-based), both factors are multiplied. If this value is chosen to be negative, <a class="el" href="namespaceIpopt.html">Ipopt</a> will maximize the objective function instead of minimizing it. The valid range for this real option is unrestricted and its default value is 1. </p>
 </blockquote>
 <p><a class="anchor" id="OPT_nlp_scaling_max_gradient"></a><a href="#OPT_nlp_scaling_max_gradient">&#x25B8;&nbsp;</a><b>nlp_scaling_max_gradient</b>: Maximum gradient after NLP scaling. </p><blockquote class="doxtable">
 <p>This is the gradient scaling cut-off. If the maximum gradient is above this value, then gradient based scaling will be performed. Scaling parameters are calculated to scale the maximum gradient back to this value. (This is g_max in Section 3.8 of the implementation paper.) Note: This option is only used if "nlp_scaling_method" is chosen as "gradient-based". The valid range for this real option is 0 &lt; nlp_scaling_max_gradient and its default value is 100. </p>
@@ -417,14 +417,14 @@ Initialization</h2>
 </ul>
 </blockquote>
 <p><a class="anchor" id="OPT_least_square_init_primal"></a><a href="#OPT_least_square_init_primal">&#x25B8;&nbsp;</a><b>least_square_init_primal</b>: Least square initialization of the primal variables </p><blockquote class="doxtable">
-<p>If set to yes, <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> ignores the user provided point and solves a least square problem for the primal variables (x and s) to fit the linearized equality and inequality constraints.This might be useful if the user doesn't know anything about the starting point, or for solving an LP or QP. The default value for this string option is "no".</p>
+<p>If set to yes, <a class="el" href="namespaceIpopt.html">Ipopt</a> ignores the user provided point and solves a least square problem for the primal variables (x and s) to fit the linearized equality and inequality constraints.This might be useful if the user doesn't know anything about the starting point, or for solving an LP or QP. The default value for this string option is "no".</p>
 <p>Possible values:</p><ul>
 <li>no: take user-provided point</li>
 <li>yes: overwrite user-provided point with least-square estimates </li>
 </ul>
 </blockquote>
 <p><a class="anchor" id="OPT_least_square_init_duals"></a><a href="#OPT_least_square_init_duals">&#x25B8;&nbsp;</a><b>least_square_init_duals</b>: Least square initialization of all dual variables </p><blockquote class="doxtable">
-<p>If set to yes, <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> tries to compute least-square multipliers (considering ALL dual variables). If successful, the bound multipliers are possibly corrected to be at least bound_mult_init_val. This might be useful if the user doesn't know anything about the starting point, or for solving an LP or QP. This overwrites option "bound_mult_init_method". The default value for this string option is "no".</p>
+<p>If set to yes, <a class="el" href="namespaceIpopt.html">Ipopt</a> tries to compute least-square multipliers (considering ALL dual variables). If successful, the bound multipliers are possibly corrected to be at least bound_mult_init_val. This might be useful if the user doesn't know anything about the starting point, or for solving an LP or QP. This overwrites option "bound_mult_init_method". The default value for this string option is "no".</p>
 <p>Possible values:</p><ul>
 <li>no: use bound_mult_init_val and least-square equality constraint multipliers</li>
 <li>yes: overwrite user-provided point with least-square estimates </li>
@@ -474,7 +474,7 @@ Warm Start</h2>
 <h2><a class="anchor" id="OPT_Miscellaneous"></a>
 Miscellaneous</h2>
 <p><a class="anchor" id="OPT_option_file_name"></a><a href="#OPT_option_file_name">&#x25B8;&nbsp;</a><b>option_file_name</b>: File name of options file. </p><blockquote class="doxtable">
-<p>By default, the name of the <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> options file is "ipopt.opt" - or something else if specified in the IpoptApplication::Initialize call. If this option is set by SetStringValue BEFORE the options file is read, it specifies the name of the options file. It does not make any sense to specify this option within the options file. Setting this option to an empty string disables reading of an options file. The default value for this string option is "ipopt.opt".</p>
+<p>By default, the name of the <a class="el" href="namespaceIpopt.html">Ipopt</a> options file is "ipopt.opt" - or something else if specified in the IpoptApplication::Initialize call. If this option is set by SetStringValue BEFORE the options file is read, it specifies the name of the options file. It does not make any sense to specify this option within the options file. Setting this option to an empty string disables reading of an options file. The default value for this string option is "ipopt.opt".</p>
 <p>Possible values:</p><ul>
 <li>*: Any acceptable standard file name </li>
 </ul>
@@ -484,10 +484,10 @@ Miscellaneous</h2>
 <p>Possible values: yes, no </p>
 </blockquote>
 <p><a class="anchor" id="OPT_skip_finalize_solution_call"></a><a href="#OPT_skip_finalize_solution_call">&#x25B8;&nbsp;</a><b>skip_finalize_solution_call</b> (<em>advanced</em>): Whether a call to NLP::FinalizeSolution after optimization should be suppressed </p><blockquote class="doxtable">
-<p>In some <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> applications, the user might want to call the FinalizeSolution method separately. Setting this option to "yes" will cause the IpoptApplication object to suppress the default call to that method. The default value for this string option is "no".</p>
+<p>In some <a class="el" href="namespaceIpopt.html">Ipopt</a> applications, the user might want to call the FinalizeSolution method separately. Setting this option to "yes" will cause the IpoptApplication object to suppress the default call to that method. The default value for this string option is "no".</p>
 <p>Possible values: yes, no </p>
 </blockquote>
-<p><a class="anchor" id="OPT_timing_statistics"></a><a href="#OPT_timing_statistics">&#x25B8;&nbsp;</a><b>timing_statistics</b>: Indicates whether to measure time spend in components of <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> and NLP evaluation </p><blockquote class="doxtable">
+<p><a class="anchor" id="OPT_timing_statistics"></a><a href="#OPT_timing_statistics">&#x25B8;&nbsp;</a><b>timing_statistics</b>: Indicates whether to measure time spend in components of <a class="el" href="namespaceIpopt.html">Ipopt</a> and NLP evaluation </p><blockquote class="doxtable">
 <p>The overall algorithm time is unaffected by this option. The default value for this string option is "no".</p>
 <p>Possible values: yes, no </p>
 </blockquote>
@@ -839,7 +839,7 @@ Step Calculation</h2>
 <p>If the improvement of the residual test ratio made by one iterative refinement step is not better than this factor, iterative refinement is aborted. The valid range for this real option is 0 &lt; residual_improvement_factor and its default value is 1. </p>
 </blockquote>
 <p><a class="anchor" id="OPT_neg_curv_test_tol"></a><a href="#OPT_neg_curv_test_tol">&#x25B8;&nbsp;</a><b>neg_curv_test_tol</b>: Tolerance for heuristic to ignore wrong inertia. </p><blockquote class="doxtable">
-<p>If nonzero, incorrect inertia in the augmented system is ignored, and <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> tests if the direction is a direction of positive curvature. This tolerance is alpha_n in the paper by Zavala and Chiang (2014) and it determines when the direction is considered to be sufficiently positive. A value in the range of [1e-12, 1e-11] is recommended. The valid range for this real option is 0 &le; neg_curv_test_tol and its default value is 0. </p>
+<p>If nonzero, incorrect inertia in the augmented system is ignored, and <a class="el" href="namespaceIpopt.html">Ipopt</a> tests if the direction is a direction of positive curvature. This tolerance is alpha_n in the paper by Zavala and Chiang (2014) and it determines when the direction is considered to be sufficiently positive. A value in the range of [1e-12, 1e-11] is recommended. The valid range for this real option is 0 &le; neg_curv_test_tol and its default value is 0. </p>
 </blockquote>
 <p><a class="anchor" id="OPT_neg_curv_test_reg"></a><a href="#OPT_neg_curv_test_reg">&#x25B8;&nbsp;</a><b>neg_curv_test_reg</b>: Whether to do the curvature test with the primal regularization (see Zavala and Chiang, 2014). </p><blockquote class="doxtable">
 <p>The default value for this string option is "yes".</p>
@@ -849,7 +849,7 @@ Step Calculation</h2>
 </ul>
 </blockquote>
 <p><a class="anchor" id="OPT_max_hessian_perturbation"></a><a href="#OPT_max_hessian_perturbation">&#x25B8;&nbsp;</a><b>max_hessian_perturbation</b>: Maximum value of regularization parameter for handling negative curvature. </p><blockquote class="doxtable">
-<p>In order to guarantee that the search directions are indeed proper descent directions, <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> requires that the inertia of the (augmented) linear system for the step computation has the correct number of negative and positive eigenvalues. The idea is that this guides the algorithm away from maximizers and makes <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> more likely converge to first order optimal points that are minimizers. If the inertia is not correct, a multiple of the identity matrix is added to the Hessian of the Lagrangian in the augmented system. This parameter gives the maximum value of the regularization parameter. If a regularization of that size is not enough, the algorithm skips this iteration and goes to the restoration phase. This is delta_w^max in the implementation paper. The valid range for this real option is 0 &lt; max_hessian_perturbation and its default value is 10<sup>+20</sup>. </p>
+<p>In order to guarantee that the search directions are indeed proper descent directions, <a class="el" href="namespaceIpopt.html">Ipopt</a> requires that the inertia of the (augmented) linear system for the step computation has the correct number of negative and positive eigenvalues. The idea is that this guides the algorithm away from maximizers and makes <a class="el" href="namespaceIpopt.html">Ipopt</a> more likely converge to first order optimal points that are minimizers. If the inertia is not correct, a multiple of the identity matrix is added to the Hessian of the Lagrangian in the augmented system. This parameter gives the maximum value of the regularization parameter. If a regularization of that size is not enough, the algorithm skips this iteration and goes to the restoration phase. This is delta_w^max in the implementation paper. The valid range for this real option is 0 &lt; max_hessian_perturbation and its default value is 10<sup>+20</sup>. </p>
 </blockquote>
 <p><a class="anchor" id="OPT_min_hessian_perturbation"></a><a href="#OPT_min_hessian_perturbation">&#x25B8;&nbsp;</a><b>min_hessian_perturbation</b>: Smallest perturbation of the Hessian block. </p><blockquote class="doxtable">
 <p>The size of the perturbation of the Hessian block is never selected smaller than this value, unless no perturbation is necessary. This is delta_w^min in implementation paper. The valid range for this real option is 0 &le; min_hessian_perturbation and its default value is 10<sup>-20</sup>. </p>
@@ -909,7 +909,7 @@ Restoration Phase</h2>
 <p>Possible values: yes, no </p>
 </blockquote>
 <p><a class="anchor" id="OPT_resto_penalty_parameter"></a><a href="#OPT_resto_penalty_parameter">&#x25B8;&nbsp;</a><b>resto_penalty_parameter</b> (<em>advanced</em>): Penalty parameter in the restoration phase objective function. </p><blockquote class="doxtable">
-<p>This is the parameter rho in equation (31a) in the <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> implementation paper. The valid range for this real option is 0 &lt; resto_penalty_parameter and its default value is 1000. </p>
+<p>This is the parameter rho in equation (31a) in the <a class="el" href="namespaceIpopt.html">Ipopt</a> implementation paper. The valid range for this real option is 0 &lt; resto_penalty_parameter and its default value is 1000. </p>
 </blockquote>
 <p><a class="anchor" id="OPT_resto_proximity_weight"></a><a href="#OPT_resto_proximity_weight">&#x25B8;&nbsp;</a><b>resto_proximity_weight</b> (<em>advanced</em>): Weighting factor for the proximity term in restoration phase objective. </p><blockquote class="doxtable">
 <p>This determines how the parameter zeta in equation (29a) in the implementation paper is computed. zeta here is resto_proximity_weight*sqrt(mu), where mu is the current barrier parameter. The valid range for this real option is 0 &le; resto_proximity_weight and its default value is 1. </p>
@@ -965,7 +965,7 @@ Hessian Approximation</h2>
 <p>If the update is skipped more than this number of successive iterations, the quasi-Newton approximation is reset. The valid range for this integer option is 1 &le; limited_memory_max_skipping and its default value is 2. </p>
 </blockquote>
 <p><a class="anchor" id="OPT_limited_memory_special_for_resto"></a><a href="#OPT_limited_memory_special_for_resto">&#x25B8;&nbsp;</a><b>limited_memory_special_for_resto</b>: Determines if the quasi-Newton updates should be special during the restoration phase. </p><blockquote class="doxtable">
-<p>Until Nov 2010, <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> used a special update during the restoration phase, but it turned out that this does not work well. The new default uses the regular update procedure and it improves results. If for some reason you want to get back to the original update, set this option to "yes". The default value for this string option is "no".</p>
+<p>Until Nov 2010, <a class="el" href="namespaceIpopt.html">Ipopt</a> used a special update during the restoration phase, but it turned out that this does not work well. The new default uses the regular update procedure and it improves results. If for some reason you want to get back to the original update, set this option to "yes". The default value for this string option is "no".</p>
 <p>Possible values: yes, no </p>
 </blockquote>
 <p><a class="anchor" id="OPT_hessian_approximation"></a><a href="#OPT_hessian_approximation">&#x25B8;&nbsp;</a><b>hessian_approximation</b>: Indicates what Hessian information is to be used. </p><blockquote class="doxtable">
@@ -1018,23 +1018,23 @@ MA27 Linear Solver</h2>
 <p>A smaller number pivots for sparsity, a larger number pivots for stability. The valid range for this real option is 0 &lt; ma27_pivtol &lt; 1 and its default value is 10<sup>-08</sup>. </p>
 </blockquote>
 <p><a class="anchor" id="OPT_ma27_pivtolmax"></a><a href="#OPT_ma27_pivtolmax">&#x25B8;&nbsp;</a><b>ma27_pivtolmax</b>: Maximum pivot tolerance for the linear solver MA27. </p><blockquote class="doxtable">
-<p><a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> may increase pivtol as high as ma27_pivtolmax to get a more accurate solution to the linear system. The valid range for this real option is 0 &lt; ma27_pivtolmax &lt; 1 and its default value is 0.0001. </p>
+<p><a class="el" href="namespaceIpopt.html">Ipopt</a> may increase pivtol as high as ma27_pivtolmax to get a more accurate solution to the linear system. The valid range for this real option is 0 &lt; ma27_pivtolmax &lt; 1 and its default value is 0.0001. </p>
 </blockquote>
 <p><a class="anchor" id="OPT_ma27_liw_init_factor"></a><a href="#OPT_ma27_liw_init_factor">&#x25B8;&nbsp;</a><b>ma27_liw_init_factor</b>: Integer workspace memory for MA27. </p><blockquote class="doxtable">
-<p>The initial integer workspace memory = liw_init_factor * memory required by unfactored system. <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> will increase the workspace size by ma27_meminc_factor if required. The valid range for this real option is 1 &le; ma27_liw_init_factor and its default value is 5. </p>
+<p>The initial integer workspace memory = liw_init_factor * memory required by unfactored system. <a class="el" href="namespaceIpopt.html">Ipopt</a> will increase the workspace size by ma27_meminc_factor if required. The valid range for this real option is 1 &le; ma27_liw_init_factor and its default value is 5. </p>
 </blockquote>
 <p><a class="anchor" id="OPT_ma27_la_init_factor"></a><a href="#OPT_ma27_la_init_factor">&#x25B8;&nbsp;</a><b>ma27_la_init_factor</b>: Real workspace memory for MA27. </p><blockquote class="doxtable">
-<p>The initial real workspace memory = la_init_factor * memory required by unfactored system. <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> will increase the workspace size by ma27_meminc_factor if required. The valid range for this real option is 1 &le; ma27_la_init_factor and its default value is 5. </p>
+<p>The initial real workspace memory = la_init_factor * memory required by unfactored system. <a class="el" href="namespaceIpopt.html">Ipopt</a> will increase the workspace size by ma27_meminc_factor if required. The valid range for this real option is 1 &le; ma27_la_init_factor and its default value is 5. </p>
 </blockquote>
 <p><a class="anchor" id="OPT_ma27_meminc_factor"></a><a href="#OPT_ma27_meminc_factor">&#x25B8;&nbsp;</a><b>ma27_meminc_factor</b>: Increment factor for workspace size for MA27. </p><blockquote class="doxtable">
-<p>If the integer or real workspace is not large enough, <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> will increase its size by this factor. The valid range for this real option is 1 &le; ma27_meminc_factor and its default value is 2. </p>
+<p>If the integer or real workspace is not large enough, <a class="el" href="namespaceIpopt.html">Ipopt</a> will increase its size by this factor. The valid range for this real option is 1 &le; ma27_meminc_factor and its default value is 2. </p>
 </blockquote>
 <p><a class="anchor" id="OPT_ma27_skip_inertia_check"></a><a href="#OPT_ma27_skip_inertia_check">&#x25B8;&nbsp;</a><b>ma27_skip_inertia_check</b> (<em>advanced</em>): Whether to always pretend that inertia is correct. </p><blockquote class="doxtable">
 <p>Setting this option to "yes" essentially disables inertia check. This option makes the algorithm non-robust and easily fail, but it might give some insight into the necessity of inertia control. The default value for this string option is "no".</p>
 <p>Possible values: yes, no </p>
 </blockquote>
 <p><a class="anchor" id="OPT_ma27_ignore_singularity"></a><a href="#OPT_ma27_ignore_singularity">&#x25B8;&nbsp;</a><b>ma27_ignore_singularity</b> (<em>advanced</em>): Whether to use MA27's ability to solve a linear system even if the matrix is singular. </p><blockquote class="doxtable">
-<p>Setting this option to "yes" means that <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> will call MA27 to compute solutions for right hand sides, even if MA27 has detected that the matrix is singular (but is still able to solve the linear system). In some cases this might be better than using <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a>'s heuristic of small perturbation of the lower diagonal of the KKT matrix. The default value for this string option is "no".</p>
+<p>Setting this option to "yes" means that <a class="el" href="namespaceIpopt.html">Ipopt</a> will call MA27 to compute solutions for right hand sides, even if MA27 has detected that the matrix is singular (but is still able to solve the linear system). In some cases this might be better than using <a class="el" href="namespaceIpopt.html">Ipopt</a>'s heuristic of small perturbation of the lower diagonal of the KKT matrix. The default value for this string option is "no".</p>
 <p>Possible values: yes, no </p>
 </blockquote>
 <h2><a class="anchor" id="OPT_MA57_Linear_Solver"></a>
@@ -1046,7 +1046,7 @@ MA57 Linear Solver</h2>
 <p>A smaller number pivots for sparsity, a larger number pivots for stability. The valid range for this real option is 0 &lt; ma57_pivtol &lt; 1 and its default value is 10<sup>-08</sup>. </p>
 </blockquote>
 <p><a class="anchor" id="OPT_ma57_pivtolmax"></a><a href="#OPT_ma57_pivtolmax">&#x25B8;&nbsp;</a><b>ma57_pivtolmax</b>: Maximum pivot tolerance for the linear solver MA57. </p><blockquote class="doxtable">
-<p><a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> may increase pivtol as high as ma57_pivtolmax to get a more accurate solution to the linear system. The valid range for this real option is 0 &lt; ma57_pivtolmax &lt; 1 and its default value is 0.0001. </p>
+<p><a class="el" href="namespaceIpopt.html">Ipopt</a> may increase pivtol as high as ma57_pivtolmax to get a more accurate solution to the linear system. The valid range for this real option is 0 &lt; ma57_pivtolmax &lt; 1 and its default value is 0.0001. </p>
 </blockquote>
 <p><a class="anchor" id="OPT_ma57_pre_alloc"></a><a href="#OPT_ma57_pre_alloc">&#x25B8;&nbsp;</a><b>ma57_pre_alloc</b>: Safety factor for work space memory allocation for the linear solver MA57. </p><blockquote class="doxtable">
 <p>If 1 is chosen, the suggested amount of work space is used. However, choosing a larger number might avoid reallocation if the suggest values do not suffice. The valid range for this real option is 1 &le; ma57_pre_alloc and its default value is 1.05. </p>
@@ -1184,7 +1184,7 @@ MA97 Linear Solver</h2>
 <li>never: Scaling is never enabled.</li>
 <li>at_start: Scaling to be used from the very start.</li>
 <li>at_start_reuse: Scaling to be used on first iteration, then reused thereafter.</li>
-<li>on_demand: Scaling to be used after <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> request improved solution (i.e. iterative refinement has failed).</li>
+<li>on_demand: Scaling to be used after <a class="el" href="namespaceIpopt.html">Ipopt</a> request improved solution (i.e. iterative refinement has failed).</li>
 <li>on_demand_reuse: As on_demand, but reuse scaling from previous itr</li>
 <li>high_delay: Scaling to be used after more than 0.05*n delays are present</li>
 <li>high_delay_reuse: Scaling to be used only when previous itr created more that 0.05*n additional delays, otherwise reuse scaling from previous itr</li>
@@ -1207,7 +1207,7 @@ MA97 Linear Solver</h2>
 <li>never: Scaling is never enabled.</li>
 <li>at_start: Scaling to be used from the very start.</li>
 <li>at_start_reuse: Scaling to be used on first iteration, then reused thereafter.</li>
-<li>on_demand: Scaling to be used after <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> request improved solution (i.e. iterative refinement has failed).</li>
+<li>on_demand: Scaling to be used after <a class="el" href="namespaceIpopt.html">Ipopt</a> request improved solution (i.e. iterative refinement has failed).</li>
 <li>on_demand_reuse: As on_demand, but reuse scaling from previous itr</li>
 <li>high_delay: Scaling to be used after more than 0.05*n delays are present</li>
 <li>high_delay_reuse: Scaling to be used only when previous itr created more that 0.05*n additional delays, otherwise reuse scaling from previous itr</li>
@@ -1230,7 +1230,7 @@ MA97 Linear Solver</h2>
 <li>never: Scaling is never enabled.</li>
 <li>at_start: Scaling to be used from the very start.</li>
 <li>at_start_reuse: Scaling to be used on first iteration, then reused thereafter.</li>
-<li>on_demand: Scaling to be used after <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> request improved solution (i.e. iterative refinement has failed).</li>
+<li>on_demand: Scaling to be used after <a class="el" href="namespaceIpopt.html">Ipopt</a> request improved solution (i.e. iterative refinement has failed).</li>
 <li>on_demand_reuse: As on_demand, but reuse scaling from previous itr</li>
 <li>high_delay: Scaling to be used after more than 0.05*n delays are present</li>
 <li>high_delay_reuse: Scaling to be used only when previous itr created more that 0.05*n additional delays, otherwise reuse scaling from previous itr</li>
@@ -1526,7 +1526,7 @@ WSMP Linear Solver</h2>
 <p>A smaller number pivots for sparsity, a larger number pivots for stability. The valid range for this real option is 0 &lt; wsmp_pivtol &lt; 1 and its default value is 0.0001. </p>
 </blockquote>
 <p><a class="anchor" id="OPT_wsmp_pivtolmax"></a><a href="#OPT_wsmp_pivtolmax">&#x25B8;&nbsp;</a><b>wsmp_pivtolmax</b>: Maximum pivot tolerance for the linear solver WSMP. </p><blockquote class="doxtable">
-<p><a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> may increase pivtol as high as pivtolmax to get a more accurate solution to the linear system. The valid range for this real option is 0 &lt; wsmp_pivtolmax &lt; 1 and its default value is 0.1. </p>
+<p><a class="el" href="namespaceIpopt.html">Ipopt</a> may increase pivtol as high as pivtolmax to get a more accurate solution to the linear system. The valid range for this real option is 0 &lt; wsmp_pivtolmax &lt; 1 and its default value is 0.1. </p>
 </blockquote>
 <p><a class="anchor" id="OPT_wsmp_scaling"></a><a href="#OPT_wsmp_scaling">&#x25B8;&nbsp;</a><b>wsmp_scaling</b>: Determines how the matrix is scaled by WSMP. </p><blockquote class="doxtable">
 <p>This corresponds to the value of WSSMP's IPARM(10). The valid range for this integer option is 0 &le; wsmp_scaling &le; 3 and its default value is 0. </p>
@@ -1566,7 +1566,7 @@ Mumps Linear Solver</h2>
 <p>A smaller number pivots for sparsity, a larger number pivots for stability. The valid range for this real option is 0 &le; mumps_pivtol &le; 1 and its default value is 10<sup>-06</sup>. </p>
 </blockquote>
 <p><a class="anchor" id="OPT_mumps_pivtolmax"></a><a href="#OPT_mumps_pivtolmax">&#x25B8;&nbsp;</a><b>mumps_pivtolmax</b>: Maximum pivot tolerance for the linear solver MUMPS. </p><blockquote class="doxtable">
-<p><a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> may increase pivtol as high as pivtolmax to get a more accurate solution to the linear system. The valid range for this real option is 0 &le; mumps_pivtolmax &le; 1 and its default value is 0.1. </p>
+<p><a class="el" href="namespaceIpopt.html">Ipopt</a> may increase pivtol as high as pivtolmax to get a more accurate solution to the linear system. The valid range for this real option is 0 &le; mumps_pivtolmax &le; 1 and its default value is 0.1. </p>
 </blockquote>
 <p><a class="anchor" id="OPT_mumps_mem_percent"></a><a href="#OPT_mumps_mem_percent">&#x25B8;&nbsp;</a><b>mumps_mem_percent</b>: Percentage increase in the estimated working space for MUMPS. </p><blockquote class="doxtable">
 <p>When significant extra fill-in is caused by numerical pivoting, larger values of mumps_mem_percent may help use the workspace more efficiently. On the other hand, if memory requirement are too large at the very beginning of the optimization, choosing a much smaller value for this option, such as 5, might reduce memory requirements. The valid range for this integer option is 0 &le; mumps_mem_percent and its default value is 1000. </p>

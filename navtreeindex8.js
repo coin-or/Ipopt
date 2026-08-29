@@ -1,5 +1,6 @@
 var NAVTREEINDEX8 =
 {
+"classIpopt_1_1GenKKTSolverInterface.html":[1,0,0,46],
 "classIpopt_1_1GenKKTSolverInterface.html#a11e8b46a72275fc25f870e924db3ff3a":[1,0,0,46,3],
 "classIpopt_1_1GenKKTSolverInterface.html#a3f9c2a063357bb95a66fbee6607e7640":[1,0,0,46,4],
 "classIpopt_1_1GenKKTSolverInterface.html#a4e40b8f8046b588ef3f9c703dd0a35f9":[1,0,0,46,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX8 =
 "classIpopt_1_1InexactLSAcceptor.html#acdf3f599c4ec69392bd49f103765ba58":[1,0,0,59,37],
 "classIpopt_1_1InexactLSAcceptor.html#ad1ce568deada87cf3aee277b2cbbfe23":[1,0,0,59,25],
 "classIpopt_1_1InexactLSAcceptor.html#ad62c9f3d376c24e4496f1a712346d941":[1,0,0,59,1],
-"classIpopt_1_1InexactLSAcceptor.html#add7635a0c6b4acfd1180f576ffc904ca":[1,0,0,59,21],
-"classIpopt_1_1InexactLSAcceptor.html#ae398c0c8b111df00695aaf9ccc24cecd":[1,0,0,59,23]
+"classIpopt_1_1InexactLSAcceptor.html#add7635a0c6b4acfd1180f576ffc904ca":[1,0,0,59,21]
 };

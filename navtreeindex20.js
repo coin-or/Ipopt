@@ -1,5 +1,6 @@
 var NAVTREEINDEX20 =
 {
+"classIpopt_1_1SensBuilder.html":[1,0,0,157],
 "classIpopt_1_1SensBuilder.html#a27c70247d1720673f9ea7a1bfa755d07":[1,0,0,157,2],
 "classIpopt_1_1SensBuilder.html#a6ead46a9ee07e48670c315cf828fb848":[1,0,0,157,1],
 "classIpopt_1_1SensBuilder.html#ac314c96662e24e694fd7b5aaad9be387":[1,0,0,157,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX20 =
 "classIpopt_1_1StdInterfaceTNLP.html#a4d4ee056bc29a08bdd16d4ab4a967699":[1,0,0,167,25],
 "classIpopt_1_1StdInterfaceTNLP.html#a4f09fc237e8049f586c8311589caf2f9":[1,0,0,167,18],
 "classIpopt_1_1StdInterfaceTNLP.html#a50353b8f92b3023f7fbfbebcce9dd5a3":[1,0,0,167,8],
-"classIpopt_1_1StdInterfaceTNLP.html#a5082e17ab6fca431e9840a3d4e2608b3":[1,0,0,167,16],
-"classIpopt_1_1StdInterfaceTNLP.html#a524a63141905cc98ae106c089df2a98b":[1,0,0,167,21]
+"classIpopt_1_1StdInterfaceTNLP.html#a5082e17ab6fca431e9840a3d4e2608b3":[1,0,0,167,16]
 };

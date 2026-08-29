@@ -39,7 +39,7 @@ MathJax.Hub.Config({
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.14.19</span-->
+   &#160;<!--span id="projectnumber">3.14.20</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -123,15 +123,13 @@ $(document).ready(function(){initNavTree('classIpopt_1_1TNLPAdapter.html',''); i
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="classIpopt_1_1TNLPAdapter__inherit__graph.png" border="0" usemap="#aIpopt_1_1TNLPAdapter_inherit__map" alt="Inheritance graph"/></div>
-<map name="aIpopt_1_1TNLPAdapter_inherit__map" id="aIpopt_1_1TNLPAdapter_inherit__map">
-<area shape="rect" title="This class adapts the TNLP interface so it looks like an NLP interface." alt="" coords="22,157,167,184"/>
-<area shape="rect" href="classIpopt_1_1NLP.html" title="Traditional NLP." alt="" coords="51,81,138,109"/>
-<area shape="poly" title=" " alt="" coords="97,124,97,156,92,156,92,124"/>
-<area shape="rect" href="classIpopt_1_1ReferencedObject.html" title="Storing the reference count of all the smart pointers that currently reference it." alt="" coords="5,5,184,33"/>
-<area shape="poly" title=" " alt="" coords="97,49,97,81,92,81,92,49"/>
-</map>
-<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+ <div class="center">
+  <img src="classIpopt_1_1TNLPAdapter.png" usemap="#Ipopt::TNLPAdapter_map" alt=""/>
+  <map id="Ipopt::TNLPAdapter_map" name="Ipopt::TNLPAdapter_map">
+<area href="classIpopt_1_1NLP.html" title="Traditional NLP." alt="Ipopt::NLP" shape="rect" coords="0,56,148,80"/>
+<area href="classIpopt_1_1ReferencedObject.html" title="Storing the reference count of all the smart pointers that currently reference it." alt="Ipopt::ReferencedObject" shape="rect" coords="0,0,148,24"/>
+  </map>
+</div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
@@ -249,7 +247,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a6e804930a7b33c865fb617c592bc3df0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get number and indices of fixed variables.  <br /></td></tr>
 <tr class="separator:a6e804930a7b33c865fb617c592bc3df0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a362ee0bc15da61231e129d88cd8ab1f3" id="r_a362ee0bc15da61231e129d88cd8ab1f3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIpopt_1_1DependentResult.html">void</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a362ee0bc15da61231e129d88cd8ab1f3">GetPermutationMatrices</a> (<a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1DependentResult.html">const</a> <a class="el" href="classIpopt_1_1ExpansionMatrix.html">ExpansionMatrix</a> &gt; &amp;<a class="el" href="classIpopt_1_1DependentResult.html">P_x_full_x</a>, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1DependentResult.html">const</a> <a class="el" href="classIpopt_1_1ExpansionMatrix.html">ExpansionMatrix</a> &gt; &amp;<a class="el" href="classIpopt_1_1DependentResult.html">P_x_x_L</a>, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1DependentResult.html">const</a> <a class="el" href="classIpopt_1_1ExpansionMatrix.html">ExpansionMatrix</a> &gt; &amp;<a class="el" href="classIpopt_1_1DependentResult.html">P_x_x_U</a>, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1DependentResult.html">const</a> <a class="el" href="classIpopt_1_1ExpansionMatrix.html">ExpansionMatrix</a> &gt; &amp;<a class="el" href="classIpopt_1_1DependentResult.html">P_c_g</a>, <a class="el" href="classIpopt_1_1SmartPtr.html">SmartPtr</a>&lt; <a class="el" href="classIpopt_1_1DependentResult.html">const</a> <a class="el" href="classIpopt_1_1ExpansionMatrix.html">ExpansionMatrix</a> &gt; &amp;<a class="el" href="classIpopt_1_1DependentResult.html">P_d_g</a>) <a class="el" href="classIpopt_1_1DependentResult.html">const</a></td></tr>
-<tr class="memdesc:a362ee0bc15da61231e129d88cd8ab1f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get mappings between <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> indices and <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> internal indices for variables and constraints.  <br /></td></tr>
+<tr class="memdesc:a362ee0bc15da61231e129d88cd8ab1f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get mappings between <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> indices and <a class="el" href="namespaceIpopt.html">Ipopt</a> internal indices for variables and constraints.  <br /></td></tr>
 <tr class="separator:a362ee0bc15da61231e129d88cd8ab1f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2cb0ebf657e32bbcfcf169bdbfeac65d" id="r_a2cb0ebf657e32bbcfcf169bdbfeac65d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIpopt_1_1DependentResult.html">const</a> <a class="el" href="namespaceIpopt.html#ab75ce5f2ad60aa86e4dff723998e653f">Number</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1TNLPAdapter.html#a2cb0ebf657e32bbcfcf169bdbfeac65d">GetC_Rhs</a> () <a class="el" href="classIpopt_1_1DependentResult.html">const</a></td></tr>
 <tr class="memdesc:a2cb0ebf657e32bbcfcf169bdbfeac65d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get right-hand-sides that are added into c(x)  <br /></td></tr>
@@ -557,7 +555,7 @@ Private Attributes</h2></td></tr>
                  &amp;&amp; d_L \leq s \leq d_U &amp;\qquad v_L, v_U \\
 \end{eqnarray*}
 </p>
-<p>If fixed variables are present ( \(x_{L,i} = x_{U,i}\)) in the <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> and fixed_variable_treatment is set to make_parameter, then these variables are not made visible to <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> internally. If fixed_variable_treatment is set to make_constraint, then their bounds relaxed and equality constraints \(x_i - x_{L,i} = 0\) are added to the end of \(c(x) = 0\). </p>
+<p>If fixed variables are present ( \(x_{L,i} = x_{U,i}\)) in the <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> and fixed_variable_treatment is set to make_parameter, then these variables are not made visible to <a class="el" href="namespaceIpopt.html">Ipopt</a> internally. If fixed_variable_treatment is set to make_constraint, then their bounds relaxed and equality constraints \(x_i - x_{L,i} = 0\) are added to the end of \(c(x) = 0\). </p>
 
 <p class="definition">Definition at line <a class="el" href="IpTNLPAdapter_8hpp_source.html#l00065">65</a> of file <a class="el" href="IpTNLPAdapter_8hpp_source.html">IpTNLPAdapter.hpp</a>.</p>
 </div><h2 class="groupheader">Member Enumeration Documentation</h2>
@@ -1677,7 +1675,7 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>This method is called once per iteration, after the iteration summary output has been printed. </p>
-<p>It provides the current information to the user to do with it anything she wants. It also allows the user to ask for a premature termination of the optimization by returning false, in which case <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> will terminate with a corresponding return status. The basic information provided in the argument list has the quantities values printed in the iteration summary line. If more information is required, a user can obtain it from the IpData and IpCalculatedQuantities objects. However, note that the provided quantities are all for the problem that <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> sees, i.e., the quantities might be scaled, fixed variables might be sorted out, etc. The status indicates things like whether the algorithm is in the restoration phase... In the restoration phase, the dual variables are probably not not changing. </p>
+<p>It provides the current information to the user to do with it anything she wants. It also allows the user to ask for a premature termination of the optimization by returning false, in which case <a class="el" href="namespaceIpopt.html">Ipopt</a> will terminate with a corresponding return status. The basic information provided in the argument list has the quantities values printed in the iteration summary line. If more information is required, a user can obtain it from the IpData and IpCalculatedQuantities objects. However, note that the provided quantities are all for the problem that <a class="el" href="namespaceIpopt.html">Ipopt</a> sees, i.e., the quantities might be scaled, fixed variables might be sorted out, etc. The status indicates things like whether the algorithm is in the restoration phase... In the restoration phase, the dual variables are probably not not changing. </p>
 
 <p>Reimplemented from <a class="el" href="classIpopt_1_1NLP.html#a9cf00e4fc7ad13c810a6d1e238221fee">Ipopt::NLP</a>.</p>
 
@@ -1892,7 +1890,7 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Sort constraint values. </p>
-<p>To <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a>, the equality constraints are presented with right hand side zero. Specifying correctrhs=true corrects for the original right hand side. </p>
+<p>To <a class="el" href="namespaceIpopt.html">Ipopt</a>, the equality constraints are presented with right hand side zero. Specifying correctrhs=true corrects for the original right hand side. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">c</td><td>internal activity for equality constraints  </td></tr>
@@ -2259,15 +2257,15 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Get mappings between <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> indices and <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> internal indices for variables and constraints. </p>
+<p>Get mappings between <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> indices and <a class="el" href="namespaceIpopt.html">Ipopt</a> internal indices for variables and constraints. </p>
 <p>See the various ResortXyz functions on usage.</p>
 <dl class="section attention"><dt>Attention</dt><dd>P_x_full_x is set to NULL if there are no fixed variables or fixed_variable_treatment is not make_parameter </dd></dl>
 <dl class="section since"><dt>Since</dt><dd>3.14.0 </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">P_x_full_x</td><td>map from <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> variable indices to <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> internal indices, filtered variables get mapped to -1  </td></tr>
-    <tr><td class="paramname">P_x_x_L</td><td>map from indices on lower bounds on x to <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> internal indices for x  </td></tr>
-    <tr><td class="paramname">P_x_x_U</td><td>map from indices on upper bounds on x to <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> internal indices for x  </td></tr>
+    <tr><td class="paramname">P_x_full_x</td><td>map from <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> variable indices to <a class="el" href="namespaceIpopt.html">Ipopt</a> internal indices, filtered variables get mapped to -1  </td></tr>
+    <tr><td class="paramname">P_x_x_L</td><td>map from indices on lower bounds on x to <a class="el" href="namespaceIpopt.html">Ipopt</a> internal indices for x  </td></tr>
+    <tr><td class="paramname">P_x_x_U</td><td>map from indices on upper bounds on x to <a class="el" href="namespaceIpopt.html">Ipopt</a> internal indices for x  </td></tr>
     <tr><td class="paramname">P_c_g</td><td>map from indices on equality constraints (c(x)=0) into <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> constraint indices (g_l &lt;= g(x) &lt;= g_u)  </td></tr>
     <tr><td class="paramname">P_d_g</td><td>map from indices on inequality constraints (d(x)-s=0) into <a class="el" href="classIpopt_1_1TNLP.html" title="Base class for all NLP&#39;s that use standard triplet matrix form and dense vectors.">TNLP</a> constraint indices (g_l &lt;= g(x) &lt;= g_u) </td></tr>
   </table>

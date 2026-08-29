@@ -39,7 +39,7 @@ MathJax.Hub.Config({
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.14.19</span-->
+   &#160;<!--span id="projectnumber">3.14.20</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -187,7 +187,7 @@ Prerequisites</h2>
 <li><a href="http://researcher.ibm.com/view_project.php?id=1426">WSMP</a> (Watson Sparse Matrix Package)</li>
 </ul>
 <p class="startli">You must include at least one of the linear solvers above in order to run Ipopt, and if you want to be able to switch easily between different alternatives, you can compile Ipopt with interfaces to all of them. The linear solvers from HSL and Pardiso Project can also be loaded from a shared library at runtime, see <a class="el" href="INSTALL.html#LINEARSOLVERLOADER">Providing a HSL library at runtime</a> and <a class="el" href="INSTALL.html#DOWNLOAD_PARDISO">Pardiso from Pardiso Project</a>. For the latter, this is also the only option.</p>
-<dl class="section note"><dt>Note</dt><dd>The solution of the linear systems is a central ingredient in Ipopt and the optimizer's performance and robustness depends on your choice. The best choice depends on your application, and it makes sense to try different options, but solvers from HSL or Pardiso Project are often a good choice. Most of the solvers also rely on efficient BLAS code (see above), so you should use a good BLAS library tailored to your system. Please keep this in mind, particularly when you are comparing Ipopt with other optimization codes. See also <a class="el" href="citelist.html#CITEREF_Tasseff2019">[9]</a> for a comparison of <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> with various linear solvers.</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>The solution of the linear systems is a central ingredient in Ipopt and the optimizer's performance and robustness depends on your choice. The best choice depends on your application, and it makes sense to try different options, but solvers from HSL or Pardiso Project are often a good choice. Most of the solvers also rely on efficient BLAS code (see above), so you should use a good BLAS library tailored to your system. Please keep this in mind, particularly when you are comparing Ipopt with other optimization codes. See also <a class="el" href="citelist.html#CITEREF_Tasseff2019">[9]</a> for a comparison of <a class="el" href="namespaceIpopt.html">Ipopt</a> with various linear solvers.</dd></dl>
 <p>If you are compiling MA57, HSL_MA77, HSL_MA86, HSL_MA97, MUMPS, or SPRAL within the Ipopt build system, you should also include the METIS linear system ordering package.</p>
 <p class="startli">Interfaces to other linear solvers might be added in the future; if you are interested in contributing such an interface please contact us! Note that Ipopt requires that the linear solver is able to provide the inertia (number of positive and negative eigenvalues) of the symmetric matrix that is factorized.</p>
 </li>
@@ -218,10 +218,10 @@ How to use Ipopt</h2>
 </li>
 <li><p class="startli"><a href="https://github.com/coin-or/CppAD">CppAD</a> (automatic differentiation)</p>
 <p class="startli">Given a C++ algorithm that computes function values, CppAD generates an algorithm that computes corresponding derivative values (of arbitrary order using either forward or reverse mode). It comes with an <a href="https://coin-or.github.io/CppAD/doc/ipopt_solve.htm">example</a> that shows how to use it in connection with Ipopt.</p>
-<p class="startli">It is also possible to use <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> via <a href="https://bradbell.github.io/cppad_py/doc/xsrst/cppad_py.html">CppADs Python interface</a>. An example is available <a href="https://bradbell.github.io/cppad_py/doc/xsrst/mixed_optimize_fixed_2_py.html">here</a>.</p>
+<p class="startli">It is also possible to use <a class="el" href="namespaceIpopt.html">Ipopt</a> via <a href="https://bradbell.github.io/cppad_py/doc/xsrst/cppad_py.html">CppADs Python interface</a>. An example is available <a href="https://bradbell.github.io/cppad_py/doc/xsrst/mixed_optimize_fixed_2_py.html">here</a>.</p>
 </li>
-<li><p class="startli"><a href="https://github.com/cureos/csipopt">csipopt</a></p>
-<p class="startli">Interfacing <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> from .NET languages such as <b>C#</b>, <b>F#</b> and <b>Visual Basic.NET</b>.</p>
+<li><p class="startli"><a href="https://github.com/sfiruch/ipopt-net">IpoptNet</a></p>
+<p class="startli">A modern .NET interface providing both a high-level modeling API with automatic differentiation and a low-level native wrapper.</p>
 </li>
 <li><p class="startli"><a href="https://github.com/mechmotum/cyipopt">cyipopt</a></p>
 <p class="startli">A <b>Python</b> wrapper around Ipopt with a SciPy-style interface.</p>

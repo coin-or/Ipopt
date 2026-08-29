@@ -39,7 +39,7 @@ MathJax.Hub.Config({
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.14.19</span-->
+   &#160;<!--span id="projectnumber">3.14.20</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -120,19 +120,15 @@ $(document).ready(function(){initNavTree('classIpopt_1_1HessianUpdater.html','')
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="classIpopt_1_1HessianUpdater__inherit__graph.png" border="0" usemap="#aIpopt_1_1HessianUpdater_inherit__map" alt="Inheritance graph"/></div>
-<map name="aIpopt_1_1HessianUpdater_inherit__map" id="aIpopt_1_1HessianUpdater_inherit__map">
-<area shape="rect" title="Abstract base class for objects responsible for updating the Hessian information." alt="" coords="137,174,303,201"/>
-<area shape="rect" href="classIpopt_1_1ExactHessianUpdater.html" title="Implementation of the HessianUpdater for the use of exact second derivatives." alt="" coords="5,258,208,286"/>
-<area shape="poly" title=" " alt="" coords="191,213,126,259,123,255,188,208"/>
-<area shape="rect" href="classIpopt_1_1LimMemQuasiNewtonUpdater.html" title="Implementation of the HessianUpdater for limit&#45;memory quasi&#45;Newton approximation of the Lagrangian He..." alt="" coords="231,249,438,294"/>
-<area shape="poly" title=" " alt="" coords="252,209,306,247,302,251,249,213"/>
-<area shape="rect" href="classIpopt_1_1AlgorithmStrategyObject.html" title="This is the base class for all algorithm strategy objects." alt="" coords="129,81,310,126"/>
-<area shape="poly" title=" " alt="" coords="222,141,222,173,217,173,217,141"/>
-<area shape="rect" href="classIpopt_1_1ReferencedObject.html" title="Storing the reference count of all the smart pointers that currently reference it." alt="" coords="131,5,309,33"/>
-<area shape="poly" title=" " alt="" coords="222,49,222,80,217,80,217,49"/>
-</map>
-<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+ <div class="center">
+  <img src="classIpopt_1_1HessianUpdater.png" usemap="#Ipopt::HessianUpdater_map" alt=""/>
+  <map id="Ipopt::HessianUpdater_map" name="Ipopt::HessianUpdater_map">
+<area href="classIpopt_1_1AlgorithmStrategyObject.html" title="This is the base class for all algorithm strategy objects." alt="Ipopt::AlgorithmStrategyObject" shape="rect" coords="110,56,320,80"/>
+<area href="classIpopt_1_1ReferencedObject.html" title="Storing the reference count of all the smart pointers that currently reference it." alt="Ipopt::ReferencedObject" shape="rect" coords="110,0,320,24"/>
+<area href="classIpopt_1_1ExactHessianUpdater.html" title="Implementation of the HessianUpdater for the use of exact second derivatives." alt="Ipopt::ExactHessianUpdater" shape="rect" coords="0,168,210,192"/>
+<area href="classIpopt_1_1LimMemQuasiNewtonUpdater.html" title="Implementation of the HessianUpdater for limit-memory quasi-Newton approximation of the Lagrangian He..." alt="Ipopt::LimMemQuasiNewtonUpdater" shape="rect" coords="220,168,430,192"/>
+  </map>
+</div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -154,7 +150,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:aa2cb1ac4ea5b97c9283bc0fdb71da1d1 inherit pub_methods_classIpopt_1_1AlgorithmStrategyObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method is called every time the algorithm starts again - it is used to reset any internal state.  <br /></td></tr>
 <tr class="separator:aa2cb1ac4ea5b97c9283bc0fdb71da1d1 inherit pub_methods_classIpopt_1_1AlgorithmStrategyObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac624e5a883f5c655cb0abbaa24eafcf9 inherit pub_methods_classIpopt_1_1AlgorithmStrategyObject" id="r_ac624e5a883f5c655cb0abbaa24eafcf9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIpopt_1_1DependentResult.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1AlgorithmStrategyObject.html#ac624e5a883f5c655cb0abbaa24eafcf9">ReducedInitialize</a> (<a class="el" href="classIpopt_1_1DependentResult.html">const</a> <a class="el" href="classIpopt_1_1Journalist.html">Journalist</a> &amp;<a class="el" href="classIpopt_1_1DependentResult.html">jnlst</a>, <a class="el" href="classIpopt_1_1DependentResult.html">const</a> <a class="el" href="classIpopt_1_1OptionsList.html">OptionsList</a> &amp;<a class="el" href="classIpopt_1_1DependentResult.html">options</a>, <a class="el" href="classIpopt_1_1DependentResult.html">const</a> std::string &amp;<a class="el" href="classIpopt_1_1DependentResult.html">prefix</a>)</td></tr>
-<tr class="memdesc:ac624e5a883f5c655cb0abbaa24eafcf9 inherit pub_methods_classIpopt_1_1AlgorithmStrategyObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reduced version of the Initialize method, which does not require special <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> information.  <br /></td></tr>
+<tr class="memdesc:ac624e5a883f5c655cb0abbaa24eafcf9 inherit pub_methods_classIpopt_1_1AlgorithmStrategyObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reduced version of the Initialize method, which does not require special <a class="el" href="namespaceIpopt.html">Ipopt</a> information.  <br /></td></tr>
 <tr class="separator:ac624e5a883f5c655cb0abbaa24eafcf9 inherit pub_methods_classIpopt_1_1AlgorithmStrategyObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af2d972f86eec83a96682bd6741a1d265 inherit pub_methods_classIpopt_1_1AlgorithmStrategyObject" id="r_af2d972f86eec83a96682bd6741a1d265"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1AlgorithmStrategyObject.html#af2d972f86eec83a96682bd6741a1d265">AlgorithmStrategyObject</a> ()</td></tr>
 <tr class="memdesc:af2d972f86eec83a96682bd6741a1d265 inherit pub_methods_classIpopt_1_1AlgorithmStrategyObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default Constructor.  <br /></td></tr>

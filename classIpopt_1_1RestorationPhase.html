@@ -39,7 +39,7 @@ MathJax.Hub.Config({
  <tr style="height: 40px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Ipopt Documentation
-   &#160;<!--span id="projectnumber">3.14.19</span-->
+   &#160;<!--span id="projectnumber">3.14.20</span-->
    </div>
   </td>
    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
@@ -120,19 +120,15 @@ $(document).ready(function(){initNavTree('classIpopt_1_1RestorationPhase.html','
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="classIpopt_1_1RestorationPhase__inherit__graph.png" border="0" usemap="#aIpopt_1_1RestorationPhase_inherit__map" alt="Inheritance graph"/></div>
-<map name="aIpopt_1_1RestorationPhase_inherit__map" id="aIpopt_1_1RestorationPhase_inherit__map">
-<area shape="rect" title="Base class for different restoration phases." alt="" coords="142,174,319,201"/>
-<area shape="rect" href="classIpopt_1_1MinC__1NrmRestorationPhase.html" title="Restoration Phase that minimizes the 1&#45;norm of the constraint violation &#45; using the interior point me..." alt="" coords="5,249,219,294"/>
-<area shape="poly" title=" " alt="" coords="201,213,145,251,142,246,198,208"/>
-<area shape="rect" href="classIpopt_1_1RestoRestorationPhase.html" title="Recursive Restoration Phase for the MinC_1NrmRestorationPhase." alt="" coords="243,258,456,286"/>
-<area shape="poly" title=" " alt="" coords="264,208,332,255,329,259,261,213"/>
-<area shape="rect" href="classIpopt_1_1AlgorithmStrategyObject.html" title="This is the base class for all algorithm strategy objects." alt="" coords="140,81,321,126"/>
-<area shape="poly" title=" " alt="" coords="233,141,233,173,228,173,228,141"/>
-<area shape="rect" href="classIpopt_1_1ReferencedObject.html" title="Storing the reference count of all the smart pointers that currently reference it." alt="" coords="142,5,320,33"/>
-<area shape="poly" title=" " alt="" coords="233,49,233,80,228,80,228,49"/>
-</map>
-<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+ <div class="center">
+  <img src="classIpopt_1_1RestorationPhase.png" usemap="#Ipopt::RestorationPhase_map" alt=""/>
+  <map id="Ipopt::RestorationPhase_map" name="Ipopt::RestorationPhase_map">
+<area href="classIpopt_1_1AlgorithmStrategyObject.html" title="This is the base class for all algorithm strategy objects." alt="Ipopt::AlgorithmStrategyObject" shape="rect" coords="110,56,320,80"/>
+<area href="classIpopt_1_1ReferencedObject.html" title="Storing the reference count of all the smart pointers that currently reference it." alt="Ipopt::ReferencedObject" shape="rect" coords="110,0,320,24"/>
+<area href="classIpopt_1_1MinC__1NrmRestorationPhase.html" title="Restoration Phase that minimizes the 1-norm of the constraint violation - using the interior point me..." alt="Ipopt::MinC_1NrmRestorationPhase" shape="rect" coords="0,168,210,192"/>
+<area href="classIpopt_1_1RestoRestorationPhase.html" title="Recursive Restoration Phase for the MinC_1NrmRestorationPhase." alt="Ipopt::RestoRestorationPhase" shape="rect" coords="220,168,430,192"/>
+  </map>
+</div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -154,7 +150,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:aa2cb1ac4ea5b97c9283bc0fdb71da1d1 inherit pub_methods_classIpopt_1_1AlgorithmStrategyObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method is called every time the algorithm starts again - it is used to reset any internal state.  <br /></td></tr>
 <tr class="separator:aa2cb1ac4ea5b97c9283bc0fdb71da1d1 inherit pub_methods_classIpopt_1_1AlgorithmStrategyObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac624e5a883f5c655cb0abbaa24eafcf9 inherit pub_methods_classIpopt_1_1AlgorithmStrategyObject" id="r_ac624e5a883f5c655cb0abbaa24eafcf9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classIpopt_1_1DependentResult.html">bool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1AlgorithmStrategyObject.html#ac624e5a883f5c655cb0abbaa24eafcf9">ReducedInitialize</a> (<a class="el" href="classIpopt_1_1DependentResult.html">const</a> <a class="el" href="classIpopt_1_1Journalist.html">Journalist</a> &amp;<a class="el" href="classIpopt_1_1DependentResult.html">jnlst</a>, <a class="el" href="classIpopt_1_1DependentResult.html">const</a> <a class="el" href="classIpopt_1_1OptionsList.html">OptionsList</a> &amp;<a class="el" href="classIpopt_1_1DependentResult.html">options</a>, <a class="el" href="classIpopt_1_1DependentResult.html">const</a> std::string &amp;<a class="el" href="classIpopt_1_1DependentResult.html">prefix</a>)</td></tr>
-<tr class="memdesc:ac624e5a883f5c655cb0abbaa24eafcf9 inherit pub_methods_classIpopt_1_1AlgorithmStrategyObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reduced version of the Initialize method, which does not require special <a class="el" href="namespaceIpopt.html" title="This file contains a base class for all exceptions and a set of macros to help with exceptions.">Ipopt</a> information.  <br /></td></tr>
+<tr class="memdesc:ac624e5a883f5c655cb0abbaa24eafcf9 inherit pub_methods_classIpopt_1_1AlgorithmStrategyObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reduced version of the Initialize method, which does not require special <a class="el" href="namespaceIpopt.html">Ipopt</a> information.  <br /></td></tr>
 <tr class="separator:ac624e5a883f5c655cb0abbaa24eafcf9 inherit pub_methods_classIpopt_1_1AlgorithmStrategyObject"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af2d972f86eec83a96682bd6741a1d265 inherit pub_methods_classIpopt_1_1AlgorithmStrategyObject" id="r_af2d972f86eec83a96682bd6741a1d265"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classIpopt_1_1AlgorithmStrategyObject.html#af2d972f86eec83a96682bd6741a1d265">AlgorithmStrategyObject</a> ()</td></tr>
 <tr class="memdesc:af2d972f86eec83a96682bd6741a1d265 inherit pub_methods_classIpopt_1_1AlgorithmStrategyObject"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default Constructor.  <br /></td></tr>

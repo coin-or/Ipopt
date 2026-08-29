@@ -1,5 +1,6 @@
 var NAVTREEINDEX23 =
 {
+"classIpopt_1_1TaggedObject.html#aec96b8d790bf8ce7c707b55824796210":[1,0,0,184,2],
 "classIpopt_1_1TimedTask.html":[1,0,0,186],
 "classIpopt_1_1TimedTask.html#a09719c604b547eeed2eadaf77f145c53":[1,0,0,186,22],
 "classIpopt_1_1TimedTask.html#a1120b00c20af7e830004c44fba088e7a":[1,0,0,186,8],
@@ -248,6 +249,5 @@ var NAVTREEINDEX23 =
 "classIpopt_1_1Vector.html#a46eaed1bd50c543212088badfa54d0ee":[1,0,0,199,32],
 "classIpopt_1_1Vector.html#a484a53fbdeafee5f5b3c08b20a547d96":[1,0,0,199,5],
 "classIpopt_1_1Vector.html#a49104b125991e9ae2861d862bfe02442":[1,0,0,199,37],
-"classIpopt_1_1Vector.html#a4ae757963067a49fe6892a28536ff442":[1,0,0,199,39],
-"classIpopt_1_1Vector.html#a4efbd79b97f301baea0407b1d3124d05":[1,0,0,199,10]
+"classIpopt_1_1Vector.html#a4ae757963067a49fe6892a28536ff442":[1,0,0,199,39]
 };

@@ -1,5 +1,6 @@
 var NAVTREEINDEX18 =
 {
+"classIpopt_1_1ReferencedObject.html#aa69ecb0f026bd741e2fa84c31d4ec332":[1,0,0,135,3],
 "classIpopt_1_1ReferencedObject.html#aa99c6c922e04cf98edb2e7ea35cc046d":[1,0,0,135,5],
 "classIpopt_1_1ReferencedObject.html#aac517534e10e36c946aeefc6fe337777":[1,0,0,135,2],
 "classIpopt_1_1ReferencedObject.html#adbbf3aa5307da62ab8224ba599d4bd7a":[1,0,0,135,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX18 =
 "classIpopt_1_1RestoIpoptNLP.html#aded973608fc5c4440f19675942b03081":[1,0,0,142,27],
 "classIpopt_1_1RestoIpoptNLP.html#ae032ad193bc80ec47b6e56064a2dca68":[1,0,0,142,17],
 "classIpopt_1_1RestoIpoptNLP.html#ae51cbff8fb0c3683603d4452fabcc2d1":[1,0,0,142,25],
-"classIpopt_1_1RestoIpoptNLP.html#ae52809950993ab70df176a92b396ccf2":[1,0,0,142,75],
-"classIpopt_1_1RestoIpoptNLP.html#ae54fa43c005fd984193d57e791dab6ed":[1,0,0,142,58]
+"classIpopt_1_1RestoIpoptNLP.html#ae52809950993ab70df176a92b396ccf2":[1,0,0,142,75]
 };
