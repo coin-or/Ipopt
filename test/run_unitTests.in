@@ -98,6 +98,9 @@ SKIPGREP=true checkrun ./emptynlp || retval=$?
 echo "Testing GetCurr Example..."
 SKIPGREP=true checkrun ./getcurr || retval=$?
 
+echo "Testing failing eval_g with check_derivatives_for_naninf..."
+checkrun ./evalgfail || retval=$?
+
 # clean up
 rm -rf tmpfile debug.out ipopt.out IPOPT.OUT
 

@@ -579,7 +579,7 @@ SmartPtr<const Vector> OrigIpoptNLP::c(
          timing_statistics_.c_eval_time().End();
          if( !success || !IsFiniteNumber(unscaled_c->Nrm2()) )
          {
-            if( check_derivatives_for_naninf_ && !IsFiniteNumber(unscaled_c->Nrm2()) )
+            if( check_derivatives_for_naninf_ && success && !IsFiniteNumber(unscaled_c->Nrm2()) )
             {
                jnlst_->Printf(J_WARNING, J_NLP, "The equality constraints contain an invalid number\n");
                unscaled_c->Print(*jnlst_, J_MOREDETAILED, J_MAIN, "unscaled_c");
@@ -628,7 +628,7 @@ SmartPtr<const Vector> OrigIpoptNLP::d(
          DBG_PRINT_VECTOR(2, "unscaled_d", *unscaled_d);
          if( !success || !IsFiniteNumber(unscaled_d->Nrm2()) )
          {
-            if( check_derivatives_for_naninf_ && !IsFiniteNumber(unscaled_d->Nrm2()) )
+            if( check_derivatives_for_naninf_ && success && !IsFiniteNumber(unscaled_d->Nrm2()) )
             {
                jnlst_->Printf(J_WARNING, J_NLP, "The inequality constraints contain an invalid number\n");
                unscaled_d->Print(*jnlst_, J_MOREDETAILED, J_MAIN, "unscaled_d");
