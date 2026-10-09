@@ -7,6 +7,8 @@ More detailed information about incremental changes can be found in the
 
 ## 3.14
 
+### 3.14.21
+
 ### 3.14.20 (2026-08-27)
 
 - Fixed issue where Ipopt exceptions could not been caught from other libraries
