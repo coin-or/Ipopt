@@ -577,15 +577,19 @@ SmartPtr<const Vector> OrigIpoptNLP::c(
          timing_statistics_.c_eval_time().Start();
          bool success = nlp_->Eval_c(*unscaled_x, *unscaled_c);
          timing_statistics_.c_eval_time().End();
-         if( !success || !IsFiniteNumber(unscaled_c->Nrm2()) )
+         if( !success )
          {
-            if( check_derivatives_for_naninf_ && success && !IsFiniteNumber(unscaled_c->Nrm2()) )
+            THROW_EXCEPTION(Eval_Error, "Error evaluating the equality constraints (Eval_c returned false)");
+         }
+         if( !IsFiniteNumber(unscaled_c->Nrm2()) )
+         {
+            if( check_derivatives_for_naninf_ )
             {
                jnlst_->Printf(J_WARNING, J_NLP, "The equality constraints contain an invalid number\n");
                unscaled_c->Print(*jnlst_, J_MOREDETAILED, J_MAIN, "unscaled_c");
                jnlst_->FlushBuffer();
             }
-            THROW_EXCEPTION(Eval_Error, "Error evaluating the equality constraints");
+            THROW_EXCEPTION(Eval_Error, "Error evaluating the equality constraints (invalid number)");
          }
          retValue = NLP_scaling()->apply_vector_scaling_c(ConstPtr(unscaled_c));
          c_cache_.AddCachedResult1Dep(retValue, x);
@@ -626,15 +630,19 @@ SmartPtr<const Vector> OrigIpoptNLP::d(
          bool success = nlp_->Eval_d(*unscaled_x, *unscaled_d);
          timing_statistics_.d_eval_time().End();
          DBG_PRINT_VECTOR(2, "unscaled_d", *unscaled_d);
-         if( !success || !IsFiniteNumber(unscaled_d->Nrm2()) )
+         if( !success )
          {
-            if( check_derivatives_for_naninf_ && success && !IsFiniteNumber(unscaled_d->Nrm2()) )
+            THROW_EXCEPTION(Eval_Error, "Error evaluating the inequality constraints (Eval_d returned false)");
+         }
+         if( !IsFiniteNumber(unscaled_d->Nrm2()) )
+         {
+            if( check_derivatives_for_naninf_ )
             {
                jnlst_->Printf(J_WARNING, J_NLP, "The inequality constraints contain an invalid number\n");
                unscaled_d->Print(*jnlst_, J_MOREDETAILED, J_MAIN, "unscaled_d");
                jnlst_->FlushBuffer();
             }
-            THROW_EXCEPTION(Eval_Error, "Error evaluating the inequality constraints");
+            THROW_EXCEPTION(Eval_Error, "Error evaluating the inequality constraints (invalid number)");
          }
          retValue = NLP_scaling()->apply_vector_scaling_d(ConstPtr(unscaled_d));
          d_cache_.AddCachedResult1Dep(retValue, x);
