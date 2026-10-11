@@ -197,6 +197,42 @@ void SymTMatrix::ComputeRowAMaxImpl(
    }
 }
 
+void SymTMatrix::ComputeRowA1Impl(
+   Vector& rows_norms,
+   bool    /*init*/
+) const
+{
+   DBG_ASSERT(initialized_);
+
+   if( NRows() == 0 )
+   {
+      return;
+   }
+
+   DenseVector* dense_vec = static_cast<DenseVector*>(&rows_norms);
+   DBG_ASSERT(dynamic_cast<DenseVector*>(&rows_norms));
+
+   const Index* irn = Irows();
+   const Index* jcn = Jcols();
+   const Number* val = values_;
+   Number* vec_vals = dense_vec->Values();
+   DBG_ASSERT(vec_vals != NULL);
+
+   // const Number zero = 0.;
+   // IpBlasCopy(NRows(), &zero, 0, vec_vals, 1);
+
+   vec_vals--; // to deal with 1-based indexing in irn and jcn (I believe)
+   for( Index i = 0; i < Nonzeros(); i++ )
+   {
+      const Number f = std::abs(*val);
+      vec_vals[*irn] += f;
+      vec_vals[*jcn] += f;
+      val++;
+      irn++;
+      jcn++;
+   }
+}
+
 void SymTMatrix::PrintImpl(
    const Journalist&  jnlst,
    EJournalLevel      level,

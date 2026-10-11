@@ -74,6 +74,19 @@ protected:
    }
    ///@}
 
+    /** Implementation of ComputeColA1Impl, which calls ComputeRowA1Impl.
+    *
+    * Since the matrix is symmetric, the row and column 1 norms are identical.
+    */
+   virtual void ComputeColA1Impl(
+      Vector& cols_norms,
+      bool    init
+   ) const
+   {
+      ComputeRowA1Impl(cols_norms, init);
+   }
+   ///@}
+
 private:
    /** Copy of the owner space ptr as a SymMatrixSpace instead
     *  of a MatrixSpace

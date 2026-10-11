@@ -254,6 +254,15 @@ void DenseSymMatrix::ComputeRowAMaxImpl(
    }
 }
 
+void DenseSymMatrix::ComputeRowA1Impl(
+   Vector& /*rows_norms*/,
+   bool    /*init*/
+) const
+{
+   THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "DenseSymMatrix::ComputeRowA1Impl not implemented");
+}
+
+
 void DenseSymMatrix::PrintImpl(
    const Journalist&  jnlst,
    EJournalLevel      level,

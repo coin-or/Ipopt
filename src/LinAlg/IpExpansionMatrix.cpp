@@ -405,6 +405,38 @@ void ExpansionMatrix::ComputeColAMaxImpl(
    }
 }
 
+void ExpansionMatrix::ComputeRowA1Impl(
+   Vector& rows_norms,
+   bool    /*init*/
+) const
+{
+   DenseVector* dense_vec = static_cast<DenseVector*>(&rows_norms);
+   DBG_ASSERT(dynamic_cast<DenseVector*>(&rows_norms));
+   Number* vec_vals = dense_vec->Values();
+
+   const Index* exp_pos = ExpandedPosIndices();
+
+   for( Index i = 0; i < NCols(); i++ )
+   {
+      vec_vals[exp_pos[i]] += Number(1.);
+   }
+}
+
+void ExpansionMatrix::ComputeColA1Impl(
+   Vector& cols_norms,
+   bool    init
+) const
+{
+   if( init )
+   {
+      cols_norms.Set(1.);
+   }
+   else
+   {
+      cols_norms.AddScalar(Number(1.));
+   }
+}
+
 void ExpansionMatrix::PrintImplOffset(
    const Journalist&  jnlst,
    EJournalLevel      level,

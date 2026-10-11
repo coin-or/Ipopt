@@ -237,6 +237,57 @@ void CompoundSymMatrix::ComputeRowAMaxImpl(
    }
 }
 
+void CompoundSymMatrix::ComputeRowA1Impl(
+   Vector& rows_norms,
+   bool    /*init*/
+) const
+{
+   if( !matrices_valid_ )
+   {
+      matrices_valid_ = MatricesValid();
+   }
+   DBG_ASSERT(matrices_valid_);
+
+   // The vector is assumed to be compound Vectors as well except if
+   // there is only one component
+   CompoundVector* comp_vec = dynamic_cast<CompoundVector*>(&rows_norms);
+
+   //  A few sanity checks
+   if( comp_vec )
+   {
+      DBG_ASSERT(NComps_Dim() == comp_vec->NComps());
+   }
+   else
+   {
+      DBG_ASSERT(NComps_Dim() == 1);
+   }
+
+   for( Index jcol = 0; jcol < NComps_Dim(); jcol++ )
+   {
+      for( Index irow = 0; irow < NComps_Dim(); irow++ )
+      {
+         SmartPtr<Vector> vec_i;
+         if( comp_vec )
+         {
+            vec_i = comp_vec->GetCompNonConst(irow);
+         }
+         else
+         {
+            vec_i = &rows_norms;
+         }
+         DBG_ASSERT(IsValid(vec_i));
+         if( jcol <= irow && ConstComp(irow, jcol) )
+         {
+            ConstComp(irow, jcol)->ComputeRowA1(*vec_i, false);
+         }
+         else if( jcol > irow && ConstComp(jcol, irow) )
+         {
+            ConstComp(jcol, irow)->ComputeRowA1(*vec_i, false);
+         }
+      }
+   }
+}
+
 void CompoundSymMatrix::PrintImpl(
    const Journalist&  jnlst,
    EJournalLevel      level,

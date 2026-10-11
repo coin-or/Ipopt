@@ -415,6 +415,22 @@ void DenseGenMatrix::ComputeColAMaxImpl(
    }
 }
 
+void DenseGenMatrix::ComputeRowA1Impl(
+   Vector& /*rows_norms*/,
+   bool    /*init*/
+) const
+{
+   THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "DenseGenMatrix::ComputeRowA1Impl not implemented");
+}
+
+void DenseGenMatrix::ComputeColA1Impl(
+   Vector& /*cols_norms*/,
+   bool    /*init*/
+) const
+{
+   THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "DenseGenMatrix::ComputeColA1Impl not implemented");
+}
+
 bool DenseGenMatrix::HasValidNumbersImpl() const
 {
    DBG_ASSERT(initialized_);

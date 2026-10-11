@@ -5,6 +5,8 @@
 // Authors:  Carl Laird, Andreas Waechter     IBM    2004-08-13
 
 #include "IpSymScaledMatrix.hpp"
+#include "IpSymTMatrix.hpp"
+#include "IpDenseVector.hpp"
 
 namespace Ipopt
 {
@@ -68,6 +70,42 @@ void SymScaledMatrix::ComputeRowAMaxImpl(
 ) const
 {
    THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "SymScaledMatrix::ComputeRowAMaxImpl not implemented");
+}
+
+void SymScaledMatrix::ComputeRowA1Impl(
+   Vector& rows_norms,
+   bool    init
+) const
+{
+   DBG_ASSERT(IsValid(matrix_));
+
+   if( IsValid(owner_space_->RowColScaling()) )
+   {
+      const SymTMatrix* mt = dynamic_cast<const SymTMatrix*>(GetRawPtr(matrix_));
+      if( mt )
+      {
+         const DenseVector* D = dynamic_cast<const DenseVector*>(GetRawPtr(owner_space_->RowColScaling()));
+         DenseVector* rn = dynamic_cast<DenseVector*>(&rows_norms);
+         DBG_ASSERT(D);
+         DBG_ASSERT(rn);
+         for ( Index i = 0; i < mt->Nonzeros(); i++ )
+         {
+            rn->Values()[mt->Irows()[i] - 1] += std::abs(mt->Values()[i] * D->Values()[mt->Jcols()[i] - 1]);
+            if( mt->Irows()[i] != mt->Jcols()[i] )
+            {
+               rn->Values()[mt->Jcols()[i] - 1] += std::abs(mt->Values()[i] * D->Values()[mt->Irows()[i] - 1]);
+            }
+         }
+      }
+      else
+      {
+         THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "ScaledMatrix::ComputeRowA1Impl not implemented");
+      }
+   }
+   else
+   {
+      matrix_->ComputeRowA1(rows_norms, init);
+   }
 }
 
 void SymScaledMatrix::PrintImpl(

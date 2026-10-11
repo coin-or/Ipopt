@@ -301,6 +301,22 @@ void MultiVectorMatrix::ComputeColAMaxImpl(
    THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "MultiVectorMatrix::ComputeColAMaxImpl not implemented");
 }
 
+void MultiVectorMatrix::ComputeRowA1Impl(
+   Vector& /*rows_norms*/,
+   bool    /*init*/
+) const
+{
+   THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "MultiVectorMatrix::ComputeRowA1Impl not implemented");
+}
+
+void MultiVectorMatrix::ComputeColA1Impl(
+   Vector& /*cols_norms*/,
+   bool    /*init*/
+) const
+{
+   THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "MultiVectorMatrix::ComputeColA1Impl not implemented");
+}
+
 void MultiVectorMatrix::PrintImpl(
    const Journalist&  jnlst,
    EJournalLevel      level,

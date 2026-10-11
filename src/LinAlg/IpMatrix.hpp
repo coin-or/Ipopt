@@ -163,6 +163,44 @@ public:
    }
    ///@}
 
+   /** Compute the 1-norm of the rows in the matrix.
+    *
+    *  The result is stored in rows_norms.
+    *  The vector is assumed to be initialized if init is false.
+    */
+   void ComputeRowA1(
+      Vector& rows_norms,
+      bool    init = true
+   ) const
+   {
+      DBG_ASSERT(NRows() == rows_norms.Dim());
+      if( init )
+      {
+         rows_norms.Set(0.);
+      }
+      ComputeRowA1Impl(rows_norms, init);
+   }
+   ///@}
+
+   /** Compute the 1-norm of the columns in the matrix.
+    *
+    *  The result is stored in cols_norms.
+    *  The vector is assumed to be initialized if init is false.
+    */
+   void ComputeColA1(
+      Vector& cols_norms,
+      bool    init = true
+   ) const
+   {
+      DBG_ASSERT(NCols() == cols_norms.Dim());
+      if( init )
+      {
+         cols_norms.Set(0.);
+      }
+      ComputeColA1Impl(cols_norms, init);
+   }
+   ///@}
+
    /** Print detailed information about the matrix.
     *
     * @attention Do not overload. Overload PrintImpl instead.
@@ -266,6 +304,24 @@ protected:
     *  The result is stored in cols_norms.
     *  The vector is assumed to be initialized if init is false. */
    virtual void ComputeColAMaxImpl(
+      Vector& cols_norms,
+      bool    init
+   ) const = 0;
+
+   /** Compute the 1-norm of the rows in the matrix.
+    *
+    *  The result is stored in rows_norms.
+    *  The vector is assumed to be initialized if init is false. */
+   virtual void ComputeRowA1Impl(
+      Vector& rows_norms,
+      bool    init
+   ) const = 0;
+
+   /** Compute the 1-norm of the cols in the matrix.
+    *
+    *  The result is stored in cols_norms.
+    *  The vector is assumed to be initialized if init is false. */
+   virtual void ComputeColA1Impl(
       Vector& cols_norms,
       bool    init
    ) const = 0;

@@ -170,6 +170,22 @@ void LowRankUpdateSymMatrix::ComputeColAMaxImpl(
    THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "LowRankUpdateSymMatrix::ComputeColAMaxImpl not implemented");
 }
 
+void LowRankUpdateSymMatrix::ComputeRowA1Impl(
+   Vector& /*rows_norms*/,
+   bool    /*init*/
+) const
+{
+   THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "LowRankUpdateSymMatrix::ComputeRowA1Impl not implemented");
+}
+
+void LowRankUpdateSymMatrix::ComputeColA1Impl(
+   Vector& /*cols_norms*/,
+   bool    /*init*/
+) const
+{
+   THROW_EXCEPTION(UNIMPLEMENTED_LINALG_METHOD_CALLED, "LowRankUpdateSymMatrix::ComputeColA1Impl not implemented");
+}
+
 void LowRankUpdateSymMatrix::PrintImpl(
    const Journalist&  jnlst,
    EJournalLevel      level,
