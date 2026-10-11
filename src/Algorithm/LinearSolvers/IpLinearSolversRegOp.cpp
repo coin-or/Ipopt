@@ -30,6 +30,9 @@
 # include "IpWsmpSolverInterface.hpp"
 # include "IpIterativeWsmpSolverInterface.hpp"
 #endif
+#ifdef IPOPT_HAS_CUDSS
+# include "IpCuDssSolverInterface.hpp"
+#endif
 
 namespace Ipopt
 {
@@ -113,6 +116,14 @@ void RegisterOptions_LinearSolvers(
       roptions->SetRegisteringCategory("WSMP Linear Solver");
       WsmpSolverInterface::RegisterOptions(roptions);
       IterativeWsmpSolverInterface::RegisterOptions(roptions);
+   }
+#endif
+
+#ifdef IPOPT_HAS_CUDSS
+   if( availablesolvers & IPOPTLINEARSOLVER_CUDSS )
+   {
+      roptions->SetRegisteringCategory("cuDSS Linear Solver");
+      cuDSSSolverInterface::RegisterOptions(roptions);
    }
 #endif
 

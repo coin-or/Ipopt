@@ -141,6 +141,9 @@
 /* Define to 1 if WSMP is available */
 #undef IPOPT_HAS_WSMP
 
+/* Define to 1 if cuDSS is available. */
+#undef IPOPT_HAS_CUDSS
+
 /* Define to a macro mangling the given C identifier (in lower and upper
    case). */
 #undef IPOPT_HSL_FUNC

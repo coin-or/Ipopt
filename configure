@@ -704,6 +704,8 @@ COIN_HAS_MUMPS_TRUE
 IPOPTLIB_CFLAGS
 COIN_HAS_ASL_FALSE
 COIN_HAS_ASL_TRUE
+HAVE_CUDSS_FALSE
+HAVE_CUDSS_TRUE
 SIPOPTAMPLINTERFACELIB_PCFILES
 SIPOPTAMPLINTERFACELIB_CFLAGS
 SIPOPTAMPLINTERFACELIB_LFLAGS
@@ -922,6 +924,9 @@ with_spral
 with_spral_lflags
 with_spral_cflags
 with_wsmp
+with_cudss
+with_cudss_lflags
+with_cudss_cflags
 enable_inexact_solver
 enable_java
 enable_linear_solver_loader
@@ -1675,6 +1680,18 @@ Optional Packages:
   --with-spral-cflags     Compiler flags for Spral appropriate for your
                           environment. (Most often, -I specs for header file
                           directories.)
+  --without-cudss         Do not use cuDSS. If an argument is given to
+                          --with-cuDSS, then 'yes' is equivalent
+                          to --with-cuDSS, 'no' is equivalent to
+                          --without-cuDSS and any other argument is applied as
+                          for --with-cuDSS-lflags. Requires --with-intsize=64
+  --with-cudss-lflags     Linker flags for cuDSS appropriate for your
+                          environment. (Most often, -l specs for libraries.)
+                          Requires --with-intsize=64
+  --with-cudss-cflags     Compiler flags for cuDSS appropriate for your
+                          environment. (Most often, -I specs for header file
+                          directories.)
+                          Requires --with-intsize=64
   --with-wsmp             specify WSMP library
 
 Some influential environment variables:
@@ -27820,6 +27837,133 @@ else
   HAVE_WSMP_FALSE=
 fi
 
+#########
+# CUDSS #
+#########
+
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for package cuDSS (Requires --with-intsize=64)" >&5
+printf %s "checking for package cuDSS (Requires --with-intsize=64)... " >&6; }
+
+
+
+
+
+
+
+
+  coin_has_cudss=noInfo
+  if test x"$COIN_SKIP_PROJECTS" != x ; then
+    for pkg in `echo $COIN_SKIP_PROJECTS | tr '[:upper:]' '[:lower:]'` ; do
+      if test "$pkg" = "cudss" ; then
+        coin_has_cudss=skipping
+      fi
+    done
+  fi
+
+
+  if test "$coin_has_cudss" != skipping ; then
+
+
+
+if test $intsize = 64 ; then
+# Check whether --with-cudss was given.
+if test ${with_cudss+y}
+then :
+  withval=$with_cudss;
+fi
+
+
+
+# Check whether --with-cudss-lflags was given.
+if test ${with_cudss_lflags+y}
+then :
+  withval=$with_cudss_lflags;
+fi
+
+  coin_has_cudss=requested
+
+  cudss_lflags=
+
+
+  withval="$with_cudss"
+  if test -n "$withval" ; then
+    case "$withval" in
+      no )
+        coin_has_cudss=skipping
+        cudss_failmode='command line'
+        ;;
+      yes )
+        coin_has_cudss=requested
+        cudss_failmode=''
+        ;;
+      * )
+        coin_has_cudss=requested
+        cudss_failmode=''
+        cudss_lflags="$withval"
+        ;;
+    esac
+  else
+    coin_has_cudss=requested
+    cudss_failmode=''
+  fi
+
+
+  if test "$coin_has_cudss" != skipping ; then
+       withval="$with_cudss_lflags"
+       if test -n "$withval" ; then
+         case "$withval" in
+           build | no | yes )
+             as_fn_error $? "\"$withval\" is not useful here; please specify link flags appropriate for your environment." "$LINENO" 5
+             ;;
+           * )
+             coin_has_cudss=yes
+             cudss_lflags="$withval"
+             ;;
+         esac
+       fi
+     fi
+  fi
+
+
+  if test "$BUILDTOOLS_DEBUG" = 1 ; then
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: FIND_PRIM_PKG result for cudss: \"$coin_has_cudss\"" >&5
+printf "%s\n" "$as_me: FIND_PRIM_PKG result for cudss: \"$coin_has_cudss\"" >&6;}
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: Collected values for package 'cudss'" >&5
+printf "%s\n" "$as_me: Collected values for package 'cudss'" >&6;}
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: cudss_lflags is \"$cudss_lflags\"" >&5
+printf "%s\n" "$as_me: cudss_lflags is \"$cudss_lflags\"" >&6;}
+  fi
+
+
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $coin_has_cudss" >&5
+printf "%s\n" "$coin_has_cudss" >&6; }
+
+
+  if test "$coin_has_cudss" != yes ; then
+    coin_has_cudss=no
+  fi
+
+
+   if test $coin_has_cudss = yes; then
+  HAVE_CUDSS_TRUE=
+  HAVE_CUDSS_FALSE='#'
+else
+  HAVE_CUDSS_TRUE='#'
+  HAVE_CUDSS_FALSE=
+fi
+
+
+
+  if test $coin_has_cudss = yes ; then
+
+printf "%s\n" "#define IPOPT_HAS_CUDSS 1" >>confdefs.h
+
+       IPOPTLIB_LFLAGS="$cudss_lflags $IPOPTLIB_LFLAGS"
+
+
+  fi
+
+fi
 
 #############################################################################
 #                             Stuff for examples                            #
@@ -29907,6 +30051,10 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${HAVE_WSMP_TRUE}" && test -z "${HAVE_WSMP_FALSE}"; then
   as_fn_error $? "conditional \"HAVE_WSMP\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${HAVE_CUDSS_TRUE}" && test -z "${HAVE_CUDSS_FALSE}"; then
+  as_fn_error $? "conditional \"HAVE_CUDSS\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${BUILD_INEXACT_TRUE}" && test -z "${BUILD_INEXACT_FALSE}"; then
