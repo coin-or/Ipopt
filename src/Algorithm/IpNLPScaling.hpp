@@ -181,6 +181,13 @@ public:
       const VectorSpace&            x_space
    );
 
+   /** Returns an x-unscaled vector in the x_L or x_U space */
+   SmartPtr<Vector> unapply_vector_scaling_x_LU_NonConst(
+      const Matrix&                 Px_LU,
+      const SmartPtr<const Vector>& lu,
+      const VectorSpace&            x_space
+   );
+
    /** Returns an d-scaled vector in the d_L or d_U space */
    SmartPtr<Vector> apply_vector_scaling_d_LU_NonConst(
       const Matrix&                 Pd_LU,

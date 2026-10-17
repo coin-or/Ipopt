@@ -51,6 +51,35 @@ SmartPtr<Vector> NLPScalingObject::apply_vector_scaling_x_LU_NonConst(
    return scaled_x_LU;
 }
 
+SmartPtr<Vector> NLPScalingObject::unapply_vector_scaling_x_LU_NonConst(
+   const Matrix&                 Px_LU,
+   const SmartPtr<const Vector>& lu,
+   const VectorSpace&            x_space
+)
+{
+   DBG_START_METH("NLPScalingObject::unapply_vector_scaling_x_LU_NonConst", dbg_verbosity);
+   SmartPtr<Vector> unscaled_x_LU = lu->MakeNew();
+   if( have_x_scaling() )
+   {
+      SmartPtr<Vector> tmp_x = x_space.MakeNew();
+
+      // move to full x space
+      Px_LU.MultVector(1.0, *lu, 0.0, *tmp_x);
+
+      // unscale in full x space
+      tmp_x = unapply_vector_scaling_x_NonConst(ConstPtr(tmp_x));
+
+      // move back to x_L space
+      Px_LU.TransMultVector(1.0, *tmp_x, 0.0, *unscaled_x_LU);
+   }
+   else
+   {
+      unscaled_x_LU->Copy(*lu);
+   }
+
+   return unscaled_x_LU;
+}
+
 SmartPtr<const Vector> NLPScalingObject::apply_vector_scaling_x_LU(
    const Matrix&                 Px_LU,
    const SmartPtr<const Vector>& lu,

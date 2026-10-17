@@ -102,7 +102,7 @@ build_triplet = @build@
 host_triplet = @host@
 noinst_PROGRAMS = hs071_cpp$(EXEEXT) hs071_c$(EXEEXT) \
 	emptynlp$(EXEEXT) getcurr$(EXEEXT) evalgfail$(EXEEXT) \
-	$(am__EXEEXT_1) $(am__EXEEXT_2)
+	warmstartscaling$(EXEEXT) $(am__EXEEXT_1) $(am__EXEEXT_2)
 @COIN_HAS_F77_TRUE@am__append_1 = hs071_f
 @BUILD_SIPOPT_TRUE@am__append_2 = parametric_cpp redhess_cpp
 subdir = test
@@ -154,6 +154,10 @@ nodist_redhess_cpp_OBJECTS = MySensTNLP.$(OBJEXT) \
 	redhess_cpp.$(OBJEXT)
 redhess_cpp_OBJECTS = $(nodist_redhess_cpp_OBJECTS)
 redhess_cpp_DEPENDENCIES = ../contrib/sIPOPT/src/libsipopt.la
+nodist_warmstartscaling_OBJECTS = warmstartscaling.$(OBJEXT)
+warmstartscaling_OBJECTS = $(nodist_warmstartscaling_OBJECTS)
+warmstartscaling_DEPENDENCIES = ../src/libipopt.la \
+	$(am__DEPENDENCIES_1)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -174,7 +178,7 @@ am__depfiles_remade = ./$(DEPDIR)/MySensTNLP.Po \
 	./$(DEPDIR)/getcurr.Po ./$(DEPDIR)/hs071_c.Po \
 	./$(DEPDIR)/hs071_main.Po ./$(DEPDIR)/hs071_nlp.Po \
 	./$(DEPDIR)/parametricTNLP.Po ./$(DEPDIR)/parametric_driver.Po \
-	./$(DEPDIR)/redhess_cpp.Po
+	./$(DEPDIR)/redhess_cpp.Po ./$(DEPDIR)/warmstartscaling.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -230,7 +234,8 @@ am__v_F77LD_1 =
 SOURCES = $(nodist_emptynlp_SOURCES) $(nodist_evalgfail_SOURCES) \
 	$(nodist_getcurr_SOURCES) $(nodist_hs071_c_SOURCES) \
 	$(nodist_hs071_cpp_SOURCES) $(nodist_hs071_f_SOURCES) \
-	$(nodist_parametric_cpp_SOURCES) $(nodist_redhess_cpp_SOURCES)
+	$(nodist_parametric_cpp_SOURCES) $(nodist_redhess_cpp_SOURCES) \
+	$(nodist_warmstartscaling_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -440,6 +445,8 @@ nodist_getcurr_SOURCES = getcurr.cpp
 getcurr_LDADD = ../src/libipopt.la
 nodist_evalgfail_SOURCES = evalgfail.c
 evalgfail_LDADD = ../src/libipopt.la $(CXXLIBS)
+nodist_warmstartscaling_SOURCES = warmstartscaling.c
+warmstartscaling_LDADD = ../src/libipopt.la $(CXXLIBS)
 @IPOPT_SINGLE_FALSE@nodist_hs071_f_SOURCES = hs071_f.f
 @IPOPT_SINGLE_TRUE@nodist_hs071_f_SOURCES = hs071_fs.f
 hs071_f_LDADD = ../src/libipopt.la $(CXXLIBS)
@@ -535,6 +542,10 @@ redhess_cpp$(EXEEXT): $(redhess_cpp_OBJECTS) $(redhess_cpp_DEPENDENCIES) $(EXTRA
 	@rm -f redhess_cpp$(EXEEXT)
 	$(AM_V_CXXLD)$(CXXLINK) $(redhess_cpp_OBJECTS) $(redhess_cpp_LDADD) $(LIBS)
 
+warmstartscaling$(EXEEXT): $(warmstartscaling_OBJECTS) $(warmstartscaling_DEPENDENCIES) $(EXTRA_warmstartscaling_DEPENDENCIES) 
+	@rm -f warmstartscaling$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(warmstartscaling_OBJECTS) $(warmstartscaling_LDADD) $(LIBS)
+
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 
@@ -551,6 +562,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parametricTNLP.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parametric_driver.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/redhess_cpp.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/warmstartscaling.Po@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -724,6 +736,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/parametricTNLP.Po
 	-rm -f ./$(DEPDIR)/parametric_driver.Po
 	-rm -f ./$(DEPDIR)/redhess_cpp.Po
+	-rm -f ./$(DEPDIR)/warmstartscaling.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -779,6 +792,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/parametricTNLP.Po
 	-rm -f ./$(DEPDIR)/parametric_driver.Po
 	-rm -f ./$(DEPDIR)/redhess_cpp.Po
+	-rm -f ./$(DEPDIR)/warmstartscaling.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

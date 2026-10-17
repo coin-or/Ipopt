@@ -433,7 +433,8 @@ bool OrigIpoptNLP::InitializeStructures(
       z_L->Print(*jnlst_, J_VECTOR, J_INITIALIZATION, "initial z_L unscaled");
       if( NLP_scaling()->have_x_scaling() )
       {
-         z_L = NLP_scaling()->apply_vector_scaling_x_LU_NonConst(*Px_L_, ConstPtr(z_L), *x_space_);
+         // a bound multiplier is a derivative with respect to x, so it scales inversely to x
+         z_L = NLP_scaling()->unapply_vector_scaling_x_LU_NonConst(*Px_L_, ConstPtr(z_L), *x_space_);
       }
       if( obj_scal != 1. )
       {
@@ -445,7 +446,8 @@ bool OrigIpoptNLP::InitializeStructures(
       z_U->Print(*jnlst_, J_VECTOR, J_INITIALIZATION, "initial z_U unscaled");
       if( NLP_scaling()->have_x_scaling() )
       {
-         z_U = NLP_scaling()->apply_vector_scaling_x_LU_NonConst(*Px_U_, ConstPtr(z_U), *x_space_);
+         // a bound multiplier is a derivative with respect to x, so it scales inversely to x
+         z_U = NLP_scaling()->unapply_vector_scaling_x_LU_NonConst(*Px_U_, ConstPtr(z_U), *x_space_);
       }
       if( obj_scal != 1. )
       {
