@@ -8,7 +8,7 @@
 #                        unitTest for Ipopt                            #
 ########################################################################
 
-noinst_PROGRAMS = hs071_cpp hs071_c emptynlp getcurr evalgfail
+noinst_PROGRAMS = hs071_cpp hs071_c emptynlp getcurr evalgfail constant_hessian
 
 if COIN_HAS_F77
 noinst_PROGRAMS += hs071_f
@@ -32,6 +32,9 @@ getcurr_LDADD = ../src/libipopt.la
 
 nodist_evalgfail_SOURCES = evalgfail.c
 evalgfail_LDADD = ../src/libipopt.la $(CXXLIBS)
+
+nodist_constant_hessian_SOURCES = constant_hessian.cpp
+constant_hessian_LDADD = ../src/libipopt.la
 
 if !IPOPT_SINGLE
   nodist_hs071_f_SOURCES = hs071_f.f

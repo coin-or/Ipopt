@@ -102,7 +102,7 @@ build_triplet = @build@
 host_triplet = @host@
 noinst_PROGRAMS = hs071_cpp$(EXEEXT) hs071_c$(EXEEXT) \
 	emptynlp$(EXEEXT) getcurr$(EXEEXT) evalgfail$(EXEEXT) \
-	$(am__EXEEXT_1) $(am__EXEEXT_2)
+	constant_hessian$(EXEEXT) $(am__EXEEXT_1) $(am__EXEEXT_2)
 @COIN_HAS_F77_TRUE@am__append_1 = hs071_f
 @BUILD_SIPOPT_TRUE@am__append_2 = parametric_cpp redhess_cpp
 subdir = test
@@ -122,6 +122,9 @@ CONFIG_CLEAN_VPATH_FILES =
 @BUILD_SIPOPT_TRUE@am__EXEEXT_2 = parametric_cpp$(EXEEXT) \
 @BUILD_SIPOPT_TRUE@	redhess_cpp$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
+nodist_constant_hessian_OBJECTS = constant_hessian.$(OBJEXT)
+constant_hessian_OBJECTS = $(nodist_constant_hessian_OBJECTS)
+constant_hessian_DEPENDENCIES = ../src/libipopt.la
 nodist_emptynlp_OBJECTS = emptynlp.$(OBJEXT)
 emptynlp_OBJECTS = $(nodist_emptynlp_OBJECTS)
 emptynlp_DEPENDENCIES = ../src/libipopt.la
@@ -170,6 +173,7 @@ DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/src/Common
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/MySensTNLP.Po \
+	./$(DEPDIR)/constant_hessian.Po \
 	./$(DEPDIR)/emptynlp.Po ./$(DEPDIR)/evalgfail.Po \
 	./$(DEPDIR)/getcurr.Po ./$(DEPDIR)/hs071_c.Po \
 	./$(DEPDIR)/hs071_main.Po ./$(DEPDIR)/hs071_nlp.Po \
@@ -227,7 +231,8 @@ AM_V_F77LD = $(am__v_F77LD_@AM_V@)
 am__v_F77LD_ = $(am__v_F77LD_@AM_DEFAULT_V@)
 am__v_F77LD_0 = @echo "  F77LD   " $@;
 am__v_F77LD_1 = 
-SOURCES = $(nodist_emptynlp_SOURCES) $(nodist_evalgfail_SOURCES) \
+SOURCES = $(nodist_constant_hessian_SOURCES) \
+	$(nodist_emptynlp_SOURCES) $(nodist_evalgfail_SOURCES) \
 	$(nodist_getcurr_SOURCES) $(nodist_hs071_c_SOURCES) \
 	$(nodist_hs071_cpp_SOURCES) $(nodist_hs071_f_SOURCES) \
 	$(nodist_parametric_cpp_SOURCES) $(nodist_redhess_cpp_SOURCES)
@@ -440,6 +445,8 @@ nodist_getcurr_SOURCES = getcurr.cpp
 getcurr_LDADD = ../src/libipopt.la
 nodist_evalgfail_SOURCES = evalgfail.c
 evalgfail_LDADD = ../src/libipopt.la $(CXXLIBS)
+nodist_constant_hessian_SOURCES = constant_hessian.cpp
+constant_hessian_LDADD = ../src/libipopt.la
 @IPOPT_SINGLE_FALSE@nodist_hs071_f_SOURCES = hs071_f.f
 @IPOPT_SINGLE_TRUE@nodist_hs071_f_SOURCES = hs071_fs.f
 hs071_f_LDADD = ../src/libipopt.la $(CXXLIBS)
@@ -503,6 +510,10 @@ clean-noinstPROGRAMS:
 	$(am__rm_f) $(noinst_PROGRAMS)
 	test -z "$(EXEEXT)" || $(am__rm_f) $(noinst_PROGRAMS:$(EXEEXT)=)
 
+constant_hessian$(EXEEXT): $(constant_hessian_OBJECTS) $(constant_hessian_DEPENDENCIES) $(EXTRA_constant_hessian_DEPENDENCIES)
+	@rm -f constant_hessian$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(constant_hessian_OBJECTS) $(constant_hessian_LDADD) $(LIBS)
+
 emptynlp$(EXEEXT): $(emptynlp_OBJECTS) $(emptynlp_DEPENDENCIES) $(EXTRA_emptynlp_DEPENDENCIES) 
 	@rm -f emptynlp$(EXEEXT)
 	$(AM_V_CXXLD)$(CXXLINK) $(emptynlp_OBJECTS) $(emptynlp_LDADD) $(LIBS)
@@ -542,6 +553,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/MySensTNLP.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/constant_hessian.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/emptynlp.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/evalgfail.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/getcurr.Po@am__quote@ # am--include-marker
@@ -715,6 +727,7 @@ clean-am: clean-generic clean-libtool clean-noinstPROGRAMS \
 
 distclean: distclean-am
 	-rm -f ./$(DEPDIR)/MySensTNLP.Po
+	-rm -f ./$(DEPDIR)/constant_hessian.Po
 	-rm -f ./$(DEPDIR)/emptynlp.Po
 	-rm -f ./$(DEPDIR)/evalgfail.Po
 	-rm -f ./$(DEPDIR)/getcurr.Po
@@ -770,6 +783,7 @@ installcheck-am:
 
 maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/MySensTNLP.Po
+	-rm -f ./$(DEPDIR)/constant_hessian.Po
 	-rm -f ./$(DEPDIR)/emptynlp.Po
 	-rm -f ./$(DEPDIR)/evalgfail.Po
 	-rm -f ./$(DEPDIR)/getcurr.Po

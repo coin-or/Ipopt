@@ -170,17 +170,6 @@ bool OrigIpoptNLP::Initialize(
       jac_c_cache_.Clear();
       d_cache_.Clear();
       jac_d_cache_.Clear();
-      // If the hessian is constant, we want two hessians to be
-      // cached, one for regular iterations and one for restoration
-      // phase
-      if( hessian_constant_ )
-      {
-         h_cache_.Clear(2);
-      }
-      else
-      {
-         h_cache_.Clear(1);
-      }
    }
 
    // Reset the cache entries belonging to a dummy dependency.  This
@@ -196,8 +185,9 @@ bool OrigIpoptNLP::Initialize(
    d_cache_.InvalidateResult(deps, sdeps);
    jac_c_cache_.InvalidateResult(deps, sdeps);
    jac_d_cache_.InvalidateResult(deps, sdeps);
-   deps.resize(3, NULL);
-   h_cache_.InvalidateResult(deps, sdeps);
+   // Clear every objective-factor variant, including on structural warm starts.
+   // Keep room for regular and restoration Hessians when constant.
+   h_cache_.Clear(hessian_constant_ ? 2 : 1);
 
    if( !nlp_->ProcessOptions(options, prefix) )
    {
